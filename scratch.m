@@ -14,6 +14,6 @@ val
 
 %docs = find(conn, 'subjects', 'query', '{"subj_id": "21"}', 'limit', 10)
 
-runs = find(conn, 'runs', 'query', '{"subj_id": "26"}', 'limit', 10)
+runs = find(conn, 'runs', 'query', '{"subj_id": "0"}', 'limit', 10)
 
-plays = find(conn, 'plays', 'query', '{"subj_id": "26"}', 'limit', 10)
+plays = find(conn, 'plays', 'query', '{"subj_id": "0"}', 'limit', 10)
