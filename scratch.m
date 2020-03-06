@@ -14,14 +14,17 @@ val
 
 %docs = find(conn, 'subjects', 'query', '{"subj_id": "21"}', 'limit', 10)
 
-subj_id = 181
+subj_id = 181;
+run_id = 0;
 
 query = sprintf('{"subj_id": "%d"}', subj_id)
 
 subj = find(conn, 'subjects', 'query', query, 'limit', 10)
 
-runs = find(conn, 'runs', 'query', '{"subj_id": "177"}', 'limit', 10)
+query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id)
 
-plays = find(conn, 'plays', 'query', '{"subj_id": "177"}', 'limit', 10)
+runs = find(conn, 'runs', 'query', query, 'limit', 10)
 
-regressors = find(conn, 'regressors', 'query', '{"subj_id": "177"}', 'limit', 10)
+plays = find(conn, 'plays', 'query', query, 'limit', 10)
+
+regressors = find(conn, 'regressors', 'query', query, 'limit', 10)

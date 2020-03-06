@@ -6,8 +6,8 @@ function [ subjects, subjdirs, goodRuns, goodSubjects ] = vgdl_getSubjectsDirsAn
 
 
 % the participant id as entered in psychopy
-subjects = {181, 182, ...
-            183};
+subjects = [181, 182, ...
+            183];
 
 % should be identical to the list of subjects in the csv file
 % and in the same order
