@@ -3,7 +3,7 @@
 % https://www.mathworks.com/help/database/ug/mongo.html#d117e86584
 conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54')
 
-subj_id = 181;
+subj_id = 184;
 
 % https://www.mathworks.com/help/database/ug/mongo.find.html
 runs = find(conn, 'runs', 'query', sprintf('{"subj_id": "%d"}', subj_id), 'limit', 10)
