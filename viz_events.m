@@ -25,6 +25,7 @@ for r = 1:length(runs)
     pp = zeros(1,dur); % plays
     ee = zeros(1,dur); % events
     aa = zeros(1,dur); % actions
+    tt = zeros(1,dur); % theory changes
 
     offs = 1;
     st = round(offs * 1000) ;
@@ -76,6 +77,17 @@ for r = 1:length(runs)
                 for e = 1:length(play.events)
                     ee(round((play.events(e).ts - run.scan_start_ts + offs) * 1000)) = 0.2;
                 end
+
+                q = sprintf('{"subj_id": "%d", "run_id": %d, "block_id": %d, "instance_id": %d, "play_id": %d}', subj_id, run.run_id, block.block_id, instance.instance_id, play.play_id);
+                regressors = find(conn, 'regressors', 'query', q);
+                assert(length(regressors) == 1);
+
+                tc = regressors(1).regressors.theory_change_flag;
+                for i = 1:length(tc)
+                    if tc{i}{1} % theory changed
+                        tt(round((tc{i}{3} - run.scan_start_ts + offs) * 1000)) = 0.8;
+                    end
+                end
             end
         end
     end
@@ -88,7 +100,8 @@ for r = 1:length(runs)
     plot(x, pp);
     plot(x, aa);
     plot(x, ee);
-    legend({'run', 'blocks', 'instances', 'plays', 'actions', 'events'});
+    plot(x, tt);
+    legend({'run', 'blocks', 'instances', 'plays', 'actions', 'events', 'theory_change_flag'}, 'interpreter', 'none');
 
 end
 

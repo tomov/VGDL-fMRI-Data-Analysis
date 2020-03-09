@@ -1,6 +1,6 @@
 function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
-%glmodel = 1;
-%subj_id = 196; % 181 is simple (1 play), 184 is more realistic
+%glmodel = 3;
+%subj_id = 184; % 181 is simple (1 play), 184 is more realistic
 %run_id = 1;
 
 clear multi;
@@ -61,7 +61,7 @@ clear multi;
     plays = find(conn, 'plays', 'query', query)
 
     regressors = find(conn, 'regressors', 'query', query)
-    %assert(length(plays) == length(regressors)); TODO assert!
+    assert(length(plays) == length(regressors)); 
 
     % TODO nuisance regressors
     % start/stop play/instance/block
@@ -87,12 +87,6 @@ clear multi;
 
             idx = 0;
 
-            keyholds_left = [];
-            keyholds_right = [];
-            keyholds_up = [];
-            keyholds_down = [];
-            keyholds_spacebar = [];
-            
             keys = [];
 
             blocks = run.blocks;
@@ -113,6 +107,35 @@ clear multi;
                     % instance boxcar regressor
                     onsets = [onsets, st];
                     durs = [durs, en - st];
+                end
+
+                % instance boxcar regressor
+                idx = idx + 1;
+                multi.names{idx} = game_name;
+                multi.onsets{idx} = onsets;
+                multi.durations{idx} = durs;
+            end
+
+
+        % button presses boxcars
+        % nuisance regressors
+        % this is exploratory, so ok to look at them separately and incorporate into other GLMs later
+        %
+        case 2
+
+            idx = 0;
+
+            keys = [];
+
+            blocks = run.blocks;
+            for b = 1:length(blocks)
+                block = blocks(b);
+                instances = block.instances;
+
+                game_name = block.game.name;
+                
+                for i = 1:length(instances)
+                    instance = instances(i);
 
                     q = sprintf('{"subj_id": "%d", "run_id": %d, "block_id": %d, "instance_id": %d}', subj_id, run.run_id, block.block_id, instance.instance_id);
                     plays = find(conn, 'plays', 'query', q);
@@ -136,11 +159,6 @@ clear multi;
                     end
                 end
 
-                % instance boxcar regressor
-                idx = idx + 1;
-                multi.names{idx} = game_name;
-                multi.onsets{idx} = onsets;
-                multi.durations{idx} = durs;
             end
 
             % key hold boxcar regressors
@@ -153,16 +171,53 @@ clear multi;
                 end
             end
 
-        % button presses TODO use as nuisance regressors in other GLMs?
-        %
-        case 2
 
 
-        % condition = game x level boxcars over instances
-        % to be used for RSA for theory
+        % theory_change_flag 
         %
-        case 2
-            %multi.names{1} = 'test';
+        case 3
+
+            idx = 0;
+
+            onsets = [];
+            durs = [];
+
+            blocks = run.blocks;
+            for b = 1:length(blocks)
+                block = blocks(b);
+                instances = block.instances;
+
+                game_name = block.game.name;
+                
+                for i = 1:length(instances)
+                    instance = instances(i);
+
+                    q = sprintf('{"subj_id": "%d", "run_id": %d, "block_id": %d, "instance_id": %d}', subj_id, run.run_id, block.block_id, instance.instance_id);
+                    plays = find(conn, 'plays', 'query', q);
+
+                    for p = 1:length(plays)
+                        play = plays(p);
+
+                        q = sprintf('{"subj_id": "%d", "run_id": %d, "block_id": %d, "instance_id": %d, "play_id": %d}', subj_id, run.run_id, block.block_id, instance.instance_id, play.play_id);
+                        regressors = find(conn, 'regressors', 'query', q);
+                        assert(length(regressors) == 1);
+
+                        tc = regressors(1).regressors.theory_change_flag;
+                        for i = 1:length(tc)
+                            if tc{i}{1} % theory changed
+                                onsets = [onsets tc{i}{3} - run.scan_start_ts];
+                                durs = [durs 0];
+                            end
+                        end
+                    end
+                end
+
+            end
+
+            idx = idx + 1;
+            multi.names{idx} = 'theory_change_flag';
+            multi.onsets{idx} = onsets;
+            multi.durations{idx} = durs;
 
         otherwise
             assert(false, 'invalid glmodel -- should be one of the above');
