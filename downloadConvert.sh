@@ -12,6 +12,7 @@
 # 2) make sure data is on CBS central
 # 3) make sure ArcGet.py script is in same dir
 # 4) make sure subj id is correct
+# 5) make sure fileNames is in same order as scans on CBS central (the subset of them fetched by ArcGet)
 
 # download all structural and functional scans in order in which they were taken
 #
@@ -28,8 +29,7 @@ fileNames=(struct run001 run002 run003 run004 run005 run006)
 mkdir /ncf/gershman/Lab/${experiment}/subjects/
 cd /ncf/gershman/Lab/${experiment}/subjects/
 
-mkdir /ncf/gershman/Lab/${experiment}/subjects/${1}/
-mkdir  /ncf/gershman/Lab/${experiment}/subjects/${1}/RAW
+mv ${1} /ncf/gershman/Lab/${experiment}/subjects/
 mkdir /ncf/gershman/Lab/${experiment}/subjects/${1}/preproc
 
 #ArcGet.py -a cbscentral -s ${1} 
