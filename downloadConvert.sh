@@ -27,7 +27,6 @@ fileNames=(struct run001 run002 run003 run004 run005 run006)
 
 
 mkdir /ncf/gershman/Lab/${experiment}/subjects/
-cd /ncf/gershman/Lab/${experiment}/subjects/
 
 mv ${1} /ncf/gershman/Lab/${experiment}/subjects/
 mkdir /ncf/gershman/Lab/${experiment}/subjects/${1}/preproc
