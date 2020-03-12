@@ -14,8 +14,8 @@ val
 
 %docs = find(conn, 'subjects', 'query', '{"subj_id": "21"}', 'limit', 10)
 
-subj_id = 196;
-run_id = 0;
+subj_id = 2;
+run_id = 1;
 
 query = sprintf('{"subj_id": "%d"}', subj_id)
 

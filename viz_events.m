@@ -3,10 +3,11 @@
 % https://www.mathworks.com/help/database/ug/mongo.html#d117e86584
 conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54')
 
-subj_id = 184;
+subj_id = 2;
+run_id = 4;
 
 % https://www.mathworks.com/help/database/ug/mongo.find.html
-runs = find(conn, 'runs', 'query', sprintf('{"subj_id": "%d"}', subj_id), 'limit', 10)
+runs = find(conn, 'runs', 'query', sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id), 'limit', 10)
 
 
 figure;
@@ -60,7 +61,7 @@ for r = 1:length(runs)
 
                 st = round((play.start_time - run.scan_start_ts + offs) * 1000) + 7;
                 en = round((play.end_time - run.scan_start_ts + offs) * 1000) - 7;
-                pp(st:en) = 2;
+                pp(st:en) = 2; % you can get errors with negative indices here if you restarted the run TODO fix..............
                 if isempty(play.win)
                     win = 'T';
                 elseif play.win
@@ -80,12 +81,15 @@ for r = 1:length(runs)
 
                 q = sprintf('{"subj_id": "%d", "run_id": %d, "block_id": %d, "instance_id": %d, "play_id": %d}', subj_id, run.run_id, block.block_id, instance.instance_id, play.play_id);
                 regressors = find(conn, 'regressors', 'query', q);
-                assert(length(regressors) == 1);
 
-                tc = regressors(1).regressors.theory_change_flag;
-                for i = 1:length(tc)
-                    if tc{i}{1} % theory changed
-                        tt(round((tc{i}{3} - run.scan_start_ts + offs) * 1000)) = 0.8;
+                if length(regressors) > 0
+                    assert(length(regressors) == 1);
+
+                    tc = regressors(1).regressors.theory_change_flag;
+                    for i = 1:length(tc)
+                        if tc{i}{1} % theory changed
+                            tt(round((tc{i}{3} - run.scan_start_ts + offs) * 1000)) = 0.8;
+                        end
                     end
                 end
             end
