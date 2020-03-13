@@ -35,6 +35,7 @@ clear multi;
 
     fprintf('glm %d, subj_id %d, run_id %d\n', glmodel, subj_id, run_id);
 
+
     [allSubjects, subj_dirs, goodRuns, goodSubjs] = vgdl_getSubjectsDirsAndRuns();
 
     SPM_run_id = run_id; % save the SPM run_id (SPM doesn't see bad run_ids)
@@ -45,7 +46,19 @@ clear multi;
     %run_id = run_ids(run_id);
     fprintf('run_id %d \n', run_id);
 
-    conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54')
+    filename = sprintf('vgdl_create_multi_glm%d_subj%d_run%d.mat', glmodel, subj_id, run_id)
+
+    % hack to make it work on the cluster until they install MongoDB toolbox
+    % just pre-generate the multi's locally, then load them on the cluster
+    try
+        conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54')
+    catch e
+        e
+        fprintf('loading from %s\n', filename);
+        load(filename);
+        return
+    end
+
 
     query = sprintf('{"subj_id": "%d"}', subj_id)
 
@@ -53,7 +66,7 @@ clear multi;
     assert(length(subj) > 0, 'Subject not found -- wrong subj_id?');
     assert(length(subj) <= 1, 'Too many subjects -- duplicate entries? Yikes!');
 
-    query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id - 1) % in python we index runs from 0 (but not subjects) 
+    query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id) % in python we index runs from 0 (but not subjects) 
 
     run = find(conn, 'runs', 'query', query)
     assert(length(run) == 1);
@@ -61,7 +74,7 @@ clear multi;
     plays = find(conn, 'plays', 'query', query)
 
     regressors = find(conn, 'regressors', 'query', query)
-    assert(length(plays) == length(regressors)); 
+    %assert(length(plays) == length(regressors)); 
 
     % TODO nuisance regressors
     % start/stop play/instance/block
@@ -224,7 +237,7 @@ clear multi;
     end % end of switch statement
 
     if save_output
-        save('exploration_create_multi.mat'); % <-- DON'T DO IT! breaks on NCF... b/c of file permissions
+        save(filename, 'multi', '-v7.3'); % <-- DON'T DO IT! breaks on NCF... b/c of file permissions
     end
 
 
