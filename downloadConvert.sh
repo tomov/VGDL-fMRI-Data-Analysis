@@ -31,7 +31,7 @@ mkdir /ncf/gershman/Lab/${experiment}/subjects/
 mv ${1} /ncf/gershman/Lab/${experiment}/subjects/
 mkdir /ncf/gershman/Lab/${experiment}/subjects/${1}/preproc
 
-#ArcGet.py -a cbscentral -s ${1} 
+#ArcGet.py -a cbscentral -s ${1}          momchil: don't use this one; legacy TODO rm
 
 cd /ncf/gershman/Lab/${experiment}/subjects/${1}/RAW
 
