@@ -85,3 +85,27 @@ ccnl_fmri_preproc.sh for subject 7: output/ccnl_fmri_preproc_7_48513845.out -- S
 --- Wed Mar 18 15:36:59 EDT 2020: Running ccnl_fmri_preproc for subjects 8 in parallel
 ----------------
 ccnl_fmri_preproc.sh for subject 8: output/ccnl_fmri_preproc_8_48638973.out -- Submitted batch job 48638973
+----------------
+--- Wed Mar 18 15:40:59 EDT 2020: Running ccnl_fmri_preproc for subjects 8 in parallel
+----------------
+ccnl_fmri_preproc.sh for subject 8: output/ccnl_fmri_preproc_8_48639975.out -- Submitted batch job 48639975
+----------------
+--- Wed Mar 18 15:41:31 EDT 2020: Running ccnl_fmri_preproc for subjects 8 in parallel
+----------------
+ccnl_fmri_preproc.sh for subject 8: output/ccnl_fmri_preproc_8_48640029.out -- Submitted batch job 48640029
+----------------
+--- Wed Mar 18 15:42:00 EDT 2020: Running ccnl_fmri_preproc for subjects 8 in parallel
+----------------
+ccnl_fmri_preproc.sh for subject 8: output/ccnl_fmri_preproc_8_48640106.out -- Submitted batch job 48640106
+----------------
+--- Running downloadConvertSBatch for subjects 200315_VGDL_008
+----------------
+downloadConvertSBatch.sh for subject 200315_VGDL_008: /ncf/gershman/Lab/scripts/matlab/VGDL_fMRI/output/downloadConvert_200315_VGDL_008_48692500.out -- Submitted batch job 48692500
+----------------
+--- Running downloadConvertSBatch for subjects 200315_VGDL_008
+----------------
+downloadConvertSBatch.sh for subject 200315_VGDL_008: /ncf/gershman/Lab/scripts/matlab/VGDL_fMRI/output/downloadConvert_200315_VGDL_008_48702613.out -- Submitted batch job 48702613
+----------------
+--- Thu Mar 19 18:30:15 EDT 2020: Running ccnl_fmri_preproc for subjects 8 in parallel
+----------------
+ccnl_fmri_preproc.sh for subject 8: output/ccnl_fmri_preproc_8_48882179.out -- Submitted batch job 48882179

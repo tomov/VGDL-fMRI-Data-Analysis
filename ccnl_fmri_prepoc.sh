@@ -6,8 +6,6 @@ mkdir output
 subjects=( 8  )  #  e.g. subjects=( 1 2 5 6 7 10 )
 subj_arg="${subjects[@]}" # stringify it
 
-echo File prefix = $outfileprefix
-
 echo ---------------- >> jobs.txt
 echo --- $(date): Running ccnl_fmri_preproc for subjects ${subj_arg} in parallel >> jobs.txt
 echo ---------------- >> jobs.txt
