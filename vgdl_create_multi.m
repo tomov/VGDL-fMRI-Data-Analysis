@@ -71,11 +71,6 @@ clear multi;
     run = find(conn, 'runs', 'query', query)
     assert(length(run) == 1);
     
-    plays = find(conn, 'plays', 'query', query)
-
-    regressors = find(conn, 'regressors', 'query', query)
-    %assert(length(plays) == length(regressors)); 
-
     % TODO nuisance regressors
     % start/stop play/instance/block
     % key down / key ups

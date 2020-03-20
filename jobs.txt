@@ -1,0 +1,87 @@
+----------------
+----------------
+----------------
+--- Running downloadConvertSBatch for subjects 200311_VGDL_001
+----------------
+downloadConvertSBatch.sh for subject 200311_VGDL_001: /ncf/gershman/Lab/scripts/matlab/VGDL_fMRI/output/downloadConvert_200311_VGDL_001_.out --
+----------------
+--- Running downloadConvertSBatch for subjects 200311_VGDL_001
+----------------
+downloadConvertSBatch.sh for subject 200311_VGDL_001: /ncf/gershman/Lab/scripts/matlab/VGDL_fMRI/output/downloadConvert_200311_VGDL_001_47454721.out -- Submitted batch job 47454721
+----------------
+--- Running downloadConvertSBatch for subjects 200311_VGDL_001
+----------------
+downloadConvertSBatch.sh for subject 200311_VGDL_001: /ncf/gershman/Lab/scripts/matlab/VGDL_fMRI/output/downloadConvert_200311_VGDL_001_47455072.out -- Submitted batch job 47455072
+----------------
+--- Running ccnl_fmri_preproc for subjects 1 in parallel
+----------------
+ccnl_fmri_preproc.sh for subject 1: output/ccnl_fmri_preproc_1_47616038.out -- Submitted batch job 47616038
+----------------
+--- Running ccnl_fmri_preproc for subjects 2 in parallel
+----------------
+ccnl_fmri_preproc.sh for subject 2: output/ccnl_fmri_preproc_2_47631064.out -- Submitted batch job 47631064
+----------------
+--- Running ccnl_fmri_preproc for subjects 2 in parallel
+----------------
+ccnl_fmri_preproc.sh for subject 2: output/ccnl_fmri_preproc_2_47631102.out -- Submitted batch job 47631102
+----------------
+--- Running ccnl_fmri_preproc for subjects 2 in parallel
+----------------
+ccnl_fmri_preproc.sh for subject 2: output/ccnl_fmri_preproc_2_47631224.out -- Submitted batch job 47631224
+----------------
+--- Running ccnl_fmri_preproc for subjects 3 in parallel
+----------------
+ccnl_fmri_preproc.sh for subject 3: output/ccnl_fmri_preproc_3_48453720.out -- Submitted batch job 48453720
+----------------
+--- Running ccnl_fmri_preproc for subjects 4 in parallel
+----------------
+ccnl_fmri_preproc.sh for subject 4: output/ccnl_fmri_preproc_4_48453890.out -- Submitted batch job 48453890
+----------------
+--- Running downloadConvertSBatch for subjects 200314_VGDL_005
+----------------
+downloadConvertSBatch.sh for subject 200314_VGDL_005: /ncf/gershman/Lab/scripts/matlab/VGDL_fMRI/output/downloadConvert_200314_VGDL_005_48453944.out -- Submitted batch job 48453944
+----------------
+--- Running downloadConvertSBatch for subjects 200314_VGDL_005
+----------------
+downloadConvertSBatch.sh for subject 200314_VGDL_005: /ncf/gershman/Lab/scripts/matlab/VGDL_fMRI/output/downloadConvert_200314_VGDL_005_48454026.out -- Submitted batch job 48454026
+----------------
+--- Running downloadConvertSBatch for subjects 200314_VGDL_005
+----------------
+downloadConvertSBatch.sh for subject 200314_VGDL_005: /ncf/gershman/Lab/scripts/matlab/VGDL_fMRI/output/downloadConvert_200314_VGDL_005_48454066.out -- Submitted batch job 48454066
+----------------
+--- Running downloadConvertSBatch for subjects 200314_VGDL_006
+----------------
+downloadConvertSBatch.sh for subject 200314_VGDL_006: /ncf/gershman/Lab/scripts/matlab/VGDL_fMRI/output/downloadConvert_200314_VGDL_006_48454229.out -- Submitted batch job 48454229
+downloadConvertSBatch.sh for subject 200315_VGDL_007: /ncf/gershman/Lab/scripts/matlab/VGDL_fMRI/output/downloadConvert_200315_VGDL_007_48454231.out -- Submitted batch job 48454231
+----------------
+--- Running downloadConvertSBatch for subjects 200315_VGDL_007
+----------------
+downloadConvertSBatch.sh for subject 200315_VGDL_007: /ncf/gershman/Lab/scripts/matlab/VGDL_fMRI/output/downloadConvert_200315_VGDL_007_48454372.out -- Submitted batch job 48454372
+----------------
+--- Running downloadConvertSBatch for subjects 200315_VGDL_008
+----------------
+downloadConvertSBatch.sh for subject 200315_VGDL_008: /ncf/gershman/Lab/scripts/matlab/VGDL_fMRI/output/downloadConvert_200315_VGDL_008_48458587.out -- Submitted batch job 48458587
+----------------
+--- Running downloadConvertSBatch for subjects 200315_VGDL_008
+----------------
+downloadConvertSBatch.sh for subject 200315_VGDL_008: /ncf/gershman/Lab/scripts/matlab/VGDL_fMRI/output/downloadConvert_200315_VGDL_008_48458628.out -- Submitted batch job 48458628
+----------------
+--- Running downloadConvertSBatch for subjects 200314_VGDL_006
+----------------
+downloadConvertSBatch.sh for subject 200314_VGDL_006: /ncf/gershman/Lab/scripts/matlab/VGDL_fMRI/output/downloadConvert_200314_VGDL_006_48469039.out -- Submitted batch job 48469039
+downloadConvertSBatch.sh for subject 200315_VGDL_007: /ncf/gershman/Lab/scripts/matlab/VGDL_fMRI/output/downloadConvert_200315_VGDL_007_48469044.out -- Submitted batch job 48469044
+downloadConvertSBatch.sh for subject 200315_VGDL_008: /ncf/gershman/Lab/scripts/matlab/VGDL_fMRI/output/downloadConvert_200315_VGDL_008_48469048.out -- Submitted batch job 48469048
+----------------
+--- Running downloadConvertSBatch for subjects 200315_VGDL_008
+----------------
+downloadConvertSBatch.sh for subject 200315_VGDL_008: /ncf/gershman/Lab/scripts/matlab/VGDL_fMRI/output/downloadConvert_200315_VGDL_008_48512369.out -- Submitted batch job 48512369
+----------------
+--- Tue Mar 17 21:29:48 EDT 2020: Running ccnl_fmri_preproc for subjects 5 6 7 in parallel
+----------------
+ccnl_fmri_preproc.sh for subject 5: output/ccnl_fmri_preproc_5_48513836.out -- Submitted batch job 48513836
+ccnl_fmri_preproc.sh for subject 6: output/ccnl_fmri_preproc_6_48513842.out -- Submitted batch job 48513842
+ccnl_fmri_preproc.sh for subject 7: output/ccnl_fmri_preproc_7_48513845.out -- Submitted batch job 48513845
+----------------
+--- Wed Mar 18 15:36:59 EDT 2020: Running ccnl_fmri_preproc for subjects 8 in parallel
+----------------
+ccnl_fmri_preproc.sh for subject 8: output/ccnl_fmri_preproc_8_48638973.out -- Submitted batch job 48638973

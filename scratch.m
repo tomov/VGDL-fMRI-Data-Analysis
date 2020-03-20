@@ -14,17 +14,29 @@ val
 
 %docs = find(conn, 'subjects', 'query', '{"subj_id": "21"}', 'limit', 10)
 
-subj_id = 2;
-run_id = 1;
+subj_id = 1;
+run_id = 5;
+game_name = 'vgfmri3_chase'
+
+limit = 100;
 
 query = sprintf('{"subj_id": "%d"}', subj_id)
-
-subj = find(conn, 'subjects', 'query', query, 'limit', 10)
+subj = find(conn, 'subjects', 'query', query, 'limit', limit)
 
 query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id)
+runs = find(conn, 'runs', 'query', query, 'limit', limit)
 
-runs = find(conn, 'runs', 'query', query, 'limit', 10)
+query = sprintf('{"subj_id": "%d", "run_id": %d, "game_name": "%s"}', subj_id, run_id, game_name)
+plays = find(conn, 'plays', 'query', query, 'limit', limit)
 
-plays = find(conn, 'plays', 'query', query, 'limit', 10)
+regressors = find(conn, 'regressors', 'query', query, 'limit', limit)
 
-regressors = find(conn, 'regressors', 'query', query, 'limit', 10)
+%for r = 1:length(subj.runs)
+%    run = subj.runs(r);
+%    fprintf('run %d\n', r);
+%    for b = 1:length(run.blocks)
+%        block = run.blocks(b);
+%        fprintf('   %s\n', block.game.name);
+%    end
+%end
+%
