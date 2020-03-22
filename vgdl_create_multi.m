@@ -1,9 +1,10 @@
 function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
 %glmodel = 3;
-%subj_id = 184; % 181 is simple (1 play), 184 is more realistic
-%run_id = 1;
+%subj_id = 1; % 181 is simple (1 play), 184 is more realistic
+%run_id = 6;
 
 clear multi;
+save_output = true;
 
     % Create multi structure, helper function for creating EXPT in
     % vgdl_expt.m
@@ -207,8 +208,8 @@ clear multi;
                         play = plays(p);
 
                         q = sprintf('{"subj_id": "%d", "run_id": %d, "block_id": %d, "instance_id": %d, "play_id": %d}', subj_id, run.run_id, block.block_id, instance.instance_id, play.play_id);
-                        regressors = find(conn, 'regressors', 'query', q);
-                        assert(length(regressors) == 1);
+                        % momchil: assume latest one is the correct one TODO cleanup
+                        %regressors = find(conn, 'regressors', 'query', q, 'sort', '{"dt": -1.0}');
 
                         tc = regressors(1).regressors.theory_change_flag;
                         for i = 1:length(tc)
