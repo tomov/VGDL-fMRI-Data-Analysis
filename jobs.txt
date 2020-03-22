@@ -109,3 +109,33 @@ downloadConvertSBatch.sh for subject 200315_VGDL_008: /ncf/gershman/Lab/scripts/
 --- Thu Mar 19 18:30:15 EDT 2020: Running ccnl_fmri_preproc for subjects 8 in parallel
 ----------------
 ccnl_fmri_preproc.sh for subject 8: output/ccnl_fmri_preproc_8_48882179.out -- Submitted batch job 48882179
+----------------
+--- Running ccnl_fmri_glm for subjects 3
+----------------
+ccnl_fmri_glm.sh for GLM 1, subjects 3: output/ccnl_fmri_glm_1_goodSubjects_.out --
+----------------
+--- Running ccnl_fmri_glm for subjects 3
+----------------
+ccnl_fmri_glm.sh for GLM 1, subjects 3: output/ccnl_fmri_glm_1_goodSubjects_49117315.out -- Submitted batch job 49117315
+----------------
+--- Running ccnl_fmri_glm for subjects 1 2
+----------------
+ccnl_fmri_glm.sh for GLM 1, subjects 2 1: output/ccnl_fmri_glm_1_goodSubjects_49119965.out -- Submitted batch job 49119965
+----------------
+--- Running ccnl_fmri_glm_parallel for subjects 1 2
+----------------
+ccnl_fmri_glm_parallel.sh for GLM 1, subject 2: output/ccnl_fmri_glm_parallel_1_subj_2_49122902.out -- Submitted batch job 49122902
+ccnl_fmri_glm_parallel.sh for GLM 1, subject 1: output/ccnl_fmri_glm_parallel_1_subj_1_49122913.out -- Submitted batch job 49122913
+----------------
+--- Running ccnl_fmri_glm_parallel for subjects 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm_parallel.sh for GLM 1, subject 8: output/ccnl_fmri_glm_parallel_1_subj_8_49123381.out -- Submitted batch job 49123381
+ccnl_fmri_glm_parallel.sh for GLM 1, subject 3: output/ccnl_fmri_glm_parallel_1_subj_3_49123392.out -- Submitted batch job 49123392
+ccnl_fmri_glm_parallel.sh for GLM 1, subject 6: output/ccnl_fmri_glm_parallel_1_subj_6_49123401.out -- Submitted batch job 49123401
+ccnl_fmri_glm_parallel.sh for GLM 1, subject 4: output/ccnl_fmri_glm_parallel_1_subj_4_49123404.out -- Submitted batch job 49123404
+ccnl_fmri_glm_parallel.sh for GLM 1, subject 7: output/ccnl_fmri_glm_parallel_1_subj_7_49123408.out -- Submitted batch job 49123408
+ccnl_fmri_glm_parallel.sh for GLM 1, subject 5: output/ccnl_fmri_glm_parallel_1_subj_5_49123412.out -- Submitted batch job 49123412
+----------------
+--- Running ccnl_fmri_glm_parallel for subjects 3
+----------------
+ccnl_fmri_glm_parallel.sh for GLM 1, subject 3: output/ccnl_fmri_glm_parallel_1_subj_3_49374784.out -- Submitted batch job 49374784
