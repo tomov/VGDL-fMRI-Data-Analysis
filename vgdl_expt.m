@@ -74,6 +74,8 @@ function EXPT = vgdl_expt(local)
     
     % TR repetition time
     EXPT.TR = 2; %seconds
+    EXPT.nTRs = 283;
+    EXPT.run_duration = EXPT.TR * EXPT.nTRs;
 
     % Function handle to create subject multi structure
     EXPT.create_multi = @vgdl_create_multi;
