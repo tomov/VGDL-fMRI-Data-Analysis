@@ -1,7 +1,7 @@
 function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
-%glmodel = 3;
-%subj_id = 1; % 181 is simple (1 play), 184 is more realistic
-%run_id = 6;
+%glmodel = 2;
+%subj_id = 1;
+%run_id = 1;
 
 clear multi;
 save_output = true;
@@ -113,7 +113,6 @@ save_output = true;
                     st = instance.start_time - run.scan_start_ts;
                     en = instance.end_time - run.scan_start_ts; % includes "YOU WON / LOST / etc" screen
 
-                    % instance boxcar regressor
                     onsets = [onsets, st];
                     durs = [durs, en - st];
                 end
@@ -147,23 +146,45 @@ save_output = true;
                     instance = instances(i);
 
                     q = sprintf('{"subj_id": "%d", "run_id": %d, "block_id": %d, "instance_id": %d}', subj_id, run.run_id, block.block_id, instance.instance_id);
-                    plays = find(conn, 'plays', 'query', q);
+                    nplays = count(conn, 'plays', 'query', q);
 
-                    for p = 1:length(plays)
-                        play = plays(p);
+                    for p = 1:nplays
+                        % fetch plays one by one, b/c o/w OOM
+                        q = sprintf('{"subj_id": "%d", "run_id": %d, "block_id": %d, "instance_id": %d, "play_id": %d}', subj_id, run.run_id, block.block_id, instance.instance_id, p - 1);
+                        plays = find(conn, 'plays', 'query', q);
+                        assert(length(plays) == 1);
+                        play = plays(1);
+
+                        plays_post = find(conn, 'plays_post', 'query', q);
+                        assert(length(plays_post) == 1);
+                        play_post = plays_post(1);
 
                         if isempty(keys)
-                            keys = fieldnames(plays(p).keyholds);
+                            keys = fieldnames(play.keyholds);
                             keyholds = cell(1,length(keys));
+                            keyholds_post = cell(1,length(keys));
+                            keypresses = cell(1,length(keys));
                         end
 
                         % key hold boxcar regressors
                         for k = 1:numel(keys)
-                            kh = plays(p).keyholds.(keys{k});
+                            kh = play.keyholds.(keys{k});
                             if length(kh) > 0
                                 kh(:,1) = kh(:,1) - run.scan_start_ts;
                             end
                             keyholds{k} = [keyholds{k}; kh];
+
+                            kh_post = play_post.keyholds.(keys{k});
+                            if length(kh_post) > 0
+                                kh_post(:,1) = kh_post(:,1) - run.scan_start_ts;
+                            end
+                            keyholds_post{k} = [keyholds_post{k}; kh_post];
+
+                            kp = play_post.keypresses.(keys{k});
+                            if length(kp) > 0
+                                kp(:,1) = kp(:,1) - run.scan_start_ts;
+                            end
+                            keypresses{k} = [keypresses{k}; kp];
                         end
                     end
                 end
@@ -174,9 +195,23 @@ save_output = true;
             for k = 1:numel(keys)
                 if size(keyholds{k}, 1) > 0
                     idx = idx + 1;
-                    multi.names{idx} = keys{k};
+                    multi.names{idx} = ['keyholds_', keys{k}];
                     multi.onsets{idx} = keyholds{k}(:,1)';
                     multi.durations{idx} = keyholds{k}(:,2)';
+                end
+
+                if size(keyholds_post{k}, 1) > 0
+                    idx = idx + 1;
+                    multi.names{idx} = ['keyholds_post_', keys{k}];
+                    multi.onsets{idx} = keyholds_post{k}(:,1)';
+                    multi.durations{idx} = keyholds_post{k}(:,2)';
+                end
+
+                if size(keypresses{k}, 1) > 0
+                    idx = idx + 1;
+                    multi.names{idx} = ['keypresses_', keys{k}];
+                    multi.onsets{idx} = keypresses{k}(:,1)';
+                    multi.durations{idx} = zeros(size(multi.onsets{idx}));
                 end
             end
 
@@ -228,8 +263,61 @@ save_output = true;
             multi.onsets{idx} = onsets;
             multi.durations{idx} = durs;
 
+
+
+        % same as 1 but with nuisance regressors
+        % condition = game, boxcars over blocks
+        % look for systematic differences across games for things like agency, etc
+        % e.g. contrast: 'chase + helper - butterflies - aliens'
+        %
+        case 4 
+
+            idx = 0;
+
+            keys = [];
+
+            blocks = run.blocks;
+            for b = 1:length(blocks)
+                block = blocks(b);
+                instances = block.instances;
+
+                game_name = block.game.name;
+                
+                onsets = [];
+                durs = [];
+                for i = 1:length(instances)
+                    instance = instances(i);
+
+                    st = instance.start_time - run.scan_start_ts;
+                    en = instance.end_time - run.scan_start_ts; % includes "YOU WON / LOST / etc" screen
+
+                    q = sprintf('{"subj_id": "%d", "run_id": %d, "block_id": %d, "instance_id": %d}', subj_id, run.run_id, block.block_id, instance.instance_id);
+                    nplays = count(conn, 'plays', 'query', q);
+
+                    for p = 1:nplays
+                        % one by one, b/c o/w OOM
+                        q = sprintf('{"subj_id": "%d", "run_id": %d, "block_id": %d, "instance_id": %d, "play_id": %d}', subj_id, run.run_id, block.block_id, instance.instance_id, p - 1);
+                        plays = find(conn, 'plays', 'query', q);
+                        assert(length(plays) == 1);
+                        play = plays(1);
+
+                        % TODO continue
+                    end
+
+                    onsets = [onsets, st];
+                    durs = [durs, en - st];
+                end
+
+                % instance boxcar regressor
+                idx = idx + 1;
+                multi.names{idx} = game_name;
+                multi.onsets{idx} = onsets;
+                multi.durations{idx} = durs;
+            end
+
         otherwise
             assert(false, 'invalid glmodel -- should be one of the above');
+
     end % end of switch statement
 
     if save_output

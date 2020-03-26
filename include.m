@@ -18,5 +18,6 @@ addpath('/Users/momchil/Dropbox/Research/libs/rsatoolbox/Modules/'); % RSA toolb
 addpath('/Users/momchil/Dropbox/Research/libs/distributionPlot/'); % for plotting stuff
 addpath('/Users/momchil/Dropbox/Research/libs/panel-2.12/'); % tight subplots
 addpath('/Users/momchil/Dropbox/Research/libs/panel-2.12/demo/'); % tight subplots
+addpath('/Users/momchil/Dropbox/Research/libs/encoder/encoder/'); % gzip 
 
 
