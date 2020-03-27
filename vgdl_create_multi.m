@@ -125,91 +125,35 @@ save_output = true;
             end
 
 
-        % button presses boxcars
+        % key holds vs. button presses vs. key holds from button presses   NOT A REAL GLM for viz only
         % nuisance regressors
         % this is exploratory, so ok to look at them separately and incorporate into other GLMs later
+        % also to compare keyholds_post computed from keypresses with actual keyholds
         %
         case 2
 
             idx = 0;
 
-            keys = [];
+            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn);
 
-            blocks = run.blocks;
-            for b = 1:length(blocks)
-                block = blocks(b);
-                instances = block.instances;
-
-                game_name = block.game.name;
-                
-                for i = 1:length(instances)
-                    instance = instances(i);
-
-                    q = sprintf('{"subj_id": "%d", "run_id": %d, "block_id": %d, "instance_id": %d}', subj_id, run.run_id, block.block_id, instance.instance_id);
-                    nplays = count(conn, 'plays', 'query', q);
-
-                    for p = 1:nplays
-                        % fetch plays one by one, b/c o/w OOM
-                        q = sprintf('{"subj_id": "%d", "run_id": %d, "block_id": %d, "instance_id": %d, "play_id": %d}', subj_id, run.run_id, block.block_id, instance.instance_id, p - 1);
-                        plays = find(conn, 'plays', 'query', q);
-                        assert(length(plays) == 1);
-                        play = plays(1);
-
-                        plays_post = find(conn, 'plays_post', 'query', q);
-                        assert(length(plays_post) == 1);
-                        play_post = plays_post(1);
-
-                        if isempty(keys)
-                            keys = fieldnames(play.keyholds);
-                            keyholds = cell(1,length(keys));
-                            keyholds_post = cell(1,length(keys));
-                            keypresses = cell(1,length(keys));
-                        end
-
-                        % key hold boxcar regressors
-                        for k = 1:numel(keys)
-                            kh = play.keyholds.(keys{k});
-                            if length(kh) > 0
-                                kh(:,1) = kh(:,1) - run.scan_start_ts;
-                            end
-                            keyholds{k} = [keyholds{k}; kh];
-
-                            kh_post = play_post.keyholds.(keys{k});
-                            if length(kh_post) > 0
-                                kh_post(:,1) = kh_post(:,1) - run.scan_start_ts;
-                            end
-                            keyholds_post{k} = [keyholds_post{k}; kh_post];
-
-                            kp = play_post.keypresses.(keys{k});
-                            if length(kp) > 0
-                                kp(:,1) = kp(:,1) - run.scan_start_ts;
-                            end
-                            keypresses{k} = [keypresses{k}; kp];
-                        end
-                    end
-                end
-
-            end
-
-            % key hold boxcar regressors
-            for k = 1:numel(keys)
+            for k = 1:numel(keyNames)
                 if size(keyholds{k}, 1) > 0
                     idx = idx + 1;
-                    multi.names{idx} = ['keyholds_', keys{k}];
+                    multi.names{idx} = ['keyholds_', keyNames{k}];
                     multi.onsets{idx} = keyholds{k}(:,1)';
                     multi.durations{idx} = keyholds{k}(:,2)';
                 end
 
                 if size(keyholds_post{k}, 1) > 0
                     idx = idx + 1;
-                    multi.names{idx} = ['keyholds_post_', keys{k}];
+                    multi.names{idx} = ['keyholds_post_', keyNames{k}];
                     multi.onsets{idx} = keyholds_post{k}(:,1)';
                     multi.durations{idx} = keyholds_post{k}(:,2)';
                 end
 
                 if size(keypresses{k}, 1) > 0
                     idx = idx + 1;
-                    multi.names{idx} = ['keypresses_', keys{k}];
+                    multi.names{idx} = ['keypresses_', keyNames{k}];
                     multi.onsets{idx} = keypresses{k}(:,1)';
                     multi.durations{idx} = zeros(size(multi.onsets{idx}));
                 end
@@ -314,6 +258,55 @@ save_output = true;
                 multi.onsets{idx} = onsets;
                 multi.durations{idx} = durs;
             end
+
+
+        % button hold boxcars, (copied) subset of GLM 2
+        % nuisance regressors
+        % this is exploratory, so ok to look at them separately and incorporate into other GLMs later
+        %
+        case 5
+
+            idx = 0;
+
+            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn);
+
+            if subj_id == 1
+                % we screwed up keyholds for subject 1, so we use estimates from keypresses
+                keyholds = keyholds_post
+            end
+
+            % key hold boxcar regressors
+            for k = 1:numel(keyNames)
+                if size(keyholds{k}, 1) > 0
+                    idx = idx + 1;
+                    multi.names{idx} = keyNames{k};
+                    multi.onsets{idx} = keyholds{k}(:,1)';
+                    multi.durations{idx} = keyholds{k}(:,2)';
+                end
+            end
+
+
+        % key presses, (copied) subset of GLM 2, compare to GLM 5
+        % nuisance regressors
+        % this is exploratory, so ok to look at them separately and incorporate into other GLMs later
+        %
+        case 6
+
+            idx = 0;
+
+            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn);
+
+            for k = 1:numel(keyNames)
+                if size(keypresses{k}, 1) > 0
+                    idx = idx + 1;
+                    multi.names{idx} = ['keypresses_', keyNames{k}];
+                    multi.onsets{idx} = keypresses{k}(:,1)';
+                    multi.durations{idx} = zeros(size(multi.onsets{idx}));
+                end
+            end
+
+
+
 
         otherwise
             assert(false, 'invalid glmodel -- should be one of the above');
