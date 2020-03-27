@@ -96,32 +96,14 @@ save_output = true;
 
             idx = 0;
 
-            keys = [];
+            [game_names, onsets, durs] = get_games(subj_id, run, conn);
 
-            blocks = run.blocks;
-            for b = 1:length(blocks)
-                block = blocks(b);
-                instances = block.instances;
-
-                game_name = block.game.name;
-                
-                onsets = [];
-                durs = [];
-                for i = 1:length(instances)
-                    instance = instances(i);
-
-                    st = instance.start_time - run.scan_start_ts;
-                    en = instance.end_time - run.scan_start_ts; % includes "YOU WON / LOST / etc" screen
-
-                    onsets = [onsets, st];
-                    durs = [durs, en - st];
-                end
-
+            for i = 1:numel(game_names)
                 % instance boxcar regressor
                 idx = idx + 1;
-                multi.names{idx} = game_name;
-                multi.onsets{idx} = onsets;
-                multi.durations{idx} = durs;
+                multi.names{idx} = game_names{i};
+                multi.onsets{idx} = onsets{i};
+                multi.durations{idx} = durs{i};
             end
 
 
@@ -322,12 +304,35 @@ save_output = true;
 
             for i = 1:numel(fields)
                 if ~ismember(fields{i}, {'timestamps', 'durations'}) 
+                    if all(visuals.(fields{i}) == visuals.(fields{i})(1))
+                        % constant
+                        continue
+                    end
                     idx = idx + 1;
                     multi.pmod(1).name{idx} = fields{i};
                     multi.pmod(1).param{idx} = visuals.(fields{i});
                     multi.pmod(1).poly{idx} = 1;
                 end
             end
+
+        % visual control regressors for start/end block, instance, play
+        % nuisance regressors
+        % this is exploratory, so ok to look at them separately and incorporate into other GLMs later
+        %
+        case 8
+
+            [onoff] = get_onoff(subj_id, run, conn);
+            fields = fieldnames(onoff);
+
+            idx = 0;
+
+            for i = 1:numel(fields)
+                idx = idx + 1;
+                multi.names{idx} = fields{i};
+                multi.onsets{idx} = onoff.(fields{i});
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));
+            end
+
 
 
 

@@ -5,7 +5,7 @@ function [fields, visuals] = get_visuals(subj_id, run, conn)
     % note run is a struct
     %
 
-    fields = {'timestamps', 'new_sprites', 'killed_sprites', 'sprites', 'non_walls', 'avatar_moved', 'moved', 'movable', 'collisions', 'effects', 'sprite_groups', 'changed'}
+    fields = {'timestamps', 'new_sprites', 'killed_sprites', 'sprites', 'non_walls', 'avatar_moved', 'moved', 'movable', 'collisions', 'effects', 'sprite_groups', 'changed'};
     visuals = struct;
     for i = 1:numel(fields)
         visuals.(fields{i}) = [];
