@@ -1,5 +1,5 @@
 function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
-%glmodel = 2;
+%glmodel = 7;
 %subj_id = 1;
 %run_id = 1;
 
@@ -299,9 +299,33 @@ save_output = true;
             for k = 1:numel(keyNames)
                 if size(keypresses{k}, 1) > 0
                     idx = idx + 1;
-                    multi.names{idx} = ['keypresses_', keyNames{k}];
+                    multi.names{idx} = ['keypresses_', keyNames{k}]; % TODO rm prefix... but already ran
                     multi.onsets{idx} = keypresses{k}(:,1)';
                     multi.durations{idx} = zeros(size(multi.onsets{idx}));
+                end
+            end
+
+
+        % visual control regressors for each frame
+        % nuisance regressors
+        % this is exploratory, so ok to look at them separately and incorporate into other GLMs later
+        %
+        case 7
+
+            [fields, visuals] = get_visuals(subj_id, run, conn);
+
+            multi.names{1} = 'frames';
+            multi.onsets{1} = visuals.timestamps';
+            multi.durations{1} = visuals.durations';
+
+            idx = 0;
+
+            for i = 1:numel(fields)
+                if ~ismember(fields{i}, {'timestamps', 'durations'}) 
+                    idx = idx + 1;
+                    multi.pmod(1).name{idx} = fields{i};
+                    multi.pmod(1).param{idx} = visuals.(fields{i});
+                    multi.pmod(1).poly{idx} = 1;
                 end
             end
 
