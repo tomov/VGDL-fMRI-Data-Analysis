@@ -139,3 +139,13 @@ ccnl_fmri_glm_parallel.sh for GLM 1, subject 5: output/ccnl_fmri_glm_parallel_1_
 --- Running ccnl_fmri_glm_parallel for subjects 3
 ----------------
 ccnl_fmri_glm_parallel.sh for GLM 1, subject 3: output/ccnl_fmri_glm_parallel_1_subj_3_49374784.out -- Submitted batch job 49374784
+----------------
+--- Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 5, subjects 7 8 2 6 3 4 1 5: output/ccnl_fmri_glm_5_goodSubjects_49899442.out -- Submitted batch job 49899442
+ccnl_fmri_glm.sh for GLM 6, subjects 7 5 6 3 2 1 8 4: output/ccnl_fmri_glm_6_goodSubjects_49899443.out -- Submitted batch job 49899443
+----------------
+--- Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 7, subjects 1 6 3 4 2 5 7 8: output/ccnl_fmri_glm_7_goodSubjects_49974532.out -- Submitted batch job 49974532
+ccnl_fmri_glm.sh for GLM 8, subjects 2 4 3 8 5 6 7 1: output/ccnl_fmri_glm_8_goodSubjects_49974533.out -- Submitted batch job 49974533

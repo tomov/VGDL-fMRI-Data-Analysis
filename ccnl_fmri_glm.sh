@@ -14,7 +14,7 @@ echo --- Running ccnl_fmri_glm for subjects ${subj_arg} >> jobs.txt
 echo ---------------- >> jobs.txt
 
 
-for model in {1..1}
+for model in {7..8}
 do
     shuffledSubjects=( $(printf '%s\n' "${goodSubjects[@]}" | shuf ) )   # shuffle subjects so parallel GLM's don't use the same hard disk
     subj_arg="${shuffledSubjects[@]}" # stringify it
