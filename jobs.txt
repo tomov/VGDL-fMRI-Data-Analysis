@@ -149,3 +149,15 @@ ccnl_fmri_glm.sh for GLM 6, subjects 7 5 6 3 2 1 8 4: output/ccnl_fmri_glm_6_goo
 ----------------
 ccnl_fmri_glm.sh for GLM 7, subjects 1 6 3 4 2 5 7 8: output/ccnl_fmri_glm_7_goodSubjects_49974532.out -- Submitted batch job 49974532
 ccnl_fmri_glm.sh for GLM 8, subjects 2 4 3 8 5 6 7 1: output/ccnl_fmri_glm_8_goodSubjects_49974533.out -- Submitted batch job 49974533
+----------------
+--- Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 9, subjects 4 2 6 3 5 1 7 8: output/ccnl_fmri_glm_9_goodSubjects_50239267.out -- Submitted batch job 50239267
+----------------
+--- Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 9, subjects 5 4 7 8 1 3 2 6: output/ccnl_fmri_glm_9_goodSubjects_50241747.out -- Submitted batch job 50241747
+----------------
+--- Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 7, subjects 7 2 1 5 8 3 6 4: output/ccnl_fmri_glm_7_goodSubjects_50241748.out -- Submitted batch job 50241748

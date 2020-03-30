@@ -299,6 +299,8 @@ save_output = true;
             multi.onsets{1} = visuals.timestamps';
             multi.durations{1} = visuals.durations';
 
+            multi.orth{1} = 0; % do not orthogonalise them
+
             idx = 0;
 
             for i = 1:numel(fields)
@@ -375,6 +377,8 @@ save_output = true;
             multi.names{idx} = 'frames';
             multi.onsets{idx} = visuals.timestamps';
             multi.durations{idx} = visuals.durations';
+
+            multi.orth{idx} = 0; % do not orthogonalise them
 
             pix = 0;
             for i = 1:numel(fields)
