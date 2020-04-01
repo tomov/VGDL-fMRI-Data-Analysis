@@ -149,45 +149,12 @@ save_output = true;
 
             idx = 0;
 
-            onsets = [];
-            durs = [];
-
-            blocks = run.blocks;
-            for b = 1:length(blocks)
-                block = blocks(b);
-                instances = block.instances;
-
-                game_name = block.game.name;
-                
-                for i = 1:length(instances)
-                    instance = instances(i);
-
-                    q = sprintf('{"subj_id": "%d", "run_id": %d, "block_id": %d, "instance_id": %d}', subj_id, run.run_id, block.block_id, instance.instance_id);
-                    plays = find(conn, 'plays', 'query', q);
-
-                    for p = 1:length(plays)
-                        play = plays(p);
-
-                        q = sprintf('{"subj_id": "%d", "run_id": %d, "block_id": %d, "instance_id": %d, "play_id": %d}', subj_id, run.run_id, block.block_id, instance.instance_id, play.play_id);
-                        % momchil: assume latest one is the correct one TODO cleanup
-                        %regressors = find(conn, 'regressors', 'query', q, 'sort', '{"dt": -1.0}');
-
-                        tc = regressors(1).regressors.theory_change_flag;
-                        for i = 1:length(tc)
-                            if tc{i}{1} % theory changed
-                                onsets = [onsets tc{i}{3} - run.scan_start_ts];
-                                durs = [durs 0];
-                            end
-                        end
-                    end
-                end
-
-            end
+            onsets = get_regressors(subj_id, run, conn);
 
             idx = idx + 1;
             multi.names{idx} = 'theory_change_flag';
             multi.onsets{idx} = onsets;
-            multi.durations{idx} = durs;
+            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
 
 
 
@@ -404,6 +371,118 @@ save_output = true;
                 multi.onsets{idx} = onoff.(fields{i});
                 multi.durations{idx} = zeros(size(multi.onsets{idx}));
             end
+
+
+        % frame nuisance regressors: visual control regressors for each frame 
+        % same as GLM 7 excep 1 per GLM b/c they're highly correlated and we get nothing
+        % this is exploratory, so ok to look at them separately and incorporate into other GLMs later
+        %
+        case {10,11,12,13,14,15,16,17,18,19,20}  
+
+            [fields, visuals] = get_visuals(subj_id, run, conn);
+
+            multi.names{1} = 'frames';
+            multi.onsets{1} = visuals.timestamps';
+            multi.durations{1} = visuals.durations';
+
+            multi.orth{1} = 0; % do not orthogonalise them
+
+            glm_idx = 9;
+            for i = 1:numel(fields)
+                if ~ismember(fields{i}, {'timestamps', 'durations'}) 
+                    if all(visuals.(fields{i}) == visuals.(fields{i})(1))
+                        % constant
+                        continue
+                    end
+
+                    glm_idx = glm_idx + 1;
+                    if glm_idx == glmodel
+                        multi.pmod(1).name{1} = fields{i};
+                        multi.pmod(1).param{1} = visuals.(fields{i});
+                        multi.pmod(1).poly{1} = 1;
+                    end
+                end
+            end
+
+        % theory_change_flag + control regressors
+        % i.e. GLM 3 + GLM 9 
+        % TODO dedupe
+        %
+        case 21
+
+            idx = 0;
+
+            % from GLM 3: theory_change_flag
+            %
+            onsets = get_regressors(subj_id, run, conn);
+
+            idx = idx + 1;
+            multi.names{idx} = 'theory_change_flag';
+            multi.onsets{idx} = onsets;
+            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+
+            % from GLM 1: game instance boxcar regressor
+            %
+            [game_names, onsets, durs] = get_games(subj_id, run, conn);
+            for i = 1:numel(game_names)
+                idx = idx + 1;
+                multi.names{idx} = game_names{i};
+                multi.onsets{idx} = onsets{i};
+                multi.durations{idx} = durs{i};
+            end
+
+            % from GLM 5: keyholds nuisance regressors
+            %
+            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn);
+            if subj_id == 1
+                % we screwed up keyholds for subject 1, so we use estimates from keypresses
+                keyholds = keyholds_post
+            end
+            % key hold boxcar regressors
+            for k = 1:numel(keyNames)
+                if size(keyholds{k}, 1) > 0
+                    idx = idx + 1;
+                    multi.names{idx} = keyNames{k};
+                    multi.onsets{idx} = keyholds{k}(:,1)';
+                    multi.durations{idx} = keyholds{k}(:,2)';
+                end
+            end
+
+            % GLM 7: frame nuisance regressors
+            %
+            [fields, visuals] = get_visuals(subj_id, run, conn);
+            idx = idx + 1;
+            multi.names{idx} = 'frames';
+            multi.onsets{idx} = visuals.timestamps';
+            multi.durations{idx} = visuals.durations';
+
+            multi.orth{idx} = 0; % do not orthogonalise them
+
+            pix = 0;
+            for i = 1:numel(fields)
+                if ~ismember(fields{i}, {'timestamps', 'durations'}) 
+                    if all(visuals.(fields{i}) == visuals.(fields{i})(1))
+                        % constant
+                        continue
+                    end
+                    pix = pix + 1;
+                    multi.pmod(idx).name{pix} = fields{i};
+                    multi.pmod(idx).param{pix} = visuals.(fields{i});
+                    multi.pmod(idx).poly{pix} = 1;
+                end
+            end
+
+            % GLM 8: on/off nuisance regressors
+            %
+            [onoff] = get_onoff(subj_id, run, conn);
+            fields = fieldnames(onoff);
+            for i = 1:numel(fields)
+                idx = idx + 1;
+                multi.names{idx} = fields{i};
+                multi.onsets{idx} = onoff.(fields{i});
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));
+            end
+
 
         otherwise
             assert(false, 'invalid glmodel -- should be one of the above');
