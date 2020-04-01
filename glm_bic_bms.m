@@ -8,7 +8,7 @@ EXPT = vgdl_expt();
 
 % compare GLMs in left M1
 %
-masks = {'masks/left_M1.nii'};
+masks = {'masks/m1_L.nii'};
 region = {'Left M1'};
 %[masks, region] = get_masks(29, 'DV', true, [], 1);
 glms = [5 6];
@@ -34,6 +34,7 @@ for c = 1:length(masks)
     pxps(c,:) = pxp;
 end
 
+glms
 table(region, pxps)
 
 
