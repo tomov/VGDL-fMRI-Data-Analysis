@@ -90,5 +90,7 @@ function EXPT = vgdl_expt(local)
     % Where the data live, but not sure which data
     EXPT.datadir = [exptdir, 'testOutput'];
 
+    EXPT.exptdir = exptdir;
+
 
 end

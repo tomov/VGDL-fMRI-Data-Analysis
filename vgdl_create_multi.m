@@ -47,7 +47,7 @@ save_output = true;
     %run_id = run_ids(run_id);
     fprintf('run_id %d \n', run_id);
 
-    filename = sprintf('vgdl_create_multi_glm%d_subj%d_run%d.mat', glmodel, subj_id, run_id)
+    filename = sprintf('mat/vgdl_create_multi_glm%d_subj%d_run%d.mat', glmodel, subj_id, run_id)
 
     % hack to make it work on the cluster until they install MongoDB toolbox
     % just pre-generate the multi's locally, then load them on the cluster
@@ -405,7 +405,7 @@ save_output = true;
             end
 
         % theory_change_flag + control regressors
-        % i.e. GLM 3 + GLM 9 
+        % i.e. GLM 3 + GLM 9 = 3, 1, 5, 7, 8
         % TODO dedupe
         %
         case 21
@@ -481,6 +481,31 @@ save_output = true;
                 multi.names{idx} = fields{i};
                 multi.onsets{idx} = onoff.(fields{i});
                 multi.durations{idx} = zeros(size(multi.onsets{idx}));
+            end
+
+        % beta series -- separate regressor for each TR for each level for each game
+        % for RSA, effectively deconvolution
+        % similar to GLM 23 in Exploration
+        %
+        case 22
+
+            idx = 0;
+
+            EXPT = vgdl_expt();
+
+            [game_names, onsets, durs] = get_games(subj_id, run, conn);
+
+            for i = 1:numel(game_names)
+                for j = 1:length(onsets{i})
+                    ons = [onsets{i}(j):EXPT.TR:onsets{i}(j)+durs{i}(j)];
+                    for k = 1:length(ons)
+                        idx = idx + 1;
+                        % impulse regressors tiling every instance at 2 s intervals 
+                        multi.names{idx} = sprintf('run_%d_block_%d_instance_%d_time_%d', run_id, i, j, k);
+                        multi.onsets{idx} = ons(k);
+                        multi.durations{idx} = 0;
+                    end
+                end
             end
 
 
