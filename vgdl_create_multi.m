@@ -518,4 +518,5 @@ save_output = true;
         save(filename, 'multi', '-v7.3'); % <-- DON'T DO IT! breaks on NCF... b/c of file permissions
     end
 
+    close(conn);
 

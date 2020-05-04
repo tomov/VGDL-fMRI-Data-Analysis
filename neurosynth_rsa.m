@@ -5,7 +5,7 @@ printcode;
 
 rsa_idx = 1;
 lateralized = true;
-use_smooth = true;
+use_smooth = false;
 
 if use_smooth
     EXPT = vgdl_expt();
@@ -31,7 +31,7 @@ else
 end
 
 
-filename = sprintf('neurosynth_rsa_%d_us=%d_l=%d_pi=%d.mat', rsa_idx, use_smooth, lateralized, length(parcel_idxs));
+filename = sprintf('mat/neurosynth_rsa_%d_us=%d_l=%d_pi=%d.mat', rsa_idx, use_smooth, lateralized, length(parcel_idxs));
 disp(filename);
 
 
@@ -71,8 +71,8 @@ for i = 1:length(parcel_idxs)
     %
     mask = mask & group_mask;
 
-    if sum(mask(:)) == 0
-        disp('skipping parcel -- empty mask');
+    if sum(mask(:)) < 5
+        disp('skipping parcel -- small or empty mask');
         continue; % some masks are already lateralized
     end
 
@@ -86,3 +86,7 @@ save(filename, '-v7.3');
 [Rho, H, T, P, all_subject_rhos, Behavioral, Neural] = ccnl_rsa(EXPT, rsa_idx, roi_masks);
 
 save(filename, '-v7.3');
+
+% view RSA results
+%
+ccnl_rsa_view(EXPT, rsa_idx, 1, T, all_subject_rhos, roi_masks);

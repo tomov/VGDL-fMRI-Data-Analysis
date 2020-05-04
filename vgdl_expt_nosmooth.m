@@ -6,5 +6,5 @@ function EXPT = vgdl_expt_nosmooth(local)
     EXPT = vgdl_expt();
 
     EXPT.modeldir = [EXPT.exptdir, 'glmOutput_nosmooth'];
-    EXPT.rsadir = [EXPT.rsadir, 'rsaOutput_nosmooth'];
+    EXPT.rsadir = [EXPT.exptdir, 'rsaOutput_nosmooth'];
 
