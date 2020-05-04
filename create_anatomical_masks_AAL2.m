@@ -1,5 +1,4 @@
 % Script to create masks for our ROIs
-% copied from Exploration project
 %
 
 % The ROI AAL2 labels (we make them bilateral later)
@@ -49,6 +48,3 @@ for roi = rois
     ccnl_create_mask(labels, fullfile('masks', [roi, '.nii']), 'AAL2', true, group_mask_filename);
     ccnl_create_mask(labels, fullfile('masks', [roi, '_unnormalized.nii']), 'AAL2', false);
 end
-
-% ccnl_create_mask({'Precentral_L'}, 'masks/m1_L.nii', 'AAL2', true, group_mask_filename);
-% ccnl_view_mask({'masks/mask.nii', 'masks/m1_L.nii'})
