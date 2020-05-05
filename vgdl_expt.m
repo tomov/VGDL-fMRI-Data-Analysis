@@ -69,7 +69,7 @@ function EXPT = vgdl_expt(local)
                 i = i + 1;
             end 
         end
-        disp(EXPT.subject(subj));
+        %disp(EXPT.subject(subj));
     end
     
     % TR repetition time

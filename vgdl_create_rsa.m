@@ -11,7 +11,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
     % INPUTS:
     %   rsa_idx - positive integer indicating which RSA we're doing
     %   subj_id - integer specifying which subject is being analyzed
-    %   seed (optional) - random seed that is used to generate random permutation of labels, for permutation tests
+    %   seed (optional) - random seed that, if passed, is used to generate random permutation of labels, for permutation tests
     %
     % OUTPUTS:
     %   rsa - a structure with the following fields:
@@ -39,7 +39,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
     % hack to make it work on the cluster until they install MongoDB toolbox
     % just pre-generate the multi's locally, then load them on the cluster
     try
-        conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54')
+        conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54');
     catch e
         e
         fprintf('loading from %s\n', filename);
@@ -64,9 +64,9 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
             %goodRun_ids = goodRun_ids(randperm(length(goodRun_ids))); % TODO rm me -- more permutation testing, across runs
             for run_id = goodRun_ids
                 % copied from vgdl_create_multi, GLM 1
-                query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id) % in python we index runs from 0 (but not subjects) 
+                query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id); % in python we index runs from 0 (but not subjects) 
 
-                run = find(conn, 'runs', 'query', query)
+                run = find(conn, 'runs', 'query', query);
                 assert(length(run) == 1);
                 [game_names, onsets, durs] = get_games(subj_id, run, conn);
 
@@ -110,9 +110,9 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
             runs = [];
             for run_id = goodRun_ids 
                 % copied from vgdl_create_multi, GLM 22
-                query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id) % in python we index runs from 0 (but not subjects) 
+                query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id); % in python we index runs from 0 (but not subjects) 
 
-                run = find(conn, 'runs', 'query', query)
+                run = find(conn, 'runs', 'query', query);
                 assert(length(run) == 1);
                 [game_names, onsets, durs] = get_games(subj_id, run, conn);
 
