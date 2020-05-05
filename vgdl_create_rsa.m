@@ -1,4 +1,4 @@
-function rsa = vgdl_create_rsa(rsa_idx, subj_id)
+function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
 
     save_output = true;
 
@@ -11,6 +11,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id)
     % INPUTS:
     %   rsa_idx - positive integer indicating which RSA we're doing
     %   subj_id - integer specifying which subject is being analyzed
+    %   seed (optional) - random seed that is used to generate random permutation of labels, for permutation tests
     %
     % OUTPUTS:
     %   rsa - a structure with the following fields:
@@ -78,6 +79,13 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id)
                 %features = [features; randperm(3)']; % TODO rm me -- more random test; basically, stuff nearby (same run or even neighboring runs) is correlated => we should exclude that stuff, or at least control for it; o/w we get lots of negative similarities (b/c all "same games" are far from each other, by design => will be different, compared to "different games", which tend to be closer to each other, on average)
             end
             %features = features(randperm(size(features, 1)), :); % TODO rm me -- permutation test, weak
+
+            if exist('seed', 'var')
+                % optionally shuffle game labels within each pair of runs, for permutation testing
+                % this preserves all the essential structure of the experiment
+                rng(seed);
+                features = features([randperm(6) randperm(6)+6 randperm(6)+12]);
+            end
 
             rsa.event = 'vgfmri3_'; % just a prefix for the game name
             rsa.glmodel = 1;
