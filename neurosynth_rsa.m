@@ -1,9 +1,12 @@
 
 % copied from Exploration / neurosynth_CV.m
 
+clear all;
+
 printcode;
 
 rsa_idx = 1;
+subbatch_size = 50; % don't do all ROIs at once; we OOM b/c all the Neural RDMs
 lateralized = true;
 use_smooth = false;
 
@@ -81,9 +84,13 @@ end
 
 save(filename, '-v7.3');
 
-% run RSA
+% run RSA in (sub)batches
 %
-[Rho, H, T, P, all_subject_rhos, Behavioral, Neural] = ccnl_rsa(EXPT, rsa_idx, roi_masks);
+for s = 1:subbatch_size:length(roi_masks)
+    e = min(length(roi_masks), s + subbatch_size - 1);
+
+    [Rho(s:e,:), H(s:e,:), T(s:e,:), P(s:e,:), all_subject_rhos(s:e,:,:), Behavioral(s:e), Neural(s:e)] = ccnl_rsa(EXPT, rsa_idx, roi_masks(s:e));
+end
 
 save(filename, '-v7.3');
 
