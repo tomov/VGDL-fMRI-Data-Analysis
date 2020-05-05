@@ -83,7 +83,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
             if exist('seed', 'var')
                 % optionally shuffle game labels within each pair of runs, for permutation testing
                 % this preserves all the essential structure of the experiment
-                rng(seed);
+                rng(seed + subj_id);
                 features = features([randperm(6) randperm(6)+6 randperm(6)+12]);
             end
 

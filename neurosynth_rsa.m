@@ -1,15 +1,17 @@
+function neurosynth_rsa(rsa_idx, use_smooth, lateralized, nperms, roi_idx_min, roi_idx_max, subbatch_size)
 
 % copied from Exploration / neurosynth_CV.m
 
-clear all;
-
 printcode;
 
-rsa_idx = 1;
-subbatch_size = 50; % don't do all ROIs at once; we OOM b/c all the Neural RDMs
-lateralized = true;
-use_smooth = true;
-nperms = 1000; % 0 for no permutation tests
+%rsa_idx = 1;
+%lateralized = true;
+%use_smooth = true;
+%nperms = 1000; % 0 for no permutation tests
+
+if ~exist('subbatch_size', 'var')
+    subbatch_size = 50; % don't do all ROIs at once; we OOM b/c all the Neural RDMs; too few though, and you end up loading betas too often
+end
 
 if use_smooth
     EXPT = vgdl_expt();
@@ -18,79 +20,16 @@ else
 end
 
 % get ROIs
-group_mask_filename = fullfile('masks', 'mask.nii');
-if lateralized
-    parcellation_file = fullfile('masks', 'Neurosynth Parcellation_2_lateralized.nii');
-else
-    parcellation_file = fullfile('masks', 'Neurosynth Parcellation_2.nii');
-end
+[roi_masks, region] = get_neurosynth_rois(lateralized);
 
-[~, Vparcel, parcellation_vol] = ccnl_load_mask(parcellation_file);
-parcellation_vol = round(parcellation_vol);
+roi_idx_min = max(roi_idx_min, 1);
+roi_idx_max = min(roi_idx_max, length(roi_masks));
+roi_masks = roi_masks(roi_idx_min:roi_idx_max);
 
-if ~exist('parcel_idxs', 'var') || isempty(parcel_idxs)
-    parcel_idxs = unique(parcellation_vol(:));
-else
-    assert(all(ismember(parcel_idxs, unique(parcellation_vol(:)))));
-end
-
-
-filename = sprintf('mat/neurosynth_rsa_%d_us=%d_l=%d_pi=%d.mat', rsa_idx, use_smooth, lateralized, length(parcel_idxs));
+filename = sprintf('mat/neurosynth_rsa_%d_us=%d_l=%d_nroi=%d_nperms=%d_ri=%d-%d.mat', rsa_idx, use_smooth, lateralized, length(roi_masks), nperms, roi_idx_min, roi_idx_max);
 disp(filename);
 
-atlas.id = []; % create bspmview atlas
-atlas.label = {};
-
-region = [];
-roi_masks = {};
-for i = 1:length(parcel_idxs)
-
-    parcel_idx = parcel_idxs(i);
-    if parcel_idx == 0
-        continue;
-    end
-
-    atlas.id = [atlas.id parcel_idx];
-    atlas.label = [atlas.label {num2str(parcel_idx)}];
-
-    i
-    fprintf('parcel = %d\n', parcel_idx);
-
-    % ROI
-    mask = parcellation_vol == parcel_idx;
-
-    % normalize mask
-    group_vol = spm_vol(group_mask_filename);
-    group_mask = spm_read_vols(group_vol);
-
-    [x, y, z] = ind2sub(size(mask), find(mask)); % binary mask --> voxel indices --> voxel coordinates in AAL2 space
-    cor = mni2cor(cor2mni([x y z], Vparcel.mat), group_vol.mat); % voxel coords in AAL2 space --> voxel coords in MNI space --> voxel coords in our space
-    ind = sub2ind(size(group_mask), cor(:,1), cor(:,2), cor(:,3)); % voxel coords in our space --> voxel indices
-    
-    % Reconstruct mask in our space
-    %
-    Vmask = group_vol;
-    Vmask.fname = 'tmp.nii'; % CRUCIAL! o/w overwrite mask.nii
-    mask = zeros(size(group_mask));
-    mask(ind) = 1; % voxel indices --> binary mask
-    
-    % Only include voxels that are part of the subject group-level mask
-    % i.e. that have non-NaN betas for all subjects
-    %
-    mask = mask & group_mask;
-
-    if sum(mask(:)) < 5
-        disp('skipping parcel -- small or empty mask');
-        continue; % some masks are already lateralized
-    end
-
-    roi_masks = [roi_masks; {mask}];
-    region = [region; parcel_idx];
-end
-
-%roi_masks = roi_masks(161); % zoom in on 1 ROI for permutation test
-
-save(filename, '-v7.3');
+tic
 
 % run RSA in (sub)batches
 %
@@ -128,14 +67,20 @@ if nperms > 0
         end
     end
 
+    save(filename, '-v7.3');
+
     % p-value = P(Rho >= rho | null)
     pval = mean(perm_Rhos >= Rho, 3);
 
     % adjusted rho = subtract mean & divide by stdev (for plotting)
-    Rho_adj = (Rho - mean(perm_Rhos, 3)) ./ std(perm_Rhos, 3);
+    Rho_adj = (Rho - mean(perm_Rhos, 3)) ./ std(perm_Rhos, 0, 3);
 
     save(filename, '-v7.3');
 end
+
+disp(filename);
+
+toc
 
 % view RSA results
 %
