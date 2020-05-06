@@ -47,17 +47,8 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
 
         % special case b/c of cluster TODO better way...
         if exist('seed', 'var')
-            % optionally shuffle game labels within each pair of runs, for permutation testing
-            % this preserves all the essential structure of the experiment
-            switch rsa_idx
-                case 1
-                    rng(seed + subj_id);
-                    rsa.model(1).features = rsa.model(1).features([randperm(6) randperm(6)+6 randperm(6)+12]);
-                otherwise
-                    assert(false, 'invalid rsa_idx -- should be one of the above');
-            end % end of switch statement
+            rsa = permute(rsa, rsa_idx, subj_id, seed);
         end
-
         return
     end
 
@@ -93,13 +84,6 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
                 %features = [features; randperm(3)']; % TODO rm me -- more random test; basically, stuff nearby (same run or even neighboring runs) is correlated => we should exclude that stuff, or at least control for it; o/w we get lots of negative similarities (b/c all "same games" are far from each other, by design => will be different, compared to "different games", which tend to be closer to each other, on average)
             end
             %features = features(randperm(size(features, 1)), :); % TODO rm me -- permutation test, weak
-
-            if exist('seed', 'var')
-                % optionally shuffle game labels within each pair of runs, for permutation testing
-                % this preserves all the essential structure of the experiment
-                rng(seed + subj_id);
-                features = features([randperm(6) randperm(6)+6 randperm(6)+12]);
-            end
 
             rsa.event = 'vgfmri3_'; % just a prefix for the game name
             rsa.glmodel = 1;
@@ -162,7 +146,40 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
     if save_output
         save(filename, 'rsa', '-v7.3'); % <-- DON'T DO IT! breaks on NCF... b/c of file permissions
     end
+    
+    % permute after saving, so as not to write crap
+    if exist('seed', 'var')
+        rsa = permute(rsa, rsa_idx, subj_id, seed);
+    end
 
     close(conn);
+
+end
+
+
+function rsa = permute(rsa, rsa_idx, subj_id, seed)
+    % optionally shuffle game labels within each pair of runs, for permutation testing
+    % this preserves all the essential structure of the experiment
+    %
+    rng(seed + subj_id);
+
+    switch rsa_idx
+        case 1
+            rsa.model(1).features = rsa.model(1).features([randperm(6) randperm(6)+6 randperm(6)+12]);
+
+        case 2
+            for r = 1:3
+                f = rsa.model(1).features(rsa.model(1).runs == r);
+                p = randperm(6);
+                clear fp;
+                for i = 1:6
+                    fp(f == i) = p(i);
+                end
+                rsa.model(1).features(rsa.model(1).runs == r) = fp;
+            end
+
+        otherwise
+            assert(false, 'invalid rsa_idx -- should be one of the above');
+    end % end of switch statement
 
 end

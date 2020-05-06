@@ -29,11 +29,6 @@ function [theory_change_flag_onsets] = get_regressors(subj_id, run, conn)
 
                 regressors = find(conn, 'regressors', 'query', q);
                 %regressors = find(conn, 'regressors', 'query', q, 'sort', '{"dt": -1.0}'); % momchil: assume latest one is the correct one 
-                if length(regressors) == 0
-                    % TODO remove once we fix plaqueAttack & lemmings!
-                    fprintf('       NO REGRESSORS FOR %s: %d %d %d %d\n', play.game_name, play.run_id, play.block_id, play.instance_id, play.play_id);
-                    continue;
-                end
                 assert(length(regressors) == 1);
                 reg = regressors(1);
 
