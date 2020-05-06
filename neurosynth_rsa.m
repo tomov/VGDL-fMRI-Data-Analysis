@@ -1,4 +1,4 @@
-function neurosynth_rsa(rsa_idx, use_smooth, lateralized, nperms, roi_idx_min, roi_idx_max, subbatch_size)
+function neurosynth_rsa(rsa_idx, use_smooth, lateralized, nperms, parcel_idx, subbatch_size)
 
 % copied from Exploration / neurosynth_CV.m
 
@@ -22,14 +22,16 @@ end
 % get ROIs
 [roi_masks, region] = get_neurosynth_rois(lateralized);
 
-roi_idx_min = max(roi_idx_min, 1);
-roi_idx_max = min(roi_idx_max, length(roi_masks));
-roi_masks = roi_masks(roi_idx_min:roi_idx_max);
+if ~exist('parcel_idx', 'var') || isempty(parcel_idx)
+    filename = sprintf('mat/neurosynth_rsa_%d_us=%d_l=%d_nperms=%d_nroi=%d.mat', rsa_idx, use_smooth, lateralized, nperms, length(roi_masks));
+else
+    which = ismember(region, parcel_idx);
+    roi_masks = roi_masks(which);
 
-filename = sprintf('mat/neurosynth_rsa_%d_us=%d_l=%d_nroi=%d_nperms=%d_ri=%d-%d.mat', rsa_idx, use_smooth, lateralized, length(roi_masks), nperms, roi_idx_min, roi_idx_max);
-disp(filename);
-
-tic
+    tmp = join(cellfun(@num2str, num2cell(parcel_idx), 'UniformOutput', false), ',');
+    filename = sprintf('mat/neurosynth_rsa_%d_us=%d_l=%d_nperms=%d_nroi=%d_pi=%s.mat', rsa_idx, use_smooth, lateralized, nperms, length(roi_masks), tmp{1});
+end
+filename
 
 % run RSA in (sub)batches
 %
@@ -54,7 +56,7 @@ if nperms > 0
     perm_Rhos = nan(size(Rho,1), size(Rho,2), nperms);
     for i = 1:nperms
         seed = randi(1000000); % notice this will get affected by the rng calls inside create_rsa, but that's okay
-        fprintf('perm = %d\n', i);
+        fprintf('perm = %d, seed = %d\n', i, seed);
         
         EXPT.create_rsa = @(rsa_idx, subj_id) create_rsa(rsa_idx, subj_id, seed); % overwrite create_rsa with one that randomly shuffles 
         % run permuted RSA in (sub)batches
@@ -78,9 +80,7 @@ if nperms > 0
     save(filename, '-v7.3');
 end
 
-disp(filename);
-
-toc
+filename
 
 % view RSA results
 %
