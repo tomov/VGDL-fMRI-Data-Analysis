@@ -4,7 +4,7 @@ outfileprefix="output/neurosynth_rsa"
 echo File prefix = $outfileprefix
 
 echo ---------------- >> jobs.txt
-echo --- Running neurosynth_rsa  >> jobs.txt
+echo --- $(date) Running neurosynth_rsa  >> jobs.txt
 echo ---------------- >> jobs.txt
 
 

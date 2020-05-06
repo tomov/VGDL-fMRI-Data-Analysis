@@ -44,6 +44,20 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
         e
         fprintf('loading from %s\n', filename);
         load(filename);
+
+        % special case b/c of cluster TODO better way...
+        if exist('seed', 'var')
+            % optionally shuffle game labels within each pair of runs, for permutation testing
+            % this preserves all the essential structure of the experiment
+            switch rsa_idx
+                case 1
+                    rng(seed + subj_id);
+                    rsa.model(1).features = rsa.model(1).features([randperm(6) randperm(6)+6 randperm(6)+12]);
+                otherwise
+                    assert(false, 'invalid rsa_idx -- should be one of the above');
+            end % end of switch statement
+        end
+
         return
     end
 
