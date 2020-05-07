@@ -93,7 +93,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
 
             rsa.model(1).name = 'game';
             rsa.model(1).features = features;
-            rsa.model(1).runs = runs;
+            rsa.model(1).runs = runs; % run pairs, technically
             rsa.model(1).distance_measure = @(g1, g2) g1 ~= g2;
             rsa.model(1).is_control = false;
 
@@ -134,7 +134,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
 
             rsa.model(1).name = 'game';
             rsa.model(1).features = features;
-            rsa.model(1).runs = runs;
+            rsa.model(1).runs = runs; % run pairs, technically
             rsa.model(1).distance_measure = @(g1, g2) g1 ~= g2;
             rsa.model(1).is_control = false;
 
