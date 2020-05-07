@@ -51,26 +51,27 @@ save_output = true;
 
     % hack to make it work on the cluster until they install MongoDB toolbox
     % just pre-generate the multi's locally, then load them on the cluster
-    try
-        conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54')
-    catch e
-        e
-        fprintf('loading from %s\n', filename);
-        load(filename);
-        return
+    if ~ismember(glmodel, 23)
+        try
+            conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54')
+        catch e
+            e
+            fprintf('loading from %s\n', filename);
+            load(filename);
+            return
+        end
+
+        query = sprintf('{"subj_id": "%d"}', subj_id)
+
+        subj = find(conn, 'subjects', 'query', query)
+        assert(length(subj) > 0, 'Subject not found -- wrong subj_id?');
+        assert(length(subj) <= 1, 'Too many subjects -- duplicate entries? Yikes!');
+
+        query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id) % in python we index runs from 0 (but not subjects) 
+
+        run = find(conn, 'runs', 'query', query)
+        assert(length(run) == 1);
     end
-
-
-    query = sprintf('{"subj_id": "%d"}', subj_id)
-
-    subj = find(conn, 'subjects', 'query', query)
-    assert(length(subj) > 0, 'Subject not found -- wrong subj_id?');
-    assert(length(subj) <= 1, 'Too many subjects -- duplicate entries? Yikes!');
-
-    query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id) % in python we index runs from 0 (but not subjects) 
-
-    run = find(conn, 'runs', 'query', query)
-    assert(length(run) == 1);
     
     % TODO nuisance regressors
     % start/stop play/instance/block
@@ -508,6 +509,32 @@ save_output = true;
                 end
             end
 
+        case 23
+
+            onsets = [];
+            beta_series_glm = 22;
+
+            % cheat: just get the onsets from the beta series GLM, b/c we can't do it otherwise on the cluster 
+            % (and we can't pre-run it and cache the multi locally either, b/c the betas...)
+            %
+            multi_series = vgdl_create_multi(beta_series_glm, subj_id, run_id);
+            for i = 1:length(multi_series.onsets)
+                onsets = [onsets multi_series.onsets{i}];
+            end
+
+            EXPT = vgdl_expt();
+
+            multi.names{1} = 'run';
+            multi.onsets{1} = onsets;
+            multi.durations{1} = zeros(size(onsets));
+
+            R_IFG = ccnl_get_beta_series(EXPT, beta_series_glm, subj_id, sprintf('run_%d_', run_id), 'masks/sphere_glm3_theory_change_flag_48_10_32_r=4mm.nii');
+            R_IFG = mean(R_IFG,2);
+
+            multi.pmod(1).name{1} = 'R_IFG';
+            multi.pmod(1).param{1} = R_IFG';
+            multi.pmod(1).paly{1} = 1;
+
 
         otherwise
             assert(false, 'invalid glmodel -- should be one of the above');
@@ -518,5 +545,7 @@ save_output = true;
         save(filename, 'multi', '-v7.3'); % <-- DON'T DO IT! breaks on NCF... b/c of file permissions
     end
 
-    close(conn);
+    if exist('conn', 'var')
+        close(conn);
+    end
 
