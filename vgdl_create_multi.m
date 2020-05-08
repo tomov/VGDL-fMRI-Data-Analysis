@@ -490,6 +490,7 @@ save_output = true;
         % similar to GLM 23 in Exploration
         %
         case 22
+            assert(false);
 
             idx = 0;
 
@@ -513,6 +514,7 @@ save_output = true;
         % functional connectivity GLM 
         % TODO FIXME this doesn't work b/c we can't use beta series here, TRs are too close
         case 23
+            assert(false);
 
             onsets = [];
             beta_series_glm = 22;

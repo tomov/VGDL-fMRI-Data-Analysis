@@ -19,6 +19,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
     %     .event - which within-trial event to use for neural activity; used to pick the right betas (needs to be substring of the regressor name), e.g. 'trial_onset'
     %     .mask - path to .nii file, or 3D binary vector of voxels to consider
     %     .radius - searchlight radius in voxels
+    %     .use_beta_series - use beta series? if not, uses actual raw BOLD (make sure regressors are convolved with HRF)
     %     .which_betas - logical mask for which betas (trials) front the GLM to include (e.g. not timeouts)
     %     .model - struct array describing the models used for behavioral RDMs (see Kriegeskorte et al. 2008) with the fields:
     %         .name - model name
@@ -52,7 +53,8 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
         return
     end
 
-    game_name_to_id = containers.Map({'vgfmri3_chase','vgfmri3_helper','vgfmri3_bait','vgfmri3_lemmings','vgfmri3_plaqueAttack','vgfmri3_zelda'}, 1:6);
+    game_names = {'vgfmri3_chase','vgfmri3_helper','vgfmri3_bait','vgfmri3_lemmings','vgfmri3_plaqueAttack','vgfmri3_zelda'};
+    game_name_to_id = containers.Map(game_names, 1:6);
 
     % RSAs
     %
@@ -85,6 +87,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
             end
             %features = features(randperm(size(features, 1)), :); % TODO rm me -- permutation test, weak
 
+            rsa.use_beta_series = true;
             rsa.event = 'vgfmri3_'; % just a prefix for the game name
             rsa.glmodel = 1;
             rsa.radius = 10 / 1.5;
@@ -99,8 +102,10 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
 
 
         % basic with beta series (i.e. deconvolved impulse regressors at every 2 s; see GLM 22)
+        % TODO FIXME broken -- can't use beta series
         %
         case 2
+            assert(false);
 
             EXPT = vgdl_expt();
 
@@ -126,6 +131,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
                 end
             end
 
+            rsa.use_beta_series = true;
             rsa.event = 'run_'; % just a prefix
             rsa.glmodel = 22;
             rsa.radius = 10 / 1.5;
@@ -137,6 +143,45 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
             rsa.model(1).runs = runs; % run pairs, technically
             rsa.model(1).distance_measure = @(g1, g2) g1 ~= g2;
             rsa.model(1).is_control = false;
+
+
+        case 3
+
+            EXPT = vgdl_expt();
+            feature_glm = 1;
+
+            modeldir = fullfile(EXPT.modeldir,['model',num2str(feature_glm)],['subj',num2str(subj_id)]);
+            load(fullfile(modeldir,'SPM.mat'));
+    
+            % use convolved game boxcars from GLM 1
+            % that will take HRF into account and even the slight overlap between games
+            features = [];
+            for g = 1:length(game_names)
+                which = contains(SPM.xX.name, game_names(g));
+                assert(sum(which) == 3);
+                feature = sum(SPM.xX.X(:,which), 2); % merge game boxcars from different runs
+                features(:,g) = feature;
+            end
+
+            runs = zeros(size(SPM.xX.X,1), 1);
+            for r = 1:6
+                which = contains(SPM.xX.name, sprintf('Sn(%d) constant', r));
+                assert(sum(which) == 1);
+                run_id = SPM.xX.X(:,which) * r;
+                runs = runs + round(run_id/2); % run pair
+            end
+
+            rsa.use_beta_series = false;
+            rsa.radius = 10 / 1.5;
+            rsa.glmodel = feature_glm; % just any will work, to get activations
+            rsa.mask = 'masks/mask.nii';
+
+            rsa.model(1).name = 'game';
+            rsa.model(1).features = features + rand(size(features)) * 0.0001; % to prevent NaN cosine
+            rsa.model(1).runs = runs; % run pairs, technically
+            rsa.model(1).distance_measure = 'cosine';
+            rsa.model(1).is_control = false;
+
 
         otherwise
             assert(false, 'invalid rsa_idx -- should be one of the above');
@@ -155,6 +200,8 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
     close(conn);
 
 end
+
+
 
 
 function rsa = permute(rsa, rsa_idx, subj_id, seed)
