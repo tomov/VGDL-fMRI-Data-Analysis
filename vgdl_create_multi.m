@@ -483,7 +483,8 @@ save_output = true;
                 multi.onsets{idx} = onoff.(fields{i});
                 multi.durations{idx} = zeros(size(multi.onsets{idx}));
             end
-
+    
+        % momchil TODO FIXME: this is a bad idea; events are too close => must use actual deconvolution
         % beta series -- separate regressor for each TR for each level for each game
         % for RSA, effectively deconvolution
         % similar to GLM 23 in Exploration
@@ -509,6 +510,8 @@ save_output = true;
                 end
             end
 
+        % functional connectivity GLM 
+        % TODO FIXME this doesn't work b/c we can't use beta series here, TRs are too close
         case 23
 
             onsets = [];
@@ -533,7 +536,7 @@ save_output = true;
 
             multi.pmod(1).name{1} = 'R_IFG';
             multi.pmod(1).param{1} = R_IFG';
-            multi.pmod(1).paly{1} = 1;
+            multi.pmod(1).poly{1} = 1;
 
 
         otherwise

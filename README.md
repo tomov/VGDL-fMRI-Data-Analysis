@@ -39,6 +39,8 @@ Useful links:
    * Click around (e.g. around ventricles), make sure average functional (top) is aligned with the structural (bottom)
 10. Append the subject's behavioral data to `data.csv` and upload it to the cluster
 
+11. Check the raw BOLD traces with, e.g. `ccnl_view_mask('/ncf/gershman/Lab/VGDL_fMRI/subjects/200311_VGDL_001/preproc/swurun001.nii')`
+
 Tips
    * Always check that the job is running with `sacct`
    * Wait until some output is printed to the .out file, to be sure that it didn't fail at the very beginning
