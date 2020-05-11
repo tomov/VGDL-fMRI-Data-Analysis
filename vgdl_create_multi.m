@@ -540,6 +540,28 @@ save_output = true;
             multi.pmod(1).param{1} = R_IFG';
             multi.pmod(1).poly{1} = 1;
 
+        % 10 s boxcars tiling every instance, i.e. coarse beta series
+        % for RSA, middle ground between GLM 1 (too coarse) and GLM 22 (too fine grained; doesn't fit)
+        case 24
+
+            idx = 0;
+
+            [game_names, onsets, durs] = get_games(subj_id, run, conn);
+
+            for i = 1:numel(game_names)
+                for j = 1:length(onsets{i})
+                    dt = (durs{i}(j) + 0.0001) / 6; % assumes instances are about 60 s long
+                    ons = [onsets{i}(j) : dt : onsets{i}(j)+durs{i}(j)];
+                    for k = 1:length(ons)
+                        idx = idx + 1;
+                        % 10 s boxcar regressors tiling every instance 
+                        multi.names{idx} = sprintf('run_%d_block_%d_instance_%d_boxcar_%d', run_id, i, j, k);
+                        multi.onsets{idx} = ons(k);
+                        multi.durations{idx} = dt;
+                    end
+                end
+            end
+
 
         otherwise
             assert(false, 'invalid glmodel -- should be one of the above');
