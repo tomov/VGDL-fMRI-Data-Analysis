@@ -2,6 +2,10 @@
 subj = 1;
 mask = 'masks/sphere_glm3_theory_change_flag_48_10_32_r=4mm.nii';
 
+lateralized = true;
+[roi_masks, region] = get_neurosynth_rois(lateralized);
+mask = roi_masks{region == 38};
+
 dist = {'cosine','correlation', 'euclidean'}
 
 EXPTs = {vgdl_expt(), vgdl_expt_nosmooth()}

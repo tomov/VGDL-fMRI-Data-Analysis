@@ -6,6 +6,8 @@ function [roi_masks, region] = get_neurosynth_rois(lateralized)
     % roi_mask = cell array of 3D masks 
     % region = parcel index from neurosynth atlas
 
+    filename = sprintf('mat/get_neurosynth_rois_%d.mat', lateralized);
+
     group_mask_filename = fullfile('masks', 'mask.nii');
     if lateralized
         parcellation_file = fullfile('masks', 'Neurosynth Parcellation_2_lateralized.nii');
@@ -72,3 +74,5 @@ function [roi_masks, region] = get_neurosynth_rois(lateralized)
         roi_masks = [roi_masks; {mask}];
         region = [region; parcel_idx];
     end
+
+    save(filename, 'roi_masks', 'region', 'lateralized');

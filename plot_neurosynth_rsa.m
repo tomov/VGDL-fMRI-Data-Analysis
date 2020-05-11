@@ -1,5 +1,8 @@
 % plot permutation test results after neurosynth_rsa.m
 
+load mat/neurosynth_rsa_3_us=0_l=1_nperms=0_nroi=351.mat
+%load mat/neurosynth_rsa_1_us=0_l=1_pi=355.mat
+
 ccnl_rsa_view(vgdl_expt(), rsa_idx, 1, T, all_subject_rhos, roi_masks);
 
 names = region(which);

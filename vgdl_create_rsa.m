@@ -145,6 +145,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
             rsa.model(1).is_control = false;
 
 
+        % BOLD with features as one-hot vectors, convolved with HRF
         case 3
 
             EXPT = vgdl_expt();
@@ -182,6 +183,15 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
             rsa.model(1).distance_measure = 'cosine';
             rsa.model(1).is_control = false;
 
+        % BOLD with features convolved with HRF, but taking the max feature at each TR
+        % i.e. less smooth version of 3
+        case 4
+
+            rsa = vgdl_create_rsa(3, subj_id);
+
+            [~, i] = max(rsa.model(1).features, [], 2);
+            rsa.model(1).features = i;
+            rsa.model(1).distance_measure = @(g1, g2) g1 ~= g2;
 
         otherwise
             assert(false, 'invalid rsa_idx -- should be one of the above');
@@ -214,7 +224,7 @@ function rsa = permute(rsa, rsa_idx, subj_id, seed)
         case 1
             rsa.model(1).features = rsa.model(1).features([randperm(6) randperm(6)+6 randperm(6)+12]);
 
-        case 2
+        case {2,4}
             for r = 1:3
                 f = rsa.model(1).features(rsa.model(1).runs == r);
                 p = randperm(6);
@@ -223,6 +233,13 @@ function rsa = permute(rsa, rsa_idx, subj_id, seed)
                     fp(f == i) = p(i);
                 end
                 rsa.model(1).features(rsa.model(1).runs == r) = fp;
+            end
+
+        case 3
+            for r = 1:3
+                w = rsa.model(1).runs == r;
+                p = randperm(6);
+                rsa.model(1).features(w, :) = rsa.model(1).features(w, p);
             end
 
         otherwise
