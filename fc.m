@@ -14,6 +14,7 @@ V.dt = [16 0];
 nsubj = 8;
 
 for subj = 1:nsubj
+    tic
 
     seed = ccnl_get_residuals(EXPT, glm, seed_mask, subj);
     %seed = ccnl_get_activations(EXPT, 1, seed_mask, subj); % too correlated w/ white matter & all; way too many confounds
@@ -22,30 +23,27 @@ for subj = 1:nsubj
     seed = mean(seed, 2); % TODO eigenvariate
 
     disp('getting B');
-    tic
     B = ccnl_get_residuals(EXPT, glm, group_mask, subj);
     %B = ccnl_get_activations(EXPT, 1, group_mask, subj);
     B = B{1};
-    toc
 
     seed = zscore(seed, 0, 1);
     B = zscore(B, 0, 1);
 
     disp('comupting correlations');
-    tic
     % corr = dot product of z-scored vectors
     r = seed' * B / size(B,1);
-    toc
 
     z = atanh(r); % fisher z transform
 
     if ~exist('zs', 'var')
         zs = zeros(nsubj, length(z));
-        zs(subj,:) = z;
     end
+    zs(subj,:) = z;
     %zmap = zeros(size(Y));
     %zmap(m) = z;
 
+    toc
 end
 
 [h,p,ci,stat] = ttest(zs);
