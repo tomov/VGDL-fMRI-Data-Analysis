@@ -1,4 +1,4 @@
-rsa_idx = 5;
+rsa_idx = 3;
 subj = 1;
 mask = 'masks/sphere_glm3_theory_change_flag_48_10_32_r=4mm.nii';
 
@@ -51,3 +51,6 @@ colorbar;
 title('Neural RDM');
 xlabel('time');
 ylabel('time');
+
+
+
