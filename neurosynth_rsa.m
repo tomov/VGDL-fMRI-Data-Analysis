@@ -67,8 +67,12 @@ if nperms > 0
 
             [perm_Rhos(s:e,:,i)] = ccnl_rsa(EXPT, rsa_idx, roi_masks(s:e));
         end
-    end
 
+        if mod(i,100) == 0
+            save(filename, '-v7.3');
+        end
+    end
+            
     save(filename, '-v7.3');
 
     % p-value = P(Rho >= rho | null)
