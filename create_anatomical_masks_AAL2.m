@@ -16,6 +16,13 @@ putamen = {'Putamen'};
 v1 = {'Calcarine'};
 m1 = {'Precentral'};
 s1 = {'Postcentral'};
+mOFC = {'OFCmed'}
+lOFC = {'OFClat'}
+aOFC = {'OFCant'}
+pOFC = {'OFCpost'}
+rectus = {'Rectus'}
+vmPFC = {'Frontal_Med_Orb'}
+IFGorb = {'Frontal_Inf_Orb_2'}
 %fusiform = {'Fusiform'};
 %angular = {'Angular'};
 %mid_front = {'Frontal_Mid_2'};
@@ -26,7 +33,7 @@ s1 = {'Postcentral'};
 %rois = {'hippocampus', 'ofc', 'med_ofc', 'rectus', 'vmpfc', 'striatum', 'pallidum', 'bg', ...
 %        'v1', 'm1', 's1', 'fusiform', 'angular', 'mid_front', 'dl_sup_front'};
 %rois = {'striatum', 'pallidum', 'caudate', 'putamen'};
-rois = {'v1', 'm1', 's1', 'hippocampus'};
+rois = {'v1', 'm1', 's1', 'hippocampus', 'mOFC', 'lOFC', 'aOFC', 'pOFC', 'rectus', 'vmPFC', 'IFGorb'};
 
 group_mask_filename = fullfile('masks', 'mask.nii');
 
@@ -45,6 +52,22 @@ for roi = rois
     
     % Create and save the mask
     %
+    ccnl_create_mask(labels_L, fullfile('masks', [roi, '_L.nii']), 'AAL2', true, group_mask_filename);
+    ccnl_create_mask(labels_R, fullfile('masks', [roi, '_R.nii']), 'AAL2', true, group_mask_filename);
     ccnl_create_mask(labels, fullfile('masks', [roi, '.nii']), 'AAL2', true, group_mask_filename);
     ccnl_create_mask(labels, fullfile('masks', [roi, '_unnormalized.nii']), 'AAL2', false);
+end
+
+fprintf('mask_filenames = \n');
+for roi = rois
+    roi = roi{1};
+    fprintf('''%s'', ... \n', fullfile('masks', [roi, '_L.nii']));
+    fprintf('''%s'', ... \n', fullfile('masks', [roi, '_R.nii']));
+end
+
+fprintf('\nregion_names = \n');
+for roi = rois
+    roi = roi{1};
+    fprintf('''%s'', ... \n', [roi, '_L']);
+    fprintf('''%s'', ... \n', [roi, '_R']);
 end
