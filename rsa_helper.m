@@ -38,7 +38,7 @@ function rsa_helper(EXPT, rsa_idx, roi_masks, filename, nperms, subbatch_size)
                 [perm_Rhos(s:e,:,i)] = ccnl_rsa(EXPT, rsa_idx, roi_masks(s:e));
             end
 
-            if mod(i,100) == 0
+            if mod(i,20) == 0
                 save(filename, '-v7.3');
             end
         end

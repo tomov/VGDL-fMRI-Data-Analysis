@@ -17,11 +17,16 @@ end
 
 % get ROIs
 [roi_masks, region] = get_apriori_rois(lateralized);
-which = ismember(region, roi_names);
-roi_masks = roi_masks(which);
 
-tmp = join(cellfun(@num2str, region, 'UniformOutput', false), ',');
-filename = sprintf('mat/roi_rsa_%d_us=%d_l=%d_nperms=%d_nroi=%d_rois=%s.mat', rsa_idx, use_smooth, lateralized, nperms, length(roi_masks), tmp{1});
+if ~exist('parcel_idx', 'var') || isempty(parcel_idx)
+    filename = sprintf('mat/roi_rsa_%d_us=%d_l=%d_nperms=%d_nroi=%d_all.mat', rsa_idx, use_smooth, lateralized, nperms, length(roi_masks));
+else
+    which = ismember(region, roi_names);
+    roi_masks = roi_masks(which);
+
+    tmp = join(cellfun(@num2str, region, 'UniformOutput', false), ',');
+    filename = sprintf('mat/roi_rsa_%d_us=%d_l=%d_nperms=%d_nroi=%d_rois=%s.mat', rsa_idx, use_smooth, lateralized, nperms, length(roi_masks), tmp{1});
+end
 filename
 
 % run actual rsa
