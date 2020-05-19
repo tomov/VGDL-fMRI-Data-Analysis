@@ -1,4 +1,4 @@
-function rsa_helper(EXPT, rsa_idx, roi_masks, filename, nperms, subbatch_size)
+function rsa_helper(EXPT, rsa_idx, roi_masks, filename, nperms, subbatch_size, region, which)
 
     % do the actual RSA given binary masks
 

@@ -24,6 +24,8 @@ end
 [roi_masks, region] = get_neurosynth_rois(lateralized);
 
 if ~exist('parcel_idx', 'var') || isempty(parcel_idx)
+    which = logical(ones(size(region)));
+
     filename = sprintf('mat/neurosynth_rsa_%d_us=%d_l=%d_nperms=%d_nroi=%d.mat', rsa_idx, use_smooth, lateralized, nperms, length(roi_masks));
 else
     which = ismember(region, parcel_idx);
@@ -35,4 +37,4 @@ end
 filename
 
 % run actual rsa
-rsa_helper(EXPT, rsa_idx, roi_masks, filename, nperms, subbatch_size);
+rsa_helper(EXPT, rsa_idx, roi_masks, filename, nperms, subbatch_size, region, which);

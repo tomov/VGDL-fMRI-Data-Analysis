@@ -18,7 +18,9 @@ end
 % get ROIs
 [roi_masks, region] = get_apriori_rois(lateralized);
 
-if ~exist('parcel_idx', 'var') || isempty(parcel_idx)
+if ~exist('roi_names', 'var') || isempty(roi_names)
+    which = logical(ones(size(region)));
+
     filename = sprintf('mat/roi_rsa_%d_us=%d_l=%d_nperms=%d_nroi=%d_all.mat', rsa_idx, use_smooth, lateralized, nperms, length(roi_masks));
 else
     which = ismember(region, roi_names);
@@ -30,4 +32,4 @@ end
 filename
 
 % run actual rsa
-rsa_helper(EXPT, rsa_idx, roi_masks, filename, nperms, subbatch_size);
+rsa_helper(EXPT, rsa_idx, roi_masks, filename, nperms, subbatch_size, region, which);
