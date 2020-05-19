@@ -563,6 +563,25 @@ save_output = true;
             end
 
 
+        % condition = game, boxcars over instances
+        % for RSA, middle ground between GLM 1 and GLM 24
+        %
+        case 25
+
+            idx = 0;
+
+            [game_names, onsets, durs] = get_games(subj_id, run, conn);
+
+            for i = 1:numel(game_names)
+                % instance boxcar regressor
+                for j = 1:length(onsets{i})
+                    idx = idx + 1;
+                    multi.names{idx} = sprintf('%s_run_%d_block_%d_instance_%d', game_names{i}, run_id, i, j);
+                    multi.onsets{idx} = onsets{i}(j);
+                    multi.durations{idx} = durs{i}(j);
+                end
+            end
+
         otherwise
             assert(false, 'invalid glmodel -- should be one of the above');
 
