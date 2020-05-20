@@ -61,6 +61,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
     switch rsa_idx
 
         % basic with boxcars over blocks (i.e. GLM 1) 
+        % high SNR, low sample size
         %
         case 1
 
@@ -146,6 +147,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
 
 
         % BOLD with features as one-hot vectors, convolved with HRF
+        % low SNR, high sample size
         case 3
 
             EXPT = vgdl_expt();
@@ -195,6 +197,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
 
         % game id with coarse beta series (w/ 10 s boxcars tiling every instance)
         % copy of RSA 2
+        % in between 1 and 3
         case 5
 
             EXPT = vgdl_expt();
@@ -225,6 +228,46 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
             rsa.use_beta_series = true;
             rsa.event = 'run_'; % just a prefix
             rsa.glmodel = 24;
+            rsa.radius = 10 / 1.5;
+            rsa.mask = 'masks/mask.nii';
+            rsa.which_betas = logical(ones(size(features))); % all
+
+            rsa.model(1).name = 'game';
+            rsa.model(1).features = features;
+            rsa.model(1).runs = runs; % run pairs, technically
+            rsa.model(1).distance_measure = @(g1, g2) g1 ~= g2;
+            rsa.model(1).is_control = false;
+
+
+        % basic with boxcars over instances (i.e. GLM 25) 
+        % in between 1 and 5
+        % copied and modified from RSA 1
+        %
+        case 6
+
+            EXPT = vgdl_expt();
+
+            features = [];
+            runs = [];
+            for run_id = goodRun_ids
+                query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id); % in python we index runs from 0 (but not subjects) 
+
+                run = find(conn, 'runs', 'query', query);
+                assert(length(run) == 1);
+                [game_names, onsets, durs] = get_games(subj_id, run, conn);
+
+                for i = 1:numel(game_names)
+                    for j = 1:length(onsets{i})
+                        % one for each instance
+                        features = [features; game_name_to_id(game_names{i})];
+                        runs = [runs; round(run_id/2)]; % lump adjacent runs together to exclude comparisons for trials within the same pair; otherwise we get biased in the negative direction, i.e. same games appear more different -- see below (same issue as when comparing within run, just for adjacent runs)
+                    end
+                end
+            end
+
+            rsa.use_beta_series = true;
+            rsa.event = 'vgfmri3_'; % just a prefix for the game name
+            rsa.glmodel = 25;
             rsa.radius = 10 / 1.5;
             rsa.mask = 'masks/mask.nii';
             rsa.which_betas = logical(ones(size(features))); % all
@@ -268,7 +311,7 @@ function rsa = permute(rsa, rsa_idx, subj_id, seed)
         case 1
             rsa.model(1).features = rsa.model(1).features([randperm(6) randperm(6)+6 randperm(6)+12]);
 
-        case {2,4,5}
+        case {2,4,5,6}
             for r = 1:3
                 f = rsa.model(1).features(rsa.model(1).runs == r);
                 p = randperm(6);
