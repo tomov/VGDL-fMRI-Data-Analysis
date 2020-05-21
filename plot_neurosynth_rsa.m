@@ -13,7 +13,10 @@ clear all;
 %load mat/neurosynth_rsa_6_us=0_l=1_nperms=0_nroi=351.mat
 
 %load('mat/neurosynth_rsa_5_us=0_l=1_nperms=200_nroi=18_pi=277,351,239,383,234,106,77,126,335,72,347,55,300,313,40,168,298,175.mat');
-load('mat/neurosynth_rsa_5_us=0_l=1_nperms=200_nroi=14_pi=149,95,207,56,45,91,22,264,274,112,94,305,169,209.mat');
+%load('mat/neurosynth_rsa_5_us=0_l=1_nperms=200_nroi=14_pi=149,95,207,56,45,91,22,264,274,112,94,305,169,209.mat');
+
+%load('mat/neurosynth_rsa_6_us=0_l=1_nperms=1000_nroi=351.mat');
+load('mat/neurosynth_rsa_6_us=1_l=1_nperms=1000_nroi=351.mat');
 
 %load mat/neurosynth_rsa_5_us=0_l=1_nperms=0_nroi=351.mat
 
@@ -46,28 +49,33 @@ end
 [~,i] = sort(T);
 tbl = table(Rho(i), T(i), names(i));
 
-ccnl_rsa_view(vgdl_expt(), rsa_idx, 1, T, all_subject_rhos, roi_masks);
-%ccnl_rsa_view(vgdl_expt(), rsa_idx, 1, Rho_adj(pval < 0.1), all_subject_rhos(pval < 0.1,:,:), roi_masks(pval < 0.1));
+alpha = 0.01;
+idx = find(pval < alpha);
+
+%ccnl_rsa_view(vgdl_expt(), rsa_idx, 1, T, all_subject_rhos, roi_masks);
+ccnl_rsa_view(vgdl_expt(), rsa_idx, 1, Rho_adj(idx), all_subject_rhos(idx,:,:), roi_masks(idx));
+%ccnl_rsa_view(vgdl_expt(), rsa_idx, 1, Rho_adj(pval < 1.1), all_subject_rhos(pval < 1.1,:,:), roi_masks(pval < 1.1));
 %ccnl_rsa_view(vgdl_expt(), rsa_idx, 1, T(pval < 0.1), all_subject_rhos(pval < 0.1,:,:), roi_masks(pval < 0.1));
 %ccnl_rsa_view(vgdl_expt(), rsa_idx, 1, Rho_adj(pval < 0.1), all_subject_rhos(pval < 0.1,:,:), roi_masks(pval < 0.1));
 %ccnl_rsa_view(vgdl_expt(), rsa_idx, 1, T(T > -1.3), all_subject_rhos(T > -1.3), roi_masks(T > -1.3));
 %ccnl_rsa_view(vgdl_expt(), rsa_idx, 1, T(T > -1.3), all_subject_rhos(T > -1.3), roi_masks(T > -1.3));
 
-r = ceil(sqrt(length(roi_masks)));
-c = ceil(length(roi_masks)/r);
+r = ceil(sqrt(length(idx)));
+c = ceil(length(idx)/r);
 
 figure;
-for i = 1:length(roi_masks)
+for i = 1:length(idx)
     subplot(r,c,i);
 
     hold on;
-    hist(squeeze(perm_Rhos(i,1,:)));
+    hist(squeeze(perm_Rhos(idx(i),1,:)));
 
     yl = ylim;
-    line([Rho(i) Rho(i)], yl, 'color', 'red');
-    text(Rho(i) * 1.1, yl(2) * 0.8, sprintf('p = %.3f', pval(i)));
+    line([Rho(idx(i)) Rho(idx(i))], yl, 'color', 'red');
+    text(Rho(idx(i)) * 1.1, yl(2) * 0.8, sprintf('p = %.3f', pval(idx(i))));
+    set(gca, 'ytick', []);
 
-    title(num2str(names(i)));
+    title(num2str(names(idx(i))));
     %title(num2str(i));
     xlabel('Spearman $\rho$', 'interpreter', 'latex');
 end
