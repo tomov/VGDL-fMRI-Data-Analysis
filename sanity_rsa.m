@@ -1,6 +1,9 @@
 rsa_idx = 3;
 subj = 1;
-mask = 'masks/sphere_glm3_theory_change_flag_48_10_32_r=4mm.nii';
+%mask = 'masks/sphere_glm3_theory_change_flag_48_10_32_r=4mm.nii';
+
+load('mat/neurosynth_rsa_6_us=1_l=1_nperms=1000_nroi=351.mat');
+mask = roi_masks{find(region == 307)};
 
 EXPT = vgdl_expt_nosmooth();
 rsa = vgdl_create_rsa(rsa_idx, subj);

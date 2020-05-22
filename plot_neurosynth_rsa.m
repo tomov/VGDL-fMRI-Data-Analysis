@@ -34,6 +34,11 @@ load('mat/neurosynth_rsa_6_us=1_l=1_nperms=1000_nroi=351.mat');
 %load mat/neurosynth_rsa_3_us=0_l=1_nperms=0_nroi=351.mat
 %load('mat/neurosynth_rsa_3_us=0_l=1_nperms=200_nroi=5_pi=99,77,137,51,341.mat');
 
+if contains(EXPT.rsadir, '_nosmooth')
+    EXPT = vgdl_expt_nosmooth();
+else
+    EXPT = vgdl_expt();
+end
 
 if exist('region', 'var')
     % neurosynth
@@ -53,7 +58,7 @@ alpha = 0.01;
 idx = find(pval < alpha);
 
 %ccnl_rsa_view(vgdl_expt(), rsa_idx, 1, T, all_subject_rhos, roi_masks);
-ccnl_rsa_view(vgdl_expt(), rsa_idx, 1, Rho_adj(idx), all_subject_rhos(idx,:,:), roi_masks(idx));
+ccnl_rsa_view(EXPT, rsa_idx, 1, Rho_adj(idx), all_subject_rhos(idx,:,:), roi_masks(idx));
 %ccnl_rsa_view(vgdl_expt(), rsa_idx, 1, Rho_adj(pval < 1.1), all_subject_rhos(pval < 1.1,:,:), roi_masks(pval < 1.1));
 %ccnl_rsa_view(vgdl_expt(), rsa_idx, 1, T(pval < 0.1), all_subject_rhos(pval < 0.1,:,:), roi_masks(pval < 0.1));
 %ccnl_rsa_view(vgdl_expt(), rsa_idx, 1, Rho_adj(pval < 0.1), all_subject_rhos(pval < 0.1,:,:), roi_masks(pval < 0.1));
