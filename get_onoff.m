@@ -1,9 +1,22 @@
-function [onoff] = get_onoff(subj_id, run, conn)
+function [onoff] = get_onoff(subj_id, run, conn, do_cache)
 
     % helper function to get screen on/off regressors in vgdl_create_multi
     % copied & modified from get_visuals
     % note run is a struct
     %
+
+    if ~exist('do_cache', 'var')
+        do_cache = false;
+    end
+
+    % optionally cache
+    filename = sprintf('mat/get_onoff_subj%d_run%d.mat', subj_id, run.run_id);
+    if do_cache
+        if exist(filename, 'file')
+            load(filename);
+            return
+        end
+    end
 
     onoff = struct;
     onoff.block_start = [];
@@ -46,3 +59,6 @@ function [onoff] = get_onoff(subj_id, run, conn)
         end
 
     end
+
+
+    save(filename, 'onoff', '-v7.3');

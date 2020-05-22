@@ -117,7 +117,7 @@ save_output = true;
 
             idx = 0;
 
-            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn);
+            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
 
             for k = 1:numel(keyNames)
                 if size(keyholds{k}, 1) > 0
@@ -150,7 +150,8 @@ save_output = true;
 
             idx = 0;
 
-            onsets = get_regressors(subj_id, run, conn);
+            regs = get_regressors(subj_id, run, conn);
+            onsets = regs.theory_change_flag_onsets;
 
             idx = idx + 1;
             multi.names{idx} = 'theory_change_flag';
@@ -218,7 +219,7 @@ save_output = true;
 
             idx = 0;
 
-            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn);
+            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
 
             if subj_id == 1
                 % we screwed up keyholds for subject 1, so we use estimates from keypresses
@@ -244,7 +245,7 @@ save_output = true;
 
             idx = 0;
 
-            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn);
+            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
 
             for k = 1:numel(keyNames)
                 if size(keypresses{k}, 1) > 0
@@ -261,7 +262,7 @@ save_output = true;
         %
         case 7
 
-            [fields, visuals] = get_visuals(subj_id, run, conn);
+            [fields, visuals] = get_visuals(subj_id, run, conn, true);
 
             multi.names{1} = 'frames';
             multi.onsets{1} = visuals.timestamps';
@@ -289,7 +290,7 @@ save_output = true;
         %
         case 8
 
-            [onoff] = get_onoff(subj_id, run, conn);
+            [onoff] = get_onoff(subj_id, run, conn, true);
             fields = fieldnames(onoff);
 
             idx = 0;
@@ -323,7 +324,7 @@ save_output = true;
 
             % from GLM 5: keyholds nuisance regressors
             %
-            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn);
+            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
             if subj_id == 1
                 % we screwed up keyholds for subject 1, so we use estimates from keypresses
                 keyholds = keyholds_post
@@ -340,7 +341,7 @@ save_output = true;
 
             % GLM 7: frame nuisance regressors
             %
-            [fields, visuals] = get_visuals(subj_id, run, conn);
+            [fields, visuals] = get_visuals(subj_id, run, conn, true);
             idx = idx + 1;
             multi.names{idx} = 'frames';
             multi.onsets{idx} = visuals.timestamps';
@@ -364,7 +365,7 @@ save_output = true;
 
             % GLM 8: on/off nuisance regressors
             %
-            [onoff] = get_onoff(subj_id, run, conn);
+            [onoff] = get_onoff(subj_id, run, conn, true);
             fields = fieldnames(onoff);
             for i = 1:numel(fields)
                 idx = idx + 1;
@@ -377,10 +378,12 @@ save_output = true;
         % frame nuisance regressors: visual control regressors for each frame 
         % same as GLM 7 excep 1 per GLM b/c they're highly correlated and we get nothing
         % this is exploratory, so ok to look at them separately and incorporate into other GLMs later
+        % TODO tightly coupled to get_visuals
         %
         case {10,11,12,13,14,15,16,17,18,19,20}  
 
-            [fields, visuals] = get_visuals(subj_id, run, conn);
+            [fields, visuals] = get_visuals(subj_id, run, conn, true);
+            fields
 
             multi.names{1} = 'frames';
             multi.onsets{1} = visuals.timestamps';
@@ -415,7 +418,9 @@ save_output = true;
 
             % from GLM 3: theory_change_flag
             %
-            onsets = get_regressors(subj_id, run, conn);
+            regs = get_regressors(subj_id, run, conn, true);
+            onsets = regs.theory_change_flag_onsets;
+
 
             idx = idx + 1;
             multi.names{idx} = 'theory_change_flag';
@@ -434,7 +439,7 @@ save_output = true;
 
             % from GLM 5: keyholds nuisance regressors
             %
-            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn);
+            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
             if subj_id == 1
                 % we screwed up keyholds for subject 1, so we use estimates from keypresses
                 keyholds = keyholds_post
@@ -451,7 +456,7 @@ save_output = true;
 
             % GLM 7: frame nuisance regressors
             %
-            [fields, visuals] = get_visuals(subj_id, run, conn);
+            [fields, visuals] = get_visuals(subj_id, run, conn, true);
             idx = idx + 1;
             multi.names{idx} = 'frames';
             multi.onsets{idx} = visuals.timestamps';
@@ -475,7 +480,7 @@ save_output = true;
 
             % GLM 8: on/off nuisance regressors
             %
-            [onoff] = get_onoff(subj_id, run, conn);
+            [onoff] = get_onoff(subj_id, run, conn, true);
             fields = fieldnames(onoff);
             for i = 1:numel(fields)
                 idx = idx + 1;
@@ -581,6 +586,50 @@ save_output = true;
                     multi.durations{idx} = durs{i}(j);
                 end
             end
+
+
+        % individual theory-based regressors
+        % same idea as GLM 10-20
+        % TODO tight coupling with get_regressors.m
+        %
+        case {26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44}
+
+            [regs, ~, fields] = get_regressors(subj_id, run, conn, true);
+            fields
+
+            multi.names{1} = 'frames';
+            multi.onsets{1} = regs.timestamps';
+            multi.durations{1} = regs.durations';
+
+            multi.orth{1} = 0; % do not orthogonalise them
+
+            glm_idx = 25;
+            for i = 1:numel(fields)
+                if ~ismember(fields{i}, {'timestamps', 'durations'}) && ~contains(fields{i}, '_onsets')
+                    glm_idx = glm_idx + 1;
+                    if glm_idx == glmodel
+                        idx = 0;
+
+                        for j = 1:size(regs.(fields{i}), 2)
+                            if all(regs.(fields{i})(:,j) == regs.(fields{i})(1,j))
+                                % constant
+                                continue
+                            end
+
+                            idx = idx + 1;
+                            if size(regs.(fields{i}), 2) == 1
+                                multi.pmod(1).name{idx} = fields{i};
+                            else
+                                multi.pmod(1).name{idx} = [fields{i}, '_', num2str(j)];
+                            end
+                            multi.pmod(1).param{idx} = regs.(fields{i})(:,j);
+                            multi.pmod(1).poly{idx} = 1;
+                        end
+
+                    end
+                end
+            end
+
 
         otherwise
             assert(false, 'invalid glmodel -- should be one of the above');

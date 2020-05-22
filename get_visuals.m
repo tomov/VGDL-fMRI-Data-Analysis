@@ -1,10 +1,24 @@
-function [fields, visuals] = get_visuals(subj_id, run, conn)
+function [fields, visuals] = get_visuals(subj_id, run, conn, do_cache)
 
     % helper function to get visual regressors for each frame in vgdl_create_multi
     % copied & modified from get_keypresses
     % note run is a struct
     %
 
+    if ~exist('do_cache', 'var')
+        do_cache = false;
+    end
+
+    % optionally cache
+    filename = sprintf('mat/get_visuals_subj%d_run%d.mat', subj_id, run.run_id);
+    if do_cache
+        if exist(filename, 'file')
+            load(filename);
+            return
+        end
+    end
+
+    % TODO tight coupling with vgdl_create_multi, case 10-20
     fields = {'timestamps', 'new_sprites', 'killed_sprites', 'sprites', 'non_walls', 'avatar_moved', 'moved', 'movable', 'collisions', 'effects', 'sprite_groups', 'changed'};
     visuals = struct;
     for i = 1:numel(fields)
@@ -49,3 +63,6 @@ function [fields, visuals] = get_visuals(subj_id, run, conn)
     end
 
     visuals.timestamps = visuals.timestamps - run.scan_start_ts;
+
+
+    save(filename, 'visuals', 'fields', '-v7.3');

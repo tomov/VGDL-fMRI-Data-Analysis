@@ -1,11 +1,24 @@
-function [regs, X] = get_regressors(subj_id, run, conn)
+function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache)
 
     %{
-    subj_id = 1; 
-    run_id = 1; 
+    subj_id = 3; 
+    run_id = 5; 
     query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id); 
     run = find(conn, 'runs', 'query', query);
     %}
+
+    if ~exist('do_cache', 'var')
+        do_cache = false;
+    end
+
+    % optionally cache
+    filename = sprintf('mat/get_regressors_subj%d_run%d.mat', subj_id, run.run_id);
+    if do_cache
+        if exist(filename, 'file')
+            load(filename);
+            return
+        end
+    end
 
     % helper function to get regressors for each frame in vgdl_create_multi
     % copied & modified from GLM 3
@@ -14,6 +27,7 @@ function [regs, X] = get_regressors(subj_id, run, conn)
 
     assert(isequal(run.subj_id, num2str(subj_id)));
 
+    % TODO tigth coupling with vgdl_create_multi case 26-34 !!!!!
     % TODO interaction_change_flag when fixed
     %binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag', 'newEffects_flag'}; % binary db.regressors => onsets only, durations irrelevant; have the option of having them as onsets only
     binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'termination_change_flag', 'newEffects_flag'}; % binary db.regressors => onsets only, durations irrelevant; have the option of having them as onsets only
@@ -63,6 +77,10 @@ function [regs, X] = get_regressors(subj_id, run, conn)
                 %regressors = find(conn, 'regressors', 'query', q, 'sort', '{"dt": -1.0}'); % momchil: assume latest one is the correct one 
                 assert(length(regressors) == 1);
                 reg = regressors(1);
+
+                if length(reg.regressors.theory_change_flag) == 0
+                    continue
+                end
 
                 assert(immse(cellfun(@(x) x{3}, reg.regressors.theory_change_flag), cellfun(@(x) x{3}, reg.regressors.interaction_change_flag)) < 1e-10); % assert identical timestamps
                 assert(immse(cellfun(@(x) x{3}, reg.regressors.theory_change_flag), cellfun(@(x) x{3}, reg.regressors.sprite_change_flag)) < 1e-10); % assert identical timestamps
@@ -144,3 +162,7 @@ function [regs, X] = get_regressors(subj_id, run, conn)
         assert(isequal(post_fields{i}, 'interaction_change_flag') || length(regs.(post_fields{i})) == length(regs.timestamps));
         X = [X, zscore(regs.(post_fields{i}), 0, 1)];
     end
+
+    fields = [reg_fields, post_fields];
+
+    save(filename, 'regs', 'X', 'fields', '-v7.3');

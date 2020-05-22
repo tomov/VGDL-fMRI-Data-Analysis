@@ -1,8 +1,23 @@
-function [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn)
+function [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, do_cache)
 
     % helper function to get keypresses, keyholds, etc in vgdl_create_multi
     % note run is a struct
     %
+
+
+    if ~exist('do_cache', 'var')
+        do_cache = false;
+    end
+
+    % optionally cache
+    filename = sprintf('mat/get_keypresses_subj%d_run%d.mat', subj_id, run.run_id);
+    if do_cache
+        if exist(filename, 'file')
+            load(filename);
+            return
+        end
+    end
+
 
     keyNames = [];
 
@@ -61,3 +76,5 @@ function [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_i
         end
 
     end
+
+    save(filename, 'keyNames', 'keyholds', 'keyholds_post', 'keypresses', '-v7.3');
