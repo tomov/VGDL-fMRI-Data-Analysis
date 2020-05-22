@@ -1,16 +1,24 @@
-function [regs] = get_regressors(subj_id, run, conn)
+function [regs, X] = get_regressors(subj_id, run, conn)
+
+    %{
+    subj_id = 1; 
+    run_id = 1; 
+    query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id); 
+    run = find(conn, 'runs', 'query', query);
+    %}
 
     % helper function to get regressors for each frame in vgdl_create_multi
     % copied & modified from GLM 3
     % note run is a struct
     %
 
+    assert(isequal(run.subj_id, num2str(subj_id)));
+
     % TODO interaction_change_flag when fixed
     %binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag', 'newEffects_flag'}; % binary db.regressors => onsets only, durations irrelevant; have the option of having them as onsets only
     binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'termination_change_flag', 'newEffects_flag'}; % binary db.regressors => onsets only, durations irrelevant; have the option of having them as onsets only
-    reg_fields = [binreg_fields {'likelihood', 'sum_lik', 'n_ts', 'num_effects', 'R_GG', 'R_GGs', 'R_SG', 'R_SGs'}]; % db.regressors 
+    reg_fields = [binreg_fields, {'likelihood', 'sum_lik', 'n_ts', 'num_effects', 'R_GG', 'R_GGs', 'R_SG', 'R_SGs'}]; % db.regressors 
     binpost_fields = {'interaction_change_flag'};
-    post_fields = [binpost_fields {'timestamps', 'S_len','I_len','T_len','Igen_len','Tnov_len','Ip_len','dS_len','dI_len','dT_len','dIgen_len','dTnov_len','dIp_len'}]; % db.plays_post 
     % TODO d*_len when fixed
     %post_fields = [binpost_fields {'timestamps', 'S_len','I_len','T_len','Igen_len','Tnov_len','Ip_len','dS_len','dI_len','dT_len','dIgen_len','dTnov_len','dIp_len'}]; % db.plays_post 
     post_fields = [binpost_fields {'S_len','I_len','T_len','Igen_len','Tnov_len','Ip_len'}]; % db.plays_post 
@@ -107,7 +115,17 @@ function [regs] = get_regressors(subj_id, run, conn)
                 end
 
                 for i = 1:numel(post_fields)
-                    regs.(post_fields{i}) = [regs.(post_fields{i}); play_post.(post_fields{i})];
+                    if iscell(play_post.(post_fields{i}))
+                        if numel(play_post.(post_fields{i}){1}{1}) == 1
+                            r = cellfun(@(x) x{1}, play_post.(post_fields{i}));
+                        else
+                            r = cellfun(@(x) x{1}', play_post.(post_fields{i}), 'UniformOutput', false);
+                            r = cell2mat(r);
+                        end
+                    else
+                        r = play_post.(post_fields{i})(:,1);
+                    end
+                    regs.(post_fields{i}) = [regs.(post_fields{i}); r];
                 end
             end
 
@@ -115,9 +133,14 @@ function [regs] = get_regressors(subj_id, run, conn)
 
     end
 
-    for i = 1:numel(post_fields)
-        assert(isequal(post_fields{i}, 'interaction_change_flag') || length(regs.(post_fields{i})) == length(regs.timestamps));
-    end
+
+    X = [];
+
     for i = 1:numel(reg_fields)
         assert(size(regs.(reg_fields{i}),1) == length(regs.timestamps));
+        X = [X, zscore(regs.(reg_fields{i}), 0, 1)];
+    end
+    for i = 1:numel(post_fields)
+        assert(isequal(post_fields{i}, 'interaction_change_flag') || length(regs.(post_fields{i})) == length(regs.timestamps));
+        X = [X, zscore(regs.(post_fields{i}), 0, 1)];
     end
