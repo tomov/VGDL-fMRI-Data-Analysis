@@ -1,8 +1,9 @@
 function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache)
 
     %{
-    subj_id = 3; 
-    run_id = 5; 
+    subj_id = 1; 
+    run_id = 1; 
+    conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54');
     query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id); 
     run = find(conn, 'runs', 'query', query);
     %}
@@ -36,6 +37,15 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache)
     % TODO d*_len when fixed
     %post_fields = [binpost_fields {'timestamps', 'S_len','I_len','T_len','Igen_len','Tnov_len','Ip_len','dS_len','dI_len','dT_len','dIgen_len','dTnov_len','dIp_len'}]; % db.plays_post 
     post_fields = [binpost_fields {'S_len','I_len','T_len','Igen_len','Tnov_len','Ip_len'}]; % db.plays_post 
+
+    
+    %{
+    % for loading old regressors
+    binreg_fields = {'theory_change_flag'};
+    reg_fields = {};
+    binpost_fields = {};
+    post_fields = {};
+    %}
 
     regs = struct;
     for i = 1:numel(binreg_fields)

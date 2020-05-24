@@ -588,7 +588,7 @@ save_output = true;
             end
 
 
-        % individual theory-based regressors
+        % individual theory-based regressors, as pmods throughout the episodes
         % same idea as GLM 10-20
         % TODO tight coupling with get_regressors.m
         %
@@ -629,6 +629,83 @@ save_output = true;
                     end
                 end
             end
+
+        % sprite_change_flag 
+        % TODO broken -- some runs are empty; need to run w/ other stuff
+        % c/p GLM 3
+        %
+        case 50
+
+            idx = 0;
+
+            regs = get_regressors(subj_id, run, conn, true);
+            onsets = regs.sprite_change_flag_onsets;
+
+            idx = idx + 1;
+            multi.names{idx} = 'sprite_change_flag';
+            multi.onsets{idx} = onsets;
+            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+
+        % interaction_change_flag 
+        % c/p GLM 3
+        %
+        case 51
+
+            idx = 0;
+
+            regs = get_regressors(subj_id, run, conn, true);
+            onsets = regs.interaction_change_flag_onsets;
+
+            idx = idx + 1;
+            multi.names{idx} = 'interaction_change_flag';
+            multi.onsets{idx} = onsets;
+            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+
+
+        % termination_change_flag 
+        % c/p GLM 3
+        %
+        case 52
+
+            idx = 0;
+
+            regs = get_regressors(subj_id, run, conn, true);
+            onsets = regs.termination_change_flag_onsets;
+
+            idx = idx + 1;
+            multi.names{idx} = 'termination_change_flag';
+            multi.onsets{idx} = onsets;
+            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+
+        % sprite_change_flag, interaction_change_flag, termination_change_flag 
+        % union GLMs 50..52
+        %
+        case 53
+
+            idx = 0;
+
+            regs = get_regressors(subj_id, run, conn, true);
+
+            if length(regs.sprite_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'sprite_change_flag';
+                multi.onsets{idx} = regs.sprite_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
+
+            idx = idx + 1;
+            multi.names{idx} = 'interaction_change_flag';
+            multi.onsets{idx} = regs.interaction_change_flag_onsets;
+            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+
+
+            idx = idx + 1;
+            multi.names{idx} = 'termination_change_flag';
+            multi.onsets{idx} = regs.termination_change_flag_onsets;
+            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+
+
+
 
 
         otherwise

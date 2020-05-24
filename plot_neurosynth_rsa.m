@@ -16,9 +16,11 @@ clear all;
 %load('mat/neurosynth_rsa_5_us=0_l=1_nperms=200_nroi=14_pi=149,95,207,56,45,91,22,264,274,112,94,305,169,209.mat');
 
 %load('mat/neurosynth_rsa_6_us=0_l=1_nperms=1000_nroi=351.mat');
-load('mat/neurosynth_rsa_6_us=1_l=1_nperms=1000_nroi=351.mat');
+%load('mat/neurosynth_rsa_6_us=1_l=1_nperms=1000_nroi=351.mat');
 
-%load mat/neurosynth_rsa_5_us=0_l=1_nperms=0_nroi=351.mat
+%load('mat/roi_rsa_6_us=1_l=1_nperms=1000_nroi=23_all.mat');
+
+load mat/neurosynth_rsa_5_us=0_l=1_nperms=0_nroi=351.mat
 
 %load mat/roi_rsa_5_us=0_l=1_nperms=1000_nroi=23_all.mat
 %load mat/roi_rsa_5_us=0_l=1_nperms=1000_nroi=23_all.mat
@@ -52,9 +54,10 @@ else
 end
 
 [~,i] = sort(T);
+%tbl = table(Rho(i), T(i), names(i)');
 tbl = table(Rho(i), T(i), names(i));
 
-alpha = 0.01;
+alpha = 1.01;
 idx = find(pval < alpha);
 
 %ccnl_rsa_view(vgdl_expt(), rsa_idx, 1, T, all_subject_rhos, roi_masks);
@@ -80,7 +83,7 @@ for i = 1:length(idx)
     text(Rho(idx(i)) * 1.1, yl(2) * 0.8, sprintf('p = %.3f', pval(idx(i))));
     set(gca, 'ytick', []);
 
+    %title(names{idx(i)});
     title(num2str(names(idx(i))));
-    %title(num2str(i));
     xlabel('Spearman $\rho$', 'interpreter', 'latex');
 end
