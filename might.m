@@ -1,16 +1,21 @@
 % Run searchmight on the entire brain
 %
-% function might(rsa_idx, r, use_smooth, method, zsc)
+function might(rsa_idx, radius, use_smooth, method, zsc)
 
-clear all;
 addpath(genpath('SearchmightToolbox.Darwin_i386.0.2.5/')); % for the cluster
 
+radius = radius / 1.5; % mm -> voxels
+
+%{
 rsa_idx = 1;
-r = 4 / 1.5; % 4 mm
+radius = 4 / 1.5; % 4 mm
 use_smooth = false;
 method = 'gnb_searchmight'; % lda_ridge, lda_shrinkage, qda_shrinkage, svm_linear, svm_quadratic, svm_sigmoid, svm_rbf
 zsc = 'none';
+%}
 
+mat_filename = sprintf('mat/might_%s_rsa=%d_us=%d_r=%.4f_z%s.nii', method, rsa_idx, use_smooth, radius, zsc);
+mat_filename
 
 nruns = 6;
 
@@ -58,15 +63,16 @@ nvoxels = sum(mask(:));
 %
 disp('computing neighbors');
 tic
-[meta.voxelsToNeighbours, meta.numberOfNeighbours] = might_computeNeighborsSphere(meta.colToCoord, r, mask);
+[meta.voxelsToNeighbours, meta.numberOfNeighbours] = might_computeNeighborsSphere(meta.colToCoord, radius, mask);
 toc
 
 
 
 
 ams = nan(numel(subjects), nvoxels); % accuracy map for each subject 
+pms = nan(numel(subjects), nvoxels); % p-value map for each subject 
 
-alpha = 0.05; % for pFDR q-values
+alpha = 0.9; % for pFDR q-values
 howmany = zeros(nvoxels, 1); % for each voxel, how many subjects have it significant (according to pFDR)
 
 for s = 1:length(subjects)
@@ -110,7 +116,7 @@ for s = 1:length(subjects)
             B = zscore(B, 0, 1);
 
         case 'voxels'
-            B = zscore(B, 0, 2);
+            B = zscore(B, 0, 2); % TODO actually z-score each sphere separately; must be done inside computeInformationMap...
 
         case 'run'
             for r = 1:nruns
@@ -135,6 +141,7 @@ for s = 1:length(subjects)
     [am,pm] = computeInformationMap(inputs,labels,labelsGroup,method,'searchlight', ...
                                     meta.voxelsToNeighbours,meta.numberOfNeighbours);
     ams(s,:) = am;
+    pms(s,:) = pm;
     toc
 
 
@@ -145,7 +152,8 @@ for s = 1:length(subjects)
     howmany = howmany + (qm < alpha);
 
     disp('saving ouput');
-    filename = sprintf('%s_accuracy_rsa=%d_subj=%d_folds=%d_r=%.4f_z%s_use_smooth=%d.nii', method, rsa_idx, subj, max(labelsGroup), r, zsc, use_smooth);
+    filename = sprintf('%s_accuracy_rsa=%d_subj=%d_folds=%d_r=%.4f_z%s_use_smooth=%d.nii', method, rsa_idx, subj, max(labelsGroup), radius, zsc, use_smooth);
+    filename
     % initialize an empty accuracy map
     [~, V, amap] = ccnl_load_mask(fullfile('masks', 'spmT_0001.nii'));
     V.fname = fullfile(dirname, filename); % change immediately!
@@ -162,7 +170,8 @@ for s = 1:length(subjects)
     spm_write_vol(V, amap);
 
     % write p-value map
-    filename = sprintf('%s_p-value_rsa=%d_subj=%d_folds=%d_r=%.4f_z%s_use_smooth=%d.nii', method, rsa_idx, subj, max(labelsGroup), r, zsc, use_smooth);
+    filename = sprintf('%s_p-value_rsa=%d_subj=%d_folds=%d_r=%.4f_z%s_use_smooth=%d.nii', method, rsa_idx, subj, max(labelsGroup), radius, zsc, use_smooth);
+    filename
     V.fname = fullfile(dirname, filename);
     pmap = nan(size(amap));
     pmap(mask) = pm;
@@ -173,38 +182,37 @@ for s = 1:length(subjects)
     %bspmview(V.fname, struc);
 end
 
+save(mat_filename, '-v7.3');
 
 %% write map w/ # subjects for which voxel is significant (with pFDR) based on Pereira & Botvinick 2010
 %
 
 % initialize empty countmap 
-filename = sprintf('%s_accuracy_countmap_%s_folds=%d_r=%.4f_%s_use_nosmooth=%d_use_tmaps=%d.nii', classifier, event, max(labelsGroup), r, z_score, use_nosmooth, use_tmaps);
+filename = sprintf('%s_accuracy_countmap_rsa=%d_subj=%d_folds=%d_r=%.4f_z%s_use_smooth=%d.nii', method, rsa_idx, subj, max(labelsGroup), radius, zsc, use_smooth);
+filename
 [~, V, countmap] = ccnl_load_mask(fullfile('masks', 'spmT_0001.nii'));
 countmap(:) = NaN; % clear
 V.fname = fullfile(dirname, filename); % change immediately!
 
-% write countmap
-%
-[h, p, ci, stats] = ttest(ams, 1/6);
-countmap(mask) = howmany;
-spm_write_vol(V, countmap);
 
 % visualize countmap
+%{
 struc = fullfile('masks','mean.nii');
 bspmview(V.fname, struc);
 
 disp(V.fname);
+%}
 
 
+rmpath(genpath('SearchmightToolbox.Darwin_i386.0.2.5/')); % for the cluster; otherwise, screws up repmat..
 
 %% write t-map based on Kriegeskorte & Bandettini 2007 
 % note those have lots of negative t-values b/c "chance" is not 1/3 according to the classifier but slightly below it
 % so don't use em
 %
 
-%{
 % initialize empty tmap
-filename = sprintf('%s_accuracy_tmap_%s_folds=%d_r=%.4f_%s_use_nosmooth=%d_use_tmaps=%d.nii', classifier, event, max(labelsGroup), r, z_score, use_nosmooth, use_tmaps);
+filename = sprintf('%s_accuracy_tmap_rsa=%d_subj=%d_folds=%d_r=%.4f_z%s_use_smooth=%d.nii', method, rsa_idx, subj, max(labelsGroup), radius, zsc, use_smooth);
 [~, V, tmap] = ccnl_load_mask(fullfile('masks', 'spmT_0001.nii'));
 tmap(:) = NaN; % clear
 V.fname = fullfile(dirname, filename); % change immediately!
@@ -212,7 +220,7 @@ V.fname = fullfile(dirname, filename); % change immediately!
 % write tmap
 % for each voxel, t-test subject accuracies against chance 
 %
-[h, p, ci, stats] = ttest(ams, 1/3);
+[h, p, ci, stats] = ttest(ams, 1/6);
 tmap(mask) = stats.tstat;
 spm_write_vol(V, tmap);
 
@@ -220,4 +228,3 @@ spm_write_vol(V, tmap);
 struc = fullfile('masks','mean.nii');
 bspmview(V.fname, struc);
 
-%}
