@@ -65,4 +65,6 @@ function [fields, visuals] = get_visuals(subj_id, run, conn, do_cache)
     visuals.timestamps = visuals.timestamps - run.scan_start_ts;
 
 
-    save(filename, 'visuals', 'fields', '-v7.3');
+    if do_cache
+        save(filename, 'visuals', 'fields', '-v7.3');
+    end

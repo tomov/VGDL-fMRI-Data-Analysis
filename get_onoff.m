@@ -61,4 +61,6 @@ function [onoff] = get_onoff(subj_id, run, conn, do_cache)
     end
 
 
-    save(filename, 'onoff', '-v7.3');
+    if do_cache
+        save(filename, 'onoff', '-v7.3');
+    end

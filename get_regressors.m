@@ -30,13 +30,11 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache)
 
     % TODO tigth coupling with vgdl_create_multi case 26-34 !!!!!
     % TODO interaction_change_flag when fixed
-    %binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag', 'newEffects_flag'}; % binary db.regressors => onsets only, durations irrelevant; have the option of having them as onsets only
+    %binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag', 'newEffects_flag', 'replan_flag'}; % binary db.regressors => onsets only, durations irrelevant; have the option of having them as onsets only
     binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'termination_change_flag', 'newEffects_flag'}; % binary db.regressors => onsets only, durations irrelevant; have the option of having them as onsets only
     reg_fields = [binreg_fields, {'likelihood', 'sum_lik', 'n_ts', 'num_effects', 'R_GG', 'R_GGs', 'R_SG', 'R_SGs'}]; % db.regressors 
     binpost_fields = {'interaction_change_flag'};
-    % TODO d*_len when fixed
-    %post_fields = [binpost_fields {'timestamps', 'S_len','I_len','T_len','Igen_len','Tnov_len','Ip_len','dS_len','dI_len','dT_len','dIgen_len','dTnov_len','dIp_len'}]; % db.plays_post 
-    post_fields = [binpost_fields {'S_len','I_len','T_len','Igen_len','Tnov_len','Ip_len'}]; % db.plays_post 
+    post_fields = [binpost_fields {'S_len','I_len','T_len','Igen_len','Tnov_len','Ip_len','dS_len','dI_len','dT_len','dIgen_len','dTnov_len','dIp_len'}]; % db.plays_post 
 
     
     %{
@@ -175,4 +173,6 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache)
 
     fields = [reg_fields, post_fields];
 
-    save(filename, 'regs', 'X', 'fields', '-v7.3');
+    if do_cache
+        save(filename, 'regs', 'X', 'fields', '-v7.3');
+    end

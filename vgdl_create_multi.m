@@ -150,7 +150,7 @@ save_output = true;
 
             idx = 0;
 
-            regs = get_regressors(subj_id, run, conn);
+            regs = get_regressors(subj_id, run, conn, true);
             onsets = regs.theory_change_flag_onsets;
 
             idx = idx + 1;
@@ -592,7 +592,7 @@ save_output = true;
         % same idea as GLM 10-20
         % TODO tight coupling with get_regressors.m
         %
-        case {26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44}
+        case {26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50}
 
             [regs, ~, fields] = get_regressors(subj_id, run, conn, true);
             fields
@@ -624,27 +624,13 @@ save_output = true;
                             end
                             multi.pmod(1).param{idx} = regs.(fields{i})(:,j);
                             multi.pmod(1).poly{idx} = 1;
+
+                            multi.pmod(1).param{idx}(isnan(multi.pmod(1).param{idx})) = 0; % TODO happens for lik during first few timesteps; ideally, remove altogether
                         end
 
                     end
                 end
             end
-
-        % sprite_change_flag 
-        % TODO broken -- some runs are empty; need to run w/ other stuff
-        % c/p GLM 3
-        %
-        case 50
-
-            idx = 0;
-
-            regs = get_regressors(subj_id, run, conn, true);
-            onsets = regs.sprite_change_flag_onsets;
-
-            idx = idx + 1;
-            multi.names{idx} = 'sprite_change_flag';
-            multi.onsets{idx} = onsets;
-            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
 
         % interaction_change_flag 
         % c/p GLM 3
@@ -678,7 +664,7 @@ save_output = true;
             multi.durations{idx} = zeros(size(multi.onsets{idx}));;
 
         % sprite_change_flag, interaction_change_flag, termination_change_flag 
-        % union GLMs 50..52
+        % union GLMs 51..52 + sprites
         %
         case 53
 
@@ -704,6 +690,39 @@ save_output = true;
             multi.onsets{idx} = regs.termination_change_flag_onsets;
             multi.durations{idx} = zeros(size(multi.onsets{idx}));;
 
+
+        % sprite_change_flag, interaction_change_flag, termination_change_flag as pmods
+        % GLM 53 but pmods
+        %
+        case 54
+
+            idx = 0;
+
+            [regs, ~, fields] = get_regressors(subj_id, run, conn, true);
+            fields
+
+            multi.names{1} = 'frames';
+            multi.onsets{1} = regs.timestamps';
+            multi.durations{1} = regs.durations';
+
+            multi.orth{1} = 0; % do not orthogonalise them
+
+            if any(regs.sprite_change_flag)
+                idx = idx + 1;
+                multi.pmod(1).name{idx} = 'sprite_change_flag';
+                multi.pmod(1).param{idx} = regs.sprite_change_flag;
+                multi.pmod(1).poly{idx} = 1;
+            end
+
+            idx = idx + 1;
+            multi.pmod(1).name{idx} = 'interaction_change_flag';
+            multi.pmod(1).param{idx} = regs.interaction_change_flag;
+            multi.pmod(1).poly{idx} = 1;
+
+            idx = idx + 1;
+            multi.pmod(1).name{idx} = 'termination_change_flag';
+            multi.pmod(1).param{idx} = regs.termination_change_flag;
+            multi.pmod(1).poly{idx} = 1;
 
 
 

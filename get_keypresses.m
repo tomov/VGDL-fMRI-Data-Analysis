@@ -77,4 +77,6 @@ function [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_i
 
     end
 
-    save(filename, 'keyNames', 'keyholds', 'keyholds_post', 'keypresses', '-v7.3');
+    if do_cache
+        save(filename, 'keyNames', 'keyholds', 'keyholds_post', 'keypresses', '-v7.3');
+    end

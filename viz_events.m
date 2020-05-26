@@ -7,10 +7,16 @@ subj_id = 1;
 run_id = 1;
 
 % https://www.mathworks.com/help/database/ug/mongo.find.html
-runs = find(conn, 'runs', 'query', sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id), 'limit', 10)
+%runs = find(conn, 'runs', 'query', sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id), 'limit', 10)
+runs = find(conn, 'runs', 'query', sprintf('{"subj_id": "%d", "run_id": { $gt: 0, $lt: 7} }', subj_id), 'limit', 10, 'sort', '{"run_id": 1.0}')
 
 
 figure;
+
+tc_ons = cell(1, length(runs));
+sc_ons = cell(1, length(runs));
+ic_ons = cell(1, length(runs));
+tec_ons = cell(1, length(runs));
 
 for r = 1:length(runs)
     run = runs(r);
@@ -88,7 +94,32 @@ for r = 1:length(runs)
                     tc = regressors(1).regressors.theory_change_flag;
                     for i = 1:length(tc)
                         if tc{i}{1} % theory changed
-                            tt(round((tc{i}{3} - run.scan_start_ts + offs) * 1000)) = 0.8;
+                            j = round((tc{i}{3} - run.scan_start_ts + offs) * 1000);
+                            tt(j) = 7;
+                            text(j + 10, 4 + rand()*3, sprintf('%.2f', j / 1000.0 - 1), 'interpreter', 'none', 'FontSize', 8, 'color', 'red');
+                            tc_ons{r} = [tc_ons{r} tc{i}{3} - run.scan_start_ts];
+                        end
+                    end
+
+                    sc = regressors(1).regressors.sprite_change_flag;
+                    for i = 1:length(sc)
+                        if sc{i}{1} % theory changed
+                            j = round((sc{i}{3} - run.scan_start_ts + offs) * 1000);
+                            sc_ons{r} = [sc_ons{r} sc{i}{3} - run.scan_start_ts];
+                        end
+                    end
+                    ic = regressors(1).regressors.interaction_change_flag;
+                    for i = 1:length(ic)
+                        if ic{i}{1} % theory changed
+                            j = round((ic{i}{3} - run.scan_start_ts + offs) * 1000);
+                            ic_ons{r} = [ic_ons{r} ic{i}{3} - run.scan_start_ts];
+                        end
+                    end
+                    tec = regressors(1).regressors.termination_change_flag;
+                    for i = 1:length(tec)
+                        if tec{i}{1} % theory changed
+                            j = round((tec{i}{3} - run.scan_start_ts + offs) * 1000);
+                            tec_ons{r} = [tec_ons{r} tec{i}{3} - run.scan_start_ts];
                         end
                     end
                 end
