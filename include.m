@@ -20,4 +20,4 @@ addpath('/Users/momchil/Dropbox/Research/libs/panel-2.12/'); % tight subplots
 addpath('/Users/momchil/Dropbox/Research/libs/panel-2.12/demo/'); % tight subplots
 addpath('/Users/momchil/Dropbox/Research/libs/encoder/encoder/'); % gzip 
 
-
+addpath('/Users/momchil/Dropbox/Research/libs/SearchmightToolbox.Darwin_i386.0.2.5'); % searchmight

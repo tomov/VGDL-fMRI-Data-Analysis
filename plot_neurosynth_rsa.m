@@ -20,7 +20,9 @@ clear all;
 
 %load('mat/roi_rsa_6_us=1_l=1_nperms=1000_nroi=23_all.mat');
 
-load mat/neurosynth_rsa_5_us=0_l=1_nperms=0_nroi=351.mat
+%load mat/neurosynth_rsa_5_us=0_l=1_nperms=0_nroi=351.mat
+
+load mat/neurosynth_rsa_5_us=1_l=1_nperms=500_nroi=351.mat
 
 %load mat/roi_rsa_5_us=0_l=1_nperms=1000_nroi=23_all.mat
 %load mat/roi_rsa_5_us=0_l=1_nperms=1000_nroi=23_all.mat
@@ -57,7 +59,7 @@ end
 %tbl = table(Rho(i), T(i), names(i)');
 tbl = table(Rho(i), T(i), names(i));
 
-alpha = 1.01;
+alpha = 1.1;
 idx = find(pval < alpha);
 
 %ccnl_rsa_view(vgdl_expt(), rsa_idx, 1, T, all_subject_rhos, roi_masks);
@@ -71,6 +73,7 @@ ccnl_rsa_view(EXPT, rsa_idx, 1, Rho_adj(idx), all_subject_rhos(idx,:,:), roi_mas
 r = ceil(sqrt(length(idx)));
 c = ceil(length(idx)/r);
 
+%{
 figure;
 for i = 1:length(idx)
     subplot(r,c,i);
@@ -87,3 +90,4 @@ for i = 1:length(idx)
     title(num2str(names(idx(i))));
     xlabel('Spearman $\rho$', 'interpreter', 'latex');
 end
+%}
