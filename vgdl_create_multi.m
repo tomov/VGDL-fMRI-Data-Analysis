@@ -382,8 +382,21 @@ save_output = true;
         %
         case {10,11,12,13,14,15,16,17,18,19,20}  
 
-            [fields, visuals] = get_visuals(subj_id, run, conn, true);
-            fields
+            [~, visuals] = get_visuals(subj_id, run, conn, true);
+            fields = {
+				'new_sprites', ...
+				'killed_sprites', ...
+				'sprites', ...
+				'non_walls', ...
+				'avatar_moved', ...
+				'moved', ...
+				'movable', ...
+				'collisions', ...
+				'effects', ...
+				'sprite_groups', ...
+				'changed'}
+            field = fields{glmodel - 9};
+            field
 
             multi.names{1} = 'frames';
             multi.onsets{1} = visuals.timestamps';
@@ -391,22 +404,9 @@ save_output = true;
 
             multi.orth{1} = 0; % do not orthogonalise them
 
-            glm_idx = 9;
-            for i = 1:numel(fields)
-                if ~ismember(fields{i}, {'timestamps', 'durations'}) 
-                    if all(visuals.(fields{i}) == visuals.(fields{i})(1))
-                        % constant
-                        continue
-                    end
-
-                    glm_idx = glm_idx + 1;
-                    if glm_idx == glmodel
-                        multi.pmod(1).name{1} = fields{i};
-                        multi.pmod(1).param{1} = visuals.(fields{i});
-                        multi.pmod(1).poly{1} = 1;
-                    end
-                end
-            end
+            multi.pmod(1).name{1} = field;
+            multi.pmod(1).param{1} = visuals.(field);
+            multi.pmod(1).poly{1} = 1;
 
         % theory_change_flag + control regressors
         % i.e. GLM 3 + GLM 9 = 3, 1, 5, 7, 8
@@ -594,8 +594,35 @@ save_output = true;
         %
         case {26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50}
 
-            [regs, ~, fields] = get_regressors(subj_id, run, conn, true);
-            fields
+            [regs, ~, ~] = get_regressors(subj_id, run, conn, true);
+            fields = {
+                'theory_change_flag', ...
+                'sprite_change_flag', ...
+                'termination_change_flag', ...
+                'newEffects_flag', ...
+                'likelihood', ...
+                'sum_lik', ...
+                'n_ts', ...
+                'num_effects', ...
+                'R_GG', ...
+                'R_GGs', ...
+                'R_SG', ...
+                'R_SGs', ...
+                'interaction_change_flag', ...
+                'S_len', ...
+                'I_len', ...
+                'T_len', ...
+                'Igen_len', ...
+                'Tnov_len', ...
+                'Ip_len', ...
+                'dS_len', ...
+                'dI_len', ...
+                'dT_len', ...
+                'dIgen_len', ...
+                'dTnov_len', ...
+                'dIp_len'}
+            field = fields{glmodel - 25};
+            field
 
             multi.names{1} = 'frames';
             multi.onsets{1} = regs.timestamps';
@@ -603,33 +630,24 @@ save_output = true;
 
             multi.orth{1} = 0; % do not orthogonalise them
 
-            glm_idx = 25;
-            for i = 1:numel(fields)
-                if ~ismember(fields{i}, {'timestamps', 'durations'}) && ~contains(fields{i}, '_onsets')
-                    glm_idx = glm_idx + 1;
-                    if glm_idx == glmodel
-                        idx = 0;
+            idx = 0;
 
-                        for j = 1:size(regs.(fields{i}), 2)
-                            if all(regs.(fields{i})(:,j) == regs.(fields{i})(1,j))
-                                % constant
-                                continue
-                            end
-
-                            idx = idx + 1;
-                            if size(regs.(fields{i}), 2) == 1
-                                multi.pmod(1).name{idx} = fields{i};
-                            else
-                                multi.pmod(1).name{idx} = [fields{i}, '_', num2str(j)];
-                            end
-                            multi.pmod(1).param{idx} = regs.(fields{i})(:,j);
-                            multi.pmod(1).poly{idx} = 1;
-
-                            multi.pmod(1).param{idx}(isnan(multi.pmod(1).param{idx})) = 0; % TODO happens for lik during first few timesteps; ideally, remove altogether
-                        end
-
-                    end
+            for j = 1:size(regs.(field), 2)
+                if all(regs.(field)(:,j) == regs.(field)(1,j))
+                    % constant
+                    continue
                 end
+
+                idx = idx + 1;
+                if size(regs.(field), 2) == 1
+                    multi.pmod(1).name{idx} = field;
+                else
+                    multi.pmod(1).name{idx} = [field, '_', num2str(j)];
+                end
+                multi.pmod(1).param{idx} = regs.(field)(:,j);
+                multi.pmod(1).poly{idx} = 1;
+
+                multi.pmod(1).param{idx}(isnan(multi.pmod(1).param{idx})) = 0; % TODO happens for lik during first few timesteps; ideally, remove altogether
             end
 
         % interaction_change_flag 
