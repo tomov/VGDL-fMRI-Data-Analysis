@@ -14,7 +14,7 @@ method = 'gnb_searchmight'; % lda_ridge, lda_shrinkage, qda_shrinkage, svm_linea
 zsc = 'none';
 %}
 
-mat_filename = sprintf('mat/might_%s_rsa=%d_us=%d_r=%.4f_z%s.nii', method, rsa_idx, use_smooth, radius, zsc);
+mat_filename = sprintf('mat/might_%s_rsa=%d_us=%d_r=%.4f_z%s.mat', method, rsa_idx, use_smooth, radius, zsc);
 mat_filename
 
 nruns = 6;
@@ -66,7 +66,15 @@ tic
 [meta.voxelsToNeighbours, meta.numberOfNeighbours] = might_computeNeighborsSphere(meta.colToCoord, radius, mask);
 toc
 
+% classifier params
+%
+switch method
+    case 'knn'
+        classifierParameters={'k', 0, 'similarityMeasure', 'correlation'};
 
+    otherwise
+        classifierParameters = {};
+end
 
 
 ams = nan(numel(subjects), nvoxels); % accuracy map for each subject 
@@ -127,18 +135,30 @@ for s = 1:length(subjects)
             assert(isequal(zsc, 'none'));
     end
 
-
-    % run searchlight
-    %
+    % inputs, outputs, folds
 
     inputs = B;
     labels = rsa.model(1).features;
     labelsGroup = rsa.model(1).runs;
 
+    % correct for temporal autocorrelation (Pereirra & Botvinick 2009)
+    % MT: not necessary for now; still get unbiased accuracy estimate (CV),
+    % plus doesn't seem to make a huge difference.
+    %{
+    if rsa_idx == 5
+        inputs = inputs(2:2:end, :);
+        labels = labels(2:2:end, :);
+        labelsGroup = labelsGroup(2:2:end, :);
+    end
+    %}
+
+    % run searchlight
+    %
+
     disp('searchlighting...');
 
     tic
-    [am,pm] = computeInformationMap(inputs,labels,labelsGroup,method,'searchlight', ...
+    [am,pm] = computeInformationMap(inputs,labels,labelsGroup,method, 'classifierParameters', classifierParameters, 'searchlight', ... 
                                     meta.voxelsToNeighbours,meta.numberOfNeighbours);
     ams(s,:) = am;
     pms(s,:) = pm;
@@ -182,6 +202,7 @@ for s = 1:length(subjects)
     %bspmview(V.fname, struc);
 end
 
+clear inputs, meta, B;
 save(mat_filename, '-v7.3');
 
 %% write map w/ # subjects for which voxel is significant (with pFDR) based on Pereira & Botvinick 2010
@@ -194,6 +215,8 @@ filename
 countmap(:) = NaN; % clear
 V.fname = fullfile(dirname, filename); % change immediately!
 
+countmap(mask) = howmany;
+spm_write_vol(V, countmap);
 
 % visualize countmap
 %{

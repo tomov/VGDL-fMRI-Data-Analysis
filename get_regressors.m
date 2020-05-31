@@ -1,12 +1,10 @@
-function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache)
+%function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache)
 
-    %{
     subj_id = 1; 
     run_id = 1; 
     conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54');
     query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id); 
     run = find(conn, 'runs', 'query', query);
-    %}
 
     if ~exist('do_cache', 'var')
         do_cache = false;
@@ -29,11 +27,11 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache)
     assert(isequal(run.subj_id, num2str(subj_id)));
 
     % TODO tigth coupling with vgdl_create_multi case 26-34 !!!!!
-    % TODO interaction_change_flag when fixed
+    % TODO termination_change_flag & interaction_change_flag when fixed
     %binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag', 'newEffects_flag', 'replan_flag'}; % binary db.regressors => onsets only, durations irrelevant; have the option of having them as onsets only
-    binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'termination_change_flag', 'newEffects_flag'}; % binary db.regressors => onsets only, durations irrelevant; have the option of having them as onsets only
+    binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'newEffects_flag'}; % binary db.regressors => onsets only, durations irrelevant; have the option of having them as onsets only
     reg_fields = [binreg_fields, {'likelihood', 'sum_lik', 'n_ts', 'num_effects', 'R_GG', 'R_GGs', 'R_SG', 'R_SGs'}]; % db.regressors 
-    binpost_fields = {'interaction_change_flag'};
+    binpost_fields = {'interaction_change_flag', 'termination_change_flag', 'newTimeStep_flag'};
     post_fields = [binpost_fields {'S_len','I_len','T_len','Igen_len','Tnov_len','Ip_len','dS_len','dI_len','dT_len','dIgen_len','dTnov_len','dIp_len'}]; % db.plays_post 
 
     
@@ -59,7 +57,8 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache)
         regs.(post_fields{i}) = [];
     end
     regs.durations = [];
-    regs.timestamps = []; % these all come from EMPA, so the timestamps are keystate['ts'] timestamps, whereas those from the states have state['ts'] timestamps; TODO unify maybe
+    regs.keystate_timestamps = []; % these all come from EMPA, so the timestamps are keystate['ts'] timestamps, whereas those from the states have state['ts'] timestamps; TODO unify maybe
+    regs.state_timestamps = []; % these all come directly from states, so they are state['ts'] timestamps;
 
     blocks = run.blocks;
     for b = 1:length(blocks)
@@ -85,10 +84,11 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache)
                 %regressors = find(conn, 'regressors', 'query', q, 'sort', '{"dt": -1.0}'); % momchil: assume latest one is the correct one 
                 assert(length(regressors) == 1);
                 reg = regressors(1);
-
-                if length(reg.regressors.theory_change_flag) == 0
-                    continue
-                end
+    
+                % was necessary before, for first round of replay where we couldn't replay plaqueAttack
+                %if length(reg.regressors.theory_change_flag) == 0
+                %    continue
+                %end
 
                 assert(immse(cellfun(@(x) x{3}, reg.regressors.theory_change_flag), cellfun(@(x) x{3}, reg.regressors.interaction_change_flag)) < 1e-10); % assert identical timestamps
                 assert(immse(cellfun(@(x) x{3}, reg.regressors.theory_change_flag), cellfun(@(x) x{3}, reg.regressors.sprite_change_flag)) < 1e-10); % assert identical timestamps
@@ -122,12 +122,14 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache)
                 durations = t(2:end) - t(1:end-1);
                 durations = [durations; mean(durations)]; % guesstimate duration of last frame
                 regs.durations = [regs.durations; durations];
-                regs.timestamps = [regs.timestamps; t - run.scan_start_ts]; % assuming all have the same ts
+                regs.keystate_timestamps = [regs.keystate_timestamps; t - run.scan_start_ts]; % assuming all have the same ts; notice those are keystate timestamps (slightly off from state timestamps... sorry; see core.py)
 
 
                 plays_post = find(conn, 'plays_post', 'query', q);
                 assert(length(plays_post) == 1);
                 play_post = plays_post(1);
+
+                %assert(immse(int32(cellfun(@(x) x{1}, reg.regressors.interaction_change_flag)), int32(cellfun(@(x) x{1}, play_post.interaction_change_flag))) < 1e-10); % assert identical interaction change flags computed during replay and after; note will not be true for older replays 
 
                 for i = 1:numel(binpost_fields)
                     if iscell(play_post.(binpost_fields{i}))
@@ -139,6 +141,8 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache)
                     end
                     regs.([binpost_fields{i}, '_onsets']) = [regs.([binpost_fields{i}, '_onsets']); t(find(r > 0)) - run.scan_start_ts];
                 end
+
+                regs.state_timestamps = [regs.state_timestamps; t - run.scan_start_ts]; % assuming all have the same ts; notice those are keystate timestamps (slightly off from state timestamps... sorry; see core.py)
 
                 for i = 1:numel(post_fields)
                     if iscell(play_post.(post_fields{i}))
@@ -159,6 +163,7 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache)
 
     end
 
+    regs.timestamps = regs.keystate_timestamps;
 
     X = [];
 
