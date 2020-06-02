@@ -1,19 +1,26 @@
-function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache)
+function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, collection)
 
     %{
-    subj_id = 5; 
-    run_id = 4; 
+    subj_id = 1; 
+    run_id = 2; 
     conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54');
     query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id); 
     run = find(conn, 'runs', 'query', query);
+    collection = 'regressors_1';
     %}
 
     if ~exist('do_cache', 'var')
         do_cache = false;
     end
 
+    if ~exist('collection', 'var')
+        collection = 'regressors';
+        filename = sprintf('mat/get_regressors_subj%d_run%d.mat', subj_id, run.run_id);
+    else
+        filename = sprintf('mat/get_regressors_subj%d_run%d_c=%s.mat', subj_id, run.run_id, collection);
+    end
+
     % optionally cache
-    filename = sprintf('mat/get_regressors_subj%d_run%d.mat', subj_id, run.run_id);
     if do_cache
         if exist(filename, 'file')
             load(filename);
@@ -28,14 +35,51 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache)
 
     assert(isequal(run.subj_id, num2str(subj_id)));
 
-    % TODO tigth coupling with vgdl_create_multi case 26-34 !!!!!
-    % TODO termination_change_flag & interaction_change_flag when fixed
-    % TODO likelihood, surprise, sum_lik, newTimeStep_flag form regressors when fixed
-    %binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag', 'newEffects_flag', 'replan_flag'}; % binary db.regressors => onsets only, durations irrelevant; have the option of having them as onsets only
-    binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'newEffects_flag'}; % binary db.regressors => onsets only, durations irrelevant; have the option of having them as onsets only
-    reg_fields = [binreg_fields, {'n_ts', 'num_effects', 'R_GG', 'R_GGs', 'R_SG', 'R_SGs'}]; % db.regressors 
-    binpost_fields = {'interaction_change_flag', 'termination_change_flag'};
-    post_fields = [binpost_fields {'newTimeStep_flag', 'likelihood', 'sum_lik_play', 'surprise', 'S_len','I_len','T_len','Igen_len','Tnov_len','Ip_len','dS_len','dI_len','dT_len','dIgen_len','dTnov_len','dIp_len'}]; % db.plays_post 
+    switch collection
+        case 'regressors'
+            % current one -- regressors_and_playspost_2020_05_31_finalTS_block
+
+            % TODO tigth coupling with vgdl_create_multi case 26-34 !!!!!
+            % TODO termination_change_flag & interaction_change_flag when fixed
+            % TODO likelihood, surprise, sum_lik, newTimeStep_flag form regressors when fixed
+            %binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag', 'newEffects_flag', 'replan_flag'}; % binary db.regressors => onsets only, durations irrelevant; have the option of having them as onsets only
+            binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'newEffects_flag'}; % binary db.regressors => onsets only, durations irrelevant; have the option of having them as onsets only
+            reg_fields = [binreg_fields, {'n_ts', 'num_effects', 'R_GG', 'R_GGs', 'R_SG', 'R_SGs'}]; % db.regressors 
+            binpost_fields = {'interaction_change_flag', 'termination_change_flag'}; % binary db.plays_post, copied & fixed from db.regressors
+            post_fields = [binpost_fields {'newTimeStep_flag', 'likelihood', 'sum_lik_play', 'surprise', 'S_len','I_len','T_len','Igen_len','Tnov_len','Ip_len','dS_len','dI_len','dT_len','dIgen_len','dTnov_len','dIp_len'}]; % db.plays_post 
+
+        case 'regressors_1'
+
+            % oldest one -- regressors_2020_04_01_fullTSList_nonrefactor
+
+            binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag'};
+            reg_fields = [binreg_fields, {}]  
+            binpost_fields = {};
+            post_fields = [binpost_fields {}]; % db.plays_post 
+
+        case 'regressors_2'
+
+            %  regressors_2020_05_19_finalTimeStep_reset_nonrefactored
+
+            binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag'};
+            reg_fields = [binreg_fields, {}]  
+            binpost_fields = {};
+            post_fields = [binpost_fields {}]; % db.plays_post 
+
+
+        case 'regressors_3'
+
+            %  regressors_2020_05_24_finalTimeStep_reset_refactored
+
+            binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag'};
+            reg_fields = [binreg_fields, {}]  
+            binpost_fields = {};
+            post_fields = [binpost_fields {}]; % db.plays_post 
+
+        otherwise
+
+            assert(false);
+    end
 
     
     %{
@@ -83,9 +127,17 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache)
                 assert(length(plays) == 1);
                 play = plays(1);
 
-                regressors = find(conn, 'regressors', 'query', q);
-                %regressors = find(conn, 'regressors', 'query', q, 'sort', '{"dt": -1.0}'); % momchil: assume latest one is the correct one 
-                assert(length(regressors) == 1);
+                if isequal('collection', 'regressors')
+                    regressors = find(conn, collection, 'query', q);
+                    assert(length(regressors) == 1);
+                else
+                    % we didn't have our shit together back in the day
+                    regressors = find(conn, collection, 'query', q, 'sort', '{"dt": -1.0}'); % momchil: assume latest one is the correct one 
+                    if isempty(regressors)
+                        disp('EMPTY w t f........');
+                        continue
+                    end
+                end
                 reg = regressors(1);
    
                 % some plays are too short (e.g. 1-2 frames)
@@ -168,23 +220,28 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache)
 
     end
 
-    % to make sure the "visual" regressors from states (logged in core.py, in plays.states) line up with "EMPA" regressors (logged in EMPA.py, in regressors).
-    % this is a challenge b/c we log ones in state timestamps and the others in keystate timestamps (logged separately in core.py), and b/c they have different lengths (b/c EMPA skips initial and last state)
-    % so we have to manually adjust for that; in the end, we treat the keystates timestamps as ground truth
-    assert(all(regs.state_timestamps > regs.keystate_timestamps)); % states are logged after keystates
-    assert(mean(regs.state_timestamps - regs.keystate_timestamps) < 0.02); % ...but not too long after (~0.05 is the difference between two frames); notice if we're misaligned, lots of them will be off; maybe compare w/ mean(regs.state_timestamps(2:end) - regs.state_timestamps(1:end-1))
+    if isequal(collection, 'regressors')
+        % to make sure the "visual" regressors from states (logged in core.py, in plays.states) line up with "EMPA" regressors (logged in EMPA.py, in regressors).
+        % this is a challenge b/c we log ones in state timestamps and the others in keystate timestamps (logged separately in core.py), and b/c they have different lengths (b/c EMPA skips initial and last state)
+        % so we have to manually adjust for that; in the end, we treat the keystates timestamps as ground truth
+        assert(all(regs.state_timestamps > regs.keystate_timestamps)); % states are logged after keystates
+        assert(mean(regs.state_timestamps - regs.keystate_timestamps) < 0.02); % ...but not too long after (~0.05 is the difference between two frames); notice if we're misaligned, lots of them will be off; maybe compare w/ mean(regs.state_timestamps(2:end) - regs.state_timestamps(1:end-1))
 
-    regs.timestamps = regs.keystate_timestamps;
+        regs.timestamps = regs.keystate_timestamps;
 
-    X = [];
+        X = [];
 
-    for i = 1:numel(reg_fields)
-        assert(size(regs.(reg_fields{i}),1) == length(regs.timestamps));
-        X = [X, zscore(regs.(reg_fields{i}), 0, 1)];
-    end
-    for i = 1:numel(post_fields)
-        assert(isequal(post_fields{i}, 'interaction_change_flag') || length(regs.(post_fields{i})) == length(regs.timestamps));
-        X = [X, zscore(regs.(post_fields{i}), 0, 1)];
+        for i = 1:numel(reg_fields)
+            assert(size(regs.(reg_fields{i}),1) == length(regs.timestamps));
+            X = [X, zscore(regs.(reg_fields{i}), 0, 1)];
+        end
+        for i = 1:numel(post_fields)
+            assert(isequal(post_fields{i}, 'interaction_change_flag') || length(regs.(post_fields{i})) == length(regs.timestamps));
+            X = [X, zscore(regs.(post_fields{i}), 0, 1)];
+        end
+    else
+
+        X = [];
     end
 
     fields = [reg_fields, post_fields];

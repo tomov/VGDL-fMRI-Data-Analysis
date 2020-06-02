@@ -24,7 +24,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
     %     .model - struct array describing the models used for behavioral RDMs (see Kriegeskorte et al. 2008) with the fields:
     %         .name - model name
     %         .features - [nTrials x D] feature vector
-    %         .runs - [nTrials x 1] run id vector
+    %         .partitions - [nTrials x 1] partition id vector
     %         .distance_measure - name (e.g. 'cosine') or function handler to be used as a distance measure for the RDMs (passed to pdist, see MATLAB documentation)
     %         .is_control - whether this is a control model (e.g. time)
     %
@@ -68,7 +68,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
             EXPT = vgdl_expt();
 
             features = [];
-            runs = [];
+            partitions = [];
             %goodRun_ids = goodRun_ids(randperm(length(goodRun_ids))); % TODO rm me -- more permutation testing, across runs
             for run_id = goodRun_ids
                 % copied from vgdl_create_multi, GLM 1
@@ -82,7 +82,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
                 for i = 1:numel(game_names)
                     % one for each block
                     features = [features; game_name_to_id(game_names{i})];
-                    runs = [runs; round(run_id/2)]; % lump adjacent runs together to exclude comparisons for trials within the same pair; otherwise we get biased in the negative direction, i.e. same games appear more different -- see below (same issue as when comparing within run, just for adjacent runs)
+                    partitions = [partitions; round(run_id/2)]; % lump adjacent runs together to exclude comparisons for trials within the same pair; otherwise we get biased in the negative direction, i.e. same games appear more different -- see below (same issue as when comparing within run, just for adjacent runs)
                 end
                 %features = [features; randperm(3)']; % TODO rm me -- more random test; basically, stuff nearby (same run or even neighboring runs) is correlated => we should exclude that stuff, or at least control for it; o/w we get lots of negative similarities (b/c all "same games" are far from each other, by design => will be different, compared to "different games", which tend to be closer to each other, on average)
             end
@@ -97,7 +97,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
 
             rsa.model(1).name = 'game';
             rsa.model(1).features = features;
-            rsa.model(1).runs = runs; % run pairs, technically
+            rsa.model(1).partitions = partitions; % run pairs, technically TODO rename to partitions, same everywhere
             rsa.model(1).distance_measure = @(g1, g2) g1 ~= g2;
             rsa.model(1).is_control = false;
 
@@ -111,7 +111,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
             EXPT = vgdl_expt();
 
             features = [];
-            runs = [];
+            partitions = [];
             for run_id = goodRun_ids 
                 % copied from vgdl_create_multi, GLM 22
                 query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id); % in python we index runs from 0 (but not subjects) 
@@ -126,7 +126,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
                         for k = 1:length(ons)
                             % one for each TR / time point
                             features = [features; game_name_to_id(game_names{i})];
-                            runs = [runs; round(run_id/2)]; % lump adjacent runs together to exclude comparisons for trials within the same pair; otherwise we get biased in the negative direction, i.e. same games appear more different -- see below (same issue as when comparing within run, just for adjacent runs)
+                            partitions = [partitions; round(run_id/2)]; % lump adjacent runs together to exclude comparisons for trials within the same pair; otherwise we get biased in the negative direction, i.e. same games appear more different -- see below (same issue as when comparing within run, just for adjacent runs)
                         end
                     end
                 end
@@ -141,7 +141,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
 
             rsa.model(1).name = 'game';
             rsa.model(1).features = features;
-            rsa.model(1).runs = runs; % run pairs, technically
+            rsa.model(1).partitions = partitions; % run pairs, technically
             rsa.model(1).distance_measure = @(g1, g2) g1 ~= g2;
             rsa.model(1).is_control = false;
 
@@ -162,16 +162,16 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
             for g = 1:length(game_names)
                 which = contains(SPM.xX.name, game_names(g));
                 assert(sum(which) == 3);
-                feature = sum(SPM.xX.X(:,which), 2); % merge game boxcars from different runs
+                feature = sum(SPM.xX.xKXs.X(:,which), 2); % merge game boxcars from different runs
                 features(:,g) = feature;
             end
 
-            runs = zeros(size(SPM.xX.X,1), 1);
+            partitions = zeros(size(SPM.xX.X,1), 1);
             for r = 1:6
                 which = contains(SPM.xX.name, sprintf('Sn(%d) constant', r));
                 assert(sum(which) == 1);
                 run_id = SPM.xX.X(:,which) * r;
-                runs = runs + round(run_id/2); % run pair
+                partitions = partitions + round(run_id/2); % run pair
             end
 
             rsa.use_beta_series = false;
@@ -181,7 +181,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
 
             rsa.model(1).name = 'game';
             rsa.model(1).features = features + rand(size(features)) * 0.0001; % to prevent NaN cosine
-            rsa.model(1).runs = runs; % run pairs, technically
+            rsa.model(1).partitions = partitions; % run pairs, technically
             rsa.model(1).distance_measure = 'cosine';
             rsa.model(1).is_control = false;
 
@@ -203,7 +203,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
             EXPT = vgdl_expt();
 
             features = [];
-            runs = [];
+            partitions = [];
             for run_id = goodRun_ids 
                 % copied from vgdl_create_multi, GLM 24
                 query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id); % in python we index runs from 0 (but not subjects) 
@@ -219,7 +219,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
                         for k = 1:length(ons)
                             % one for each boxcar
                             features = [features; game_name_to_id(game_names{i})];
-                            runs = [runs; round(run_id/2)]; % lump adjacent runs together to exclude comparisons for trials within the same pair; otherwise we get biased in the negative direction, i.e. same games appear more different -- see below (same issue as when comparing within run, just for adjacent runs)
+                            partitions = [partitions; round(run_id/2)]; % lump adjacent runs together to exclude comparisons for trials within the same pair; otherwise we get biased in the negative direction, i.e. same games appear more different -- see below (same issue as when comparing within run, just for adjacent runs)
                         end
                     end
                 end
@@ -234,7 +234,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
 
             rsa.model(1).name = 'game';
             rsa.model(1).features = features;
-            rsa.model(1).runs = runs; % run pairs, technically
+            rsa.model(1).partitions = partitions; % run pairs, technically
             rsa.model(1).distance_measure = @(g1, g2) g1 ~= g2;
             rsa.model(1).is_control = false;
 
@@ -248,7 +248,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
             EXPT = vgdl_expt();
 
             features = [];
-            runs = [];
+            partitions = [];
             for run_id = goodRun_ids
                 query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id); % in python we index runs from 0 (but not subjects) 
 
@@ -260,7 +260,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
                     for j = 1:length(onsets{i})
                         % one for each instance
                         features = [features; game_name_to_id(game_names{i})];
-                        runs = [runs; round(run_id/2)]; % lump adjacent runs together to exclude comparisons for trials within the same pair; otherwise we get biased in the negative direction, i.e. same games appear more different -- see below (same issue as when comparing within run, just for adjacent runs)
+                        partitions = [partitions; round(run_id/2)]; % lump adjacent runs together to exclude comparisons for trials within the same pair; otherwise we get biased in the negative direction, i.e. same games appear more different -- see below (same issue as when comparing within run, just for adjacent runs)
                     end
                 end
             end
@@ -274,7 +274,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
 
             rsa.model(1).name = 'game';
             rsa.model(1).features = features;
-            rsa.model(1).runs = runs; % run pairs, technically
+            rsa.model(1).partitions = partitions; % run pairs, technically
             rsa.model(1).distance_measure = @(g1, g2) g1 ~= g2;
             rsa.model(1).is_control = false;
 
@@ -313,18 +313,18 @@ function rsa = permute(rsa, rsa_idx, subj_id, seed)
 
         case {2,4,5,6}
             for r = 1:3
-                f = rsa.model(1).features(rsa.model(1).runs == r);
+                f = rsa.model(1).features(rsa.model(1).partitions == r);
                 p = randperm(6);
                 clear fp;
                 for i = 1:6
                     fp(f == i) = p(i);
                 end
-                rsa.model(1).features(rsa.model(1).runs == r) = fp;
+                rsa.model(1).features(rsa.model(1).partitions == r) = fp;
             end
 
         case 3
             for r = 1:3
-                w = rsa.model(1).runs == r;
+                w = rsa.model(1).partitions == r;
                 p = randperm(6);
                 rsa.model(1).features(w, :) = rsa.model(1).features(w, p);
             end

@@ -110,7 +110,7 @@ for s = 1:length(subjects)
     else
         % load BOLD
         %
-        [B, runs] = ccnl_get_activations(EXPT, rsa.glmodel, rsa.mask, subj, true, true); % whiten & filter; see Diedrichsen et al. 2016
+        [B, runs] = ccnl_get_activations(EXPT, rsa.glmodel, mask, subj, true, true); % whiten & filter; see Diedrichsen et al. 2016
         B = B{1};
         runs = runs{1};
     end
@@ -139,7 +139,7 @@ for s = 1:length(subjects)
 
     inputs = B;
     labels = rsa.model(1).features;
-    labelsGroup = rsa.model(1).runs;
+    labelsGroup = rsa.model(1).partitions;
 
     % correct for temporal autocorrelation (Pereirra & Botvinick 2009)
     % MT: not necessary for now; still get unbiased accuracy estimate (CV),

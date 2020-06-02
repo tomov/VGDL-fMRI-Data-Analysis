@@ -6,12 +6,20 @@ clear all;
 EXPT = vgdl_expt();
 [~,~,goodRuns,goodSubjects] = vgdl_getSubjectsDirsAndRuns();
 
-% compare GLMs in left M1
+% compare keypressGLMs in left M1
 %
+%{
 masks = {'masks/m1_L.nii'};
 region = {'Left M1'};
 %[masks, region] = get_masks(29, 'DV', true, [], 1);
 glms = [5 6];
+%}
+
+% compare theory_change_flag GLMs
+%
+masks = {'masks/ClusterMask_spmT_0001_x=48_y=12_z=32_183voxels.nii', 'masks/ROI_x=48_y=12_z=32_62voxels_Sphere6.nii'};
+region = {'theory glm3 clust', 'theory glm3 sphere'};
+glms = [3 59 60 61];
 
 for c = 1:length(masks)
     mask = masks{c};
