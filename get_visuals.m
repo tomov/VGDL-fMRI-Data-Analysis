@@ -19,7 +19,7 @@ function [fields, visuals] = get_visuals(subj_id, run, conn, do_cache)
     end
 
     % TODO tight coupling with vgdl_create_multi, case 10-20
-    fields = {'timestamps', 'new_sprites', 'killed_sprites', 'sprites', 'non_walls', 'avatar_moved', 'moved', 'movable', 'collisions', 'effects', 'sprite_groups', 'changed'};
+    fields = {'timestamps', 'new_sprites', 'killed_sprites', 'sprites', 'non_walls', 'avatar_moved', 'moved', 'movable', 'collisions', 'effects', 'sprite_groups', 'changed', 'avatar_collision_flag', 'effectsByCol'};
     visuals = struct;
     for i = 1:numel(fields)
         visuals.(fields{i}) = [];

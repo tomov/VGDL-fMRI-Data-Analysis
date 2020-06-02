@@ -592,7 +592,7 @@ save_output = true;
         % same idea as GLM 10-20
         % TODO tight coupling with get_regressors.m
         %
-        case {26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50}
+        case {26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,57}
 
             [regs, ~, ~] = get_regressors(subj_id, run, conn, true);
             fields = {
@@ -601,7 +601,7 @@ save_output = true;
                 'termination_change_flag', ...
                 'newEffects_flag', ...
                 'likelihood', ...
-                'sum_lik', ...
+                'sum_lik_play', ...
                 'n_ts', ...
                 'num_effects', ... # len(effectListByColor)
                 'R_GG', ...
@@ -621,7 +621,10 @@ save_output = true;
                 'dIgen_len', ...
                 'dTnov_len', ...
                 'dIp_len'}
-            field = fields{glmodel - 25};
+            map = containers.Map(26:50, fields);
+            map(57) = 'surprise';
+
+            field = map(glmodel);
             field
 
             multi.names{1} = 'frames';
@@ -741,6 +744,97 @@ save_output = true;
             multi.pmod(1).name{idx} = 'termination_change_flag';
             multi.pmod(1).param{idx} = regs.termination_change_flag;
             multi.pmod(1).poly{idx} = 1;
+
+
+        % theory_change_flag - avatar_collision_flag (orth)
+        % #Sam
+        %
+        case 55
+
+            idx = 0;
+
+            regs = get_regressors(subj_id, run, conn, true);
+            tc = regs.theory_change_flag;
+            tc = logical(tc);
+            assert(all(regs.timestamps(tc) == regs.theory_change_flag_onsets));
+
+            [~, visuals] = get_visuals(subj_id, run, conn, true);
+            av = visuals.avatar_collision_flag;
+            av = logical(av);
+            which = ismember(visuals.timestamps, regs.state_timestamps); % cross-reference them; annoying stuff
+            av = av(which);
+
+            av(tc) = 0; % orthogonalise w.r.t. theory_change_flag
+
+            idx = idx + 1;
+            multi.names{idx} = 'theory_change_flag';
+            multi.onsets{idx} = regs.timestamps(tc);
+            multi.durations{idx} = zeros(size(multi.onsets{idx}));
+
+            idx = idx + 1;
+            multi.names{idx} = 'avatar_collision_flag';
+            multi.onsets{idx} = regs.timestamps(av);
+            multi.durations{idx} = zeros(size(multi.onsets{idx}));
+
+
+        % theory_change_flag - collisions (orth)
+        % similar to 55
+        %
+        case 56
+
+            idx = 0;
+
+            regs = get_regressors(subj_id, run, conn, true);
+            tc = regs.theory_change_flag;
+            tc = logical(tc);
+            assert(all(regs.timestamps(tc) == regs.theory_change_flag_onsets));
+
+            [~, visuals] = get_visuals(subj_id, run, conn, true);
+            ef = visuals.effectsByCol; % same as newTimeStep_flag 
+            ef = ef > 0;
+            which = ismember(visuals.timestamps, regs.state_timestamps); % cross-reference them; annoying stuff
+            ef = ef(which);
+            %assert(all(ef == regs.newTimeStep_flag)); fails TODO weird
+
+            ef(tc) = 0; % orthogonalize w.r.t. theory_change_flag
+
+            idx = idx + 1;
+            multi.names{idx} = 'theory_change_flag';
+            multi.onsets{idx} = regs.timestamps(tc);
+            multi.durations{idx} = zeros(size(multi.onsets{idx}));
+
+            idx = idx + 1;
+            multi.names{idx} = 'collision_flag';
+            multi.onsets{idx} = regs.timestamps(ef);
+            multi.durations{idx} = zeros(size(multi.onsets{idx}));
+
+        % case 57 is surprise
+
+        % theory_change_flag vs. surprise 
+        %
+        case 58
+
+            idx = 0;
+
+            regs = get_regressors(subj_id, run, conn, true);
+            tc = regs.theory_change_flag;
+            tc = logical(tc);
+            assert(all(regs.timestamps(tc) == regs.theory_change_flag_onsets));
+
+            su = regs.surprise;
+            su(isnan(su)) = 0;
+            su = logical(su);
+
+            idx = idx + 1;
+            multi.names{idx} = 'theory_change_flag';
+            multi.onsets{idx} = regs.timestamps(tc);
+            multi.durations{idx} = zeros(size(multi.onsets{idx}));
+
+            idx = idx + 1;
+            multi.names{idx} = 'surprise_flag';
+            multi.onsets{idx} = regs.timestamps(su);
+            multi.durations{idx} = zeros(size(multi.onsets{idx}));
+
 
 
 

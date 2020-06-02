@@ -1,10 +1,12 @@
-%function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache)
+function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache)
 
-    subj_id = 1; 
-    run_id = 1; 
+    %{
+    subj_id = 5; 
+    run_id = 4; 
     conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54');
     query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id); 
     run = find(conn, 'runs', 'query', query);
+    %}
 
     if ~exist('do_cache', 'var')
         do_cache = false;
@@ -28,11 +30,12 @@
 
     % TODO tigth coupling with vgdl_create_multi case 26-34 !!!!!
     % TODO termination_change_flag & interaction_change_flag when fixed
+    % TODO likelihood, surprise, sum_lik, newTimeStep_flag form regressors when fixed
     %binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag', 'newEffects_flag', 'replan_flag'}; % binary db.regressors => onsets only, durations irrelevant; have the option of having them as onsets only
     binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'newEffects_flag'}; % binary db.regressors => onsets only, durations irrelevant; have the option of having them as onsets only
-    reg_fields = [binreg_fields, {'likelihood', 'sum_lik', 'n_ts', 'num_effects', 'R_GG', 'R_GGs', 'R_SG', 'R_SGs'}]; % db.regressors 
-    binpost_fields = {'interaction_change_flag', 'termination_change_flag', 'newTimeStep_flag'};
-    post_fields = [binpost_fields {'S_len','I_len','T_len','Igen_len','Tnov_len','Ip_len','dS_len','dI_len','dT_len','dIgen_len','dTnov_len','dIp_len'}]; % db.plays_post 
+    reg_fields = [binreg_fields, {'n_ts', 'num_effects', 'R_GG', 'R_GGs', 'R_SG', 'R_SGs'}]; % db.regressors 
+    binpost_fields = {'interaction_change_flag', 'termination_change_flag'};
+    post_fields = [binpost_fields {'newTimeStep_flag', 'likelihood', 'sum_lik_play', 'surprise', 'S_len','I_len','T_len','Igen_len','Tnov_len','Ip_len','dS_len','dI_len','dT_len','dIgen_len','dTnov_len','dIp_len'}]; % db.plays_post 
 
     
     %{
@@ -84,11 +87,11 @@
                 %regressors = find(conn, 'regressors', 'query', q, 'sort', '{"dt": -1.0}'); % momchil: assume latest one is the correct one 
                 assert(length(regressors) == 1);
                 reg = regressors(1);
-    
-                % was necessary before, for first round of replay where we couldn't replay plaqueAttack
-                %if length(reg.regressors.theory_change_flag) == 0
-                %    continue
-                %end
+   
+                % some plays are too short (e.g. 1-2 frames)
+                if length(reg.regressors.theory_change_flag) == 0
+                    continue
+                end
 
                 assert(immse(cellfun(@(x) x{3}, reg.regressors.theory_change_flag), cellfun(@(x) x{3}, reg.regressors.interaction_change_flag)) < 1e-10); % assert identical timestamps
                 assert(immse(cellfun(@(x) x{3}, reg.regressors.theory_change_flag), cellfun(@(x) x{3}, reg.regressors.sprite_change_flag)) < 1e-10); % assert identical timestamps
@@ -142,8 +145,6 @@
                     regs.([binpost_fields{i}, '_onsets']) = [regs.([binpost_fields{i}, '_onsets']); t(find(r > 0)) - run.scan_start_ts];
                 end
 
-                regs.state_timestamps = [regs.state_timestamps; t - run.scan_start_ts]; % assuming all have the same ts; notice those are keystate timestamps (slightly off from state timestamps... sorry; see core.py)
-
                 for i = 1:numel(post_fields)
                     if iscell(play_post.(post_fields{i}))
                         if numel(play_post.(post_fields{i}){1}{1}) == 1
@@ -157,11 +158,21 @@
                     end
                     regs.(post_fields{i}) = [regs.(post_fields{i}); r];
                 end
+
+                % note we skif first and last state timestamp b/c EMPA skips them too when fMRI logging TODO 
+                regs.state_timestamps = [regs.state_timestamps; play_post.timestamps(2:end-1) - run.scan_start_ts]; % assuming all have the same ts; notice those are keystate timestamps (slightly off from state timestamps... sorry; see core.py)
+
             end
 
         end
 
     end
+
+    % to make sure the "visual" regressors from states (logged in core.py, in plays.states) line up with "EMPA" regressors (logged in EMPA.py, in regressors).
+    % this is a challenge b/c we log ones in state timestamps and the others in keystate timestamps (logged separately in core.py), and b/c they have different lengths (b/c EMPA skips initial and last state)
+    % so we have to manually adjust for that; in the end, we treat the keystates timestamps as ground truth
+    assert(all(regs.state_timestamps > regs.keystate_timestamps)); % states are logged after keystates
+    assert(mean(regs.state_timestamps - regs.keystate_timestamps) < 0.02); % ...but not too long after (~0.05 is the difference between two frames); notice if we're misaligned, lots of them will be off; maybe compare w/ mean(regs.state_timestamps(2:end) - regs.state_timestamps(1:end-1))
 
     regs.timestamps = regs.keystate_timestamps;
 
