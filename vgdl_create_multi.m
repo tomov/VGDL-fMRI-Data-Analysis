@@ -592,7 +592,7 @@ save_output = true;
         % same idea as GLM 10-20
         % TODO tight coupling with get_regressors.m
         %
-        case {26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,57}
+        case {26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,57,72}
 
             [regs, ~, ~] = get_regressors(subj_id, run, conn, true);
             fields = {
@@ -623,6 +623,7 @@ save_output = true;
                 'dIp_len'}
             map = containers.Map(26:50, fields);
             map(57) = 'surprise';
+            map(72) = 'replan_flag';
 
             field = map(glmodel);
             field
@@ -1127,10 +1128,390 @@ save_output = true;
             end
     
 
+        % old sprite_change_flag, interaction_change_flag, termination_change_flag 
+        % same as GLM 53 but with regressors_2020_04_01_fullTSList_nonrefactor
+
+        %
+        case 65
+
+            idx = 0;
+
+            regs = get_regressors(subj_id, run, conn, true, 'regressors_1');
+
+            if length(regs.sprite_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'sprite_change_flag';
+                multi.onsets{idx} = regs.sprite_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
+
+            idx = idx + 1;
+            multi.names{idx} = 'interaction_change_flag';
+            multi.onsets{idx} = regs.interaction_change_flag_onsets;
+            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
 
 
+            idx = idx + 1;
+            multi.names{idx} = 'termination_change_flag';
+            multi.onsets{idx} = regs.termination_change_flag_onsets;
+            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
 
 
+        % old sprite_change_flag, interaction_change_flag, termination_change_flag 
+        % same as GLM 53 but with regressors_2020_05_19_finalTimeStep_reset_nonrefactored
+
+        %
+        case 66
+
+            idx = 0;
+
+            regs = get_regressors(subj_id, run, conn, true, 'regressors_2');
+
+            if length(regs.sprite_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'sprite_change_flag';
+                multi.onsets{idx} = regs.sprite_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
+
+            idx = idx + 1;
+            multi.names{idx} = 'interaction_change_flag';
+            multi.onsets{idx} = regs.interaction_change_flag_onsets;
+            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+
+
+            idx = idx + 1;
+            multi.names{idx} = 'termination_change_flag';
+            multi.onsets{idx} = regs.termination_change_flag_onsets;
+            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+
+
+        % interaction_change_flag or termination_change_flag 
+        % similar idea to GLM 3 except without the sprite changes 
+        % also looks like sometimes theory_change_flag = 1 but nothing actually chanfed, just some interactions got shuffled around
+        %
+        case 67
+
+            idx = 0;
+
+            regs = get_regressors(subj_id, run, conn, true);
+            ic = regs.interaction_change_flag;
+            ic = logical(ic);
+            assert(all(regs.timestamps(ic) == regs.interaction_change_flag_onsets));
+
+            tec = regs.termination_change_flag;
+            tec = logical(tec);
+            assert(all(regs.timestamps(tec) == regs.termination_change_flag_onsets));
+
+            idx = idx + 1;
+            multi.names{idx} = 'interaction_or_termination_change_flag';
+            multi.onsets{idx} = regs.timestamps(ic | tec);
+            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+
+
+            %{
+        % old sprite_change_flag, interaction_change_flag, termination_change_flag 
+        % same as 53 but with regressors_2020_05_24_finalTimeStep_reset_refactored
+        %
+        case 68
+
+            idx = 0;
+
+            regs = get_regressors(subj_id, run, conn, true, 'regressors_3');
+
+            if length(regs.sprite_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'sprite_change_flag';
+                multi.onsets{idx} = regs.sprite_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
+
+            idx = idx + 1;
+            multi.names{idx} = 'interaction_change_flag';
+            multi.onsets{idx} = regs.interaction_change_flag_onsets;
+            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+
+
+            idx = idx + 1;
+            multi.names{idx} = 'termination_change_flag';
+            multi.onsets{idx} = regs.termination_change_flag_onsets;
+            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+
+
+        % old sprite_change_flag, interaction_change_flag, termination_change_flag as pmods
+        % same as GLM 54 but with regressors_2020_05_24_finalTimeStep_reset_refactored
+        %
+        case 69
+
+            idx = 0;
+
+            [regs, ~, fields] = get_regressors(subj_id, run, conn, true, 'regressors_3');
+            fields
+
+            multi.names{1} = 'frames';
+            multi.onsets{1} = regs.timestamps';
+            multi.durations{1} = regs.durations';
+
+            multi.orth{1} = 0; % do not orthogonalise them
+
+            if any(regs.sprite_change_flag)
+                idx = idx + 1;
+                multi.pmod(1).name{idx} = 'sprite_change_flag';
+                multi.pmod(1).param{idx} = regs.sprite_change_flag;
+                multi.pmod(1).poly{idx} = 1;
+            end
+
+            idx = idx + 1;
+            multi.pmod(1).name{idx} = 'interaction_change_flag';
+            multi.pmod(1).param{idx} = regs.interaction_change_flag;
+            multi.pmod(1).poly{idx} = 1;
+
+            idx = idx + 1;
+            multi.pmod(1).name{idx} = 'termination_change_flag';
+            multi.pmod(1).param{idx} = regs.termination_change_flag;
+            multi.pmod(1).poly{idx} = 1;
+
+            %}
+
+
+        % sprite_change_flag, interaction_change_flag, termination_change_flag 
+        %  + control regressors
+        % merge of GLM 21 and GLM 53
+        % i.e. GLM 53 + GLM 9 = 53, 1, 5, 7, 8
+        %
+        case 68
+
+            idx = 0;
+
+            % from GLM 53: sprite_change_flag, interaction_change_flag, termination_change_flag 
+
+            %
+            regs = get_regressors(subj_id, run, conn, true);
+
+            if length(regs.sprite_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'sprite_change_flag';
+                multi.onsets{idx} = regs.sprite_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
+
+            idx = idx + 1;
+            multi.names{idx} = 'interaction_change_flag';
+            multi.onsets{idx} = regs.interaction_change_flag_onsets;
+            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+
+
+            idx = idx + 1;
+            multi.names{idx} = 'termination_change_flag';
+            multi.onsets{idx} = regs.termination_change_flag_onsets;
+            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+
+            % from GLM 1: game instance boxcar regressor
+            %
+            [game_names, onsets, durs] = get_games(subj_id, run, conn);
+            for i = 1:numel(game_names)
+                idx = idx + 1;
+                multi.names{idx} = game_names{i};
+                multi.onsets{idx} = onsets{i};
+                multi.durations{idx} = durs{i};
+            end
+
+            % from GLM 5: keyholds nuisance regressors
+            %
+            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
+            if subj_id == 1
+                % we screwed up keyholds for subject 1, so we use estimates from keypresses
+                keyholds = keyholds_post
+            end
+            % key hold boxcar regressors
+            for k = 1:numel(keyNames)
+                if size(keyholds{k}, 1) > 0
+                    idx = idx + 1;
+                    multi.names{idx} = keyNames{k};
+                    multi.onsets{idx} = keyholds{k}(:,1)';
+                    multi.durations{idx} = keyholds{k}(:,2)';
+                end
+            end
+
+            % GLM 7: frame nuisance regressors
+            %
+            [fields, visuals] = get_visuals(subj_id, run, conn, true);
+            idx = idx + 1;
+            multi.names{idx} = 'frames';
+            multi.onsets{idx} = visuals.timestamps';
+            multi.durations{idx} = visuals.durations';
+
+            multi.orth{idx} = 0; % do not orthogonalise them
+
+            pix = 0;
+            for i = 1:numel(fields)
+                if ~ismember(fields{i}, {'timestamps', 'durations'}) 
+                    if all(visuals.(fields{i}) == visuals.(fields{i})(1))
+                        % constant
+                        continue
+                    end
+                    pix = pix + 1;
+                    multi.pmod(idx).name{pix} = fields{i};
+                    multi.pmod(idx).param{pix} = visuals.(fields{i});
+                    multi.pmod(idx).poly{pix} = 1;
+                end
+            end
+
+            % GLM 8: on/off nuisance regressors
+            %
+            [onoff] = get_onoff(subj_id, run, conn, true);
+            fields = fieldnames(onoff);
+            for i = 1:numel(fields)
+                idx = idx + 1;
+                multi.names{idx} = fields{i};
+                multi.onsets{idx} = onoff.(fields{i});
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));
+            end
+    
+
+        % surprise, likelihood, sum_lik_play, n_ts
+        %  + control regressors
+        % see GLM 21 
+        %
+        case 69
+
+            idx = 0;
+
+            % from GLM 30,31,32,57: sprite_change_flag, interaction_change_flag, termination_change_flag 
+
+            %
+            [regs, ~, ~] = get_regressors(subj_id, run, conn, true);
+            fields = {
+                'likelihood', ...
+                'sum_lik_play', ...
+                'surprise'}
+
+            idx = idx + 1;
+            multi.names{idx} = 'frames';
+            multi.onsets{idx} = regs.timestamps';
+            multi.durations{idx} = regs.durations';
+
+            multi.orth{1} = 0; % do not orthogonalise them
+
+            for i = 1:numel(fields)
+                field = fields{i};
+
+                multi.pmod(idx).name{i} = field;
+                multi.pmod(idx).param{i} = regs.(field);
+                multi.pmod(idx).poly{i} = 1;
+
+                multi.pmod(idx).param{i}(isnan(multi.pmod(idx).param{i})) = 0; % TODO happens for lik during first few timesteps; ideally, remove altogether
+            end
+
+            % from GLM 1: game instance boxcar regressor
+            %
+            [game_names, onsets, durs] = get_games(subj_id, run, conn);
+            for i = 1:numel(game_names)
+                idx = idx + 1;
+                multi.names{idx} = game_names{i};
+                multi.onsets{idx} = onsets{i};
+                multi.durations{idx} = durs{i};
+            end
+
+            % from GLM 5: keyholds nuisance regressors
+            %
+            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
+            if subj_id == 1
+                % we screwed up keyholds for subject 1, so we use estimates from keypresses
+                keyholds = keyholds_post
+            end
+            % key hold boxcar regressors
+            for k = 1:numel(keyNames)
+                if size(keyholds{k}, 1) > 0
+                    idx = idx + 1;
+                    multi.names{idx} = keyNames{k};
+                    multi.onsets{idx} = keyholds{k}(:,1)';
+                    multi.durations{idx} = keyholds{k}(:,2)';
+                end
+            end
+
+            % GLM 7: frame nuisance regressors
+            %
+            [fields, visuals] = get_visuals(subj_id, run, conn, true);
+            idx = idx + 1;
+            multi.names{idx} = 'frames';
+            multi.onsets{idx} = visuals.timestamps';
+            multi.durations{idx} = visuals.durations';
+
+            multi.orth{idx} = 0; % do not orthogonalise them
+
+            pix = 0;
+            for i = 1:numel(fields)
+                if ~ismember(fields{i}, {'timestamps', 'durations'}) 
+                    if all(visuals.(fields{i}) == visuals.(fields{i})(1))
+                        % constant
+                        continue
+                    end
+                    pix = pix + 1;
+                    multi.pmod(idx).name{pix} = fields{i};
+                    multi.pmod(idx).param{pix} = visuals.(fields{i});
+                    multi.pmod(idx).poly{pix} = 1;
+                end
+            end
+
+            % GLM 8: on/off nuisance regressors
+            %
+            [onoff] = get_onoff(subj_id, run, conn, true);
+            fields = fieldnames(onoff);
+            for i = 1:numel(fields)
+                idx = idx + 1;
+                multi.names{idx} = fields{i};
+                multi.onsets{idx} = onoff.(fields{i});
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));
+            end
+   
+
+        % sum_lik_play vs. n_ts
+        %
+        case 70
+
+            idx = 0;
+
+            % from GLM 30,31,32,57: sprite_change_flag, interaction_change_flag, termination_change_flag 
+
+            %
+            [regs, ~, ~] = get_regressors(subj_id, run, conn, true);
+            fields = {
+                'sum_lik_play', ...
+                'n_ts' ...
+                }
+
+            idx = idx + 1;
+            multi.names{idx} = 'frames';
+            multi.onsets{idx} = regs.timestamps';
+            multi.durations{idx} = regs.durations';
+
+            multi.orth{1} = 0; % do not orthogonalise them
+
+            for i = 1:numel(fields)
+                field = fields{i};
+
+                multi.pmod(idx).name{i} = field;
+                multi.pmod(idx).param{i} = regs.(field);
+                multi.pmod(idx).poly{i} = 1;
+
+                multi.pmod(idx).param{i}(isnan(multi.pmod(idx).param{i})) = 0; % TODO happens for lik during first few timesteps; ideally, remove altogether
+            end
+
+
+        % replan_flag 
+        %
+        case 71
+
+            idx = 0;
+
+            regs = get_regressors(subj_id, run, conn, true);
+            onsets = regs.replan_flag_onsets;
+
+            idx = idx + 1;
+            multi.names{idx} = 'replan_flag';
+            multi.onsets{idx} = onsets;
+            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
 
 
         otherwise

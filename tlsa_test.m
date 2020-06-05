@@ -2,10 +2,13 @@
 % momchil: c/p from might.m
 % random effects 
 
+clear all;
+close all;
+
 addpath(genpath('../../tlsa_matlab'));
 
 use_smooth = true;
-rsa_idx = 3;
+rsa_idx = 1;
 
 if use_smooth
     EXPT = vgdl_expt();
@@ -15,12 +18,11 @@ else
     maskfile = 'masks/mask_nosmooth.nii';
 end
 
-clear all;
-close all;
-
 [mask, Vmask] = ccnl_load_mask(maskfile);
 
 subjects = 1:length(EXPT.subject);
+
+nruns = 6;
 
 % Parameters of the synthetic data
 N = 80;     % number of observations
@@ -34,18 +36,20 @@ tau = 1;    % noise precision
 % TLSA options (missing fields get set to defaults)
 opts.mapfun = @(theta,R) map_st_rbf(theta,R);    % mapping function (spatiotemporal RBF)
 opts.K = K;
-opts.beta = 0.01;  % set to 0 to fit each subject independently
+%opts.beta = 0.01;  % set to 0 to fit each subject independently
+opts.beta = 0;  % set to 0 to fit each subject independently
 
 % Create the synthetic data set
 %[r1 r2 r3 r4] = ndgrid(linspace(0,1,5)');
 %R = [r1(:) r2(:) r3(:) r4(:)];  % location matrix
 [x y z] = ind2sub(size(mask), find(mask));
 R = cor2mni([x y z], Vmask.mat);
+R = R / max(R(:)); % normalize
 
 omega = randn(K,M);             % source parameters (here each subject has the same parameters)
 
 rng(234);
-vox = randsample(size(R,1), 5000); % subsample voxels, to make things faster
+vox = randsample(size(R,1), 500); % subsample voxels, to make things faster
 
 for s = 1:S
     subj = subjects(s);
@@ -57,13 +61,44 @@ for s = 1:S
     spm_mat_file = fullfile(modeldir,'SPM.mat');
     load(spm_mat_file);
 
-    assert(rsa_idx == 3);
-    Y = ccnl_get_activations(EXPT, rsa.glmodel, mask, subj, true, true); % whiten & filter; see Diedrichsen et al. 2016
-    Y = Y{1};
-    %X = SPM.xX.xKXs.X; % whiten & high-pass filtered
+    % c/p from might.m
+    % notice we load from nii every time, unlike RSA where we cache them
+    % couple reasons:
+    % 1) here use_smooth matters for which mask we use => need multiple caches
+    % 2) this is not the bottleneck (as we only do this once)
+    tic
+    disp('loading betas from .nii files...');
 
+    if rsa.use_beta_series
+        % load betas
+        %
+        [Y, names] = ccnl_get_beta_series(EXPT, rsa.glmodel, subj, rsa.event, mask);
+        clear runs;
+        for r = 1:nruns
+            runs(contains(names, ['Sn(', num2str(r), ')']),:) = r;
+        end
+    else
+        % load BOLD
+        %
+        [Y, runs] = ccnl_get_activations(EXPT, rsa.glmodel, mask, subj, true, true); % whiten & filter; see Diedrichsen et al. 2016
+        Y = Y{1};
+        runs = runs{1};
+    end
+    toc
+
+    Y = rand(size(Y));
     X = rsa.model(1).features;
     foldid = rsa.model(1).partitions;
+
+    % turn from game id to one-hot
+    if ismember(rsa_idx, [1 5 6])
+        assert(size(X,2) == 1);
+        idx = X;
+        X = zeros(size(X,1),max(idx));
+        X(sub2ind(size(X), [1:length(idx)]', idx)) = 1;
+        [~,i] = max(X,[],2);
+        assert(immse(idx,i) == 0);
+    end
 
     clear data;
 

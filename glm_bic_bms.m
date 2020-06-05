@@ -17,9 +17,11 @@ glms = [5 6];
 
 % compare theory_change_flag GLMs
 %
-masks = {'masks/ClusterMask_spmT_0001_x=48_y=12_z=32_183voxels.nii', 'masks/ROI_x=48_y=12_z=32_62voxels_Sphere6.nii'};
-region = {'theory glm3 clust', 'theory glm3 sphere'};
-glms = [3 59 60 61];
+masks = {'masks/ClusterMask_spmT_0001_x=48_y=12_z=32_183voxels.nii', 'masks/ROI_x=48_y=12_z=32_62voxels_Sphere6.nii', 'masks/ROI_x=48_y=12_z=32_133voxels_Sphere10.nii', 'masks/ROI_x=48_y=12_z=32_1voxels_Sphere1.nii'}';
+region = {'theory glm3 clust', 'theory glm3 sphere 6', 'theory glm3 sphere 10', 'theory glm3 sphere 1'}';
+glms = [59 60 61 3];
+
+%glms = [62 63 64 21];
 
 for c = 1:length(masks)
     mask = masks{c};
@@ -43,7 +45,8 @@ for c = 1:length(masks)
 end
 
 glms
-table(region, pxps)
+%table(region, pxps)
+table(masks, pxps)
 
 
 save('glm_bic_bms.mat');

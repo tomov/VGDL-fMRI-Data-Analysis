@@ -2,11 +2,11 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, collec
 
     %{
     subj_id = 1; 
-    run_id = 2; 
+    run_id = 1; 
     conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54');
     query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id); 
     run = find(conn, 'runs', 'query', query);
-    collection = 'regressors_1';
+    collection = 'regressors';
     %}
 
     if ~exist('do_cache', 'var')
@@ -43,7 +43,7 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, collec
             % TODO termination_change_flag & interaction_change_flag when fixed
             % TODO likelihood, surprise, sum_lik, newTimeStep_flag form regressors when fixed
             %binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag', 'newEffects_flag', 'replan_flag'}; % binary db.regressors => onsets only, durations irrelevant; have the option of having them as onsets only
-            binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'newEffects_flag'}; % binary db.regressors => onsets only, durations irrelevant; have the option of having them as onsets only
+            binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'newEffects_flag', 'replan_flag'}; % binary db.regressors => onsets only, durations irrelevant; have the option of having them as onsets only
             reg_fields = [binreg_fields, {'n_ts', 'num_effects', 'R_GG', 'R_GGs', 'R_SG', 'R_SGs'}]; % db.regressors 
             binpost_fields = {'interaction_change_flag', 'termination_change_flag'}; % binary db.plays_post, copied & fixed from db.regressors
             post_fields = [binpost_fields {'newTimeStep_flag', 'likelihood', 'sum_lik_play', 'surprise', 'S_len','I_len','T_len','Igen_len','Tnov_len','Ip_len','dS_len','dI_len','dT_len','dIgen_len','dTnov_len','dIp_len'}]; % db.plays_post 
