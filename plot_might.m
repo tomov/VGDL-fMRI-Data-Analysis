@@ -9,8 +9,8 @@ close all;
 %load('mat/might_knn_rsa=5_us=0_r=6.6667_znone.mat');
 %load('mat/might_knn_rsa=5_us=1_r=6.6667_znone.mat');
 %load('mat/might_knn_rsa=5_us=1_r=6.6667_znone.mat');
-%load('mat/might_svm_linear_rsa=5_us=0_r=6.6667_znone.mat');
-load('mat/might_lda_shrinkage_rsa=1_us=0_r=6.6667_znone.mat');
+load('mat/might_svm_linear_rsa=5_us=0_r=6.6667_znone.mat');
+%load('mat/might_lda_shrinkage_rsa=1_us=0_r=6.6667_znone.mat');
 
 % compute accuracy map
 amap(mask) = mean(ams,1);
@@ -45,22 +45,5 @@ else
     EXPT = vgdl_expt_nosmooth();
 end
 
-V = spm_vol(fullfile('masks', 'spmT_0001.nii'));
+bspmview_wrapper(EXPT, cmap);
 
-% hacks to make it save the t-map as a t-map
-V.fname = fullfile(EXPT.rsadir, ['temp_map.nii']); % change immediately!
-V.dt = [16 0];
-V.private.dat.dtype = 'FLOAT32-LE';
-V.private.dat.fname = V.fname;
-
-% save map
-V.fname
-spm_write_vol(V, cmap);
-
-% view map
-struc = fullfile(EXPT.modeldir,'mean.nii');
-if exist(struc,'file')
-    bspmview(V.fname, struc);
-else
-    bspmview(V.fname);
-end

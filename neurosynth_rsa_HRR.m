@@ -63,7 +63,7 @@ end
 clear ROI;
 
 for r = 1:length(roi_masks)
-    mask = roi_masks{r};
+    roi_mask = roi_masks{r};
 
     clear S;
 
@@ -73,7 +73,7 @@ for r = 1:length(roi_masks)
         subj = subjects(s);
 
         % subset whole-brain patterns
-        U = U_all{s}(:, whole_brain_mask(mask));
+        U = U_all{s}(:, whole_brain_mask(roi_mask));
 
         % RDM between partition 2 and partition 3
         % 1) avoid comparing games in the same run
@@ -158,49 +158,5 @@ for r = 1:length(roi_masks)
 
     toc
 end
-
-    %{
-    sem = @(x) std(x) / sqrt(length(x));
-
-    m = [mean(sym) mean(diff) mean(z_rho)];
-    se = [sem(sym) sem(diff) sem(z_rho)];
-    bar([1 2 3], m);
-    hold on;
-    er = errorbar([1 2 3], m, se, 'linestyle', 'none');
-    %}
-
-figure;
-
-subplot(1,3,1);
-
-hold on;
-hist(null_sym);
-yl = ylim;
-xl = xlim;
-line([sym sym], yl, 'color', 'red');
-text(xl(1), yl(2) * 0.9, sprintf('p = %.3f', p_sym));
-set(gca, 'ytick', []);
-title('Symmetry');
-xlabel('symmetry coefficient', 'interpreter', 'latex');
-
-
-subplot(1,3,2);
-hist(null_diff);
-yl = ylim;
-line([diff diff], yl, 'color', 'red');
-text(diff * 0.9, yl(2) * 0.9, sprintf('p = %.3f', p_diff));
-set(gca, 'ytick', []);
-title('Across - within game');
-xlabel('$\Delta$ r', 'interpreter', 'latex');
-
-
-subplot(1,3,3);
-hist(null_rho);
-yl = ylim;
-line([rho rho], yl, 'color', 'red');
-text(rho * 0.9, yl(2) * 0.9, sprintf('p = %.3f', p_rho));
-set(gca, 'ytick', []);
-title('HRR RSA match');
-xlabel('Spearman $\rho$', 'interpreter', 'latex');
 
 save(filename, '-v7.3');
