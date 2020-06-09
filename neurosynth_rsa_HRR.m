@@ -3,7 +3,7 @@
 
 use_smooth = false;
 glmodel = 1;
-nperms = 100;
+nperms = 1000;
 
 
 if use_smooth
@@ -18,7 +18,7 @@ subjects = 1:length(EXPT.subject);
 % get ROIs
 %[roi_masks, region] = get_neurosynth_rois(lateralized);
 load('mat/get_neurosynth_rois_lat=true');
-mask = roi_masks{region == 120};
+mask = roi_masks{region == 12};
 
 load('mat/HRR_groundtruth_RDM_correlation.mat'); % game_names, mean_RDM
 game_names = cellfun(@strtrim, mat2cell(game_names, ones(size(game_names, 1), 1)), 'UniformOutput', false);
@@ -78,7 +78,7 @@ for s = 1:length(subjects)
     tic
 
     for i = 1:nperms
-        U = U(randperm(size(U,1)), :);
+        U(1:length(game_names),:) = U(randperm(length(game_names)), :); % shuffle one half only
 
         tmp = squareRDMs(pdist(U, 'correlation'));
         neural_RDM = tmp(1:length(game_names), length(game_names)+1:end);
@@ -129,8 +129,9 @@ subplot(1,3,1);
 hold on;
 hist(null_sym);
 yl = ylim;
+xl = xlim;
 line([sym sym], yl, 'color', 'red');
-text(sym * 0.9, yl(2) * 0.8, sprintf('p = %.3f', p_sym));
+text(xl(1), yl(2) * 0.9, sprintf('p = %.3f', p_sym));
 set(gca, 'ytick', []);
 title('Symmetry');
 xlabel('symmetry coefficient', 'interpreter', 'latex');
@@ -140,7 +141,7 @@ subplot(1,3,2);
 hist(null_diff);
 yl = ylim;
 line([diff diff], yl, 'color', 'red');
-text(diff * 0.9, yl(2) * 0.8, sprintf('p = %.3f', p_diff));
+text(diff * 0.9, yl(2) * 0.9, sprintf('p = %.3f', p_diff));
 set(gca, 'ytick', []);
 title('Across - within game');
 xlabel('$\Delta$ r', 'interpreter', 'latex');
@@ -150,7 +151,7 @@ subplot(1,3,3);
 hist(null_rho);
 yl = ylim;
 line([rho rho], yl, 'color', 'red');
-text(rho * 0.9, yl(2) * 0.8, sprintf('p = %.3f', p_rho));
+text(rho * 0.9, yl(2) * 0.9, sprintf('p = %.3f', p_rho));
 set(gca, 'ytick', []);
 title('HRR RSA match');
 xlabel('Spearman $\rho$', 'interpreter', 'latex');
