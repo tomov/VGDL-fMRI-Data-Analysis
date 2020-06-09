@@ -286,10 +286,10 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
     end % end of switch statement
 
     if save_output
-        save(filename, 'rsa', '-v7.3'); % <-- DON'T DO IT! breaks on NCF... b/c of file permissions
+        save(filename, 'rsa', '-v7.3');
     end
     
-    % permute after saving, so as not to write crap
+    % permute after saving, so as not to save the permuted version
     if exist('seed', 'var')
         rsa = permute(rsa, rsa_idx, subj_id, seed);
     end

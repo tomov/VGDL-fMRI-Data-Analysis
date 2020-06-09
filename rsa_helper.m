@@ -35,6 +35,8 @@ function rsa_helper(EXPT, rsa_idx, roi_masks, filename, nperms, subbatch_size, r
                 e = min(length(roi_masks), s + subbatch_size - 1);
                 fprintf('        perm s:e = %d:%d\n', s, e);
 
+                % USE ALL SUBJECT RHOS !!! x8 data points!! 
+                % JUST KIDDING DON'T DO IT!! would you test for significance for subject A by doing a shuffle on subject B? no -- b/c some subjects might have e.g. high activations overall, leading to more similar correlations overall (see Walther 2015)
                 [perm_Rhos(s:e,:,i)] = ccnl_rsa(EXPT, rsa_idx, roi_masks(s:e));
             end
 
@@ -46,7 +48,7 @@ function rsa_helper(EXPT, rsa_idx, roi_masks, filename, nperms, subbatch_size, r
         save(filename, '-v7.3');
 
         % p-value = P(Rho >= rho | null)
-        pval = mean(perm_Rhos >= Rho, 3);
+        pval = mean(perm_Rhos >= Rho, 3); % TODO include Rho as well
 
         % adjusted rho = subtract mean & divide by stdev (for plotting)
         Rho_adj = (Rho - mean(perm_Rhos, 3)) ./ std(perm_Rhos, 0, 3);

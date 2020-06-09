@@ -3,6 +3,7 @@
 
 use_smooth = false;
 glmodel = 1;
+nperms = 100;
 
 
 if use_smooth
@@ -64,19 +65,55 @@ for s = 1:length(subjects)
     S(s).diff = S(s).across_game - S(s).within_game; % should be high
 
     % rank correlation between behavioral and neural RDMs
-    S(s).rho = corr(neural_RDM(upper), behavioral_RDM(upper), 'type', 'Spearman');
-    S(s).z_rho = atanh(S(s).rho); % should be high
+    S(s).rho = corr(neural_RDM(upper), behavioral_RDM(upper), 'type', 'Spearman'); % should be high
+
+    S(s).z_rho = atanh(S(s).rho);
+
+    % null distribution TODO dedupe
+    %
+    S(s).null_sym = nan(nperms, 1);
+    S(s).null_diff = nan(nperms, 1);
+    S(s).null_rho = nan(nperms, 1);
+
+    tic
+
+    for i = 1:nperms
+        U = U(randperm(size(U,1)), :);
+
+        tmp = squareRDMs(pdist(U, 'correlation'));
+        neural_RDM = tmp(1:length(game_names), length(game_names)+1:end);
+
+        S(s).null_sym(i) = how_sym(neural_RDM); % should be high
+
+        neural_RDM = 0.5 * (neural_RDM + neural_RDM'); 
+
+        within_game = mean(diag(neural_RDM));
+        across_game = mean(neural_RDM(upper));
+        S(s).null_diff(i) = across_game - within_game; % should be high
+
+        S(s).null_rho(i) = corr(neural_RDM(upper), behavioral_RDM(upper), 'type', 'Spearman');
+    end
+
+    toc
 
 end
 
 
-sym = [S.sym];
-diff = [S.diff];
-z_rho = [S.z_rho];
+sym = mean([S.sym]);
+diff = mean([S.diff]);
+rho = mean([S.rho]);
+
+null_sym = [mean([S.null_sym], 2); sym];
+null_diff = [mean([S.null_diff], 2); diff];
+null_rho = [mean([S.null_rho], 2); rho];
+
+p_sym = mean(sym < null_sym);
+p_diff = mean(diff < null_diff);
+p_rho = mean(rho < null_rho);
 
 figure;
 
-%sem = @(x) std(x, 0, 1) / sqrt(size(x,1));
+%{
 sem = @(x) std(x) / sqrt(length(x));
 
 m = [mean(sym) mean(diff) mean(z_rho)];
@@ -84,4 +121,37 @@ se = [sem(sym) sem(diff) sem(z_rho)];
 bar([1 2 3], m);
 hold on;
 er = errorbar([1 2 3], m, se, 'linestyle', 'none');
+%}
+
+
+subplot(1,3,1);
+
+hold on;
+hist(null_sym);
+yl = ylim;
+line([sym sym], yl, 'color', 'red');
+text(sym * 0.9, yl(2) * 0.8, sprintf('p = %.3f', p_sym));
+set(gca, 'ytick', []);
+title('Symmetry');
+xlabel('symmetry coefficient', 'interpreter', 'latex');
+
+
+subplot(1,3,2);
+hist(null_diff);
+yl = ylim;
+line([diff diff], yl, 'color', 'red');
+text(diff * 0.9, yl(2) * 0.8, sprintf('p = %.3f', p_diff));
+set(gca, 'ytick', []);
+title('Across - within game');
+xlabel('$\Delta$ r', 'interpreter', 'latex');
+
+
+subplot(1,3,3);
+hist(null_rho);
+yl = ylim;
+line([rho rho], yl, 'color', 'red');
+text(rho * 0.9, yl(2) * 0.8, sprintf('p = %.3f', p_rho));
+set(gca, 'ytick', []);
+title('HRR RSA match');
+xlabel('Spearman $\rho$', 'interpreter', 'latex');
 
