@@ -22,7 +22,9 @@ clear all;
 
 %load mat/neurosynth_rsa_5_us=0_l=1_nperms=0_nroi=351.mat
 
-load mat/neurosynth_rsa_5_us=1_l=1_nperms=500_nroi=351.mat
+%load mat/neurosynth_rsa_5_us=1_l=1_nperms=500_nroi=351.mat
+
+load mat/neurosynth_rsa_1_us=0_l=1_nperms=1000_nroi=351.mat
 
 %load mat/roi_rsa_5_us=0_l=1_nperms=1000_nroi=23_all.mat
 %load mat/roi_rsa_5_us=0_l=1_nperms=1000_nroi=23_all.mat
@@ -59,7 +61,7 @@ end
 %tbl = table(Rho(i), T(i), names(i)');
 tbl = table(Rho(i), T(i), names(i));
 
-alpha = 1.1;
+alpha = 0.1; % signifinace level for thresholding (uncorr.) based on permutation tests
 idx = find(pval < alpha);
 
 %ccnl_rsa_view(vgdl_expt(), rsa_idx, 1, T, all_subject_rhos, roi_masks);
