@@ -4,7 +4,7 @@
 close all;
 clear all;
 
-load('mat/neurosynth_rsa_HRR_us=1.mat');
+load('mat/neurosynth_rsa_HRR_us=0.mat');
 
 if contains(EXPT.rsadir, '_nosmooth')
     EXPT = vgdl_expt_nosmooth();
@@ -14,8 +14,8 @@ end
 
 
 
-alpha = 0.30; % signifinace level for thresholding (uncorr.) based on permutation tests
-idx = find([ROI.p_rho] < alpha);
+alpha = 0.10; % signifinace level for thresholding (uncorr.) based on permutation tests
+idx = find([ROI.p] < alpha);
 
 
 V = spm_vol('masks/mask.nii');
@@ -27,56 +27,7 @@ rho_map = nan(V.dim);
 for r = 1:length(roi_masks)
     roi_mask = roi_masks{r};
 
-    rho_map(roi_mask) = ROI(r).z_rho;
+    rho_map(roi_mask) = ROI(r).t;
 end
 bspmview_wrapper(EXPT, rho_map);
 
-
-
-
-
-
-null_sym = ROI(1).null_sym;
-null_diff = ROI(1).null_diff;
-null_rho = ROI(1).null_rho;
-sym = ROI(1).sym;
-diff = ROI(1).diff;
-rho = ROI(1).rho;
-p_sym = ROI(1).p_sym;
-p_diff = ROI(1).p_diff;
-p_rho = ROI(1).p_rho;
-
-
-figure;
-
-subplot(1,3,1);
-
-hold on;
-hist(null_sym);
-yl = ylim;
-xl = xlim;
-line([sym sym], yl, 'color', 'red');
-text(xl(1), yl(2) * 0.9, sprintf('p = %.3f', p_sym));
-set(gca, 'ytick', []);
-title('Symmetry');
-xlabel('symmetry coefficient', 'interpreter', 'latex');
-
-
-subplot(1,3,2);
-hist(null_diff);
-yl = ylim;
-line([diff diff], yl, 'color', 'red');
-text(diff * 0.9, yl(2) * 0.9, sprintf('p = %.3f', p_diff));
-set(gca, 'ytick', []);
-title('Across - within game');
-xlabel('$\Delta$ r', 'interpreter', 'latex');
-
-
-subplot(1,3,3);
-hist(null_rho);
-yl = ylim;
-line([rho rho], yl, 'color', 'red');
-text(rho * 0.9, yl(2) * 0.9, sprintf('p = %.3f', p_rho));
-set(gca, 'ytick', []);
-title('HRR RSA match');
-xlabel('Spearman $\rho$', 'interpreter', 'latex');
