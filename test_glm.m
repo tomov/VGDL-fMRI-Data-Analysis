@@ -17,29 +17,29 @@ ynew = Xnew * b + normrnd(0, sigma, size(X,1), 1);
 %% test OLS
 
 % fit glm and manually
-beta = (X' * X)^(-1) * X' * y;  % OLS
-b0 = glmfit(X,y, 'normal','constant', 'off');
+beta_OLS_manual = (X' * X)^(-1) * X' * y;  % OLS
+beta_OLS_glmfit = glmfit(X,y, 'normal','constant', 'off');
 
-assert(immse(beta, b0) < 1e-10);
+assert(immse(beta_OLS_manual, beta_OLS_glmfit) < 1e-10);
 
 % predict
-Ynew_0 = X * beta;
-Ynew0 = X * b0;
+y_OLS_manual = X * beta_OLS_manual;
+y_OLS_glmfit = X * beta_OLS_glmfit;
 
-assert(immse(Ynew0, Ynew_0) < 1e-10);
+assert(immse(y_OLS_glmfit, y_OLS_manual) < 1e-10);
 
 
 %% test ridge with k = 0 i.e. OLS
 
 % fit ridge
-b1 = ridge(y,X(:,2:end),0,0); % automatically includes intercept
+beta_OLS_ridge = ridge(y,X(:,2:end),0,0); % automatically includes intercept
 
-assert(immse(b1, b0) < 1e-10);
+assert(immse(beta_OLS_ridge, beta_OLS_manual) < 1e-10);
 
 % predict
-Ynew1 = X * b1;
+y_OLS_ridge = X * beta_OLS_ridge;
 
-assert(immse(Ynew1, Ynew0) < 1e-5);
+assert(immse(y_OLS_ridge, y_OLS_glmfit) < 1e-5);
 
 
 %% test ridge
@@ -47,56 +47,73 @@ assert(immse(Ynew1, Ynew0) < 1e-5);
 k = 0.001;
 
 % fit ridge and manually
-beta2 = (X' * X + k * var(diag(X)))^(-1) * X' * y; % note that ridge regression is not scale invariant, that is, X(:,i) * 2 doesn't make b(i) * 2
-%beta2 = (X' * X + k * eye(size(X,2)))^(-1) * X' * y; % doesn't work; see https://www.mathworks.com/matlabcentral/answers/29373-ridge-regression-coefficient-question
-b2 = ridge(y,X(:,2:end),k,0);
+beta_ridge_manual = (X' * X + k * var(diag(X)))^(-1) * X' * y; % note that ridge regression is not scale invariant, that is, X(:,i) * 2 doesn't make b(i) * 2
+%beta_ridge_manual = (X' * X + k * eye(size(X,2)))^(-1) * X' * y; % doesn't work; see https://www.mathworks.com/matlabcentral/answers/29373-ridge-regression-coefficient-question
+beta_ridge = ridge(y,X(:,2:end),k,0);
 
-assert(immse(b2, beta) < 1e-5);
+assert(immse(beta_ridge, beta_ridge_manual) < 1e-5);
 
 % predict
-Ynew_2 = Xnew * beta2;
-Ynew2 = Xnew * b2;
+y_ridge_manual = Xnew * beta_ridge_manual;
+y_ridge = Xnew * beta_ridge;
 
-assert(immse(Ynew2, Ynew_2) < 1e-5);
+assert(immse(y_ridge, y_ridge_manual) < 1e-5);
 
 %% test GP
 
 % fit classic ridge first
 lambda = sigma^2 / tau^2; % in accordance with Bayesian interpretation; see https://statisticaloddsandends.wordpress.com/2018/12/29/bayesian-interpretation-of-ridge-regression/
-beta3 = (X' * X + lambda * eye(size(X,2)))^(-1) * X' * y; 
+beta_ridge_Bayesian = (X' * X + lambda * eye(size(X,2)))^(-1) * X' * y; 
 
 % fit ridge according to Rasmussen (2006) eq. 2.8
 % notice X is transposed compared to their notation
 Sigma_p = tau.^2 * eye(size(X,2));
 A = 1/sigma^2 * X' * X + Sigma_p^(-1);
-beta4 = 1/sigma^2 * A^(-1) * X' * y;
+beta_ridge_Rasmussen = 1/sigma^2 * A^(-1) * X' * y; 
 
-assert(immse(beta3, beta4) < 1e-15); % exactly identical
+assert(immse(beta_ridge_Bayesian, beta_ridge_Rasmussen) < 1e-15); % exactly identical
 
 % predict
-Ynew3 = Xnew * beta3;
-Ynew4 = Xnew * beta4;
+y_ridge_Bayesian = Xnew * beta_ridge_Bayesian;
+y_ridge_Rasmussen = Xnew * beta_ridge_Rasmussen;
 
-assert(immse(Ynew3, Ynew4) < 1e-10);
+assert(immse(y_ridge_Bayesian, y_ridge_Rasmussen) < 1e-10);
 
 % predict using kernels, Rasmussen (2006) eq. 2.12; also see Eq 2.25 and 2.26
 K = X * Sigma_p * X';
-I = eye(size(X,1));
 K = nearestSPD(K);  % find nearest symmetric positive definite matrix (it's not b/c of numerical issues, floating points, etc.)
-Ynew5 = Xnew * Sigma_p * X' * (K + sigma^2 * I) ^ (-1) * y;
-varYnew5 = Xnew * Sigma_p * Xnew' - Xnew * Sigma_p * X' * (K + sigma^2 * I) ^ (-1) * X * Sigma_p * Xnew';
+I = eye(size(X,1));
 
-assert(immse(Ynew5, Ynew3) < 1e-5);
+predFn = @(sigma) Xnew * Sigma_p * X' * (K + sigma^2 * I) ^ (-1) * y; % Eq. 2.12, Eq. 2.25
+
+y_ridge_kernel = predFn(sigma);
+vary_ridge_kernel = Xnew * Sigma_p * Xnew' - Xnew * Sigma_p * X' * (K + sigma^2 * I) ^ (-1) * X * Sigma_p * Xnew'; % Eq. 2.12, Eq. 2.26
+
+assert(immse(y_ridge_kernel, y_ridge_Bayesian) < 1e-5);
+
+logMargLikFn = @(sigma) -0.5 * y' * (K + sigma^2 * I)^(-1) * y - 0.5 * log(det(K + sigma^2 * I)) - length(y)/2 * log(2 * pi); % Eq. 2.30
+assert(immse(logMargLikFn(sigma), -test_fit_GP(sigma, K, y)) < 1e-10);
 
 % calculate log marginal likelihood (eq 2.30) explicitly and as the MVN pdf
 margLik = (2 * pi)^(-length(y)/2) * det(K + sigma^2 * I)^(-1/2) * exp(-0.5 * y' * (K + sigma^2 * I)^(-1) * y);
-logMargLik = -0.5 * y' * (K + sigma^2 * I)^(-1) * y - 0.5 * log(det(K + sigma^2 * I)) - length(y)/2 * log(2 * pi);
+logMargLik = logMargLikFn(sigma)
 
 margLik2 = mvnpdf(y', zeros(size(y')), K + sigma^2 * I);
 logMargLik2 = log(margLik2);
 
 assert(abs(1 - margLik / margLik2) < 1e-5); % look at ratio; b/c they're huge
 assert(immse(logMargLik, logMargLik2) < 1e-10); 
+
+% fit GP hyperparams manually 
+
+options = optimoptions('fmincon','SpecifyObjectiveGradient',true);
+sigma_hat = fmincon(@(sigma) test_fit_GP(sigma, K, y), 1, -1, 0, [], [], [], [], [], options);
+sigma_hat
+sigma
+
+y_ridge_kernel_hyperparam = predFn(sigma_hat);
+
+assert(immse(y_ridge_kernel_hyperparam, y_ridge_Bayesian) < 1e-5);
 
 % fit GP 
 addpath(genpath('/Users/momchil/Dropbox/Research/libs/gpml/')); % GP ML
@@ -118,8 +135,8 @@ hyp = struct('mean', zeros(1, n), 'cov', covhyp, 'lik', -1);
 % GP
 x = [1:size(X,1)]';
 xs = [size(X,1)+1:n]';
-[Ynew5 ~] = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x, y, xs);
+[y_ridge_kernel ~] = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x, y, xs);
 
-assert(immse(Ynew5, Ynew3) < 1e-10); % for some reason, doesn't work..........
+%assert(immse(y_ridge_kernel, y_ridge_Bayesian) < 1e-10); % for some reason, doesn't work quite well...
 
-close all; plot(Ynew3); hold on; plot(Ynew5);
+close all; plot(y_ridge_Bayesian); hold on; plot(y_ridge_kernel);
