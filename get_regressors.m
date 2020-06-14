@@ -2,11 +2,12 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, collec
 
     %{
     subj_id = 1; 
-    run_id = 1; 
+    run_id = 2; 
     conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54');
     query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id); 
     run = find(conn, 'runs', 'query', query);
     collection = 'regressors';
+    do_cache = false;
     %}
 
     if ~exist('do_cache', 'var')
@@ -39,14 +40,11 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, collec
         case 'regressors'
             % current one -- regressors_and_playspost_2020_05_31_finalTS_block
 
-            % TODO tigth coupling with vgdl_create_multi case 26-34 !!!!!
-            % TODO termination_change_flag & interaction_change_flag when fixed
-            % TODO likelihood, surprise, sum_lik, newTimeStep_flag form regressors when fixed
-            %binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag', 'newEffects_flag', 'replan_flag'}; % binary db.regressors => onsets only, durations irrelevant; have the option of having them as onsets only
-            binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'newEffects_flag', 'replan_flag'}; % binary db.regressors => onsets only, durations irrelevant; have the option of having them as onsets only
-            reg_fields = [binreg_fields, {'n_ts', 'num_effects', 'R_GG', 'R_GGs', 'R_SG', 'R_SGs'}]; % db.regressors 
+            % TODO termination_change_flag & interaction_change_flag differ between regressors and plays_post; latter seem more correct
+            binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'newEffects_flag', 'newTimeStep_flag', 'replan_flag'}; % binary db.regressors => onsets only, durations irrelevant; have the option of having them as onsets only
+            reg_fields = [binreg_fields, {'spriteKL', 'likelihood', 'surprise', 'sum_lik', 'n_ts', 'num_effects', 'R_GG', 'R_GGs', 'R_SG', 'R_SGs'}]; % db.regressors 
             binpost_fields = {'interaction_change_flag', 'termination_change_flag'}; % binary db.plays_post, copied & fixed from db.regressors
-            post_fields = [binpost_fields {'newTimeStep_flag', 'likelihood', 'sum_lik_play', 'surprise', 'S_len','I_len','T_len','Igen_len','Tnov_len','Ip_len','dS_len','dI_len','dT_len','dIgen_len','dTnov_len','dIp_len'}]; % db.plays_post 
+            post_fields = [binpost_fields {'sum_lik_play', 'S_len','I_len','T_len','Igen_len','Tnov_len','Ip_len','dS_len','dI_len','dT_len','dIgen_len','dTnov_len','dIp_len'}]; % db.plays_post 
 
         case 'regressors_1'
 
@@ -75,6 +73,8 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, collec
             reg_fields = [binreg_fields, {}]  
             binpost_fields = {};
             post_fields = [binpost_fields {}]; % db.plays_post 
+
+        % TODO create regressors_4 from regressors_and_playspost_2020_05_31_finalTS_reset2_refactored
 
         otherwise
 
@@ -184,7 +184,14 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, collec
                 assert(length(plays_post) == 1);
                 play_post = plays_post(1);
 
-                %assert(immse(int32(cellfun(@(x) x{1}, reg.regressors.interaction_change_flag)), int32(cellfun(@(x) x{1}, play_post.interaction_change_flag))) < 1e-10); % assert identical interaction change flags computed during replay and after; note will not be true for older replays 
+                % assert identical stuff computed during replay and after; note will not be true for older replays 
+                %{
+                assert(immse(int32(cellfun(@(x) x{1}, reg.regressors.interaction_change_flag)), int32(cellfun(@(x) x{1}, play_post.interaction_change_flag))) < 1e-10); % not equal when interaction set gets reshuffled, probably due to pickling? or mismatch between self.hypotheses[0] and prev_theory in fmri_playsPostproc.py (it changes somewhere?)
+                assert(immse(int32(cellfun(@(x) x{1}, reg.regressors.termination_change_flag)), int32(cellfun(@(x) x{1}, play_post.termination_change_flag))) < 1e-10); % same; actually seems like the playsPostproc versions are more legit # TODO look into it!!!
+                %}
+                %assert(immse(int32(cellfun(@(x) x{1}, reg.regressors.newTimeStep_flag)), int32(play_post.newTimeStep_flag)) < 1e-10);
+                %assert(sqrt(nanmean((reg.regressors.likelihood(:,1) - double(play_post.likelihood)).^2)) < 1e-10); % initial NaNs
+                %assert(sqrt(nanmean((reg.regressors.surprise(:,1) - double(play_post.surprise)).^2)) < 1e-10); % initial NaNs
 
                 for i = 1:numel(binpost_fields)
                     if iscell(play_post.(binpost_fields{i}))

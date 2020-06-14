@@ -4,7 +4,7 @@
 close all;
 clear all;
 
-load('mat/neurosynth_rsa_HRR.mat');
+load('mat/neurosynth_rsa_HRR_us=1.mat');
 
 if contains(EXPT.rsadir, '_nosmooth')
     EXPT = vgdl_expt_nosmooth();
@@ -14,7 +14,7 @@ end
 
 
 
-alpha = 0.3; % signifinace level for thresholding (uncorr.) based on permutation tests
+alpha = 0.30; % signifinace level for thresholding (uncorr.) based on permutation tests
 idx = find([ROI.p_rho] < alpha);
 
 
@@ -32,6 +32,19 @@ end
 bspmview_wrapper(EXPT, rho_map);
 
 
+
+
+
+
+null_sym = ROI(1).null_sym;
+null_diff = ROI(1).null_diff;
+null_rho = ROI(1).null_rho;
+sym = ROI(1).sym;
+diff = ROI(1).diff;
+rho = ROI(1).rho;
+p_sym = ROI(1).p_sym;
+p_diff = ROI(1).p_diff;
+p_rho = ROI(1).p_rho;
 
 
 figure;

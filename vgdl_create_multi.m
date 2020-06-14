@@ -592,7 +592,7 @@ save_output = true;
         % same idea as GLM 10-20
         % TODO tight coupling with get_regressors.m
         %
-        case {26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,57,72}
+        case {26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,57,72,73,74}
 
             [regs, ~, ~] = get_regressors(subj_id, run, conn, true);
             fields = {
@@ -608,7 +608,7 @@ save_output = true;
                 'R_GGs', ...
                 'R_SG', ...
                 'R_SGs', ...
-                'interaction_change_flag', ...
+                'interaction_change_flag', ... % 38
                 'S_len', ...
                 'I_len', ...
                 'T_len', ...
@@ -624,6 +624,8 @@ save_output = true;
             map = containers.Map(26:50, fields);
             map(57) = 'surprise';
             map(72) = 'replan_flag';
+            map(73) = 'sum_lik';
+            map(74) = 'spriteKL';
 
             field = map(glmodel);
             field

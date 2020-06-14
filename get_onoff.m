@@ -52,6 +52,7 @@ function [onoff] = get_onoff(subj_id, run, conn, do_cache)
                 assert(length(plays) == 1);
                 play = plays(1);
 
+                assert(play.run_start_ts == run.scan_start_ts);
                 onoff.play_start = [onoff.play_start; play.start_time - run.scan_start_ts];
                 onoff.play_end = [onoff.play_end; play.end_time - run.scan_start_ts];
         

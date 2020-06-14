@@ -1,11 +1,11 @@
 % RSA with ground truth theory HRRs
 % do it manually b/c we average across partitions (runs), which is not supported by pipeline
 
-use_smooth = false;
+use_smooth = true;
 glmodel = 1;
 nperms = 1000;
 
-filename = 'mat/neurosynth_rsa_HRR.mat';
+filename = sprintf('mat/neurosynth_rsa_HRR_us=%d_nperm=%d.mat', use_smooth, nperms);
 
 if use_smooth
     EXPT = vgdl_expt();
@@ -32,7 +32,7 @@ lower = logical(tril(ones(size(behavioral_RDM)), -1));
 
 %mask = roi_masks{region == 120};
 
-% precompute whole-brain patterns
+% precompute whole-brain patterns for each subject
 %
 clear U_all;
 
@@ -54,6 +54,7 @@ for s = 1:length(subjects)
         assert(immse(B1, B2) < 1e-10);
         %}
 
+        % for each game, compare patterns from partition 2 vs. 3
         U_all{s}(g,:) = B(2,:);
         U_all{s}(g + length(game_names),:) = B(3,:);
     end
@@ -62,6 +63,8 @@ end
 
 clear ROI;
 
+% for each ROI
+%
 for r = 1:length(roi_masks)
     roi_mask = roi_masks{r};
 
@@ -69,6 +72,7 @@ for r = 1:length(roi_masks)
 
     tic
 
+    % 
     for s = 1:length(subjects)
         subj = subjects(s);
 
@@ -148,6 +152,10 @@ for r = 1:length(roi_masks)
     ROI(r).p_diff = mean(diff < null_diff);
     ROI(r).p_rho = mean(rho < null_rho);
 
+    [~, ROI(r).p_sym_t] = ttest([S.sym], 0, 'tail', 'right');
+    [~, ROI(r).p_diff_t] = ttest([S.diff], 0, 'tail', 'right');
+    [~, ROI(r).p_rho_t] = ttest([S.rho], 0, 'tail', 'right');
+
     ROI(r).z_sym = (sym - mean(null_sym)) / std(null_sym);
     ROI(r).z_diff = (diff - mean(null_diff)) / std(null_diff);
     ROI(r).z_rho = (rho - mean(null_rho)) / std(null_rho);
@@ -155,6 +163,10 @@ for r = 1:length(roi_masks)
     ROI(r).sym = sym;
     ROI(r).diff = diff;
     ROI(r).rho = rho;
+
+    ROI(r).null_sym = null_sym;
+    ROI(r).null_diff = null_diff;
+    ROI(r).null_rho = null_rho;
 
     toc
 end
