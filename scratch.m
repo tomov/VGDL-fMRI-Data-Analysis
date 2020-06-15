@@ -1,7 +1,29 @@
 clear
 
+%% generate searchlight ROIs with different params
+
+r = [4 6 10] / 1.5;
+
+for use_smooth = 0:1
+    for i = 1:length(r)
+        radius = r(i);
+
+        if use_smooth
+            EXPT = vgdl_expt();
+            [whole_brain_mask, Vwhole_brain_mask] = ccnl_load_mask('masks/mask.nii');
+        else
+            EXPT = vgdl_expt_nosmooth();
+            [whole_brain_mask, Vwhole_brain_mask] = ccnl_load_mask('masks/mask_nosmooth.nii');
+        end
+
+        ROI = get_searchlight_rois(whole_brain_mask, Vwhole_brain_mask, radius);
+
+        save(sprintf('mat/get_searchlight_rois_us=%d_r=%.4f.mat', use_smooth, radius), '-v7.3');
+    end
+end
+
 % https://www.mathworks.com/help/database/ug/mongo.html#d117e86584
-conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54')
+%conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54')
 
 % https://www.mathworks.com/help/database/ug/mongo.find.html
 %{
@@ -16,6 +38,7 @@ val
 
 %docs = find(conn, 'subjects', 'query', '{"subj_id": "21"}', 'limit', 10)
 
+%{
 subj_id = 2;
 run_id = 1;
 %game_name = 'vgfmri3_chase'
@@ -32,6 +55,7 @@ query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id)
 plays = find(conn, 'plays', 'query', query, 'limit', limit)
 
 regressors = find(conn, 'regressors', 'query', query, 'limit', limit)
+%}
 
 %for r = 1:length(subj.runs)
 %    run = subj.runs(r);
