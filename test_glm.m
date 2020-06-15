@@ -62,10 +62,12 @@ assert(immse(y_ridge, y_ridge_manual) < 1e-5);
 %% test GP
 
 % fit classic ridge first
+%
 lambda = sigma^2 / tau^2; % in accordance with Bayesian interpretation; see https://statisticaloddsandends.wordpress.com/2018/12/29/bayesian-interpretation-of-ridge-regression/
 beta_ridge_Bayesian = (X' * X + lambda * eye(size(X,2)))^(-1) * X' * y; 
 
 % fit ridge according to Rasmussen (2006) eq. 2.8
+%
 % notice X is transposed compared to their notation
 Sigma_p = tau.^2 * eye(size(X,2));
 A = 1/sigma^2 * X' * X + Sigma_p^(-1);
@@ -74,12 +76,14 @@ beta_ridge_Rasmussen = 1/sigma^2 * A^(-1) * X' * y;
 assert(immse(beta_ridge_Bayesian, beta_ridge_Rasmussen) < 1e-15); % exactly identical
 
 % predict
+%
 y_ridge_Bayesian = Xnew * beta_ridge_Bayesian;
 y_ridge_Rasmussen = Xnew * beta_ridge_Rasmussen;
 
 assert(immse(y_ridge_Bayesian, y_ridge_Rasmussen) < 1e-10);
 
 % predict using kernels, Rasmussen (2006) eq. 2.12; also see Eq 2.25 and 2.26
+%
 K = X * Sigma_p * X';
 K = nearestSPD(K);  % find nearest symmetric positive definite matrix (it's not b/c of numerical issues, floating points, etc.)
 I = eye(size(X,1));
@@ -94,7 +98,8 @@ assert(immse(y_ridge_kernel, y_ridge_Bayesian) < 1e-5);
 logMargLikFn = @(sigma) -0.5 * y' * (K + sigma^2 * I)^(-1) * y - 0.5 * log(det(K + sigma^2 * I)) - length(y)/2 * log(2 * pi); % Eq. 2.30
 assert(immse(logMargLikFn(sigma), -test_fit_GP(sigma, K, y)) < 1e-10);
 
-% calculate log marginal likelihood (eq 2.30) explicitly and as the MVN pdf
+% calculate log marginal likelihood (eq 2.30) manually and as the MVN pdf
+%
 margLik = (2 * pi)^(-length(y)/2) * det(K + sigma^2 * I)^(-1/2) * exp(-0.5 * y' * (K + sigma^2 * I)^(-1) * y);
 logMargLik = logMargLikFn(sigma)
 
@@ -106,7 +111,7 @@ assert(immse(logMargLik, logMargLik2) < 1e-10);
 
 % fit GP hyperparams manually 
 
-options = optimoptions('fmincon','SpecifyObjectiveGradient',true);
+options = optimoptions('fmincon','SpecifyObjectiveGradient',true)
 sigma_hat = fmincon(@(sigma) test_fit_GP(sigma, K, y), 1, -1, 0, [], [], [], [], [], options);
 sigma_hat
 sigma

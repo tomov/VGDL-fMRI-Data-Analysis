@@ -1,6 +1,8 @@
 % RSA with theory HRRs
 % do it manually b/c we average RDMs across features, which is not supported by pipeline
 
+rmpath('/n/sw/helmod/apps/centos7/Core/spm/12.7487-fasrc01/external/fieldtrip/external/stats/'); % tcdf
+
 clear all;
 
 use_smooth = false;
@@ -18,56 +20,49 @@ else
     whole_brain_mask = ccnl_load_mask('masks/mask_nosmooth.nii');
 end
 
-subjects = 1:length(EXPT.subject);
-
-rsa = EXPT.create_rsa;
-assert(rsa.glmodel == glmodel);
-
+%subjects = 1:length(EXPT.subject);
+subjects = [1, 2];
 
 % get ROIs
 %[roi_masks, region] = get_neurosynth_rois(lateralized);
 load('mat/get_neurosynth_rois_lat=true');
 
 %load('mat/HRR_groundtruth_RDM_correlation.mat'); % game_names, mean_RDM
-game_names = cellfun(@strtrim, mat2cell(game_names, ones(size(game_names, 1), 1)), 'UniformOutput', false);
-
-for s = 1:length(subjects)
-    subj = subjects(s);
-
-end
-
+%game_names = cellfun(@strtrim, mat2cell(game_names, ones(size(game_names, 1), 1)), 'UniformOutput', false);
 
 Behavioral = ccnl_behavioral_rdms(EXPT, rsa_idx, subjects);
-assert(isequal(size(Behavioral(1).subj(1).RDM, subj_theory_RDMs{1})));
 
 clear ROI;
 
 % for each subject
 %
 for s = 1:length(subjects)
-    subj = subjects(s);
-    subj
+    subj_id = subjects(s);
+    subj_id
 
-    disp('getting betas...');
+    rsa = EXPT.create_rsa(rsa_idx, subj_id);
+    assert(rsa.glmodel == glmodel);
+
+    disp('getting betas and RDMs...');
     tic
 
     % get HRR RDM (in lieu of ccnl_behavioral_rdms.m)
     %
     glmodel_orig = glmodel;
-    load(sprintf('mat/HRR_subject_RDM_subj=%d_K=10_N=10_E=0.050_nsamples=10_dist=corr.mat', subj), 'theory_RDM');
+    load(sprintf('mat/HRR_subject_RDM_subj=%d_K=10_N=10_E=0.050_nsamples=100_dist=correlation.mat', subj_id), 'theory_RDM', 'dist', 'glmodel');
     assert(glmodel == glmodel_orig);
-    assert(dist == 'correlation');
+    assert(isequal(dist, 'correlation'));
+    assert(isequal(size(Behavioral(1).subj(s).RDM), size(theory_RDM)));
 
     % precompute whole-brain patterns (betas) for each subject
     %
-    B = ccnl_get_beta_series(EXPT, glmodel, subj, 'run_', whole_brain_mask);
-    assert(size(B,1) == size(theory_RDM, 1);
+    B = ccnl_get_beta_series(EXPT, glmodel, subj_id, 'run_', whole_brain_mask);
+    assert(size(B,1) == size(theory_RDM, 1));
     assert(~any(isnan(B(:)))); % b/c of mask
 
     % subset RDMs
-    upper = logical(triu(ones(size(neural_RDM)), 1));
+    upper = logical(triu(ones(size(theory_RDM)), 1));
     upper = upper & Behavioral(1).subj(s).partition_RDM; % don't compare within the same partition (run)! BOLD is VERY autocorrelated
-    theory_RDM = theory_RDM(upper);
 
     toc
     
@@ -89,7 +84,7 @@ for s = 1:length(subjects)
         %
         assert(isequal(size(neural_RDM), size(theory_RDM)), 'Neural and behavioral RDMs should be equal -- check rsa.which_trials');
 
-        rho = corr(neural_RDM, theory_RDM, 'type', 'Spearman');
+        rho = corr(neural_RDM(upper), theory_RDM(upper), 'type', 'Spearman');
 
         ROI(r).rho(s) = rho;
     end
