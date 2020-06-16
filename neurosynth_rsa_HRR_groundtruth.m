@@ -1,5 +1,5 @@
 % RSA with ground truth theory HRRs
-% do it manually b/c we average across partitions (runs), which is not supported by pipeline
+% do it for partitions 2 and 3 only 
 
 use_smooth = false;
 glmodel = 1;
@@ -24,7 +24,6 @@ load('mat/get_neurosynth_rois_lat=true');
 
 load('mat/HRR_groundtruth_RDM_correlation.mat'); % game_names, mean_RDM
 game_names = cellfun(@strtrim, mat2cell(game_names, ones(size(game_names, 1), 1)), 'UniformOutput', false);
-
 behavioral_RDM = mean_RDM;
 
 upper = logical(triu(ones(size(behavioral_RDM)), 1));
@@ -82,7 +81,7 @@ for r = 1:length(roi_masks)
         % RDM between partition 2 and partition 3
         % 1) avoid comparing games in the same run
         % 2) look at more asymptotic behavior (partition 1 is probs mostly learning)
-        neural_RDM = 1 - corr(U(1:length(game_names),:)', U(length(game_names)+1:end,:)'); %-- alternative; not much faster
+        neural_RDM = 1 - corr(U(1:length(game_names),:)', U(length(game_names)+1:end,:)'); %-- alternative to pdist; not much faster
 
         %{
         % sanity -- note corr inputs are transposed compared to pdist 

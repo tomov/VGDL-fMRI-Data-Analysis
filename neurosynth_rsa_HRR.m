@@ -94,7 +94,7 @@ for s = 1:length(subjects)
 
         % match RDMs with rank correlation (ccnl_match_rdms.m)
         %
-        assert(isequal(size(neural_RDM), size(theory_RDM)), 'Neural and behavioral RDMs should be equal -- check rsa.which_trials');
+        assert(isequal(size(neural_RDM), size(theory_RDM)), 'Neural and behavioral RDM sizes should be equal -- check rsa.which_trials');
 
         rho = corr(neural_RDM(upper), theory_RDM(upper), 'type', 'Spearman');
 
