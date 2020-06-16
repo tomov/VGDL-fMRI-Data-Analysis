@@ -12,14 +12,14 @@ function [ROI] = get_searchlight_rois(mask, Vmask, radius)
         y = all_y(i);
         z = all_z(i);
 
-        if mod(i, 10) == 0
+        if mod(i, 10000) == 0
             disp(i);
         end
 
         ROI(i).cor = [x y z];
         ROI(i).mni = cor2mni([x y z], Vmask.mat);
         ROI(i).voxel_idx = [];
-        ROI(i).voxel_cor = [];
+        %ROI(i).voxel_cor = []; % too big
 
         for newx = floor(x - radius) : ceil(x + radius)
             if newx < 1 || newx > size(mask, 1)
@@ -44,7 +44,7 @@ function [ROI] = get_searchlight_rois(mask, Vmask, radius)
                         continue;
                     end
 
-                    ROI(i).voxel_cor = [ROI(i).voxel_cor; newx newy newz];
+                    %ROI(i).voxel_cor = [ROI(i).voxel_cor; newx newy newz];
                     ROI(i).voxel_idx = [ROI(i).voxel_idx, sub2ind(size(mask), newx, newy, newz)];
                 end
             end

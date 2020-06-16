@@ -1,4 +1,6 @@
-function rsa_helper(EXPT, rsa_idx, roi_masks, filename, nperms, subbatch_size, region, which)
+function rsa_helper(EXPT, rsa_idx, roi_masks, filename, nperms, subbatch_size, region, which, corr_type, dist)
+
+    subjects = 1:length(EXPT.subject);
 
     % do the actual RSA given binary masks
 
@@ -9,7 +11,7 @@ function rsa_helper(EXPT, rsa_idx, roi_masks, filename, nperms, subbatch_size, r
         e = min(length(roi_masks), s + subbatch_size - 1);
         fprintf('s:e = %d:%d\n', s, e);
 
-        [Rho(s:e,:), H(s:e,:), T(s:e,:), P(s:e,:), all_subject_rhos(s:e,:,:)] = ccnl_rsa(EXPT, rsa_idx, roi_masks(s:e));
+        [Rho(s:e,:), H(s:e,:), T(s:e,:), P(s:e,:), all_subject_rhos(s:e,:,:)] = ccnl_rsa(EXPT, rsa_idx, roi_masks(s:e), subjects, corr_type, dist);
     end
 
     Behavioral = ccnl_behavioral_rdms(EXPT, rsa_idx); % for plotting
@@ -37,7 +39,7 @@ function rsa_helper(EXPT, rsa_idx, roi_masks, filename, nperms, subbatch_size, r
 
                 % USE ALL SUBJECT RHOS !!! x8 data points!! 
                 % JUST KIDDING DON'T DO IT!! would you test for significance for subject A by doing a shuffle on subject B? no -- b/c some subjects might have e.g. high activations overall, leading to more similar correlations overall (see Walther 2015)
-                [perm_Rhos(s:e,:,i)] = ccnl_rsa(EXPT, rsa_idx, roi_masks(s:e));
+                [perm_Rhos(s:e,:,i)] = ccnl_rsa(EXPT, rsa_idx, roi_masks(s:e), subjects, corr_type, dist);
             end
 
             if mod(i,20) == 0
