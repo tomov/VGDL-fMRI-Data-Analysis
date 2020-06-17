@@ -25,6 +25,7 @@ load('mat/get_neurosynth_rois_lat=true');
 load('mat/HRR_groundtruth_RDM_correlation.mat'); % game_names, mean_RDM
 game_names = cellfun(@strtrim, mat2cell(game_names, ones(size(game_names, 1), 1)), 'UniformOutput', false);
 behavioral_RDM = mean_RDM;
+ng = length(game_names);
 
 upper = logical(triu(ones(size(behavioral_RDM)), 1));
 lower = logical(tril(ones(size(behavioral_RDM)), -1));
@@ -37,7 +38,7 @@ clear U_all;
 
 for s = 1:length(subjects)
     subj = subjects(s);
-    for g = 1:length(game_names)
+    for g = 1:ng
         game_name = game_names{g};
 
         B = ccnl_get_beta_series(EXPT, glmodel, subj, game_name, whole_brain_mask);
@@ -55,7 +56,7 @@ for s = 1:length(subjects)
 
         % for each game, compare patterns from partition 2 vs. 3
         U_all{s}(g,:) = B(2,:);
-        U_all{s}(g + length(game_names),:) = B(3,:);
+        U_all{s}(g + ng,:) = B(3,:);
     end
 end
 
@@ -81,12 +82,12 @@ for r = 1:length(roi_masks)
         % RDM between partition 2 and partition 3
         % 1) avoid comparing games in the same run
         % 2) look at more asymptotic behavior (partition 1 is probs mostly learning)
-        neural_RDM = 1 - corr(U(1:length(game_names),:)', U(length(game_names)+1:end,:)'); %-- alternative to pdist; not much faster
+        neural_RDM = 1 - corr(U(1:ng,:)', U(ng+1:end,:)'); %-- alternative to pdist; not much faster
 
         %{
         % sanity -- note corr inputs are transposed compared to pdist 
         tmp = squareRDMs(pdist(U, 'correlation'));
-        neural_RDM1 = tmp(1:length(game_names), length(game_names)+1:end);
+        neural_RDM1 = tmp(1:ng, ng+1:end);
         assert(immse(neural_RDM1, neural_RDM) < 1e-10);
         %}
 
@@ -115,9 +116,11 @@ for r = 1:length(roi_masks)
         S(s).null_rho = nan(nperms, 1);
 
         for i = 1:nperms
-            U(1:length(game_names),:) = U(randperm(length(game_names)), :); % shuffle one half only
+            % shuffle both halves
+            U(1:ng,:) = U(randperm(ng), :);
+            U(ng+1:ng*2,:) = U(ng + randperm(ng), :); 
 
-            neural_RDM = 1 - corr(U(1:length(game_names),:)', U(length(game_names)+1:end,:)');
+            neural_RDM = 1 - corr(U(1:ng,:)', U(ng+1:end,:)');
 
             S(s).null_sym(i) = how_sym(neural_RDM); % should be high
 

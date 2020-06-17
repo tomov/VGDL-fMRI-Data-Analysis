@@ -22,7 +22,9 @@ clear all;
 
 %load mat/neurosynth_rsa_5_us=0_l=1_nperms=0_nroi=351.mat
 
-load mat/neurosynth_rsa_5_us=0_l=1_nperms=500_nroi=351.mat
+%load mat/neurosynth_rsa_5_us=0_l=1_nperms=500_nroi=351.mat
+
+load('mat/neurosynth_rsa_1_us=0_l=1_nperms=1000_nroi=351_corr=ktaub_dist=correlation.mat');
 
 %load mat/neurosynth_rsa_1_us=1_l=1_nperms=1000_nroi=351.mat
 
