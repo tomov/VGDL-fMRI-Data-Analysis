@@ -42,9 +42,9 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, collec
 
             % TODO termination_change_flag & interaction_change_flag differ between regressors and plays_post; latter seem more correct
             binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'newEffects_flag', 'newTimeStep_flag', 'replan_flag'}; % binary db.regressors => onsets only, durations irrelevant; have the option of having them as onsets only
-            reg_fields = [binreg_fields, {'spriteKL', 'likelihood', 'surprise', 'sum_lik', 'n_ts', 'num_effects', 'R_GG', 'R_GGs', 'R_SG', 'R_SGs'}]; % db.regressors 
+            reg_fields = [binreg_fields, {'spriteKL', 'sum_lik', 'n_ts', 'num_effects', 'R_GG', 'R_GGs', 'R_SG', 'R_SGs'}]; % db.regressors 
             binpost_fields = {'interaction_change_flag', 'termination_change_flag'}; % binary db.plays_post, copied & fixed from db.regressors
-            post_fields = [binpost_fields {'sum_lik_play', 'S_len','I_len','T_len','Igen_len','Tnov_len','Ip_len','dS_len','dI_len','dT_len','dIgen_len','dTnov_len','dIp_len'}]; % db.plays_post 
+            post_fields = [binpost_fields {'likelihood', 'surprise', 'sum_lik_play', 'S_len','I_len','T_len','Igen_len','Tnov_len','Ip_len','dS_len','dI_len','dT_len','dIgen_len','dTnov_len','dIp_len'}]; % db.plays_post 
 
         case 'regressors_1'
 

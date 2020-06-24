@@ -3,13 +3,13 @@
 close all;
 %clear all;
 
-%load('mat/might_knn_rsa=6_us=0_r=6.6667_znone.mat')
+load('mat/might_knn_rsa=6_us=0_r=6.6667_znone.mat')
 %load('mat/might_lda_shrinkage_rsa=5_us=0_r=2.6667_znone.mat');
 %load('mat/might_knn_rsa=5_us=0_r=6.6667_zrun.mat');
 %load('mat/might_knn_rsa=5_us=0_r=6.6667_znone.mat');
 %load('mat/might_knn_rsa=5_us=1_r=6.6667_znone.mat');
 %load('mat/might_knn_rsa=5_us=1_r=6.6667_znone.mat');
-load('mat/might_svm_linear_rsa=5_us=0_r=6.6667_znone.mat');
+%load('mat/might_svm_linear_rsa=5_us=0_r=6.6667_znone.mat');
 %load('mat/might_lda_shrinkage_rsa=1_us=0_r=6.6667_znone.mat');
 
 % compute accuracy map
@@ -45,5 +45,5 @@ else
     EXPT = vgdl_expt_nosmooth();
 end
 
-bspmview_wrapper(EXPT, cmap);
+bspmview_wrapper(EXPT, tmap);
 

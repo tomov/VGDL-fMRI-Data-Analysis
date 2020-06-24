@@ -11,8 +11,8 @@ echo ---------------- >> jobs.txt
 # function neurosynth_rsa(rsa_idx, use_smooth, lateralized, nperms, parcel_idx, subbatch_size)
 
 declare -a fn_calls=(
-                     "neurosynth_rsa(1, true, true, 10000, [177 294 365 38 293 174 194 118], 500)"
-                     "neurosynth_rsa(1, false, true, 10000, [177 38 94 29 86 333 294 365 38 293 174 194 118], 500)"
+                     "neurosynth_rsa(6, true, true, 10000, [177 294 365 38 293 174 194 118], 500)"
+                     "neurosynth_rsa(6, false, true, 10000, [177 38 94 29 86 333 294 365 38 293 174 194 118], 500)"
                      )
 
 

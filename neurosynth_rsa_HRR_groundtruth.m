@@ -1,11 +1,15 @@
 % RSA with ground truth theory HRRs
-% do it for partitions 2 and 3 only 
+% do it for partitions 2 and 3 only, also calc symmetry and diff
 
 use_smooth = false;
 glmodel = 1;
 nperms = 1000;
 
-filename = sprintf('mat/neurosynth_rsa_HRR_groundtruth_us=%d_nperm=%d.mat', use_smooth, nperms);
+
+what = 'game';
+
+
+filename = sprintf('mat/neurosynth_rsa_HRR_groundtruth_us=%d_nperm=%d_%s.mat', use_smooth, nperms, what);
 
 if use_smooth
     EXPT = vgdl_expt();
@@ -22,9 +26,21 @@ subjects = 1:length(EXPT.subject);
 %[roi_masks, region] = get_neurosynth_rois(lateralized);
 load('mat/get_neurosynth_rois_lat=true');
 
-load('mat/HRR_groundtruth_RDM_correlation.mat'); % game_names, mean_RDM
+%load('mat/HRR_groundtruth_RDM_correlation.mat'); % game_names, mean_RDM
+load('mat/HRR_groundtruth_RDM_K=10_N=10_E=0.050_nsamples=100_dist=correlation.mat');
 game_names = cellfun(@strtrim, mat2cell(game_names, ones(size(game_names, 1), 1)), 'UniformOutput', false);
-behavioral_RDM = mean_RDM;
+switch what
+    case 'game'
+        behavioral_RDM = game_RDM;
+    case 'sprite'
+        behavioral_RDM = sprite_RDM;
+    case 'interaction'
+        behavioral_RDM = interaction_RDM;
+    case 'termination'
+        behavioral_RDM = termination_RDM;
+    otherwise
+        assert(false);
+end
 ng = length(game_names);
 
 upper = logical(triu(ones(size(behavioral_RDM)), 1));
@@ -154,9 +170,9 @@ for r = 1:length(roi_masks)
     ROI(r).p_diff = mean(diff < null_diff);
     ROI(r).p_rho = mean(rho < null_rho);
 
-    [~, ROI(r).p_sym_t] = ttest([S.sym], 0, 'tail', 'right');
-    [~, ROI(r).p_diff_t] = ttest([S.diff], 0, 'tail', 'right');
-    [~, ROI(r).p_rho_t] = ttest([S.rho], 0, 'tail', 'right');
+    [~, ROI(r).p_sym_t, ~, ROI(r).sym_tstat] = ttest([S.sym], 0, 'tail', 'right');
+    [~, ROI(r).p_diff_t, ~, ROI(r).diff_tstat] = ttest([S.diff], 0, 'tail', 'right');
+    [~, ROI(r).p_rho_t, ~, ROI(r).rho_tstat] = ttest([S.rho], 0, 'tail', 'right');
 
     ROI(r).z_sym = (sym - mean(null_sym)) / std(null_sym);
     ROI(r).z_diff = (diff - mean(null_diff)) / std(null_diff);

@@ -24,7 +24,12 @@ clear all;
 
 %load mat/neurosynth_rsa_5_us=0_l=1_nperms=500_nroi=351.mat
 
-load('mat/neurosynth_rsa_1_us=0_l=1_nperms=1000_nroi=351_corr=ktaub_dist=correlation.mat');
+%load('mat/neurosynth_rsa_1_us=0_l=1_nperms=1000_nroi=351_corr=ktaub_dist=correlation.mat');
+%load('mat/neurosynth_rsa_1_us=0_l=1_nperms=1000_nroi=351_corr=ktaub_dist=euclidean.mat');
+
+%load('mat/neurosynth_rsa_6_us=0_l=1_nperms=1000_nroi=351_corr=ktaub_dist=correlation.mat');
+%load('mat/neurosynth_rsa_6_us=0_l=1_nperms=0_nroi=351_corr=ktaub_dist=correlation.mat');
+load('mat/neurosynth_rsa_6_us=0_l=1_nperms=1000_nroi=351.mat');
 
 %load mat/neurosynth_rsa_1_us=1_l=1_nperms=1000_nroi=351.mat
 
@@ -63,10 +68,12 @@ end
 %tbl = table(Rho(i), T(i), names(i)');
 tbl = table(Rho(i), T(i), names(i));
 
-alpha = 0.1; % signifinace level for thresholding (uncorr.) based on permutation tests
-idx = find(pval < alpha);
+alpha = 0.05; % signifinace level for thresholding (uncorr.) based on permutation tests
+idx = find(pval < alpha); % perms
+%idx = find(P < alpha); % t test
 
 ccnl_rsa_view(EXPT, rsa_idx, 1, Rho_adj(idx), all_subject_rhos(idx,:,:), roi_masks(idx));
+%ccnl_rsa_view(EXPT, rsa_idx, 1, T(idx), all_subject_rhos(idx,:,:), roi_masks(idx)); % t test
 
 
 %ccnl_rsa_view(vgdl_expt(), rsa_idx, 1, T, all_subject_rhos, roi_masks);

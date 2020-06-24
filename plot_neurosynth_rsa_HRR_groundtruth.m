@@ -4,7 +4,10 @@
 close all;
 clear all;
 
-load('mat/neurosynth_rsa_HRR_groundtruth_us=1_nperm=1000.mat');
+%load('mat/neurosynth_rsa_HRR_groundtruth_us=1_nperm=1000.mat');
+%load('mat/neurosynth_rsa_HRR_groundtruth_us=0_nperm=1000.mat');
+%load('mat/neurosynth_rsa_HRR_groundtruth_us=0_nperm=0.mat');
+load('mat/neurosynth_rsa_HRR_groundtruth_us=0_nperm=1000_game.mat');
 
 if contains(EXPT.rsadir, '_nosmooth')
     EXPT = vgdl_expt_nosmooth();
@@ -15,9 +18,31 @@ end
 what = 'rho'; % options: 'rho', 'sym', 'diff'
 
 
+%% spearman vs. null distribution group-level stats
+% sanity check, to make sure permuting wasn't screwed up
+% works for what = 'rho' only
+%{
 
-alpha = 0.05; % signifinace level for thresholding (uncorr.) based on permutation tests
+p_t = [ROI.(['p_', what, '_t'])];
+p_z = [ROI.(['p_', what])];
+
+figure;
+hold on;
+scatter(p_z, p_t);
+plot([0 1], [0 1]);
+hold off;
+xlabel('z test p-value');
+ylabel('t test p-value');
+%}
+
+
+
+%% brain map
+
+
+alpha = 0.10; % signifinace level for thresholding (uncorr.) based on permutation tests
 idx = find([ROI.(['p_', what])] < alpha);
+%idx = find([ROI.(['p_', what, '_t'])] < alpha);
 
 V = spm_vol('masks/mask.nii');
 
@@ -29,6 +54,7 @@ for r = 1:length(roi_masks)
     roi_mask = roi_masks{r};
 
     map(roi_mask) = ROI(r).(['z_', what]);
+    %map(roi_mask) = ROI(r).([what, '_tstat']).tstat;
 end
 bspmview_wrapper(EXPT, map);
 
@@ -36,10 +62,7 @@ bspmview_wrapper(EXPT, map);
 
 
 
-
-
-
-
+%% null distributions histograms
 
 
 null_sym = ROI(1).null_sym;

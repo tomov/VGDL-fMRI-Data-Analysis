@@ -1,4 +1,4 @@
-function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
+function [rsa, game_names_ordered] = vgdl_create_rsa(rsa_idx, subj_id, seed)
 
     save_output = true;
 
@@ -53,8 +53,8 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
         return
     end
 
-    game_names = {'vgfmri3_chase','vgfmri3_helper','vgfmri3_bait','vgfmri3_lemmings','vgfmri3_plaqueAttack','vgfmri3_zelda'};
-    game_name_to_id = containers.Map(game_names, 1:6);
+    game_names_ordered = {'vgfmri3_chase','vgfmri3_helper','vgfmri3_bait','vgfmri3_lemmings','vgfmri3_plaqueAttack','vgfmri3_zelda'};
+    game_name_to_id = containers.Map(game_names_ordered, 1:6);
 
     % RSAs
     %
@@ -286,7 +286,7 @@ function rsa = vgdl_create_rsa(rsa_idx, subj_id, seed)
     end % end of switch statement
 
     if save_output
-        save(filename, 'rsa', '-v7.3');
+        save(filename, 'rsa', 'game_names_ordered', '-v7.3');
     end
     
     % permute after saving, so as not to save the permuted version
