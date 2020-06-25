@@ -1,8 +1,6 @@
 % export betas for MVPA analysis in python
 
-rsa_idxs = [1 25 24];
-
-subjects = 1:length(EXPT.subject);
+rsa_idxs = [1 6 5];
 
 use_smooth = false;
 
@@ -16,9 +14,11 @@ else
     suffix = 'nosmooth';
 end
 
+subjects = 1:length(EXPT.subject);
+
 [mask, Vmask] = ccnl_load_mask(maskfile);
 
-for rsa_idx = rsa_idx 
+for rsa_idx = rsa_idxs
     rsa_idx
 
     for s = 1:length(subjects)

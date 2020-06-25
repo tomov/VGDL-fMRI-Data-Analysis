@@ -1,7 +1,55 @@
 clear
 
+%% extract filter matrix from SPM
+
+% svd sanity
+%
+X = rand(30,10);
+[u,s,v] = svd(X,0);
+assert(immse(u*s*v', X) < 1e-20);
+
+
+load('mat/SPM.mat');
+
+X = SPM.xX.X;
+K = SPM.xX.K;
+W = SPM.xX.W;
+KWX = SPM.xX.xKXs.X;
+
+% spm_filter.m
+%
+%{
+KX1 = spm_filter(K, X);
+
+clear I;
+clear X0X0;
+for s = 1:length(K)
+    I(K(s).row,K(s).row) = eye(length(K(s).row));
+    X0X0(K(s).row, K(s).row) = K(s).X0*K(s).X0';
+end
+
+K = I - X0X0;
+KX2 = K * SPM.xX.X;
+assert(immse(KX1, KX2) < 1e-20);
+%}
+
+% residual forming matrix
+%
+R1 = spm_sp('r',SPM.xX.xKXs); % residual forming matrix R = I - X X^+
+
+u = SPM.xX.xKXs.u;
+R2 = eye(size(X,1)) - u*u';
+assert(immse(R1, R2) < 1e-20);
+
+%
+
+
+
+
+
 %% generate searchlight ROIs with different params
 
+%{
 r = [4 6 10] / 1.5;
 
 for use_smooth = 0:1
@@ -21,6 +69,7 @@ for use_smooth = 0:1
         save(sprintf('mat/get_searchlight_rois_us=%d_r=%.4f.mat', use_smooth, radius), '-v7.3');
     end
 end
+%}
 
 % https://www.mathworks.com/help/database/ug/mongo.html#d117e86584
 %conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54')
