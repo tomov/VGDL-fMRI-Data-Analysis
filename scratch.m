@@ -1,6 +1,6 @@
 clear
 
-%% extract filter matrix from SPM
+%% extract K, W, and R matrices from SPM
 
 % svd sanity
 %
@@ -41,7 +41,6 @@ u = SPM.xX.xKXs.u;
 R2 = eye(size(X,1)) - u*u';
 assert(immse(R1, R2) < 1e-20);
 
-%
 
 
 

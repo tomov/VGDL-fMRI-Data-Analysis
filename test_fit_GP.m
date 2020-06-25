@@ -1,14 +1,17 @@
 function [l, g] = test_fit_GP(sigma, K, y)
+    % compute LME and its gradient for GP
     % see test_glm.m
 
     I = eye(size(K));
     Ky = K + sigma^2 * I;
     invKy = Ky^(-1);
 
-    logMargLikFn = @(sigma) -0.5 * y' * invKy * y - 0.5 * log(det(Ky)) - length(y)/2 * log(2 * pi); % Eq. 2.30 from Rasmussen
-    l = -logMargLikFn(sigma);
-
-    if nargout > 1
-        logMargLikFn_grad = @(sigma) 0.5 * y' * invKy * 2*sigma*I * invKy * y - 0.5 * trace(invKy * 2*sigma*I); % Eq 5.9
-        g = -logMargLikFn_grad(sigma);
+    if nargout == 1
+        l = gp_loglik(K, y, sigma);
+        l = -l;
+    else
+        assert(nargout == 2);
+        [l, g] = gp_loglik(K, y, sigma);
+        l = -l;
+        g = -g;
     end
