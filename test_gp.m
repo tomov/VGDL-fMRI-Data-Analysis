@@ -115,7 +115,7 @@ assert(immse(vary_ridge_kernel, vary_ridge_kernel_1) < 1e-15);
 
 assert(immse(y_ridge_kernel, y_ridge_Bayesian) < 1e-5);
 
-logMargLikFn = @(sigma) -0.5 * y' * (K + sigma^2 * I)^(-1) * y - 0.5 * log(det(K + sigma^2 * I)) - length(y)/2 * log(2 * pi); % Eq. 2.30
+logMargLikFn = @(sigma) -0.5 * y' * (K + sigma^2 * I)^(-1) * y - 0.5 * log(det(K + sigma^2 * I)) - length(y)/2 * log(2 * pi); % Eq. 2.30 TODO is there a sigma^2 after the 2 * pi? not in the book, but yes in infGaussLik
 assert(immse(logMargLikFn(sigma), -test_fit_GP(sigma, K, y)) < 1e-10);
 
 
@@ -160,9 +160,9 @@ likfun = @likGauss;
 
 K_all = [X; Xnew] * Sigma_p * [X; Xnew]';
 K_all = nearestSPD(K_all);  % find nearest symmetric positive definite matrix (it's not b/c of numerical issues, floating points, etc.)
-L = cholcov(K_all);
-L(1:(n+1):end) = log(diag(L));
-covhyp = L(triu(true(n)));
+L = cholcov(K_all); % not chol b/c sometimes positive semi-definite
+L(1:(n+1):end) = log(diag(L));  % see covDiscrete.m
+covhyp = L(triu(true(n)));  % see covDiscrete.m
 
 % GP hyperparams
 hyp = struct('mean', zeros(1, n), 'cov', covhyp, 'lik', log(sigma));
@@ -178,6 +178,10 @@ logPred_GP_kernel
 % sanity
 [K_gp,dK] = feval(@covDiscrete,n,hyp.cov,x);
 assert(immse(K_gp, K) < 1e-15); % should be identical
+
+% from infLikGauss.m
+Kf_gp = apx(hyp, covfun, x, []);
+assert(immse(Kf_gp.mvm(eye(size(K))), K) < 1e-15); % should be identical
 
 assert(immse(y_ridge_kernel, y_ridge_Bayesian) < 1e-15);
 
@@ -227,5 +231,7 @@ plot(y_ridge_kernel + rand(size(ynew)) * 0.1);
 plot(y_GP_kernel + rand(size(ynew)) * 0.1); 
 plot(y_GP_kernel_fit + rand(size(ynew)) * 0.1); 
 legend({'truth', 'Bayesian (ridge) regression, from interwebs', 'Bayesian (ridge) regression, from Rasmussen', 'Equivalent kernel regression', 'Using GPML library', 'GP fit hyperparams'});
+
+%}
 
 

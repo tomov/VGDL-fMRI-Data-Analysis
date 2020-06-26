@@ -1,9 +1,7 @@
-
-%{
 clear all;
 close all;
-%}
 
+%{
 EXPT = vgdl_expt();
 glmodel = 21; % control GLM
 mask = 'masks/ROI_x=48_y=12_z=30_85voxels_Sphere6.nii';
@@ -31,26 +29,128 @@ ker =
 Y = R*K*W*Y;
 ker = R*K*W*ker*W'*K'*R';
 
-%ker = nearestSPD(ker);
-
-y = Y(:,1); % TODO for each voxel
-
-options = optimoptions('fmincon','SpecifyObjectiveGradient',true)
-% TODO optimize -- compute invKi only once
-%sigma_hat = fmincon(@(sigma) gp_loglik(ker, y, sigma, true), 1, -1, 0, [], [], [], [], [], options);
+%}
 
 
-assert(size(ker,1) == size(Y,1));
-n = size(ker,1);
+rng(334);
+
+sigma = 0.01;
+tau = 3;
+X = [ones(50,1) rand(50,3)];
+b = [0; normrnd(0, tau, 3, 1)];
+e = normrnd(0, sigma, size(X,1), 1);
+y = X * b + e;
+Sigma_p = tau.^2 * eye(size(X,2));
+
+
+
+Y = [y y y];
+ker = X * Sigma_p * X';
+
+
+
+%
+% GP shenanighans
+%
+% naively, we would just loop over voxels, and run minimize() with gp() on each voxel, fit the sigma (noise std), and get the LME 
+% however, we have two problems:
+% 1) this will compute the inverse of (K + sigma^2 I) separately for every voxel (and every sigma) thus duplicating a lot of compute
+% 2) to ensure only sigma is fit (and not the whole kernel and mean function), we have to impose hyperpriors (see http://www.gaussianprocess.org/gpml/code/matlab/doc/), however that is suuuper slow (even though we are optimizing way fewer parameters!)
+%
+% Therefore, we precompute the inverse of (K + sigma^2 I) for a grid of sigmas, then reuse it across voxels (note that this might be numerically unstable -- see A4 in the Rasmussen GP book).
+% 1) is fixed because we now only compute the inverse a fixed # of times, not for each voxel
+% 2) is fixed beacuse we're doing a grid search manually, rather than relying on the fancy minimize() (we don't need the exact sigmas anyway, ballparks are ok)
+%
+% note that their computation is different from the one in test_gp b/c 1) the inverse is approximate, and 2) the log determinant is approximate
+%
+
+debug = true;
+
+% init GP stuff
+%
+n = size(ker, 1);
+x = [1:n]';
+
+meanfun = {@meanDiscrete, n};
+covfun = {@covDiscrete, n};
+likfun = @likGauss;
+
+ker = nearestSPD(ker);  % find nearest symmetric positive definite matrix (it's not b/c of numerical issues, floating points, etc.)
 L = cholcov(ker); % not chol b/c sometimes positive semi-definite
-covhyp = L(triu(true(n))); % see covDiscrete.m
+L(1:(n+1):end) = log(diag(L));  % see covDiscrete.m
+covhyp = L(triu(true(n)));  % see covDiscrete.m
 
 % GP hyperparams
-hyp = struct('mean', zeros(1, n), 'cov', covhyp, 'lik', exp(sigma));
+hyp = struct('mean', zeros(1, n), 'cov', covhyp, 'lik', nan);
 
-% GP
-x = [1:size(Y,1)]';
-[nlz, ~] = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x, y);
+% grid search sigmas
+sigmas = logspace(-10, 10, 21);
+
+% precompute (K + sigma^2 I) ^ (-1) for every sigma
+%
+for j = 1:length(sigmas)
+    s = sigmas(j);
+    hyp.lik = log(s);
+
+    % from infLikGauss.m
+    sn2(j) = exp(2*hyp.lik); W = ones(n,1)/sn2(j);            % noise variance of likGauss
+    K_gp{j} = apx(hyp,covfun,x,[]);                        % set up covariance approximation
+    [ldB2(j),solveKiW{j},dW,dhyp,post.L] = K_gp{j}.fun(W); % obtain functionality depending on W
+
+    assert(immse(K_gp{j}.mvm(eye(size(ker))), ker) < 1e-15); % should be identical
+
+    % compute inverse the gp()-way
+    invKi_gp = solveKiW{j}(eye(n));
+
+    % compute inverse the standard way
+    I = eye(n);
+    invKi{j} = (ker + s^2 * I)^(-1);
+
+    %assert(immse(invKi{j}, invKi_gp) < 1e-15); % those are different! what matters is if the log likelihoods below match
+end
+
+
+% loop over voxels
+
+for i = 1:size(Y, 2)
+    y = Y(:,i);
+
+    for j = 1:length(sigmas)
+        s = sigmas(j);
+            
+        % from infGaussLik
+        nlz(j) = y'*invKi{j}*y + ldB2(j) + n*log(2*pi*sn2(j))/2;    % -log marginal likelihood TODO there is no sn2 term in Eq 2.30 in the Rasmussen book?
+
+        if debug
+            % sanity checks
+            hyp.lik = log(s);
+
+            % GP log lik
+            nlz_gp(j) = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x, y);
+
+            % from infGaussLik
+            alpha = solveKiW{j}(y);
+            nlz_gp2 = y'*alpha/2 + ldB2(j) + n*log(2*pi*sn2(j))/2;    % -log marginal likelihood
+
+            assert(immse(nlz_gp(j), nlz_gp2) < 1e-15);
+            %assert(immse(nlz_gp(j), nlz(j)) < 1e-15); % not equal.... bummer
+        end
+    end
+
+    [~,j] = min(nlz);
+    sigma(i) = sigmas(j);
+    loglik(i) = -nlz(j);
+
+    if debug
+        % make sure at least sigmas are the same
+        [~,j1] = min(nlz_gp);
+        assert(j == j1);
+    end
+end
+
+
+
+
 
 
 function [Y, K, W, R] = load_subject(EXPT, glmodel, subj, mask, Vmask)
