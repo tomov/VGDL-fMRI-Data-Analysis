@@ -17,6 +17,7 @@ function [loglik, grad] = gp_loglik(K, y, sigma, neg)
     invKi = Ki^(-1);
 
     loglik = -0.5 * y' * invKi * y - 0.5 * log(det(Ki)) - length(y)/2 * log(2 * pi); % Eq. 2.30 from Rasmussen
+    % ok to be positive! this is a PDF, not a PMF, so exp(loglik) can be > 1
     if neg
         loglik = -loglik;
     end

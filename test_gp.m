@@ -146,34 +146,86 @@ y_ridge_kernel_hyperparam = predFn(sigma_hat);
 assert(immse(y_ridge_kernel_hyperparam, y_ridge_Bayesian) < 1e-5);
 
 %% fit GP using Rasmussen's library
+% http://www.gaussianprocess.org/gpml/code/matlab/doc/
 %
 addpath(genpath('/Users/momchil/Dropbox/Research/libs/gpml/')); % GP ML
 
+% init stuff
+%
 n = size(X,1) + size(Xnew,1);
 
 meanfun = {@meanDiscrete, n};
 covfun = {@covDiscrete, n};
 likfun = @likGauss;
 
-K = [X; Xnew] * Sigma_p * [X; Xnew]';
-K = nearestSPD(K);  % find nearest symmetric positive definite matrix (it's not b/c of numerical issues, floating points, etc.)
-L = chol(K);
+K_all = [X; Xnew] * Sigma_p * [X; Xnew]';
+K_all = nearestSPD(K_all);  % find nearest symmetric positive definite matrix (it's not b/c of numerical issues, floating points, etc.)
+L = cholcov(K_all);
+L(1:(n+1):end) = log(diag(L));
 covhyp = L(triu(true(n)));
 
 % GP hyperparams
-hyp = struct('mean', zeros(1, n), 'cov', covhyp, 'lik', -1);
+hyp = struct('mean', zeros(1, n), 'cov', covhyp, 'lik', log(sigma));
 
-% GP
+
+% GP prediction
 x = [1:size(X,1)]';
-xs = [size(X,1)+1:n]';
-[y_GP_kernel ~] = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x, y, xs);
+xnew = [size(X,1)+1:n]';
+[y_GP_kernel, ~, ~, ~, lp] = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x, y, xnew, ynew);
+logPred_GP_kernel = sum(lp);
+logPred_GP_kernel
 
-%assert(immse(y_ridge_kernel, y_ridge_Bayesian) < 1e-10); % for some reason, doesn't work quite well...
+% sanity
+[K_gp,dK] = feval(@covDiscrete,n,hyp.cov,x);
+assert(immse(K_gp, K) < 1e-15); % should be identical
 
+assert(immse(y_ridge_kernel, y_ridge_Bayesian) < 1e-15);
+
+% GP marginal log likelihood
+negLogMargLik_GP = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x, y);
+logMargLik_GP = -negLogMargLik_GP;
+assert(immse(logMargLik_GP, logMargLik) < 1e-15);
+
+%% minimize GP
+% http://www.gaussianprocess.org/gpml/code/matlab/doc/
+
+% fit all hyperparams -- not good; we don't want to fit kernel & mean fun
+%hyp2 = minimize(hyp, @gp, -100, @infGaussLik, meanfun, covfun, likfun, x, y);
+
+% ...instead, fit noise only (TODO too slow!)
+for i = 1:n
+    prior.mean{i} = {@priorDelta};
+end
+for i = 1:length(covhyp)
+    prior.cov{i} = {@priorDelta};
+end
+inf = {@infPrior, @infGaussLik, prior};
+hyp.lik = log(10); % confuse it by starting off the true log(sigma)
+hyp2 = minimize(hyp, @gp, -100, inf, meanfun, covfun, likfun, x, y);
+% these should be unchanged 
+assert(immse(hyp2.cov, hyp.cov) < 1e-20);
+assert(immse(hyp2.mean, hyp.mean) < 1e-20);
+
+fprintf('sigma = %.4f vs. inferred sigma = %.4f\n', sigma, exp(hyp2.lik));
+
+hyp2
+nlz = gp(hyp2, @infGaussLik, meanfun, covfun, likfun, x, y);
+nlz
+
+[y_GP_kernel_fit, ~, ~, ~, lp] = gp(hyp2, @infGaussLik, meanfun, covfun, likfun, x, y, xnew, ynew);
+logPred_GP_kernel_fit = sum(lp);
+logPred_GP_kernel_fit
+
+
+%% plot stuff
 close all; 
-plot(y_ridge_Bayesian); 
 hold on; 
-plot(y_ridge_Rasmussen);
-plot(y_ridge_kernel);
-plot(y_GP_kernel); 
-legend({'Bayesian (ridge) regression, from interwebs', 'Bayesian (ridge) regression, from Rasmussen', 'Equivalent kernel regression', 'Using GPML library'});
+plot(ynew); 
+plot(y_ridge_Bayesian + rand(size(ynew)) * 0.1); 
+plot(y_ridge_Rasmussen + rand(size(ynew)) * 0.1);
+plot(y_ridge_kernel + rand(size(ynew)) * 0.1);
+plot(y_GP_kernel + rand(size(ynew)) * 0.1); 
+plot(y_GP_kernel_fit + rand(size(ynew)) * 0.1); 
+legend({'truth', 'Bayesian (ridge) regression, from interwebs', 'Bayesian (ridge) regression, from Rasmussen', 'Equivalent kernel regression', 'Using GPML library', 'GP fit hyperparams'});
+
+

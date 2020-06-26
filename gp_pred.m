@@ -12,10 +12,8 @@ function [y_mean, y_var] = gp_pred(K, y, K_new, K_new_new, sigma)
     % Eq. 2.23; also see Eq. 2.12, Eq. 2.25 from Rasmussen book
     %
     I = eye(size(K));
-    K = K + sigma^2 * I;
-    invK = Ki^(-1);
-
-    invKi
+    Ki = K + sigma^2 * I;
+    invKi = Ki^(-1);
 
     y_mean = K_new' * invKi * y; % Eq. 2.23; also Eq. 2.12, Eq. 2.25
     y_var = K_new_new - K_new' * invKi * K_new; % variance of prediction; Eq. 2.24; also Eq. 2.12, Eq. 2.26
