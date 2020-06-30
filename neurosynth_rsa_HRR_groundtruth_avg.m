@@ -90,7 +90,7 @@ for s = 1:length(subjects)
         end
 
         % subset whole-brain patterns
-        U = U_all(:, whole_brain_mask(roi_mask));
+        U = U_all(:, roi_mask(whole_brain_mask));
 
         % compute neural RDM (ccnl_roi_rdms.m)
         neural_RDM = squareRDMs(pdist(U, dist));

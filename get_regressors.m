@@ -218,7 +218,7 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, collec
                     regs.(post_fields{i}) = [regs.(post_fields{i}); r];
                 end
 
-                % note we skif first and last state timestamp b/c EMPA skips them too when fMRI logging TODO 
+                % note we skip first and last state timestamp b/c EMPA skips them too when fMRI logging TODO 
                 regs.state_timestamps = [regs.state_timestamps; play_post.timestamps(2:end-1) - run.scan_start_ts]; % assuming all have the same ts; notice those are keystate timestamps (slightly off from state timestamps... sorry; see core.py)
 
             end
