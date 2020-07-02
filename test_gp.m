@@ -148,7 +148,6 @@ assert(immse(y_ridge_kernel_hyperparam, y_ridge_Bayesian) < 1e-5);
 %% fit GP using Rasmussen's library
 % http://www.gaussianprocess.org/gpml/code/matlab/doc/
 %
-addpath(genpath('/Users/momchil/Dropbox/Research/libs/gpml/')); % GP ML
 
 % init stuff
 %

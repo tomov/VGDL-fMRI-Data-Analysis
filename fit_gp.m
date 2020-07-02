@@ -1,11 +1,12 @@
 clear all;
 close all;
 
-%{
 EXPT = vgdl_expt();
 glmodel = 21; % control GLM
 mask = 'masks/ROI_x=48_y=12_z=30_85voxels_Sphere6.nii';
 subjects = 1:length(EXPT.subject);
+
+debug = true;
 
 
 % load mask
@@ -16,22 +17,23 @@ addpath(genpath('/ncf/gershman/Lab/scripts/gpml'));
 
 subj = subjects(1); % TODO for each subject
 
-[Y, K, W, R] = load_subject(EXPT, glmodel, subj, mask, Vmask);
+fprintf('loading BOLD for subj %d\n', subj);
+tic
+[Y, K, W, R] = load_BOLD(EXPT, glmodel, subj, mask, Vmask);
+toc
 
-%X = rand(size(Y,1), round(size(Y,1) * 1.2));
-X = [];
-for i = 0.01:0.01:1
-    X = [X; cos([1:1000]*i)'];
-end
-ker = X*X'; % temporary
-ker = 
+fprintf('loading kernel for subj %d\n', subj);
+tic
+ker = load_kernel(subj);
+toc
 
+% whiten, filter & project out nuisance regressors
 Y = R*K*W*Y;
 ker = R*K*W*ker*W'*K'*R';
 
-%}
 
 
+%{
 rng(334);
 
 sigma = 0.01;
@@ -46,6 +48,8 @@ Sigma_p = tau.^2 * eye(size(X,2));
 
 Y = [y y y];
 ker = X * Sigma_p * X';
+%}
+
 
 
 
@@ -63,8 +67,6 @@ ker = X * Sigma_p * X';
 %
 % note that their computation is different from the one in test_gp b/c 1) the inverse is approximate, and 2) the log determinant is approximate
 %
-
-debug = true;
 
 % init GP stuff
 %
@@ -92,6 +94,9 @@ for j = 1:length(sigmas)
     s = sigmas(j);
     hyp.lik = log(s);
 
+    fprintf('inverting kernel for subj %d, sigma %.3f\n', subj, s);
+    tic
+
     % from infLikGauss.m
     sn2(j) = exp(2*hyp.lik); W = ones(n,1)/sn2(j);            % noise variance of likGauss
     K_gp{j} = apx(hyp,covfun,x,[]);                        % set up covariance approximation
@@ -99,7 +104,7 @@ for j = 1:length(sigmas)
 
     assert(immse(K_gp{j}.mvm(eye(size(ker))), ker) < 1e-15); % should be identical
 
-    % compute inverse the gp()-way
+    % compute inverse the gp()-way (for sanity check)
     invKi_gp = solveKiW{j}(eye(n));
 
     % compute inverse the standard way
@@ -107,14 +112,22 @@ for j = 1:length(sigmas)
     invKi{j} = (ker + s^2 * I)^(-1);
 
     %assert(immse(invKi{j}, invKi_gp) < 1e-15); % those are different! what matters is if the log likelihoods below match
+
+    toc
 end
 
 
-% loop over voxels
-
+% GP
+% for each voxel
+%
 for i = 1:size(Y, 2)
+    fprintf('solving GP for subj %d, voxel %d\n', subj, i);
+    tic
+
     y = Y(:,i);
 
+    % for each sigma, compute marginal likelihood = loglik = -NLZ
+    %
     for j = 1:length(sigmas)
         s = sigmas(j);
             
@@ -146,22 +159,38 @@ for i = 1:size(Y, 2)
         [~,j1] = min(nlz_gp);
         assert(j == j1);
     end
+
+    toc
 end
 
 
 
 
+function [ker] = load_kernel(subj_id)
+    filename = sprintf('mat/HRR_subject_kernel_subj=%d_K=10_N=10_E=0.050_nsamples=10_sigma_w=1.000_norm=1.mat', subj_id);
+    load(filename, 'theory_kernel', 'sprite_kernel', 'interaction_kernel', 'termination_kernel');
+
+    ker = theory_kernel;
+end
 
 
-function [Y, K, W, R] = load_subject(EXPT, glmodel, subj, mask, Vmask)
+function [Y, K, W, R] = load_BOLD(EXPT, glmodel, subj_id, mask, Vmask)
     % load subject data
     % Y = raw BOLD
     % K = filter matrix
     % W = whitening matrix
     % R = residual forming matrix
     %
+    % 
+    % Y = Xb + Gg + e              (Y = BOLD, X = HRR features; G = nuisance regressors (X in GLM 21), e = noise)
+    % KWY = KWXb + KWGg + KWe      (whiten & filter w.r.t. G, as in GLM 21)
+    % R = (I - KWG (KWG)^+)        (residual forming matrix w.r.t. G from GLM 21)
+    % RKWY = RKWXb + 0 + RKWe      (project out nuisance regressors)
+    % but...use GP regression instead
+    %
+    % TODO RKWe not gaussian, also maybe correlated => need to whiten again after GP fit
 
-    modeldir = fullfile(EXPT.modeldir,['model',num2str(glmodel)],['subj',num2str(subj)]);
+    modeldir = fullfile(EXPT.modeldir,['model',num2str(glmodel)],['subj',num2str(subj_id)]);
     load(fullfile(modeldir,'SPM.mat'));
     assert(isempty(Vmask) || isequal(SPM.xY.VY(1).dim, Vmask.dim), 'Different dimensions between mask and activations');
     assert(ndims(mask) < 3 || isequal(SPM.Vbeta(1).dim, size(mask)), 'Different dimensions between mask and betas');

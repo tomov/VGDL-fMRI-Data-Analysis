@@ -21,5 +21,6 @@ addpath('/Users/momchil/Dropbox/Research/libs/distributionPlot/'); % for plottin
 addpath('/Users/momchil/Dropbox/Research/libs/panel-2.12/'); % tight subplots
 addpath('/Users/momchil/Dropbox/Research/libs/panel-2.12/demo/'); % tight subplots
 addpath('/Users/momchil/Dropbox/Research/libs/encoder/encoder/'); % gzip 
+addpath(genpath('/Users/momchil/Dropbox/Research/libs/gpml/')); % GP ML
 
 addpath('/Users/momchil/Dropbox/Research/libs/SearchmightToolbox.Darwin_i386.0.2.5'); % searchmight

@@ -1,3 +1,5 @@
+
+%{
 clear
 
 %% extract K, W, and R matrices from SPM
@@ -15,6 +17,8 @@ X = SPM.xX.X;
 K = SPM.xX.K;
 W = SPM.xX.W;
 KWX = SPM.xX.xKXs.X;
+
+%}
 
 % spm_filter.m
 %
@@ -35,12 +39,14 @@ assert(immse(KX1, KX2) < 1e-20);
 
 % residual forming matrix
 %
+%{
 R1 = spm_sp('r',SPM.xX.xKXs); % residual forming matrix R = I - X X^+
 
 u = SPM.xX.xKXs.u;
 R2 = eye(size(X,1)) - u*u';
 assert(immse(R1, R2) < 1e-20);
 
+%}
 
 
 
