@@ -108,6 +108,7 @@
     % grid search sigmas
     sigmas = logspace(-3, 4, 20);
 
+    %{
     % precompute (K + sigma^2 I) ^ (-1) for every sigma
     %
     for j = 1:length(sigmas)
@@ -150,6 +151,8 @@
 
         toc
     end
+
+    %}
 
 
 
@@ -221,7 +224,7 @@
         % no CV; use marginal likelihood for model comparison
         %
         train = partition_id > 0; % all trials
-        test = train;
+        test = train; % test data = train data here
 
         [sigma(i), ...
          margloglik(i), ...
@@ -241,7 +244,13 @@
          null_r(i)] = fit_gp_helper(x, y, train, test, null_ker, null_hyp, meanfun, covfun, likfun, sigmas, null_invKi, null_ldB2, null_sn2, null_solveKiW, debug);
 
         % fit noise ceiling model
-
+        [ceil_sigma(i), ...
+         ceil_margloglik(i), ...
+         ceil_predloglik(i), ...
+         ceil_y_hat, ...
+         ceil_R2(i), ...
+         ceil_adjR2(i), ...
+         ceil_r(i)] = minimize_gp_helper(x, y, train, test, hyp, meanfun, covfun, likfun, sigma(i));
 
         % CV; use predictive likelihood for model comparison
         %
@@ -266,6 +275,15 @@
              null_R2_CV(p,i), ...
              null_adjR2_CV(p,i), ...
              null_r_CV(p,i)] = fit_gp_helper(x, y, train, test, null_ker, null_hyp, meanfun, covfun, likfun, sigmas, null_invKi_CV(p,:), null_ldB2_CV(p,:), null_sn2_CV(p,:), null_solveKiW_CV(p,:), debug);
+
+            % noise ceiling model
+            [ceil_sigma_CV(p,i), ...
+             ceil_margloglik_CV(p,i), ...
+             ceil_predloglik_CV(p,i), ...
+             ceil_y_hat_CV(test), ...
+             ceil_R2_CV(p,i), ...
+             ceil_adjR2_CV(p,i), ...
+             ceil_r_CV(p,i)] = minimize_gp_helper(x, y, train, test, hyp, meanfun, covfun, likfun, sigma_CV(p,i));
 
         end
 
@@ -306,11 +324,11 @@
 
 % fit gp using minimize(), for noise ceiling model
 %
-function [sigma, margloglik, predloglik, y_hat, R2, adjR2, r, ceil_hyp] = minimize_gp_helper(x, y, train, test, ker, hyp, meanfun, covfun, likfun)
+function [sigma, margloglik, predloglik, y_hat, R2, adjR2, r, ceil_hyp] = minimize_gp_helper(x, y, train, test, hyp, meanfun, covfun, likfun, sigma)
 
-    hyp.lik = log(1); % start at sigma = 1 
+    hyp.lik = log(sigma);
 
-    % fit mean, kernel, and sigma
+    % fit mean, kernel, and sigma; 100 iters
     ceil_hyp = minimize(hyp, @gp, -100, @infGaussLik, meanfun, covfun, likfun, x(train), y(train));
 
     % compute marginal lik on training data
@@ -322,7 +340,9 @@ function [sigma, margloglik, predloglik, y_hat, R2, adjR2, r, ceil_hyp] = minimi
     sigma = exp(ceil_hyp.lik);
     margloglik = -nlz;
     predloglik = sum(lp);
-    [R2, adjR2] = calc_R2(y_hat, y(test));
+
+    p = numel(ceil_hyp.mean) + numel(ceil_hyp.cov) + numel(ceil_hyp.lik);
+    [R2, adjR2] = calc_R2(y_hat, y(test), p);
     r = corr(y_hat, y(test));
 end
 
@@ -352,11 +372,13 @@ function [sigma, margloglik, predloglik, y_hat, R2, adjR2, r] = fit_gp_helper(x,
             alpha = solveKiW{j}(y(train));
             nlz_gp2 = y(train)'*alpha/2 + ldB2(j) + n*log(2*pi*sn2(j))/2;    % -log marginal likelihood
 
+            %{
             nlz_gp(j)
             nlz_gp2
             nlz(j)
             immse(nlz_gp(j), nlz_gp2)
             immse(nlz_gp(j), nlz(j))
+            %}
             assert(immse(nlz_gp(j), nlz_gp2) < 1e-1);
             assert(immse(nlz_gp(j), nlz(j)) < 1e-1);
         end
@@ -497,6 +519,7 @@ function [R2, adjR2] = calc_R2(y, y_hat, p)
     SSres = sum((y - y_hat).^2);
 
     R2 = 1 - SSres/SStot;
+
     adjR2 = 1 - (1 - R2) * (n - 1) / (n - p - 1);
 end
 
