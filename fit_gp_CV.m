@@ -31,7 +31,6 @@
     addpath(genpath('/ncf/gershman/Lab/scripts/gpml'));
 
 
-    %{
     fprintf('loading BOLD for subj %d\n', subj);
     tic
     [Y, K, W, R] = load_BOLD(EXPT, glmodel, subj, mask, Vmask);
@@ -53,7 +52,10 @@
     partition_id = rsa.model(1).partitions;
     assert(size(partition_id, 1) == size(Y, 1));
     n_partitions = max(partition_id);
-    %}
+
+    % find nearest symmetric positive definite matrix (it's not b/c of numerical issues, floating points, etc.)
+    ker = nearestSPD(ker);
+    null_ker = nearestSPD(null_ker);
 
 
     %{
@@ -99,42 +101,30 @@
     covfun = {@covDiscrete, n};
     likfun = @likGauss;
 
-    ker = nearestSPD(ker);  % find nearest symmetric positive definite matrix (it's not b/c of numerical issues, floating points, etc.)
-    L = cholcov(ker); % not chol b/c sometimes positive semi-definite
-    L(1:(n+1):end) = log(diag(L));  % see covDiscrete.m
-    covhyp = L(triu(true(n)));  % see covDiscrete.m
-
-    % GP hyperparams
-    hyp = struct('mean', zeros(1, n), 'cov', covhyp, 'lik', nan);
+    % init hyperparams from kernel
+    hyp = hyp_from_ker(ker);
+    null_hyp = hyp_from_ker(null_ker);
 
     % grid search sigmas
     sigmas = logspace(-3, 4, 20);
 
-    %{
     % precompute (K + sigma^2 I) ^ (-1) for every sigma
     %
     for j = 1:length(sigmas)
         s = sigmas(j);
-        hyp.lik = log(s);
 
         fprintf('inverting kernel for subj %d, sigma %.3f\n', subj, s);
         tic
 
-        % from infLikGauss.m
-        sn2(j) = exp(2*hyp.lik); W = ones(n,1)/sn2(j);            % noise variance of likGauss
-        K_gp{j} = apx(hyp,covfun,x,[]);                        % set up covariance approximation
-        [ldB2(j),solveKiW{j},dW,dhyp,post.L] = K_gp{j}.fun(W); % obtain functionality depending on W
+        [sn2(j), ...
+         ldB2(j), ...
+         solveKiW{j}, ...
+         invKi{j}] = calc_invKi(ker, x, s, hyp, covfun);
 
-        assert(immse(K_gp{j}.mvm(eye(size(ker))), ker) < 1e-15); % should be identical
-
-        % compute inverse the gp()-way (for sanity check)
-        invKi_gp = solveKiW{j}(eye(n));
-
-        % compute inverse the standard way
-        I = eye(n);
-        invKi{j} = (ker + s^2 * I)^(-1);
-
-        %assert(immse(invKi{j}, invKi_gp) < 1e-15); % those are different! what matters is if the log likelihoods below match
+        [null_sn2(j), ...
+         null_ldB2(j), ...
+         null_solveKiW{j}, ...
+         null_invKi{j}] = calc_invKi(null_ker, x, s, null_hyp, covfun);
 
         toc
 
@@ -142,26 +132,26 @@
         tic
 
         %
-        % CV TODO dedupe
+        % CV
         %
         for p = 1:n_partitions % for each partition
             train = partition_id ~= p;
-            n = sum(train);
 
-            % from infLikGauss.m
-            sn2_CV(p,j) = exp(2*hyp.lik); W = ones(n,1)/sn2_CV(p,j);            % noise variance of likGauss
-            K_gp_CV{p,j} = apx(hyp,covfun,x(train),[]);                        % set up covariance approximation
-            [ldB2_CV(p,j),solveKiW_CV{p,j},~,~,~] = K_gp_CV{p,j}.fun(W); % obtain functionality depending on W
+            [sn2_CV(p,j), ...
+             ldB2_CV(p,j), ...
+             solveKiW_CV{p,j}, ...
+             invKi_CV{p,j}] = calc_invKi(ker(train, train), x(train), s, hyp, covfun);
 
-            % compute inverse the standard way
-            I = eye(n);
-            invKi_CV{p,j} = (ker(train, train) + s^2 * I)^(-1);
+            [null_sn2_CV(p,j), ...
+             null_ldB2_CV(p,j), ...
+             null_solveKiW_CV{p,j}, ...
+             null_invKi_CV{p,j}] = calc_invKi(null_ker(train, train), x(train), s, null_hyp, covfun);
         end
 
         toc
     end
 
-    %}
+
 
     fprintf('solving GP for subj %d, %d voxels\n', subj, size(Y,2));
     tic
@@ -180,6 +170,38 @@
     R2_CV = nan(n_partitions, size(Y,2));
     adjR2_CV = nan(n_partitions, size(Y,2));
     r_CV = nan(n_partitions, size(Y,2));
+
+    % same but null kernel
+    null_sigma = nan(1, size(Y,2)); % fitted noise std's
+    null_margloglik = nan(1, size(Y,2)); % marginal log likelihoods
+    null_predloglik = nan(1, size(Y,2)); % predictive log likelihoods
+    null_R2 = nan(1, size(Y,2)); % R^2
+    null_adjR2 = nan(1, size(Y,2)); % adjusted R^2
+    null_r = nan(1, size(Y,2)); % Pearson correlation
+
+    % same but cross-validated
+    null_sigma_CV = nan(n_partitions, size(Y,2));
+    null_margloglik_CV = nan(n_partitions, size(Y,2));
+    null_predloglik_CV = nan(n_partitions, size(Y,2));
+    null_R2_CV = nan(n_partitions, size(Y,2));
+    null_adjR2_CV = nan(n_partitions, size(Y,2));
+    null_r_CV = nan(n_partitions, size(Y,2));
+
+    % same but noise ceiling kernel
+    ceil_sigma = nan(1, size(Y,2)); % fitted noise std's
+    ceil_margloglik = nan(1, size(Y,2)); % marginal log likelihoods
+    ceil_predloglik = nan(1, size(Y,2)); % predictive log likelihoods
+    ceil_R2 = nan(1, size(Y,2)); % R^2
+    ceil_adjR2 = nan(1, size(Y,2)); % adjusted R^2
+    ceil_r = nan(1, size(Y,2)); % Pearson correlation
+
+    % same but cross-validated
+    ceil_sigma_CV = nan(n_partitions, size(Y,2));
+    ceil_margloglik_CV = nan(n_partitions, size(Y,2));
+    ceil_predloglik_CV = nan(n_partitions, size(Y,2));
+    ceil_R2_CV = nan(n_partitions, size(Y,2));
+    ceil_adjR2_CV = nan(n_partitions, size(Y,2));
+    ceil_r_CV = nan(n_partitions, size(Y,2));
 
     % GP
     % for each voxel
@@ -209,6 +231,17 @@
          adjR2(i), ...
          r(i)] = fit_gp_helper(x, y, train, test, ker, hyp, meanfun, covfun, likfun, sigmas, invKi, ldB2, sn2, solveKiW, debug);
 
+        % fit null model
+        [null_sigma(i), ...
+         null_margloglik(i), ...
+         null_predloglik(i), ...
+         null_y_hat, ...
+         null_R2(i), ...
+         null_adjR2(i), ...
+         null_r(i)] = fit_gp_helper(x, y, train, test, null_ker, null_hyp, meanfun, covfun, likfun, sigmas, null_invKi, null_ldB2, null_sn2, null_solveKiW, debug);
+
+        % fit noise ceiling model
+
 
         % CV; use predictive likelihood for model comparison
         %
@@ -224,6 +257,15 @@
              R2_CV(p,i), ...
              adjR2_CV(p,i), ...
              r_CV(p,i)] = fit_gp_helper(x, y, train, test, ker, hyp, meanfun, covfun, likfun, sigmas, invKi_CV(p,:), ldB2_CV(p,:), sn2_CV(p,:), solveKiW_CV(p,:), debug);
+
+            % null model
+            [null_sigma_CV(p,i), ...
+             null_margloglik_CV(p,i), ...
+             null_predloglik_CV(p,i), ...
+             null_y_hat_CV(test), ...
+             null_R2_CV(p,i), ...
+             null_adjR2_CV(p,i), ...
+             null_r_CV(p,i)] = fit_gp_helper(x, y, train, test, null_ker, null_hyp, meanfun, covfun, likfun, sigmas, null_invKi_CV(p,:), null_ldB2_CV(p,:), null_sn2_CV(p,:), null_solveKiW_CV(p,:), debug);
 
         end
 
@@ -260,11 +302,33 @@
 
 
 
-%function [sn2, K_gp, 
 
 
+% fit gp using minimize(), for noise ceiling model
+%
+function [sigma, margloglik, predloglik, y_hat, R2, adjR2, r, ceil_hyp] = minimize_gp_helper(x, y, train, test, ker, hyp, meanfun, covfun, likfun)
+
+    hyp.lik = log(1); % start at sigma = 1 
+
+    % fit mean, kernel, and sigma
+    ceil_hyp = minimize(hyp, @gp, -100, @infGaussLik, meanfun, covfun, likfun, x(train), y(train));
+
+    % compute marginal lik on training data
+    nlz = gp(ceil_hyp, @infGaussLik, meanfun, covfun, likfun, x(train), y(train));
+
+    % compute predictive lik on test data
+    [y_hat, ~, ~, ~, lp] = gp(ceil_hyp, @infGaussLik, meanfun, covfun, likfun, x(train), y(train), x(test), y(test));
+
+    sigma = exp(ceil_hyp.lik);
+    margloglik = -nlz;
+    predloglik = sum(lp);
+    [R2, adjR2] = calc_R2(y_hat, y(test));
+    r = corr(y_hat, y(test));
+end
 
 
+% fit gp sigmas manually; optionally sanity check with gp() library
+%
 function [sigma, margloglik, predloglik, y_hat, R2, adjR2, r] = fit_gp_helper(x, y, train, test, ker, hyp, meanfun, covfun, likfun, sigmas, invKi, ldB2, sn2, solveKiW, debug)
 
     n = sum(train);
@@ -288,8 +352,13 @@ function [sigma, margloglik, predloglik, y_hat, R2, adjR2, r] = fit_gp_helper(x,
             alpha = solveKiW{j}(y(train));
             nlz_gp2 = y(train)'*alpha/2 + ldB2(j) + n*log(2*pi*sn2(j))/2;    % -log marginal likelihood
 
-            assert(immse(nlz_gp(j), nlz_gp2) < 1e-2);
-            assert(immse(nlz_gp(j), nlz(j)) < 1e-2);
+            nlz_gp(j)
+            nlz_gp2
+            nlz(j)
+            immse(nlz_gp(j), nlz_gp2)
+            immse(nlz_gp(j), nlz(j))
+            assert(immse(nlz_gp(j), nlz_gp2) < 1e-1);
+            assert(immse(nlz_gp(j), nlz(j)) < 1e-1);
         end
     end
 
@@ -303,7 +372,7 @@ function [sigma, margloglik, predloglik, y_hat, R2, adjR2, r] = fit_gp_helper(x,
     [~,~,~,~,lp] = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x(train), y(train), x(test), y(test));
     predloglik = sum(lp);
 
-    % posterior predictive on observed dataset (Eq. 2.23 in Rasmussen)
+    % posterior predictive on test dataset (Eq. 2.23 in Rasmussen)
     y_hat = ker(test, train) * invKi{j} * y(train);
 
     [R2, adjR2] = calc_R2(y(test), y_hat, 1);
@@ -322,65 +391,6 @@ function [sigma, margloglik, predloglik, y_hat, R2, adjR2, r] = fit_gp_helper(x,
         %plot(y_hat_gp);
         %legend({'y', 'y_hat', 'y_hat_gp'}, 'interpreter', 'none');
     end
-
-            %{
-    % for each sigma, compute marginal likelihood = loglik = -NLZ
-    %
-    for j = 1:length(sigmas)
-        s = sigmas(j);
-            
-        % from infGaussLik
-        nlz(j) = y_train'*invKi{j}*y_train/2 + ldB2(j) + n*log(2*pi*sn2(j))/2;    % -log marginal likelihood TODO there is no sn2 term in Eq 2.30 in the Rasmussen book?
-
-        if debug
-            % sanity checks
-            hyp.lik = log(s);
-
-            % GP log lik
-            nlz_gp(j) = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x_train, y_train);
-
-            % from infGaussLik
-            alpha = solveKiW{j}(y);
-            nlz_gp2 = y'*alpha/2 + ldB2(j) + n*log(2*pi*sn2(j))/2;    % -log marginal likelihood
-
-            assert(immse(nlz_gp(j), nlz_gp2) < 1e-3);
-            assert(immse(nlz_gp(j), nlz(j)) < 1e-3);
-        end
-    end
-
-    % pick best sigma
-    [~,j] = min(nlz);
-    sigma = sigmas(j);
-    margloglik = -nlz(j); % marginal log lik
-
-    % compute predictive log lik
-    % TODO redundant
-    [~,~,~,~,lp] = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x_train, y_train, x_test, y_test);
-    predloglik = sum(lp);
-
-
-    % posterior predictive on observed dataset (Eq. 2.23 in Rasmussen)
-    % btw v slow... much slower than nlz computation
-    y_hat = ker * invKi{j} * y;
-
-    [R2, adjR2] = calc_R2(y, y_hat, 1);
-    r = corr(y_hat, y);
-
-    if debug
-        hyp.lik = log(sigma);
-        y_hat_gp = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x, y, x);
-
-        assert(immse(y_hat, y_hat_gp) < 1e-10);
-
-        %figure;
-        %hold on;
-        %plot(y);
-        %plot(y_hat);
-        %plot(y_hat_gp);
-        %legend({'y', 'y_hat', 'y_hat_gp'}, 'interpreter', 'none');
-    end
-
-    %}
 
 end
 
@@ -488,4 +498,42 @@ function [R2, adjR2] = calc_R2(y, y_hat, p)
 
     R2 = 1 - SSres/SStot;
     adjR2 = 1 - (1 - R2) * (n - 1) / (n - p - 1);
+end
+
+
+% init hyperparams from kernel for gp() toolbox
+%
+function [hyp] = hyp_from_ker(ker)
+    n = size(ker, 1);
+
+    % init hyperparams for kernel
+    L = cholcov(ker); % not chol b/c sometimes positive semi-definite
+    L(1:(n+1):end) = log(diag(L));  % see covDiscrete.m
+    covhyp = L(triu(true(n)));  % see covDiscrete.m
+
+    % GP hyperparams
+    hyp = struct('mean', zeros(1, n), 'cov', covhyp, 'lik', nan);
+end
+
+
+function [sn2, ldB2, solveKiW, invKi] = calc_invKi(ker, x, s, hyp, covfun)
+    n = size(ker, 1);
+    hyp.lik = log(s);
+
+    % from infLikGauss.m
+    sn2 = exp(2*hyp.lik); W = ones(n,1)/sn2;            % noise variance of likGauss
+    K_gp = apx(hyp,covfun,x,[]);                        % set up covariance approximation
+    [ldB2,solveKiW,dW,dhyp,post.L] = K_gp.fun(W); % obtain functionality depending on W
+
+    assert(immse(K_gp.mvm(eye(size(ker))), ker) < 1e-15); % should be identical
+
+    % compute inverse the gp()-way (for sanity check)
+    invKi_gp = solveKiW(eye(n));
+
+    % compute inverse the standard way
+    I = eye(n);
+    invKi = (ker + s^2 * I)^(-1);
+
+    %assert(immse(invKi, invKi_gp) < 1e-15); % those are different! what matters is if the log likelihoods below match
+
 end
