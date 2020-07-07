@@ -159,8 +159,7 @@ function fit_gp(subj, use_smooth, glmodel, mask, what, debug)
             s = sigmas(j);
                 
             % from infGaussLik
-            % TODO divide first term by 2!!!!!
-            nlz(j) = y'*invKi{j}*y + ldB2(j) + n*log(2*pi*sn2(j))/2;    % -log marginal likelihood TODO there is no sn2 term in Eq 2.30 in the Rasmussen book?
+            nlz(j) = y'*invKi{j}*y/2 + ldB2(j) + n*log(2*pi*sn2(j))/2;    % -log marginal likelihood TODO there is no sn2 term in Eq 2.30 in the Rasmussen book?
 
             if debug
                 % sanity checks
@@ -173,8 +172,8 @@ function fit_gp(subj, use_smooth, glmodel, mask, what, debug)
                 alpha = solveKiW{j}(y);
                 nlz_gp2 = y'*alpha/2 + ldB2(j) + n*log(2*pi*sn2(j))/2;    % -log marginal likelihood
 
-                assert(immse(nlz_gp(j), nlz_gp2) < 1e-15);
-                %assert(immse(nlz_gp(j), nlz(j)) < 1e-15); % not equal.... different approximations? it's ok b/c predictive mean is the same (below)
+                assert(immse(nlz_gp(j), nlz_gp2) < 1e-3);
+                assert(immse(nlz_gp(j), nlz(j)) < 1e-3);
             end
         end
 

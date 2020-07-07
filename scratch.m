@@ -1,4 +1,13 @@
 
+[mask, Vmask] = ccnl_load_mask('masks/mask_nosmooth.nii');
+
+[x y z] = ind2sub(size(mask), find(mask));
+
+cor = [x y z];
+mni = cor2mni(cor, Vmask.mat);
+
+save('mat/coords_nosmooth.mat');
+
 %{
 clear
 
