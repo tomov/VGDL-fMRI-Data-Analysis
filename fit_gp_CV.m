@@ -33,7 +33,7 @@
 
     fprintf('loading BOLD for subj %d\n', subj);
     tic
-    [Y, K, W, R] = load_BOLD(EXPT, glmodel, subj, mask, Vmask);
+    [Y, K, W, R, run_id] = load_BOLD(EXPT, glmodel, subj, mask, Vmask);
     toc
 
     fprintf('loading kernel for subj %d\n', subj);
@@ -96,14 +96,27 @@
     %
     n = size(ker, 1);
     x = [1:n]';
+    ceil_x = x + run_id * 10000; % do not extrapolate RBF across runs
 
-    meanfun = {@meanDiscrete, n};
+    % init functions and  hyperparams from kernel
+    %meanfun = {@meanDiscrete, n};
+    meanfun = @meanConst;
     covfun = {@covDiscrete, n};
     likfun = @likGauss;
-
-    % init hyperparams from kernel
     hyp = hyp_from_ker(ker);
+
+    % same for null model
+    null_meanfun = @meanConst;
+    null_covfun = {@covDiscrete, n};
+    null_likfun = @likGauss;
     null_hyp = hyp_from_ker(null_ker);
+
+    % same for noise ceiling model
+    % from http://www.gaussianprocess.org/gpml/code/matlab/doc/, section 4a)
+    ceil_meanfun = [];
+    ceil_covfun = @covSEiso; % RBF
+    ceil_likfun = @likGauss;
+    ceil_hyp = struct('cov', [0; 0], 'lik', log(0.1));
 
     % grid search sigmas
     sigmas = logspace(-3, 4, 20);
@@ -241,7 +254,7 @@
          null_y_hat, ...
          null_R2(i), ...
          null_adjR2(i), ...
-         null_r(i)] = fit_gp_helper(x, y, train, test, null_ker, null_hyp, meanfun, covfun, likfun, sigmas, null_invKi, null_ldB2, null_sn2, null_solveKiW, debug);
+         null_r(i)] = fit_gp_helper(x, y, train, test, null_ker, null_hyp, null_meanfun, null_covfun, null_likfun, sigmas, null_invKi, null_ldB2, null_sn2, null_solveKiW, debug);
 
         % fit noise ceiling model
         [ceil_sigma(i), ...
@@ -250,7 +263,8 @@
          ceil_y_hat, ...
          ceil_R2(i), ...
          ceil_adjR2(i), ...
-         ceil_r(i)] = minimize_gp_helper(x, y, train, test, hyp, meanfun, covfun, likfun, sigma(i));
+         ceil_r(i), ...
+         ceil_hyp] = minimize_gp_helper(ceil_x, y, train, test, ceil_hyp, ceil_meanfun, ceil_covfun, ceil_likfun);
 
         % CV; use predictive likelihood for model comparison
         %
@@ -274,7 +288,7 @@
              null_y_hat_CV(test), ...
              null_R2_CV(p,i), ...
              null_adjR2_CV(p,i), ...
-             null_r_CV(p,i)] = fit_gp_helper(x, y, train, test, null_ker, null_hyp, meanfun, covfun, likfun, sigmas, null_invKi_CV(p,:), null_ldB2_CV(p,:), null_sn2_CV(p,:), null_solveKiW_CV(p,:), debug);
+             null_r_CV(p,i)] = fit_gp_helper(x, y, train, test, null_ker, null_hyp, null_meanfun, null_covfun, null_likfun, sigmas, null_invKi_CV(p,:), null_ldB2_CV(p,:), null_sn2_CV(p,:), null_solveKiW_CV(p,:), debug);
 
             % noise ceiling model
             [ceil_sigma_CV(p,i), ...
@@ -283,7 +297,8 @@
              ceil_y_hat_CV(test), ...
              ceil_R2_CV(p,i), ...
              ceil_adjR2_CV(p,i), ...
-             ceil_r_CV(p,i)] = minimize_gp_helper(x, y, train, test, hyp, meanfun, covfun, likfun, sigma_CV(p,i));
+             ceil_r_CV(p,i), ...
+             ceil_hyp_CV] = minimize_gp_helper(ceil_x, y, train, test, ceil_hyp, ceil_meanfun, ceil_covfun, ceil_likfun);
 
         end
 
@@ -292,6 +307,13 @@
         %plot(y);
         %plot(y_hat);
         %legend({'y', 'y_hat'}, 'interpreter', 'none');
+
+        figure;
+        hold on;
+        plot(y);
+        plot(ceil_y_hat);
+        plot(ceil_y_hat_CV);
+        legend({'y', 'ceil_y_hat', 'ceil_y_hat_CV'}, 'interpreter', 'none');
 
     end
 
@@ -324,9 +346,7 @@
 
 % fit gp using minimize(), for noise ceiling model
 %
-function [sigma, margloglik, predloglik, y_hat, R2, adjR2, r, ceil_hyp] = minimize_gp_helper(x, y, train, test, hyp, meanfun, covfun, likfun, sigma)
-
-    hyp.lik = log(sigma);
+function [sigma, margloglik, predloglik, y_hat, R2, adjR2, r, ceil_hyp] = minimize_gp_helper(x, y, train, test, hyp, meanfun, covfun, likfun)
 
     % fit mean, kernel, and sigma; 100 iters
     ceil_hyp = minimize(hyp, @gp, -100, @infGaussLik, meanfun, covfun, likfun, x(train), y(train));
@@ -334,14 +354,30 @@ function [sigma, margloglik, predloglik, y_hat, R2, adjR2, r, ceil_hyp] = minimi
     % compute marginal lik on training data
     nlz = gp(ceil_hyp, @infGaussLik, meanfun, covfun, likfun, x(train), y(train));
 
-    % compute predictive lik on test data
-    [y_hat, ~, ~, ~, lp] = gp(ceil_hyp, @infGaussLik, meanfun, covfun, likfun, x(train), y(train), x(test), y(test));
+    % compute predictive lik on observed test data
+    % LOO-CV on test data for prediction
+    % notice we're ignoring training data b/c it's from different runs
+    % TODO too slow...
+    ix = find(test);
+    y_hat = nan(size(y(test)));
+    lp = nan(size(y(test)));
+    for i = 1:length(ix)
+        test(ix(i)) = 0;
+        [y_hat(i), ~, ~, ~, lp(i)] = gp(ceil_hyp, @infGaussLik, meanfun, covfun, likfun, x(test), y(test), x(ix(i)), y(ix(i)));
+        test(ix(i)) = 1;
+    end
+    %[y_hat, ~, ~, ~, lp] = gp(ceil_hyp, @infGaussLik, meanfun, covfun, likfun, x(test), y(test), x(test), y(test));   -- don't do this; this double dips the test data and gives overly optimistic predictions
 
     sigma = exp(ceil_hyp.lik);
     margloglik = -nlz;
     predloglik = sum(lp);
 
-    p = numel(ceil_hyp.mean) + numel(ceil_hyp.cov) + numel(ceil_hyp.lik);
+    % # of free (hyper)parameters
+    p = numel(ceil_hyp.cov) + numel(ceil_hyp.lik);
+    if isfield(ceil_hyp, 'mean')
+        p = p + numel(ceil_hyp.mean);
+    end
+
     [R2, adjR2] = calc_R2(y_hat, y(test), p);
     r = corr(y_hat, y(test));
 end
@@ -457,7 +493,7 @@ function [ker] = load_HRR_kernel(subj_id, what)
 end
 
 
-function [Y, K, W, R] = load_BOLD(EXPT, glmodel, subj_id, mask, Vmask)
+function [Y, K, W, R, run_id] = load_BOLD(EXPT, glmodel, subj_id, mask, Vmask)
     % load subject data
     % Y = raw BOLD
     % K = filter matrix
@@ -503,6 +539,10 @@ function [Y, K, W, R] = load_BOLD(EXPT, glmodel, subj_id, mask, Vmask)
     assert(immse(K*W*X, KWX) < 1e-15);
     assert(immse(K*W*Y, KWY) < 1e-15);
     assert(immse(R, eye(size(X,1)) - SPM.xX.xKXs.u*SPM.xX.xKXs.u') < 1e-15);
+
+    for r = 1:length(SPM.Sess)
+        run_id(SPM.Sess(r).row,:) = r;
+    end
 end
 
 
@@ -535,7 +575,8 @@ function [hyp] = hyp_from_ker(ker)
     covhyp = L(triu(true(n)));  % see covDiscrete.m
 
     % GP hyperparams
-    hyp = struct('mean', zeros(1, n), 'cov', covhyp, 'lik', nan);
+    %hyp = struct('mean', zeros(1, n), 'cov', covhyp, 'lik', nan);
+    hyp = struct('mean', 0, 'cov', covhyp, 'lik', nan);
 end
 
 
