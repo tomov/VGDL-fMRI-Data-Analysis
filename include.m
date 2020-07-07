@@ -8,7 +8,7 @@ addpath('/Users/momchil/Dropbox/Research/libs/ccnl-fmri/') % sam's ccnl fmri wra
 addpath('/Users/momchil/Dropbox/Research/libs/ktaub/') % mann-kendall tau b test 
 addpath('/Users/momchil/Dropbox/Research/libs/tlsa_matlab/') % sam's TLSA lib 
 addpath('/Users/momchil/Dropbox/Research/libs/mfit/'); % sam's mfit library; uses fconmin
-addpath('/Users/momchil/Dropbox/Research/libs/bspmview/'); % for viewing fMRI data
+addpath('/Users/momchil/Dropbox/Research/libs/bspmview_ncf/'); % for viewing fMRI data
 addpath('/Users/momchil/Dropbox/Research/libs/marsbar-0.44/'); % for ROI analysis
 addpath('/Users/momchil/Dropbox/Research/libs/aal/'); % Automated anatomical labeling
 addpath('/Users/momchil/Dropbox/Research/libs/NIfTI_20140122/'); % Nifti file manipulation

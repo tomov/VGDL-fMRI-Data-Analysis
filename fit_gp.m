@@ -100,7 +100,7 @@ function fit_gp(subj, use_smooth, glmodel, mask, what, debug)
     hyp = struct('mean', zeros(1, n), 'cov', covhyp, 'lik', nan);
 
     % grid search sigmas
-    sigmas = logspace(-10, 10, 21);
+    sigmas = logspace(-3, 4, 20);
 
     % precompute (K + sigma^2 I) ^ (-1) for every sigma
     %
@@ -159,6 +159,7 @@ function fit_gp(subj, use_smooth, glmodel, mask, what, debug)
             s = sigmas(j);
                 
             % from infGaussLik
+            % TODO divide first term by 2!!!!!
             nlz(j) = y'*invKi{j}*y + ldB2(j) + n*log(2*pi*sn2(j))/2;    % -log marginal likelihood TODO there is no sn2 term in Eq 2.30 in the Rasmussen book?
 
             if debug
@@ -232,6 +233,7 @@ function fit_gp(subj, use_smooth, glmodel, mask, what, debug)
     clear covhyp
     clear ker
     clear post
+    clear Y
     save(filename, '-v7.3');
 
     disp('Done');
