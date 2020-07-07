@@ -1,4 +1,12 @@
-function fit_gp(subj, use_smooth, glmodel, mask, what, debug)
+%function fit_gp(subj, use_smooth, glmodel, mask, what, debug)
+
+    subj = 1;
+    use_smooth = true;
+    glmodel = 21;
+    %mask = 'masks/ROI_x=48_y=12_z=32_62voxels_Sphere6.nii';
+    mask = 'masks/ROI_x=48_y=12_z=32_1voxels_Sphere1.nii';
+    what = 'theory';
+    debug = true;
 
     if use_smooth
         EXPT = vgdl_expt();
@@ -12,15 +20,6 @@ function fit_gp(subj, use_smooth, glmodel, mask, what, debug)
 
     assert(ismember(what, {'theory', 'sprite', 'interaction', 'termination'}));
 
-    %{
-    clear all;
-    close all;
-
-    EXPT = vgdl_expt();
-    glmodel = 21; % control GLM
-    mask = 'masks/ROI_x=48_y=12_z=30_85voxels_Sphere6.nii';
-    subjects = 1:length(EXPT.subject);
-    %}
 
     [~,maskname,~] = fileparts(mask);
     filename = sprintf('mat/fit_gp_HRR_subj=%d_us=%d_glm=%d_mask=%s_%s.mat', subj, use_smooth, glmodel, maskname, what);
@@ -39,13 +38,20 @@ function fit_gp(subj, use_smooth, glmodel, mask, what, debug)
 
     fprintf('loading kernel for subj %d\n', subj);
     tic
-    ker = load_kernel(subj, what);
+    ker = load_HRR_kernel(subj, what);
+    null_ker = load_null_kernel(EXPT, subj); % GLM 1 game id features
     toc
 
     % whiten, filter & project out nuisance regressors
     Y = R*K*W*Y;
     ker = R*K*W*ker*W'*K'*R';
+    null_ker = R*K*W*null_ker*W'*K'*R'; % TODO technically, this should project out the null kernel! b/c game identity features were already part of GLM 1
 
+    % get partitions from RSA 3
+    rsa = vgdl_create_rsa(3, subj);
+    partition_id = rsa.model(1).partitions;
+    assert(size(partition_id, 1) == size(Y, 1));
+    n_partitions = max(partition_id);
 
 
     %{
@@ -102,6 +108,7 @@ function fit_gp(subj, use_smooth, glmodel, mask, what, debug)
     % grid search sigmas
     sigmas = logspace(-3, 4, 20);
 
+    %{
     % precompute (K + sigma^2 I) ^ (-1) for every sigma
     %
     for j = 1:length(sigmas)
@@ -128,15 +135,47 @@ function fit_gp(subj, use_smooth, glmodel, mask, what, debug)
         %assert(immse(invKi{j}, invKi_gp) < 1e-15); % those are different! what matters is if the log likelihoods below match
 
         toc
+
+        disp('    ... for CV');
+        tic
+
+        %
+        % CV TODO dedupe
+        %
+        for p = 1:n_partitions % for each partition
+            train = partition_id ~= p;
+            n_CV = sum(train);
+
+            % from infLikGauss.m
+            sn2_CV(p,j) = exp(2*hyp.lik); W_CV = ones(n_CV,1)/sn2_CV(p,j);            % noise variance of likGauss
+            K_gp_CV{p,j} = apx(hyp,covfun,x(train),[]);                        % set up covariance approximation
+            [ldB2_CV(p,j),solveKiW_CV{p,j},~,~,~] = K_gp_CV{p,j}.fun(W_CV); % obtain functionality depending on W
+
+            % compute inverse the standard way
+            I_CV = eye(n_CV);
+            invKi_CV{p,j} = (ker(train, train) + s^2 * I_CV)^(-1);
+        end
+
+        toc
     end
+
+    %}
 
     fprintf('solving GP for subj %d, %d voxels\n', subj, size(Y,2));
     tic
 
-    sigma = nan(1, size(Y,2));
-    loglik = nan(1, size(Y,2));
-    R2 = nan(1, size(Y,2));
-    adjR2 = nan(1, size(Y,2));
+    sigma = nan(1, size(Y,2)); % fitted noise std's
+    loglik = nan(1, size(Y,2)); % marginal log likelihoods
+    R2 = nan(1, size(Y,2)); % R^2
+    adjR2 = nan(1, size(Y,2)); % adjusted R^2
+    r = nan(1, size(Y,2)); % Pearson correlation
+
+    % same but cross-validated
+    sigma_CV = nan(n_partitions, size(Y,2));
+    loglik_CV = nan(n_partitions, size(Y,2)); % PREDICTIVE log likelihood!
+    R2_CV = nan(n_partitions, size(Y,2));
+    adjR2_CV = nan(n_partitions, size(Y,2));
+    r_CV = nan(n_partitions, size(Y,2));
 
     % GP
     % for each voxel
@@ -180,27 +219,14 @@ function fit_gp(subj, use_smooth, glmodel, mask, what, debug)
         % pick best sigma
         [~,j] = min(nlz);
         sigma(i) = sigmas(j);
-        loglik(i) = -nlz(j);
+        loglik(i) = -nlz(j); % marginal log lik
 
-        if debug
-            % make sure at least sigmas are the same
-            [~,j1] = min(nlz_gp);
-            assert(j == j1);
-        end
-
-        % posterior predictive on observed dataset (Eq. 2.22 in Rasmussen)
-        % TODO use CV; a bit overfit b/c of sigma / other hyperparams
-        % TODO also v slow... much slower than nlz computation
+        % posterior predictive on observed dataset (Eq. 2.23 in Rasmussen)
+        % btw v slow... much slower than nlz computation
         y_hat = ker * invKi{j} * y;
 
-        % calculate R^2 https://en.wikipedia.org/wiki/Coefficient_of_determination
-        SStot = sum((y - mean(y)).^2); 
-        assert(immse(SStot, var(y) * (length(y) - 1)) < 1e-15);
-        SSres = sum((y - y_hat).^2);
-        p = 1; % # of free parameters (sigma)
-
-        R2(i) = 1 - SSres/SStot;
-        adjR2(i) = 1 - (1 - R2(i)) * (n - 1) / (n - p - 1);
+        [R2(i), adjR2(i)] = calc_R2(y, y_hat, 1);
+        r(i) = corr(y_hat, y);
 
         if debug
             hyp.lik = log(sigma(i));
@@ -216,10 +242,75 @@ function fit_gp(subj, use_smooth, glmodel, mask, what, debug)
             %legend({'y', 'y_hat', 'y_hat_gp'}, 'interpreter', 'none');
         end
 
+        %
+        % same thing but cross-validated TODO dedupe
+        %
+
+        y_hat_CV = nan(size(y));
+        for p = 1:n_partitions % for each partition
+            train = partition_id ~= p;
+            test = partition_id == p;
+
+            n_CV = sum(train);
+
+            % for each sigma, compute marginal likelihood = loglik = -NLZ
+            %
+            for j = 1:length(sigmas)
+                s = sigmas(j);
+                    
+                % from infGaussLik
+                nlz_CV(p,j) = y(train)'*invKi_CV{p,j}*y(train)/2 + ldB2_CV(p,j) + n_CV*log(2*pi*sn2_CV(p,j))/2;    % -log marginal likelihood TODO there is no sn2 term in Eq 2.30 in the Rasmussen book?
+
+                if debug
+                    % sanity checks
+                    hyp.lik = log(s);
+
+                    % GP log lik
+                    nlz_gp_CV(p,j) = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x(train), y(train));
+
+                    % from infGaussLik
+                    alpha_CV = solveKiW_CV{p,j}(y(train));
+                    nlz_gp2_CV = y(train)'*alpha_CV/2 + ldB2_CV(p,j) + n_CV*log(2*pi*sn2_CV(p,j))/2;    % -log marginal likelihood
+
+                    assert(immse(nlz_gp_CV(p,j), nlz_gp2_CV) < 1e-3);
+                    assert(immse(nlz_gp_CV(p,j), nlz_CV(p,j)) < 1e-3);
+                end
+            end
+
+            % pick best sigma
+            [~,j] = min(nlz_CV(p,:));
+            sigma_CV(p,i) = sigmas(j);
+
+            % compute predictive log lik (notice difference -- before it was marginal!)
+            % TODO why are they all identical?
+            [~,~,~,~,lp] = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x(train), y(train), x(test), y(test));
+            loglik_CV(p,i) = sum(lp);
+
+            % posterior predictive on observed dataset (Eq. 2.23 in Rasmussen)
+            y_hat_CV(test) = ker(test, train) * invKi_CV{p,j} * y(train);
+
+            [R2_CV(p,i), adjR2_CV(p,i)] = calc_R2(y(test), y_hat(test), 1);
+            r_CV(p,i) = corr(y_hat(test), y(test));
+
+            if debug
+                hyp.lik = log(sigma_CV(p,i));
+                y_hat_gp_CV = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x(train), y(train), x(test));
+
+                assert(immse(y_hat_CV(test), y_hat_gp_CV) < 1e-10);
+            end
+        end
+
+        %figure;
+        %hold on;
+        %plot(y);
+        %plot(y_hat_CV);
+        %legend({'y', 'y_hat_CV'}, 'interpreter', 'none');
+
     end
 
     toc
 
+    %{
     filename
     clear invKi
     clear invKi_gp
@@ -234,15 +325,48 @@ function fit_gp(subj, use_smooth, glmodel, mask, what, debug)
     clear post
     clear Y
     save(filename, '-v7.3');
+    %}
 
     disp('Done');
 
+%end
+
+
+
+
+% load game identity kernel based on GLM 1
+%
+function [ker] = load_null_kernel(EXPT, subj_id)
+    feature_glm = 1;
+
+    modeldir = fullfile(EXPT.modeldir,['model',num2str(feature_glm)],['subj',num2str(subj_id)]);
+    load(fullfile(modeldir,'SPM.mat'));
+
+    game_names = {'vgfmri3_chase','vgfmri3_helper','vgfmri3_bait','vgfmri3_lemmings','vgfmri3_plaqueAttack','vgfmri3_zelda'};
+
+    % use convolved game boxcars from GLM 1
+    % that will take HRF into account and even the slight overlap between games
+    features = [];
+    for g = 1:length(game_names)
+        which = contains(SPM.xX.name, game_names(g));
+        assert(sum(which) == 3);
+        feature = sum(SPM.xX.X(:,which), 2); % merge game boxcars from different runs
+        features(:,g) = feature;
+    end
+
+    % see gen_subject_kernels() in HRR.py
+
+    sigma_w = 1; % TODO fit; matching with sigma_w in HRR.py
+
+    Sigma_w = eye(size(features,2)) * sigma_w; % Sigma_p in Rasmussen, Eq. 2.4
+
+    ker = features * Sigma_w * features'; % K in Rasmussen, Eq. 2.12
 end
 
 
-
-
-function [ker] = load_kernel(subj_id, what)
+% load HRR kernel
+%
+function [ker] = load_HRR_kernel(subj_id, what)
     filename = sprintf('mat/HRR_subject_kernel_subj=%d_K=10_N=10_E=0.050_nsamples=10_sigma_w=1.000_norm=1.mat', subj_id);
     load(filename, 'theory_kernel', 'sprite_kernel', 'interaction_kernel', 'termination_kernel');
 
@@ -296,4 +420,21 @@ function [Y, K, W, R] = load_BOLD(EXPT, glmodel, subj_id, mask, Vmask)
     assert(immse(K*W*X, KWX) < 1e-15);
     assert(immse(K*W*Y, KWY) < 1e-15);
     assert(immse(R, eye(size(X,1)) - SPM.xX.xKXs.u*SPM.xX.xKXs.u') < 1e-15);
+end
+
+
+
+function [R2, adjR2] = calc_R2(y, y_hat, p)
+    % calculate R^2 https://en.wikipedia.org/wiki/Coefficient_of_determination
+    %
+    % p = # of free parameters (e.g. sigma)
+    %
+    n = length(y);
+
+    SStot = sum((y - mean(y)).^2); 
+    assert(immse(SStot, var(y) * (n - 1)) < 1e-15);
+    SSres = sum((y - y_hat).^2);
+
+    R2 = 1 - SSres/SStot;
+    adjR2 = 1 - (1 - R2) * (n - 1) / (n - p - 1);
 end

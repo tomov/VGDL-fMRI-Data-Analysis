@@ -159,8 +159,8 @@ function [rsa, game_names_ordered] = vgdl_create_rsa(rsa_idx, subj_id, seed)
             % use convolved game boxcars from GLM 1
             % that will take HRF into account and even the slight overlap between games
             features = [];
-            for g = 1:length(game_names)
-                which = contains(SPM.xX.name, game_names(g));
+            for g = 1:length(game_names_ordered)
+                which = contains(SPM.xX.name, game_names_ordered(g));
                 assert(sum(which) == 3);
                 feature = sum(SPM.xX.xKXs.X(:,which), 2); % merge game boxcars from different runs
                 features(:,g) = feature;
