@@ -31,6 +31,7 @@
     addpath(genpath('/ncf/gershman/Lab/scripts/gpml'));
 
 
+    %{
     fprintf('loading BOLD for subj %d\n', subj);
     tic
     [Y, K, W, R] = load_BOLD(EXPT, glmodel, subj, mask, Vmask);
@@ -52,6 +53,7 @@
     partition_id = rsa.model(1).partitions;
     assert(size(partition_id, 1) == size(Y, 1));
     n_partitions = max(partition_id);
+    %}
 
 
     %{
@@ -144,16 +146,16 @@
         %
         for p = 1:n_partitions % for each partition
             train = partition_id ~= p;
-            n_CV = sum(train);
+            n = sum(train);
 
             % from infLikGauss.m
-            sn2_CV(p,j) = exp(2*hyp.lik); W_CV = ones(n_CV,1)/sn2_CV(p,j);            % noise variance of likGauss
+            sn2_CV(p,j) = exp(2*hyp.lik); W = ones(n,1)/sn2_CV(p,j);            % noise variance of likGauss
             K_gp_CV{p,j} = apx(hyp,covfun,x(train),[]);                        % set up covariance approximation
-            [ldB2_CV(p,j),solveKiW_CV{p,j},~,~,~] = K_gp_CV{p,j}.fun(W_CV); % obtain functionality depending on W
+            [ldB2_CV(p,j),solveKiW_CV{p,j},~,~,~] = K_gp_CV{p,j}.fun(W); % obtain functionality depending on W
 
             % compute inverse the standard way
-            I_CV = eye(n_CV);
-            invKi_CV{p,j} = (ker(train, train) + s^2 * I_CV)^(-1);
+            I = eye(n);
+            invKi_CV{p,j} = (ker(train, train) + s^2 * I)^(-1);
         end
 
         toc
@@ -165,14 +167,16 @@
     tic
 
     sigma = nan(1, size(Y,2)); % fitted noise std's
-    loglik = nan(1, size(Y,2)); % marginal log likelihoods
+    margloglik = nan(1, size(Y,2)); % marginal log likelihoods
+    predloglik = nan(1, size(Y,2)); % predictive log likelihoods
     R2 = nan(1, size(Y,2)); % R^2
     adjR2 = nan(1, size(Y,2)); % adjusted R^2
     r = nan(1, size(Y,2)); % Pearson correlation
 
     % same but cross-validated
     sigma_CV = nan(n_partitions, size(Y,2));
-    loglik_CV = nan(n_partitions, size(Y,2)); % PREDICTIVE log likelihood!
+    margloglik_CV = nan(n_partitions, size(Y,2));
+    predloglik_CV = nan(n_partitions, size(Y,2));
     R2_CV = nan(n_partitions, size(Y,2));
     adjR2_CV = nan(n_partitions, size(Y,2));
     r_CV = nan(n_partitions, size(Y,2));
@@ -192,119 +196,42 @@
 
         y = Y(:,i);
 
-        % for each sigma, compute marginal likelihood = loglik = -NLZ
+        % no CV; use marginal likelihood for model comparison
         %
-        for j = 1:length(sigmas)
-            s = sigmas(j);
-                
-            % from infGaussLik
-            nlz(j) = y'*invKi{j}*y/2 + ldB2(j) + n*log(2*pi*sn2(j))/2;    % -log marginal likelihood TODO there is no sn2 term in Eq 2.30 in the Rasmussen book?
+        train = partition_id > 0; % all trials
+        test = train;
 
-            if debug
-                % sanity checks
-                hyp.lik = log(s);
+        [sigma(i), ...
+         margloglik(i), ...
+         predloglik(i), ...
+         y_hat, ...
+         R2(i), ...
+         adjR2(i), ...
+         r(i)] = fit_gp_helper(x, y, train, test, ker, hyp, meanfun, covfun, likfun, sigmas, invKi, ldB2, sn2, solveKiW, debug);
 
-                % GP log lik
-                nlz_gp(j) = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x, y);
 
-                % from infGaussLik
-                alpha = solveKiW{j}(y);
-                nlz_gp2 = y'*alpha/2 + ldB2(j) + n*log(2*pi*sn2(j))/2;    % -log marginal likelihood
-
-                assert(immse(nlz_gp(j), nlz_gp2) < 1e-3);
-                assert(immse(nlz_gp(j), nlz(j)) < 1e-3);
-            end
-        end
-
-        % pick best sigma
-        [~,j] = min(nlz);
-        sigma(i) = sigmas(j);
-        loglik(i) = -nlz(j); % marginal log lik
-
-        % posterior predictive on observed dataset (Eq. 2.23 in Rasmussen)
-        % btw v slow... much slower than nlz computation
-        y_hat = ker * invKi{j} * y;
-
-        [R2(i), adjR2(i)] = calc_R2(y, y_hat, 1);
-        r(i) = corr(y_hat, y);
-
-        if debug
-            hyp.lik = log(sigma(i));
-            y_hat_gp = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x, y, x);
-
-            assert(immse(y_hat, y_hat_gp) < 1e-10);
-
-            %figure;
-            %hold on;
-            %plot(y);
-            %plot(y_hat);
-            %plot(y_hat_gp);
-            %legend({'y', 'y_hat', 'y_hat_gp'}, 'interpreter', 'none');
-        end
-
+        % CV; use predictive likelihood for model comparison
         %
-        % same thing but cross-validated TODO dedupe
-        %
-
         y_hat_CV = nan(size(y));
         for p = 1:n_partitions % for each partition
             train = partition_id ~= p;
             test = partition_id == p;
 
-            n_CV = sum(train);
+            [sigma_CV(p,i), ...
+             margloglik_CV(p,i), ...
+             predloglik_CV(p,i), ...
+             y_hat_CV(test), ...
+             R2_CV(p,i), ...
+             adjR2_CV(p,i), ...
+             r_CV(p,i)] = fit_gp_helper(x, y, train, test, ker, hyp, meanfun, covfun, likfun, sigmas, invKi_CV(p,:), ldB2_CV(p,:), sn2_CV(p,:), solveKiW_CV(p,:), debug);
 
-            % for each sigma, compute marginal likelihood = loglik = -NLZ
-            %
-            for j = 1:length(sigmas)
-                s = sigmas(j);
-                    
-                % from infGaussLik
-                nlz_CV(p,j) = y(train)'*invKi_CV{p,j}*y(train)/2 + ldB2_CV(p,j) + n_CV*log(2*pi*sn2_CV(p,j))/2;    % -log marginal likelihood TODO there is no sn2 term in Eq 2.30 in the Rasmussen book?
-
-                if debug
-                    % sanity checks
-                    hyp.lik = log(s);
-
-                    % GP log lik
-                    nlz_gp_CV(p,j) = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x(train), y(train));
-
-                    % from infGaussLik
-                    alpha_CV = solveKiW_CV{p,j}(y(train));
-                    nlz_gp2_CV = y(train)'*alpha_CV/2 + ldB2_CV(p,j) + n_CV*log(2*pi*sn2_CV(p,j))/2;    % -log marginal likelihood
-
-                    assert(immse(nlz_gp_CV(p,j), nlz_gp2_CV) < 1e-3);
-                    assert(immse(nlz_gp_CV(p,j), nlz_CV(p,j)) < 1e-3);
-                end
-            end
-
-            % pick best sigma
-            [~,j] = min(nlz_CV(p,:));
-            sigma_CV(p,i) = sigmas(j);
-
-            % compute predictive log lik (notice difference -- before it was marginal!)
-            % TODO why are they all identical?
-            [~,~,~,~,lp] = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x(train), y(train), x(test), y(test));
-            loglik_CV(p,i) = sum(lp);
-
-            % posterior predictive on observed dataset (Eq. 2.23 in Rasmussen)
-            y_hat_CV(test) = ker(test, train) * invKi_CV{p,j} * y(train);
-
-            [R2_CV(p,i), adjR2_CV(p,i)] = calc_R2(y(test), y_hat(test), 1);
-            r_CV(p,i) = corr(y_hat(test), y(test));
-
-            if debug
-                hyp.lik = log(sigma_CV(p,i));
-                y_hat_gp_CV = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x(train), y(train), x(test));
-
-                assert(immse(y_hat_CV(test), y_hat_gp_CV) < 1e-10);
-            end
         end
 
         %figure;
         %hold on;
         %plot(y);
-        %plot(y_hat_CV);
-        %legend({'y', 'y_hat_CV'}, 'interpreter', 'none');
+        %plot(y_hat);
+        %legend({'y', 'y_hat'}, 'interpreter', 'none');
 
     end
 
@@ -332,6 +259,130 @@
 %end
 
 
+
+%function [sn2, K_gp, 
+
+
+
+
+function [sigma, margloglik, predloglik, y_hat, R2, adjR2, r] = fit_gp_helper(x, y, train, test, ker, hyp, meanfun, covfun, likfun, sigmas, invKi, ldB2, sn2, solveKiW, debug)
+
+    n = sum(train);
+
+    % for each sigma, compute marginal likelihood = loglik = -NLZ
+    %
+    for j = 1:length(sigmas)
+        s = sigmas(j);
+            
+        % from infGaussLik
+        nlz(j) = y(train)'*invKi{j}*y(train)/2 + ldB2(j) + n*log(2*pi*sn2(j))/2;    % -log marginal likelihood TODO there is no sn2 term in Eq 2.30 in the Rasmussen book?
+
+        if debug
+            % sanity checks
+            hyp.lik = log(s);
+
+            % GP log lik
+            nlz_gp(j) = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x(train), y(train));
+
+            % from infGaussLik
+            alpha = solveKiW{j}(y(train));
+            nlz_gp2 = y(train)'*alpha/2 + ldB2(j) + n*log(2*pi*sn2(j))/2;    % -log marginal likelihood
+
+            assert(immse(nlz_gp(j), nlz_gp2) < 1e-2);
+            assert(immse(nlz_gp(j), nlz(j)) < 1e-2);
+        end
+    end
+
+    % pick best sigma
+    [~,j] = min(nlz);
+    sigma = sigmas(j);
+    margloglik = -nlz(j); % marginal log lik
+
+    % compute predictive log lik
+    % TODO why are they all identical?
+    [~,~,~,~,lp] = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x(train), y(train), x(test), y(test));
+    predloglik = sum(lp);
+
+    % posterior predictive on observed dataset (Eq. 2.23 in Rasmussen)
+    y_hat = ker(test, train) * invKi{j} * y(train);
+
+    [R2, adjR2] = calc_R2(y(test), y_hat, 1);
+    r = corr(y_hat, y(test));
+
+    if debug
+        hyp.lik = log(sigma);
+        y_hat_gp = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x(train), y(train), x(test));
+
+        assert(immse(y_hat, y_hat_gp) < 1e-10);
+
+        %figure;
+        %hold on;
+        %plot(y);
+        %plot(y_hat);
+        %plot(y_hat_gp);
+        %legend({'y', 'y_hat', 'y_hat_gp'}, 'interpreter', 'none');
+    end
+
+            %{
+    % for each sigma, compute marginal likelihood = loglik = -NLZ
+    %
+    for j = 1:length(sigmas)
+        s = sigmas(j);
+            
+        % from infGaussLik
+        nlz(j) = y_train'*invKi{j}*y_train/2 + ldB2(j) + n*log(2*pi*sn2(j))/2;    % -log marginal likelihood TODO there is no sn2 term in Eq 2.30 in the Rasmussen book?
+
+        if debug
+            % sanity checks
+            hyp.lik = log(s);
+
+            % GP log lik
+            nlz_gp(j) = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x_train, y_train);
+
+            % from infGaussLik
+            alpha = solveKiW{j}(y);
+            nlz_gp2 = y'*alpha/2 + ldB2(j) + n*log(2*pi*sn2(j))/2;    % -log marginal likelihood
+
+            assert(immse(nlz_gp(j), nlz_gp2) < 1e-3);
+            assert(immse(nlz_gp(j), nlz(j)) < 1e-3);
+        end
+    end
+
+    % pick best sigma
+    [~,j] = min(nlz);
+    sigma = sigmas(j);
+    margloglik = -nlz(j); % marginal log lik
+
+    % compute predictive log lik
+    % TODO redundant
+    [~,~,~,~,lp] = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x_train, y_train, x_test, y_test);
+    predloglik = sum(lp);
+
+
+    % posterior predictive on observed dataset (Eq. 2.23 in Rasmussen)
+    % btw v slow... much slower than nlz computation
+    y_hat = ker * invKi{j} * y;
+
+    [R2, adjR2] = calc_R2(y, y_hat, 1);
+    r = corr(y_hat, y);
+
+    if debug
+        hyp.lik = log(sigma);
+        y_hat_gp = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x, y, x);
+
+        assert(immse(y_hat, y_hat_gp) < 1e-10);
+
+        %figure;
+        %hold on;
+        %plot(y);
+        %plot(y_hat);
+        %plot(y_hat_gp);
+        %legend({'y', 'y_hat', 'y_hat_gp'}, 'interpreter', 'none');
+    end
+
+    %}
+
+end
 
 
 % load game identity kernel based on GLM 1
