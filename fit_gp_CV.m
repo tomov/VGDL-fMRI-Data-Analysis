@@ -5,9 +5,10 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
     use_smooth = true;
     glmodel = 21;
     %mask = 'masks/ROI_x=48_y=12_z=32_62voxels_Sphere6.nii';
-    mask = 'masks/ROI_x=48_y=12_z=32_1voxels_Sphere1.nii';
+    %mask = 'masks/ROI_x=48_y=12_z=32_1voxels_Sphere1.nii';
+    mask = 'masks/mask_batchsize=1000_batch=2.nii';
     what = 'theory';
-    debug = true;
+    debug = false;
     %}
 
     if use_smooth
@@ -24,7 +25,7 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
 
 
     [~,maskname,~] = fileparts(mask);
-    filename = sprintf('mat/fit_gp_HRR_subj=%d_us=%d_glm=%d_mask=%s_%s.mat', subj, use_smooth, glmodel, maskname, what);
+    filename = sprintf('mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_%s.mat', subj, use_smooth, glmodel, maskname, what);
     filename
 
     % load mask
@@ -319,8 +320,14 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
 
     toc
 
+    monitor_memory_whos
+
     filename
+    %{
+    clear invKi_CV
+    clear null_invKi_CV
     clear invKi
+    clear null_invKi
     clear invKi_gp
     clear I
     clear K
@@ -328,11 +335,21 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
     clear L
     clear R
     clear hyp
+    clear null_hyp
     clear covhyp
     clear ker
+    clear null_ker
     clear post
     clear Y
-    save(filename, '-v7.3');
+    %}
+    save(filename, 'sigma', 'margloglik', 'predloglik', 'R2', 'adjR2', 'r', ... 
+                   'sigma_CV', 'margloglik_CV', 'predloglik_CV', 'R2_CV', 'adjR2_CV', 'r_CV', ...
+                   'null_sigma', 'null_margloglik', 'null_predloglik', 'null_R2', 'null_adjR2', 'null_r', ...
+                   'null_sigma_CV', 'null_margloglik_CV', 'null_predloglik_CV', 'null_R2_CV', 'null_adjR2_CV', 'null_r_CV', ...
+                   'ceil_sigma', 'ceil_margloglik', 'ceil_predloglik', 'ceil_R2', 'ceil_adjR2', 'ceil_r', ...
+                   'ceil_sigma_CV', 'ceil_margloglik_CV', 'ceil_predloglik_CV', 'ceil_R2_CV', 'ceil_adjR2_CV', 'ceil_r_CV', ...
+                   'subj', 'use_smooth', 'glmodel', 'mask', 'what', ...
+    '-v7.3');
 
     disp('Done');
 
@@ -424,7 +441,7 @@ function [sigma, margloglik, predloglik, y_hat, R2, adjR2, r] = fit_gp_helper(x,
     margloglik = -nlz(j); % marginal log lik
 
     % compute predictive log lik
-    % TODO why are they all identical?
+    hyp.lik = log(sigma);
     [~,~,~,~,lp] = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x(train), y(train), x(test), y(test));
     predloglik = sum(lp);
 
