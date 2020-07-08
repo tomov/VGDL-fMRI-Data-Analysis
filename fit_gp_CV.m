@@ -1,5 +1,6 @@
-%function fit_gp(subj, use_smooth, glmodel, mask, what, debug)
+function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
 
+%{
     subj = 1;
     use_smooth = true;
     glmodel = 21;
@@ -7,6 +8,7 @@
     mask = 'masks/ROI_x=48_y=12_z=32_1voxels_Sphere1.nii';
     what = 'theory';
     debug = true;
+    %}
 
     if use_smooth
         EXPT = vgdl_expt();
@@ -121,7 +123,6 @@
     % grid search sigmas
     sigmas = logspace(-3, 4, 20);
 
-    %{
     % precompute (K + sigma^2 I) ^ (-1) for every sigma
     %
     for j = 1:length(sigmas)
@@ -164,8 +165,6 @@
 
         toc
     end
-
-    %}
 
 
 
@@ -256,6 +255,7 @@
          null_adjR2(i), ...
          null_r(i)] = fit_gp_helper(x, y, train, test, null_ker, null_hyp, null_meanfun, null_covfun, null_likfun, sigmas, null_invKi, null_ldB2, null_sn2, null_solveKiW, debug);
 
+         %{
         % fit noise ceiling model
         [ceil_sigma(i), ...
          ceil_margloglik(i), ...
@@ -265,6 +265,7 @@
          ceil_adjR2(i), ...
          ceil_r(i), ...
          ceil_hyp] = minimize_gp_helper(ceil_x, y, train, test, ceil_hyp, ceil_meanfun, ceil_covfun, ceil_likfun);
+         %}
 
         % CV; use predictive likelihood for model comparison
         %
@@ -308,18 +309,16 @@
         %plot(y_hat);
         %legend({'y', 'y_hat'}, 'interpreter', 'none');
 
-        figure;
-        hold on;
-        plot(y);
-        plot(ceil_y_hat);
-        plot(ceil_y_hat_CV);
-        legend({'y', 'ceil_y_hat', 'ceil_y_hat_CV'}, 'interpreter', 'none');
+        %figure;
+        %hold on;
+        %plot(y);
+        %plot(ceil_y_hat_CV);
+        %legend({'y', 'ceil_y_hat', 'ceil_y_hat_CV'}, 'interpreter', 'none');
 
     end
 
     toc
 
-    %{
     filename
     clear invKi
     clear invKi_gp
@@ -334,11 +333,10 @@
     clear post
     clear Y
     save(filename, '-v7.3');
-    %}
 
     disp('Done');
 
-%end
+end
 
 
 
@@ -378,7 +376,7 @@ function [sigma, margloglik, predloglik, y_hat, R2, adjR2, r, ceil_hyp] = minimi
         p = p + numel(ceil_hyp.mean);
     end
 
-    [R2, adjR2] = calc_R2(y_hat, y(test), p);
+    [R2, adjR2] = calc_R2(y(test), y_hat, p);
     r = corr(y_hat, y(test));
 end
 
