@@ -1,7 +1,8 @@
 mkdir output
 
 #subjects=( 1 2 3 4 5 6 7 8 )  #  e.g. subjects=( 1 2 5 6 7 10 )
-subjects=( 1 )  #  e.g. subjects=( 1 2 5 6 7 10 )
+subjects=( 1 2 3 4 5 6 7 8 )  #  e.g. subjects=( 1 2 5 6 7 10 )
+#subjects=( 1 )  #  e.g. subjects=( 1 2 5 6 7 10 )
 subj_arg="${subjects[@]}" # stringify it
 
 what="theory"

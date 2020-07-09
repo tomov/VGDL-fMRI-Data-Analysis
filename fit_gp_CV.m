@@ -5,10 +5,11 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
     use_smooth = true;
     glmodel = 21;
     %mask = 'masks/ROI_x=48_y=12_z=32_62voxels_Sphere6.nii';
-    mask = 'masks/ROI_x=48_y=12_z=32_1voxels_Sphere1.nii';
+    %mask = 'masks/ROI_x=48_y=12_z=32_1voxels_Sphere1.nii';
     %mask = 'masks/mask_batchsize=1000_batch=2.nii';
+    mask = 'masks/mask.nii';
     what = 'theory';
-    debug = true;
+    debug = false;
     %}
 
     if use_smooth
@@ -18,7 +19,7 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
     end
 
     if ~exist('debug', 'var')
-        debug = true;
+        debug = false;
     end
 
     assert(ismember(what, {'theory', 'sprite', 'interaction', 'termination'}));
@@ -61,25 +62,6 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
     % find nearest symmetric positive definite matrix (it's not b/c of numerical issues, floating points, etc.)
     ker = nearestSPD(ker);
     null_ker = nearestSPD(null_ker);
-
-
-    %{
-    % for sanity checks
-    rng(334);
-
-    sigma = 0.01;
-    tau = 3;
-    X = [ones(50,1) rand(50,3)];
-    b = [0; normrnd(0, tau, 3, 1)];
-    e = normrnd(0, sigma, size(X,1), 1);
-    y = X * b + e;
-    Sigma_p = tau.^2 * eye(size(X,2));
-
-    Y = [y y y];
-    ker = X * Sigma_p * X';
-    %}
-
-
 
 
     %
@@ -182,6 +164,7 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
 
 
 
+
     fprintf('solving GP for subj %d, %d voxels\n', subj, size(Y,2));
     tic
 
@@ -248,8 +231,6 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
     % for each voxel
     %
     for i = 1:size(Y, 2)
-        %fprintf('solving GP for subj %d, voxel %d\n', subj, i);
-        %tic
 
         if mod(i,1000) == 0
             i
@@ -565,7 +546,7 @@ end
 % load HRR kernel
 %
 function [ker] = load_HRR_kernel(subj_id, what)
-    filename = sprintf('mat/HRR_subject_kernel_subj=%d_K=10_N=10_E=0.050_nsamples=10_sigma_w=1.000_norm=1.mat', subj_id);
+    filename = sprintf('mat/HRR_subject_kernel_subj=%d_K=10_N=10_E=0.050_nsamples=100_sigma_w=1.000_norm=1.mat', subj_id);
     load(filename, 'theory_kernel', 'sprite_kernel', 'interaction_kernel', 'termination_kernel');
 
     ker = eval([what, '_kernel']);
