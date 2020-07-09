@@ -8,6 +8,7 @@ what="theory"
 mask="masks/mask.nii"
 glmodel=21
 use_smooth=true
+fast=false
 
 batchsize=10000
 
@@ -17,7 +18,7 @@ echo ---------------- >> jobs.txt
 head -n 1 gitlog.txt >> jobs.txt
 
 for subj in ${subjects[*]}; do
-    for batch in {1..2}
+    for batch in {2..23}
     do
         mask="masks/mask_batchsize=${batchsize}_batch=${batch}.nii"
         outfileprefix="output/fit_gp_CV_${subj}_${use_smooth}_${glmodel}_${what}_${batchsize}_${batch}"
@@ -26,7 +27,7 @@ for subj in ${subjects[*]}; do
 
         # send the job to NCF
         #
-        sbatch_output=`sbatch -p ncf --mem 10001 -t 4-12:20 -o ${outfileprefix}_%j.out -e ${outfileprefix}_%j.err --wrap="matlab -nodisplay -nosplash -nojvm -r $'fit_gp_CV(${subj}, ${use_smooth}, ${glmodel}, \'${mask}\', \'${what}\');exit'"`
+        sbatch_output=`sbatch -p ncf --mem 10001 -t 4-12:20 -o ${outfileprefix}_%j.out -e ${outfileprefix}_%j.err --wrap="matlab -nodisplay -nosplash -nojvm -r $'fit_gp_CV(${subj}, ${use_smooth}, ${glmodel}, \'${mask}\', \'${what}\', ${fast});exit'"`
         # for local testing
         #sbatch_output=`echo Submitted batch job 88725418`
         echo $sbatch_output

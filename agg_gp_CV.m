@@ -17,7 +17,7 @@ for s = 1:length(subjects)
 
     %filename = sprintf('mat/fit_gp_HRR_subj=%d_us=%d_glm=21_mask=mask_%s.mat', subj_id, use_smooth, what);
     filename = sprintf('mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=21_mask=mask_%s.mat', subj_id, use_smooth, what);
-    load(filename, 'n', 'logmarglik', 'null_logmarglik', 'adjR2', 'R2_CV', 'null_adjR2', 'null_R2_CV', 'sigma', 'mask', 'r', 'null_r', 'r_CV', 'null_r_CV', 'mask');
+    load(filename, 'n', 'logmarglik', 'null_logmarglik', 'adjR2', 'R2_CV', 'null_adjR2', 'null_R2_CV', 'sigma', 'mask', 'r', 'null_r', 'r_CV', 'null_r_CV', 'mask', 'MSE', 'null_MSE', 'SMSE', 'null_SMSE', 'MSE_CV', 'SMSE_CV', 'null_MSE_CV', 'null_SMSE_CV');
 
     % calc stuff
     k = 1; % 1 param = sigma
@@ -27,7 +27,15 @@ for s = 1:length(subjects)
 
     if s == 1
         logBF = nan(length(subjects), size(r,2));
+
         rs = nan(length(subjects), size(r,2));
+        null_rs = nan(length(subjects), size(r,2));
+
+        MSEs = nan(length(subjects), size(r,2));
+        SMSEs = nan(length(subjects), size(r,2));
+        null_MSEs = nan(length(subjects), size(r,2));
+        null_SMSEs = nan(length(subjects), size(r,2));
+
         log_group_marglik = nan(1, size(r,2));
         null_log_group_marglik = nan(1, size(r,2));
     end
@@ -37,6 +45,12 @@ for s = 1:length(subjects)
 
     % log Bayes factor
     logBF(s,:) = logmarglik - null_logmarglik;
+
+    % MSEs
+    MSEs(s,:) = mean(MSE_CV, 1);
+    SMSEs(s,:) = mean(SMSE_CV, 1);
+    null_MSEs(s,:) = mean(null_MSE_CV, 1);
+    null_SMSEs(s,:) = mean(null_SMSE_CV, 1);
 
     % CV Pearson r's across subjects
     rs(s,:) = mean(r_CV, 1);
@@ -50,9 +64,17 @@ end
 % group log BF = sum of log BF across subjects (Stephan et al. 2009)
 logGBF = sum(logBF,1);
 
-% t-test across subjects
+% t-test Pearson corr across subjects
 [h,p,ci,stats] = ttest(zs, null_zs);
 ts = stats.tstat;
+
+% t-test MSEs across subjects 
+ps = nan(size(ts));
+Ws = nan(size(ts));
+for j = 1:size(MSEs,2)
+    [h,ps(j),stat] = signrank(MSEs(:,j), null_MSEs(:,j));
+    Ws(j) = stat.signedrank;
+end
 
 % create SPMs
 %

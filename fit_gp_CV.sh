@@ -9,6 +9,7 @@ what="theory"
 mask="masks/mask.nii"
 glmodel=21
 use_smooth=true
+fast=true
 
 echo ---------------- >> jobs.txt
 echo --- $(date): Running fit_gp_CV for subjects ${subj_arg} in parallel >> jobs.txt
@@ -22,7 +23,7 @@ for subj in ${subjects[*]}; do
 
     # send the job to NCF
     #
-    sbatch_output=`sbatch -p ncf --mem 30001 -t 1-12:20 -o ${outfileprefix}_%j.out -e ${outfileprefix}_%j.err --wrap="matlab -nodisplay -nosplash -nojvm -r $'fit_gp_CV(${subj}, ${use_smooth}, ${glmodel}, \'${mask}\', \'${what}\');exit'"`
+    sbatch_output=`sbatch -p ncf --mem 30001 -t 1-12:20 -o ${outfileprefix}_%j.out -e ${outfileprefix}_%j.err --wrap="matlab -nodisplay -nosplash -nojvm -r $'fit_gp_CV(${subj}, ${use_smooth}, ${glmodel}, \'${mask}\', \'${what}\', ${fast});exit'"`
     # for local testing
     #sbatch_output=`echo Submitted batch job 88725418`
     echo $sbatch_output
