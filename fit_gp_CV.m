@@ -5,10 +5,10 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
     use_smooth = true;
     glmodel = 21;
     %mask = 'masks/ROI_x=48_y=12_z=32_62voxels_Sphere6.nii';
-    %mask = 'masks/ROI_x=48_y=12_z=32_1voxels_Sphere1.nii';
-    mask = 'masks/mask_batchsize=1000_batch=2.nii';
+    mask = 'masks/ROI_x=48_y=12_z=32_1voxels_Sphere1.nii';
+    %mask = 'masks/mask_batchsize=1000_batch=2.nii';
     what = 'theory';
-    debug = false;
+    debug = true;
     %}
 
     if use_smooth
@@ -18,7 +18,7 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
     end
 
     if ~exist('debug', 'var')
-        debug = false;
+        debug = true;
     end
 
     assert(ismember(what, {'theory', 'sprite', 'interaction', 'termination'}));
@@ -38,6 +38,8 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
     tic
     [Y, K, W, R, run_id] = load_BOLD(EXPT, glmodel, subj, mask, Vmask);
     toc
+
+    fprintf('Memory usage: %.3f MB\n', monitor_memory_whos);
 
     fprintf('loading kernel for subj %d\n', subj);
     tic
@@ -122,9 +124,11 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
     ceil_hyp = struct('cov', [0; 0], 'lik', log(0.1));
 
     % grid search sigmas
-    sigmas = logspace(-3, 4, 20);
+    %sigmas = logspace(-3, 4, 20);
+    sigmas = 1;
 
     % precompute (K + sigma^2 I) ^ (-1) for every sigma
+    % also K(X*,X) * (K(X,X) + sigma^2 I) ^ (-1)  (predictive Eq. 2.23)
     %
     for j = 1:length(sigmas)
         s = sigmas(j);
@@ -137,10 +141,14 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
          solveKiW{j}, ...
          invKi{j}] = calc_invKi(ker, x, s, hyp, covfun);
 
+        ker_invKi{j} = ker * invKi{j};
+
         [null_sn2(j), ...
          null_ldB2(j), ...
          null_solveKiW{j}, ...
          null_invKi{j}] = calc_invKi(null_ker, x, s, null_hyp, covfun);
+
+        null_ker_invKi{j} = null_ker * null_invKi{j};
 
         toc
 
@@ -152,16 +160,21 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
         %
         for p = 1:n_partitions % for each partition
             train = partition_id ~= p;
+            test = partition_id == p;
 
             [sn2_CV(p,j), ...
              ldB2_CV(p,j), ...
              solveKiW_CV{p,j}, ...
              invKi_CV{p,j}] = calc_invKi(ker(train, train), x(train), s, hyp, covfun);
 
+            ker_invKi_CV{p,j} = ker(test, train) * invKi_CV{p,j};
+
             [null_sn2_CV(p,j), ...
              null_ldB2_CV(p,j), ...
              null_solveKiW_CV{p,j}, ...
              null_invKi_CV{p,j}] = calc_invKi(null_ker(train, train), x(train), s, null_hyp, covfun);
+
+            null_ker_invKi_CV{p,j} = null_ker(test, train) * null_invKi_CV{p,j};
         end
 
         toc
@@ -173,51 +186,63 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
     tic
 
     sigma = nan(1, size(Y,2)); % fitted noise std's
-    margloglik = nan(1, size(Y,2)); % marginal log likelihoods
-    predloglik = nan(1, size(Y,2)); % predictive log likelihoods
+    logmarglik = nan(1, size(Y,2)); % marginal log likelihoods
+    logpredlik = nan(1, size(Y,2)); % predictive log likelihoods
     R2 = nan(1, size(Y,2)); % R^2
     adjR2 = nan(1, size(Y,2)); % adjusted R^2
     r = nan(1, size(Y,2)); % Pearson correlation
+    MSE = nan(1, size(Y,2)); % MSE
+    SMSE = nan(1, size(Y,2)); % SMSE
 
     % same but cross-validated
     sigma_CV = nan(n_partitions, size(Y,2));
-    margloglik_CV = nan(n_partitions, size(Y,2));
-    predloglik_CV = nan(n_partitions, size(Y,2));
+    logmarglik_CV = nan(n_partitions, size(Y,2));
+    logpredlik_CV = nan(n_partitions, size(Y,2));
     R2_CV = nan(n_partitions, size(Y,2));
     adjR2_CV = nan(n_partitions, size(Y,2));
     r_CV = nan(n_partitions, size(Y,2));
+    MSE_CV = nan(n_partitions, size(Y,2));
+    SMSE_CV = nan(n_partitions, size(Y,2));
 
     % same but null kernel
     null_sigma = nan(1, size(Y,2)); % fitted noise std's
-    null_margloglik = nan(1, size(Y,2)); % marginal log likelihoods
-    null_predloglik = nan(1, size(Y,2)); % predictive log likelihoods
+    null_logmarglik = nan(1, size(Y,2)); % marginal log likelihoods
+    null_logpredlik = nan(1, size(Y,2)); % predictive log likelihoods
     null_R2 = nan(1, size(Y,2)); % R^2
     null_adjR2 = nan(1, size(Y,2)); % adjusted R^2
     null_r = nan(1, size(Y,2)); % Pearson correlation
+    null_MSE = nan(1, size(Y,2)); % MSE 
+    null_SMSE = nan(1, size(Y,2)); % SMSE 
 
     % same but cross-validated
     null_sigma_CV = nan(n_partitions, size(Y,2));
-    null_margloglik_CV = nan(n_partitions, size(Y,2));
-    null_predloglik_CV = nan(n_partitions, size(Y,2));
+    null_logmarglik_CV = nan(n_partitions, size(Y,2));
+    null_logpredlik_CV = nan(n_partitions, size(Y,2));
     null_R2_CV = nan(n_partitions, size(Y,2));
     null_adjR2_CV = nan(n_partitions, size(Y,2));
     null_r_CV = nan(n_partitions, size(Y,2));
+    null_MSE_CV = nan(n_partitions, size(Y,2));
+    null_SMSE_CV = nan(n_partitions, size(Y,2));
 
     % same but noise ceiling kernel
     ceil_sigma = nan(1, size(Y,2)); % fitted noise std's
-    ceil_margloglik = nan(1, size(Y,2)); % marginal log likelihoods
-    ceil_predloglik = nan(1, size(Y,2)); % predictive log likelihoods
+    ceil_logmarglik = nan(1, size(Y,2)); % marginal log likelihoods
+    ceil_logpredlik = nan(1, size(Y,2)); % predictive log likelihoods
     ceil_R2 = nan(1, size(Y,2)); % R^2
     ceil_adjR2 = nan(1, size(Y,2)); % adjusted R^2
     ceil_r = nan(1, size(Y,2)); % Pearson correlation
+    ceil_MSE = nan(1, size(Y,2)); % MSE
+    ceil_SMSE = nan(1, size(Y,2)); % SMSE 
 
     % same but cross-validated
     ceil_sigma_CV = nan(n_partitions, size(Y,2));
-    ceil_margloglik_CV = nan(n_partitions, size(Y,2));
-    ceil_predloglik_CV = nan(n_partitions, size(Y,2));
+    ceil_logmarglik_CV = nan(n_partitions, size(Y,2));
+    ceil_logpredlik_CV = nan(n_partitions, size(Y,2));
     ceil_R2_CV = nan(n_partitions, size(Y,2));
     ceil_adjR2_CV = nan(n_partitions, size(Y,2));
     ceil_r_CV = nan(n_partitions, size(Y,2));
+    ceil_MSE_CV = nan(n_partitions, size(Y,2));
+    ceil_SMSE_CV = nan(n_partitions, size(Y,2));
 
     % GP
     % for each voxel
@@ -240,27 +265,31 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
         test = train; % test data = train data here
 
         [sigma(i), ...
-         margloglik(i), ...
-         predloglik(i), ...
+         logmarglik(i), ...
+         logpredlik(i), ...
          y_hat, ...
          R2(i), ...
          adjR2(i), ...
-         r(i)] = fit_gp_helper(x, y, train, test, ker, hyp, meanfun, covfun, likfun, sigmas, invKi, ldB2, sn2, solveKiW, debug);
+         r(i), ...
+         MSE(i), ...
+         SMSE(i)] = fit_gp_helper(x, y, train, test, ker, hyp, meanfun, covfun, likfun, sigmas, invKi, ldB2, sn2, solveKiW, ker_invKi, debug);
 
         % fit null model
         [null_sigma(i), ...
-         null_margloglik(i), ...
-         null_predloglik(i), ...
+         null_logmarglik(i), ...
+         null_logpredlik(i), ...
          null_y_hat, ...
          null_R2(i), ...
          null_adjR2(i), ...
-         null_r(i)] = fit_gp_helper(x, y, train, test, null_ker, null_hyp, null_meanfun, null_covfun, null_likfun, sigmas, null_invKi, null_ldB2, null_sn2, null_solveKiW, debug);
+         null_r(i), ...
+         null_MSE(i), ... 
+         null_SMSE(i)] = fit_gp_helper(x, y, train, test, null_ker, null_hyp, null_meanfun, null_covfun, null_likfun, sigmas, null_invKi, null_ldB2, null_sn2, null_solveKiW, null_ker_invKi, debug);
 
          %{
         % fit noise ceiling model
         [ceil_sigma(i), ...
-         ceil_margloglik(i), ...
-         ceil_predloglik(i), ...
+         ceil_logmarglik(i), ...
+         ceil_logpredlik(i), ...
          ceil_y_hat, ...
          ceil_R2(i), ...
          ceil_adjR2(i), ...
@@ -276,31 +305,37 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
             test = partition_id == p;
 
             [sigma_CV(p,i), ...
-             margloglik_CV(p,i), ...
-             predloglik_CV(p,i), ...
+             logmarglik_CV(p,i), ...
+             logpredlik_CV(p,i), ...
              y_hat_CV(test), ...
              R2_CV(p,i), ...
              adjR2_CV(p,i), ...
-             r_CV(p,i)] = fit_gp_helper(x, y, train, test, ker, hyp, meanfun, covfun, likfun, sigmas, invKi_CV(p,:), ldB2_CV(p,:), sn2_CV(p,:), solveKiW_CV(p,:), debug);
+             r_CV(p,i), ...
+             MSE_CV(p,i), ...
+             SMSE_CV(p,i)] = fit_gp_helper(x, y, train, test, ker, hyp, meanfun, covfun, likfun, sigmas, invKi_CV(p,:), ldB2_CV(p,:), sn2_CV(p,:), solveKiW_CV(p,:), ker_invKi_CV(p,:), debug);
 
             % null model
             [null_sigma_CV(p,i), ...
-             null_margloglik_CV(p,i), ...
-             null_predloglik_CV(p,i), ...
+             null_logmarglik_CV(p,i), ...
+             null_logpredlik_CV(p,i), ...
              null_y_hat_CV(test), ...
              null_R2_CV(p,i), ...
              null_adjR2_CV(p,i), ...
-             null_r_CV(p,i)] = fit_gp_helper(x, y, train, test, null_ker, null_hyp, null_meanfun, null_covfun, null_likfun, sigmas, null_invKi_CV(p,:), null_ldB2_CV(p,:), null_sn2_CV(p,:), null_solveKiW_CV(p,:), debug);
+             null_r_CV(p,i), ...
+             null_MSE_CV(p,i), ...
+             null_SMSE_CV(p,i)] = fit_gp_helper(x, y, train, test, null_ker, null_hyp, null_meanfun, null_covfun, null_likfun, sigmas, null_invKi_CV(p,:), null_ldB2_CV(p,:), null_sn2_CV(p,:), null_solveKiW_CV(p,:), null_ker_invKi_CV(p,:), debug);
 
             % noise ceiling model
+            %{
             [ceil_sigma_CV(p,i), ...
-             ceil_margloglik_CV(p,i), ...
-             ceil_predloglik_CV(p,i), ...
+             ceil_logmarglik_CV(p,i), ...
+             ceil_logpredlik_CV(p,i), ...
              ceil_y_hat_CV(test), ...
              ceil_R2_CV(p,i), ...
              ceil_adjR2_CV(p,i), ...
              ceil_r_CV(p,i), ...
              ceil_hyp_CV] = minimize_gp_helper(ceil_x, y, train, test, ceil_hyp, ceil_meanfun, ceil_covfun, ceil_likfun);
+             %}
 
         end
 
@@ -320,7 +355,7 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
 
     toc
 
-    monitor_memory_whos
+    fprintf('Memory usage: %.3f MB\n', monitor_memory_whos);
 
     filename
     %{
@@ -342,13 +377,13 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
     clear post
     clear Y
     %}
-    save(filename, 'sigma', 'margloglik', 'predloglik', 'R2', 'adjR2', 'r', ... 
-                   'sigma_CV', 'margloglik_CV', 'predloglik_CV', 'R2_CV', 'adjR2_CV', 'r_CV', ...
-                   'null_sigma', 'null_margloglik', 'null_predloglik', 'null_R2', 'null_adjR2', 'null_r', ...
-                   'null_sigma_CV', 'null_margloglik_CV', 'null_predloglik_CV', 'null_R2_CV', 'null_adjR2_CV', 'null_r_CV', ...
-                   'ceil_sigma', 'ceil_margloglik', 'ceil_predloglik', 'ceil_R2', 'ceil_adjR2', 'ceil_r', ...
-                   'ceil_sigma_CV', 'ceil_margloglik_CV', 'ceil_predloglik_CV', 'ceil_R2_CV', 'ceil_adjR2_CV', 'ceil_r_CV', ...
-                   'subj', 'use_smooth', 'glmodel', 'mask', 'what', ...
+    save(filename, 'sigma', 'logmarglik', 'logpredlik', 'R2', 'adjR2', 'r', 'MSE', 'SMSE', ... 
+                   'sigma_CV', 'logmarglik_CV', 'logpredlik_CV', 'R2_CV', 'adjR2_CV', 'r_CV', 'MSE_CV', 'SMSE_CV', ...
+                   'null_sigma', 'null_logmarglik', 'null_logpredlik', 'null_R2', 'null_adjR2', 'null_r', 'null_MSE', 'null_SMSE', ...
+                   'null_sigma_CV', 'null_logmarglik_CV', 'null_logpredlik_CV', 'null_R2_CV', 'null_adjR2_CV', 'null_r_CV', 'null_MSE_CV', 'null_SMSE_CV', ...
+                   'ceil_sigma', 'ceil_logmarglik', 'ceil_logpredlik', 'ceil_R2', 'ceil_adjR2', 'ceil_r', 'ceil_MSE', 'ceil_SMSE', ...
+                   'ceil_sigma_CV', 'ceil_logmarglik_CV', 'ceil_logpredlik_CV', 'ceil_R2_CV', 'ceil_adjR2_CV', 'ceil_r_CV', 'ceil_MSE_CV', 'ceil_SMSE_CV', ...
+                   'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'sigmas', ...
     '-v7.3');
 
     disp('Done');
@@ -361,7 +396,7 @@ end
 
 % fit gp using minimize(), for noise ceiling model
 %
-function [sigma, margloglik, predloglik, y_hat, R2, adjR2, r, ceil_hyp] = minimize_gp_helper(x, y, train, test, hyp, meanfun, covfun, likfun)
+function [sigma, logmarglik, logpredlik, y_hat, R2, adjR2, r, ceil_hyp, MSE, SMSE] = minimize_gp_helper(x, y, train, test, hyp, meanfun, covfun, likfun)
 
     % fit mean, kernel, and sigma; 100 iters
     ceil_hyp = minimize(hyp, @gp, -100, @infGaussLik, meanfun, covfun, likfun, x(train), y(train));
@@ -384,23 +419,34 @@ function [sigma, margloglik, predloglik, y_hat, R2, adjR2, r, ceil_hyp] = minimi
     %[y_hat, ~, ~, ~, lp] = gp(ceil_hyp, @infGaussLik, meanfun, covfun, likfun, x(test), y(test), x(test), y(test));   -- don't do this; this double dips the test data and gives overly optimistic predictions
 
     sigma = exp(ceil_hyp.lik);
-    margloglik = -nlz;
-    predloglik = sum(lp);
+    logmarglik = -nlz;
+    logpredlik = sum(lp);
 
-    % # of free (hyper)parameters
-    p = numel(ceil_hyp.cov) + numel(ceil_hyp.lik);
-    if isfield(ceil_hyp, 'mean')
-        p = p + numel(ceil_hyp.mean);
+    % R^2
+    assert(all(train == test) || ~any(train == test));
+    if all(train == test)
+        % # of free (hyper)parameters
+        p = numel(ceil_hyp.cov) + numel(ceil_hyp.lik);
+        if isfield(ceil_hyp, 'mean')
+            p = p + numel(ceil_hyp.mean);
+        end
+    else
+        p = 0; % 0 params, b/c evaluating on held out data
     end
-
     [R2, adjR2] = calc_R2(y(test), y_hat, p);
+
+    % Pearson
     r = corr(y_hat, y(test));
+
+    % MSE and SMSE, Sec 2.5 in Rasmussen
+    MSE = immse(y(test), y_hat);
+    SMSE = MSE / var(y(test));
 end
 
 
 % fit gp sigmas manually; optionally sanity check with gp() library
 %
-function [sigma, margloglik, predloglik, y_hat, R2, adjR2, r] = fit_gp_helper(x, y, train, test, ker, hyp, meanfun, covfun, likfun, sigmas, invKi, ldB2, sn2, solveKiW, debug)
+function [sigma, logmarglik, logpredlik, y_hat, R2, adjR2, r, MSE, SMSE] = fit_gp_helper(x, y, train, test, ker, hyp, meanfun, covfun, likfun, sigmas, invKi, ldB2, sn2, solveKiW, ker_invKi, debug)
 
     n = sum(train);
 
@@ -438,24 +484,42 @@ function [sigma, margloglik, predloglik, y_hat, R2, adjR2, r] = fit_gp_helper(x,
     % pick best sigma
     [~,j] = min(nlz);
     sigma = sigmas(j);
-    margloglik = -nlz(j); % marginal log lik
+    logmarglik = -nlz(j); % marginal log lik
 
     % compute predictive log lik
     hyp.lik = log(sigma);
-    [~,~,~,~,lp] = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x(train), y(train), x(test), y(test));
-    predloglik = sum(lp);
+    %[~,~,~,~,lp] = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x(train), y(train), x(test), y(test));
+    %logpredlik = sum(lp);
+    logpredlik = nan;
 
     % posterior predictive on test dataset (Eq. 2.23 in Rasmussen)
-    y_hat = ker(test, train) * invKi{j} * y(train);
+    y_hat = ker_invKi{j} * y(train);
 
+    % R^2
+    assert(all(train == test) || ~any(train == test));
+    if all(train == test)
+        p = 1; % # 1 (hyper)param = sigma; b/c we fit on same data 
+    else
+        p = 0; % 0 params, b/c evaluating on held out data
+    end
     [R2, adjR2] = calc_R2(y(test), y_hat, 1);
+
+    % Pearson
     r = corr(y_hat, y(test));
+
+    % MSE and SMSE, Sec. 2.5 in Rasmussen
+    MSE = immse(y(test), y_hat);
+    SMSE = MSE / var(y(test));
 
     if debug
         hyp.lik = log(sigma);
         y_hat_gp = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x(train), y(train), x(test));
 
         assert(immse(y_hat, y_hat_gp) < 1e-10);
+
+        y_hat_2 = ker(test, train) * invKi{j} * y(train); % too slow => precompute
+        assert(immse(y_hat, y_hat_2) < 1e-10);
+
 
         %figure;
         %hold on;
