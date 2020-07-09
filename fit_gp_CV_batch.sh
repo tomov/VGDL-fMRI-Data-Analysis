@@ -9,6 +9,8 @@ mask="masks/mask.nii"
 glmodel=21
 use_smooth=true
 
+batchsize=10000
+
 echo ---------------- >> jobs.txt
 echo --- $(date): Running fit_gp_CV for subjects ${subj_arg} in parallel >> jobs.txt
 echo ---------------- >> jobs.txt
@@ -17,8 +19,8 @@ head -n 1 gitlog.txt >> jobs.txt
 for subj in ${subjects[*]}; do
     for batch in {1..2}
     do
-        mask="masks/mask_batchsize=1000_batch=${batch}.nii"
-        outfileprefix="output/fit_gp_CV_${subj}_${use_smooth}_${glmodel}_${what}_${batch}"
+        mask="masks/mask_batchsize=${batchsize}_batch=${batch}.nii"
+        outfileprefix="output/fit_gp_CV_${subj}_${use_smooth}_${glmodel}_${what}_${batchsize}_${batch}"
         echo ---------------------------------------------------------------------------------
         echo Subject ${subj}, file prefix = $outfileprefix
 

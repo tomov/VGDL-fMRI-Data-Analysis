@@ -12,4 +12,6 @@ else
 end
 
 %bspmview_wrapper(EXPT, tmap);
-bspmview_wrapper(EXPT, logGBFmap);
+%bspmview_wrapper(EXPT, logGBFmap);
+%bspmview_wrapper(EXPT, loglikmap);
+bspmview_wrapper(EXPT, null_loglikmap);

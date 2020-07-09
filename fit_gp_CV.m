@@ -5,9 +5,9 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
     use_smooth = true;
     glmodel = 21;
     %mask = 'masks/ROI_x=48_y=12_z=32_62voxels_Sphere6.nii';
-    %mask = 'masks/ROI_x=48_y=12_z=32_1voxels_Sphere1.nii';
+    mask = 'masks/ROI_x=48_y=12_z=32_1voxels_Sphere1.nii';
     %mask = 'masks/mask_batchsize=1000_batch=2.nii';
-    mask = 'masks/mask.nii';
+    %mask = 'masks/mask.nii';
     what = 'theory';
     debug = false;
     %}
@@ -26,7 +26,7 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
 
 
     [~,maskname,~] = fileparts(mask);
-    filename = sprintf('mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_%s.mat', subj, use_smooth, glmodel, maskname, what);
+    filename = sprintf('mat/fit_gp_CV_ceil_HRR_subj=%d_us=%d_glm=%d_mask=%s_%s.mat', subj, use_smooth, glmodel, maskname, what);
     filename
 
     % load mask
@@ -100,14 +100,14 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
 
     % same for noise ceiling model
     % from http://www.gaussianprocess.org/gpml/code/matlab/doc/, section 4a)
-    ceil_meanfun = [];
+    ceil_meanfun = @meanConst;
     ceil_covfun = @covSEiso; % RBF
     ceil_likfun = @likGauss;
-    ceil_hyp = struct('cov', [0; 0], 'lik', log(0.1));
+    ceil_hyp = struct('mean', 0, 'cov', [0; 0], 'lik', log(0.1));
 
     % grid search sigmas
-    %sigmas = logspace(-3, 4, 20);
-    sigmas = 1;
+    sigmas = logspace(-3, 3, 20);
+    %sigmas = 1;
 
     % precompute (K + sigma^2 I) ^ (-1) for every sigma
     % also K(X*,X) * (K(X,X) + sigma^2 I) ^ (-1)  (predictive Eq. 2.23)
@@ -210,7 +210,7 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
     % same but noise ceiling kernel
     ceil_sigma = nan(1, size(Y,2)); % fitted noise std's
     ceil_logmarglik = nan(1, size(Y,2)); % marginal log likelihoods
-    ceil_logpredlik = nan(1, size(Y,2)); % predictive log likelihoods
+    ceil_logpseudolik = nan(1, size(Y,2)); % predictive log likelihoods
     ceil_R2 = nan(1, size(Y,2)); % R^2
     ceil_adjR2 = nan(1, size(Y,2)); % adjusted R^2
     ceil_r = nan(1, size(Y,2)); % Pearson correlation
@@ -220,7 +220,7 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
     % same but cross-validated
     ceil_sigma_CV = nan(n_partitions, size(Y,2));
     ceil_logmarglik_CV = nan(n_partitions, size(Y,2));
-    ceil_logpredlik_CV = nan(n_partitions, size(Y,2));
+    ceil_logpseudolik_CV = nan(n_partitions, size(Y,2));
     ceil_R2_CV = nan(n_partitions, size(Y,2));
     ceil_adjR2_CV = nan(n_partitions, size(Y,2));
     ceil_r_CV = nan(n_partitions, size(Y,2));
@@ -232,7 +232,7 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
     %
     for i = 1:size(Y, 2)
 
-        if mod(i,1000) == 0
+        if mod(i,1) == 0
             i
             toc
             tic
@@ -266,17 +266,17 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
          null_MSE(i), ... 
          null_SMSE(i)] = fit_gp_helper(x, y, train, test, null_ker, null_hyp, null_meanfun, null_covfun, null_likfun, sigmas, null_invKi, null_ldB2, null_sn2, null_solveKiW, null_ker_invKi, debug);
 
-         %{
         % fit noise ceiling model
         [ceil_sigma(i), ...
          ceil_logmarglik(i), ...
-         ceil_logpredlik(i), ...
+         ceil_logpseudolik(i), ...
          ceil_y_hat, ...
          ceil_R2(i), ...
          ceil_adjR2(i), ...
          ceil_r(i), ...
-         ceil_hyp] = minimize_gp_helper(ceil_x, y, train, test, ceil_hyp, ceil_meanfun, ceil_covfun, ceil_likfun);
-         %}
+         ceil_MSE(i), ...
+         ceil_SMSE(i), ...
+         ceil_hyp] = minimize_gp_helper(ceil_x, y, train, test, ceil_hyp, ceil_meanfun, ceil_covfun, ceil_likfun, debug);
 
         % CV; use predictive likelihood for model comparison
         %
@@ -307,16 +307,16 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
              null_SMSE_CV(p,i)] = fit_gp_helper(x, y, train, test, null_ker, null_hyp, null_meanfun, null_covfun, null_likfun, sigmas, null_invKi_CV(p,:), null_ldB2_CV(p,:), null_sn2_CV(p,:), null_solveKiW_CV(p,:), null_ker_invKi_CV(p,:), debug);
 
             % noise ceiling model
-            %{
             [ceil_sigma_CV(p,i), ...
              ceil_logmarglik_CV(p,i), ...
-             ceil_logpredlik_CV(p,i), ...
+             ceil_logpseudolik_CV(p,i), ...
              ceil_y_hat_CV(test), ...
              ceil_R2_CV(p,i), ...
              ceil_adjR2_CV(p,i), ...
              ceil_r_CV(p,i), ...
-             ceil_hyp_CV] = minimize_gp_helper(ceil_x, y, train, test, ceil_hyp, ceil_meanfun, ceil_covfun, ceil_likfun);
-             %}
+             ceil_MSE_CV(p,i), ...
+             ceil_SMSE_CV(p,i), ...
+             ceil_hyp_CV] = minimize_gp_helper(ceil_x, y, train, test, ceil_hyp, ceil_meanfun, ceil_covfun, ceil_likfun, debug);
 
         end
 
@@ -362,9 +362,9 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, debug)
                    'sigma_CV', 'logmarglik_CV', 'logpredlik_CV', 'R2_CV', 'adjR2_CV', 'r_CV', 'MSE_CV', 'SMSE_CV', ...
                    'null_sigma', 'null_logmarglik', 'null_logpredlik', 'null_R2', 'null_adjR2', 'null_r', 'null_MSE', 'null_SMSE', ...
                    'null_sigma_CV', 'null_logmarglik_CV', 'null_logpredlik_CV', 'null_R2_CV', 'null_adjR2_CV', 'null_r_CV', 'null_MSE_CV', 'null_SMSE_CV', ...
-                   'ceil_sigma', 'ceil_logmarglik', 'ceil_logpredlik', 'ceil_R2', 'ceil_adjR2', 'ceil_r', 'ceil_MSE', 'ceil_SMSE', ...
-                   'ceil_sigma_CV', 'ceil_logmarglik_CV', 'ceil_logpredlik_CV', 'ceil_R2_CV', 'ceil_adjR2_CV', 'ceil_r_CV', 'ceil_MSE_CV', 'ceil_SMSE_CV', ...
-                   'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'sigmas', ...
+                   'ceil_sigma', 'ceil_logmarglik', 'ceil_logpseudolik', 'ceil_R2', 'ceil_adjR2', 'ceil_r', 'ceil_MSE', 'ceil_SMSE', ...
+                   'ceil_sigma_CV', 'ceil_logmarglik_CV', 'ceil_logpseudolik_CV', 'ceil_R2_CV', 'ceil_adjR2_CV', 'ceil_r_CV', 'ceil_MSE_CV', 'ceil_SMSE_CV', ...
+                   'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'sigmas', 'n', ...
     '-v7.3');
 
     disp('Done');
@@ -376,40 +376,52 @@ end
 
 
 % fit gp using minimize(), for noise ceiling model
+% use LOO-CV to get predictions on test data
 %
-function [sigma, logmarglik, logpredlik, y_hat, R2, adjR2, r, ceil_hyp, MSE, SMSE] = minimize_gp_helper(x, y, train, test, hyp, meanfun, covfun, likfun)
+function [sigma, logmarglik, logpseudolik, y_hat, R2, adjR2, r, MSE, SMSE, hyp] = minimize_gp_helper(x, y, train, test, hyp, meanfun, covfun, likfun, debug)
 
-    % fit mean, kernel, and sigma; 100 iters
-    ceil_hyp = minimize(hyp, @gp, -100, @infGaussLik, meanfun, covfun, likfun, x(train), y(train));
+    % fit mean, kernel, and sigma; 25 iters
+    hyp = minimize(hyp, @gp, -25, @infGaussLik, meanfun, covfun, likfun, x(train), y(train));
+    sigma = exp(hyp.lik);
 
     % compute marginal lik on training data
-    nlz = gp(ceil_hyp, @infGaussLik, meanfun, covfun, likfun, x(train), y(train));
-
-    % compute predictive lik on observed test data
-    % LOO-CV on test data for prediction
-    % notice we're ignoring training data b/c it's from different runs
-    % TODO too slow...
-    ix = find(test);
-    y_hat = nan(size(y(test)));
-    lp = nan(size(y(test)));
-    for i = 1:length(ix)
-        test(ix(i)) = 0;
-        [y_hat(i), ~, ~, ~, lp(i)] = gp(ceil_hyp, @infGaussLik, meanfun, covfun, likfun, x(test), y(test), x(ix(i)), y(ix(i)));
-        test(ix(i)) = 1;
-    end
-    %[y_hat, ~, ~, ~, lp] = gp(ceil_hyp, @infGaussLik, meanfun, covfun, likfun, x(test), y(test), x(test), y(test));   -- don't do this; this double dips the test data and gives overly optimistic predictions
-
-    sigma = exp(ceil_hyp.lik);
+    nlz = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x(train), y(train));
     logmarglik = -nlz;
-    logpredlik = sum(lp);
+
+    % compute LOO likelihood = pseudolikelihood on test data (Eq. 5.12 in Rasmussen)
+    % call it manually to get predictions
+    [~, nloo, ~, loo] = infLOO(hyp, {meanfun}, {covfun}, {likfun}, x(test), y(test));
+    logpseudolik = -nloo;
+    y_hat = loo.ymu;
+
+    if debug
+        % call infLOO via gp()
+        nloo2 = gp(hyp, @infLOO, meanfun, covfun, likfun, x(test), y(test));
+        assert(immse(nloo2, nloo) < 1e-20);
+        assert(immse(nloo, -sum(loo.lp)) < 1e-20);
+        assert(immse(loo.ymu, loo.fmu) < 1e-20);
+
+        % actually compute LOO manually (SUPER SLOW)
+        ix = find(test);
+        y_hat_2 = nan(size(y(test)));
+        lp = nan(size(y(test)));
+        for i = 1:length(ix)
+            test(ix(i)) = 0;
+            [y_hat_2(i), ~, ~, ~, lp(i)] = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x(test), y(test), x(ix(i)), y(ix(i)));
+            test(ix(i)) = 1;
+        end
+
+        assert(immse(y_hat_2, loo.ymu) < 1e-10);
+        assert(immse(lp, loo.lp) < 1e-10);
+    end
 
     % R^2
     assert(all(train == test) || ~any(train == test));
     if all(train == test)
         % # of free (hyper)parameters
-        p = numel(ceil_hyp.cov) + numel(ceil_hyp.lik);
-        if isfield(ceil_hyp, 'mean')
-            p = p + numel(ceil_hyp.mean);
+        p = numel(hyp.cov) + numel(hyp.lik);
+        if isfield(hyp, 'mean')
+            p = p + numel(hyp.mean);
         end
     else
         p = 0; % 0 params, b/c evaluating on held out data
@@ -436,7 +448,7 @@ function [sigma, logmarglik, logpredlik, y_hat, R2, adjR2, r, MSE, SMSE] = fit_g
     for j = 1:length(sigmas)
         s = sigmas(j);
             
-        % from infGaussLik
+        % from infGaussLik.m
         nlz(j) = y(train)'*invKi{j}*y(train)/2 + ldB2(j) + n*log(2*pi*sn2(j))/2;    % -log marginal likelihood TODO there is no sn2 term in Eq 2.30 in the Rasmussen book?
 
         if debug
@@ -469,9 +481,9 @@ function [sigma, logmarglik, logpredlik, y_hat, R2, adjR2, r, MSE, SMSE] = fit_g
 
     % compute predictive log lik
     hyp.lik = log(sigma);
-    %[~,~,~,~,lp] = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x(train), y(train), x(test), y(test));
-    %logpredlik = sum(lp);
-    logpredlik = nan;
+    [~,~,~,~,lp] = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x(train), y(train), x(test), y(test));
+    logpredlik = sum(lp);
+    %logpredlik = nan;
 
     % posterior predictive on test dataset (Eq. 2.23 in Rasmussen)
     y_hat = ker_invKi{j} * y(train);

@@ -6,7 +6,7 @@ clear all;
 
 all_inds = find(mask);
 
-batch_size = 1000;
+batch_size = 10000;
 
 b = 0;
 for s = 1:batch_size:length(all_inds)
