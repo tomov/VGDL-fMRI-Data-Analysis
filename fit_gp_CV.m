@@ -30,7 +30,7 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, fast, debug)
 
 
     [~,maskname,~] = fileparts(mask);
-    filename = sprintf('mat/fit_gp_CV_ceil_HRR_subj=%d_us=%d_glm=%d_mask=%s_%s.mat', subj, use_smooth, glmodel, maskname, what);
+    filename = sprintf('mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_%s.mat', subj, use_smooth, glmodel, maskname, what);
     filename
 
     % load mask
