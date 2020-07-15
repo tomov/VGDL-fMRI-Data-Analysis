@@ -1,4 +1,4 @@
-% RSA with theory HRRs
+% RSA with theory HRRs, with 10-s boxcar beta series
 % do it manually b/c we average RDMs across features, which is not supported by pipeline
 
 rmpath('/n/sw/helmod/apps/centos7/Core/spm/12.7487-fasrc01/external/fieldtrip/external/stats/'); % tcdf
@@ -6,8 +6,8 @@ rmpath('/n/sw/helmod/apps/centos7/Core/spm/12.7487-fasrc01/external/fieldtrip/ex
 clear all;
 
 use_smooth = false;
-glmodel = 24;
-rsa_idx = 5;
+glmodel = 24; % beta series GLM
+rsa_idx = 5; % for partition RDMs, etc. boilerplate stuff
 %nperms = 1000;
 
 radius = 6 / 1.5; % mm -> voxels
@@ -22,7 +22,7 @@ end
 
 subjects = 1:length(EXPT.subject);
 
-what = 'theory';
+what = 'interaction';
 
 %subjects = [1, 2];
 
@@ -48,7 +48,7 @@ for s = 1:length(subjects)
     subj_id = subjects(s);
     subj_id
 
-    rsa = EXPT.create_rsa(rsa_idx, subj_id);
+    rsa = EXPT.create_rsa(rsa_idx, subj_id); % sanity check
     assert(rsa.glmodel == glmodel);
 
     disp('getting betas and RDMs...');

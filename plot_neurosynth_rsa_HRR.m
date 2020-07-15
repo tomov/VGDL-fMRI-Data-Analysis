@@ -4,9 +4,10 @@
 close all;
 clear all;
 
-%load('mat/neurosynth_rsa_HRR_us=0.mat');
 %load('mat/neurosynth_rsa_HRR_us=0_termination.mat');
-load('mat/neurosynth_rsa_HRR_us=0_theory.mat');
+%load('mat/neurosynth_rsa_HRR_us=0_theory.mat');
+%load('mat/neurosynth_rsa_HRR_us=0_sprite.mat');
+load('mat/neurosynth_rsa_HRR_us=0_termination.mat');
 
 if contains(EXPT.rsadir, '_nosmooth')
     EXPT = vgdl_expt_nosmooth();
@@ -16,7 +17,7 @@ end
 
 
 
-alpha = 0.1; % signifinace level for thresholding (uncorr.) based on permutation tests
+alpha = 0.05; % signifinace level for thresholding (uncorr.)
 idx = find([ROI.p_s] < alpha);
 
 

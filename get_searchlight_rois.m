@@ -18,7 +18,7 @@ function [ROI] = get_searchlight_rois(mask, Vmask, radius)
 
         ROI(i).cor = [x y z];
         ROI(i).mni = cor2mni([x y z], Vmask.mat);
-        ROI(i).voxel_idx = [];
+        ROI(i).voxel_idx = []; % for indexing in 3D volume
         %ROI(i).voxel_cor = []; % too big
 
         for newx = floor(x - radius) : ceil(x + radius)
@@ -49,6 +49,10 @@ function [ROI] = get_searchlight_rois(mask, Vmask, radius)
                 end
             end
         end
+
+        roi_mask = logical(zeros(size(mask)));
+        roi_mask(ROI(i).voxel_idx) = true;
+        ROI(i).masked_voxel_idx = find(roi_mask(mask)); % for indexing in beta array
 
     end
 

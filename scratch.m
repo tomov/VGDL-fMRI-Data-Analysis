@@ -1,4 +1,7 @@
 
+%{
+%% get voxel coordinates for Daphne
+
 [mask, Vmask] = ccnl_load_mask('masks/mask_nosmooth.nii');
 
 [x y z] = ind2sub(size(mask), find(mask));
@@ -7,6 +10,8 @@ cor = [x y z];
 mni = cor2mni(cor, Vmask.mat);
 
 save('mat/coords_nosmooth.mat');
+%}
+
 
 %{
 clear
@@ -63,7 +68,6 @@ assert(immse(R1, R2) < 1e-20);
 
 %% generate searchlight ROIs with different params
 
-%{
 r = [4 6 10] / 1.5;
 
 for use_smooth = 0:1
@@ -83,7 +87,6 @@ for use_smooth = 0:1
         save(sprintf('mat/get_searchlight_rois_us=%d_r=%.4f.mat', use_smooth, radius), '-v7.3');
     end
 end
-%}
 
 % https://www.mathworks.com/help/database/ug/mongo.html#d117e86584
 %conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54')
