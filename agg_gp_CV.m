@@ -10,7 +10,7 @@ else
 end
 
 subjects = 1:length(EXPT.subject);
-what = 'theory';
+what = 'termination';
 glmodel = 21;
 
 agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_%s.mat', use_smooth, glmodel, what);
@@ -145,9 +145,11 @@ loglikmap(mask) = log_group_marglik;
 null_loglikmap = zeros(size(mask));
 null_loglikmap(mask) = null_log_group_marglik;
 
+%{
 Wmap = zeros(size(mask));
 Ws(ps < 0.01) = nan;
 Wmap(mask) = Ws;
+%}
 
 
 agg_filename

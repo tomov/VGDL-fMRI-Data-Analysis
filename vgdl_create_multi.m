@@ -1752,7 +1752,43 @@ save_output = true;
                 multi.onsets{idx} = onoff.(fields{i});
                 multi.durations{idx} = zeros(size(multi.onsets{idx}));
             end
-    
+   
+
+        % condition = game, boxcars over blocks (GLM 1)
+        % + key presses (GLM 5)
+        % 
+        case 78
+
+            idx = 0;
+
+            % from GLM 1: game instance boxcar regressor
+            %
+            [game_names, onsets, durs] = get_games(subj_id, run, conn);
+            for i = 1:numel(game_names)
+                idx = idx + 1;
+                multi.names{idx} = game_names{i};
+                multi.onsets{idx} = onsets{i};
+                multi.durations{idx} = durs{i};
+            end
+
+            % from GLM 5: keyholds nuisance regressors
+            %
+            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
+            if subj_id == 1
+                % we screwed up keyholds for subject 1, so we use estimates from keypresses
+                keyholds = keyholds_post
+            end
+            % key hold boxcar regressors
+            for k = 1:numel(keyNames)
+                if size(keyholds{k}, 1) > 0
+                    idx = idx + 1;
+                    multi.names{idx} = keyNames{k};
+                    multi.onsets{idx} = keyholds{k}(:,1)';
+                    multi.durations{idx} = keyholds{k}(:,2)';
+                end
+            end
+
+
         otherwise
             assert(false, 'invalid glmodel -- should be one of the above');
 
