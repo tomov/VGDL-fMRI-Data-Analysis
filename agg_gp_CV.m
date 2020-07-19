@@ -10,7 +10,7 @@ else
 end
 
 subjects = 1:length(EXPT.subject);
-what = 'termination';
+what = 'theory';
 glmodel = 21;
 
 agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_%s.mat', use_smooth, glmodel, what);

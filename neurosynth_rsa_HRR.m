@@ -10,7 +10,7 @@ glmodel = 24; % beta series GLM
 rsa_idx = 5; % for partition RDMs, etc. boilerplate stuff
 %nperms = 1000;
 
-radius = 6 / 1.5; % mm -> voxels
+radius = 10 / 1.5; % mm -> voxels
 
 if use_smooth
     EXPT = vgdl_expt();
@@ -22,7 +22,7 @@ end
 
 subjects = 1:length(EXPT.subject);
 
-what = 'interaction';
+what = 'theory';
 
 %subjects = [1, 2];
 
@@ -33,9 +33,12 @@ filename = sprintf('mat/neurosynth_rsa_HRR_us=%d_%s.mat', use_smooth, what);
 
 % or, searchlight ROIs
 % % ROI = get_searchlight_rois(whole_brain_mask, Vwhole_brain_mask, radius);  too slow
-%load(sprintf('mat/get_searchlight_rois_us=%d_r=%.4f.mat', use_smooth, radius));
-%roi_masks = {ROI.voxel_idx}; % backwards compatibility; they're indices actually, not masks, but it'll do
-%filename = sprintf('mat/searchlight_rsa_HRR_us=%d_r=%.4f_%s.mat', use_smooth, radius, what);
+old_whole_brain_mask = whole_brain_mask;
+load(sprintf('mat/get_searchlight_rois_us=%d_r=%.4f.mat', use_smooth, radius), 'ROI');
+assert(isequal(old_whole_brain_mask, whole_brain_mask));
+filename = sprintf('mat/searchlight_rsa_HRR_us=%d_r=%.4f_%s.mat', use_smooth, radius, what);
+roi_masks = cell(1, length(ROI)); % for backwards compatibility
+
 
 %load('mat/HRR_groundtruth_RDM_correlation.mat'); % game_names, mean_RDM
 %game_names = cellfun(@strtrim, mat2cell(game_names, ones(size(game_names, 1), 1)), 'UniformOutput', false);
@@ -104,8 +107,6 @@ for s = 1:length(subjects)
     % for each ROI
     %
     for r = 1:length(roi_masks)
-        roi_mask = roi_masks{r};
-
         if mod(r,1000) == 0
             r
             toc
@@ -113,7 +114,13 @@ for s = 1:length(subjects)
         end
 
         % subset whole-brain patterns
-        U = B(:, roi_mask(whole_brain_mask));
+        if isempty(roi_masks{r})
+            % indices
+            U = B(:, ROI(r).masked_voxel_idx);
+        else
+            % logical mask
+            U = B(:, roi_masks{r}(whole_brain_mask));
+        end
 
         % compute neural RDM (ccnl_roi_rdms.m)
         neural_RDM = squareRDMs(pdist(U, 'correlation'));
@@ -150,6 +157,10 @@ for r = 1:length(roi_masks)
     %[h,p,ci,stat] = ttest(ROI(r).tauz);
     %ROI(r).t_k = stat.tstat;
     %ROI(r).p_k = p;
+
+    % clear up space
+    ROI(r).voxel_idx = [];
+    ROI(r).masked_voxel_idx = [];
 end
 
 save(filename, '-v7.3');

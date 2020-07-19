@@ -20,6 +20,10 @@ clear all;
 %load('mat/searchlight_rsa_HRR_groundtruth_avg_us=0_glm=9_r=6.6667_nperms=0_dist=correlation_game.mat');
 %load('mat/searchlight_rsa_HRR_groundtruth_avg_us=0_glm=9_r=4.0000_nperms=0_dist=correlation_game.mat');
 %load('mat/searchlight_rsa_HRR_groundtruth_avg_us=0_glm=78_r=6.6667_nperms=0_dist=correlation_game.mat');
+%load('mat/searchlight_rsa_HRR_groundtruth_avg_us=0_glm=78_r=6.6667_nperms=0_dist=correlation_sprite.mat');
+%load('mat/searchlight_rsa_HRR_groundtruth_avg_us=0_glm=78_r=6.6667_nperms=0_dist=correlation_interaction.mat');
+load('mat/searchlight_rsa_HRR_groundtruth_avg_us=0_glm=78_r=6.6667_nperms=0_dist=correlation_termination.mat');
+
 
 if contains(EXPT.rsadir, '_nosmooth')
     EXPT = vgdl_expt_nosmooth();
