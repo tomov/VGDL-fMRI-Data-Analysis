@@ -162,6 +162,1475 @@ ccnl_fmri_glm.sh for GLM 9, subjects 5 4 7 8 1 3 2 6: output/ccnl_fmri_glm_9_goo
 ----------------
 ccnl_fmri_glm.sh for GLM 7, subjects 7 2 1 5 8 3 6 4: output/ccnl_fmri_glm_7_goodSubjects_50241748.out -- Submitted batch job 50241748
 ----------------
---- Thu Jun 4 10:09:47 EDT 2020 Running ccnl_fmri_con 67 68 69
+--- Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
 ----------------
-ccnl_fmri_con.sh: output/ccnl_fmri_con_.out --
+ccnl_fmri_glm.sh for GLM 7, subjects 8 1 2 7 6 3 4 5: output/ccnl_fmri_glm_7_goodSubjects_50296842.out -- Submitted batch job 50296842
+----------------
+--- Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 9, subjects 8 7 4 6 1 3 5 2: output/ccnl_fmri_glm_9_goodSubjects_50307164.out -- Submitted batch job 50307164
+----------------
+--- Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 10, subjects 7 1 3 5 8 4 2 6: output/ccnl_fmri_glm_10_goodSubjects_50461504.out -- Submitted batch job 50461504
+ccnl_fmri_glm.sh for GLM 11, subjects 6 5 7 3 2 4 8 1: output/ccnl_fmri_glm_11_goodSubjects_50461549.out -- Submitted batch job 50461549
+ccnl_fmri_glm.sh for GLM 12, subjects 3 4 7 8 2 1 5 6: output/ccnl_fmri_glm_12_goodSubjects_50461575.out -- Submitted batch job 50461575
+ccnl_fmri_glm.sh for GLM 13, subjects 4 3 7 1 8 5 6 2: output/ccnl_fmri_glm_13_goodSubjects_50461616.out -- Submitted batch job 50461616
+ccnl_fmri_glm.sh for GLM 14, subjects 7 1 5 4 3 6 8 2: output/ccnl_fmri_glm_14_goodSubjects_50461655.out -- Submitted batch job 50461655
+ccnl_fmri_glm.sh for GLM 15, subjects 4 3 6 2 1 5 8 7: output/ccnl_fmri_glm_15_goodSubjects_50461691.out -- Submitted batch job 50461691
+ccnl_fmri_glm.sh for GLM 16, subjects 6 8 4 3 5 1 7 2: output/ccnl_fmri_glm_16_goodSubjects_50461728.out -- Submitted batch job 50461728
+ccnl_fmri_glm.sh for GLM 17, subjects 6 8 5 7 1 2 4 3: output/ccnl_fmri_glm_17_goodSubjects_50461745.out -- Submitted batch job 50461745
+ccnl_fmri_glm.sh for GLM 18, subjects 3 1 5 7 2 6 8 4: output/ccnl_fmri_glm_18_goodSubjects_50461813.out -- Submitted batch job 50461813
+ccnl_fmri_glm.sh for GLM 19, subjects 5 8 4 6 2 3 7 1: output/ccnl_fmri_glm_19_goodSubjects_50461847.out -- Submitted batch job 50461847
+ccnl_fmri_glm.sh for GLM 20, subjects 7 8 2 1 4 3 5 6: output/ccnl_fmri_glm_20_goodSubjects_50461871.out -- Submitted batch job 50461871
+----------------
+--- Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 3, subjects 6 1 8 7 5 3 4 2: output/ccnl_fmri_glm_3_goodSubjects_50765040.out -- Submitted batch job 50765040
+----------------
+--- Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 21, subjects 7 6 1 3 8 5 2 4: output/ccnl_fmri_glm_21_goodSubjects_50777245.out -- Submitted batch job 50777245
+----------------
+--- Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 22, subjects 4 5 7 3 6 8 1 2: output/ccnl_fmri_glm_22_goodSubjects_54816002.out -- Submitted batch job 54816002
+----------------
+--- Running ccnl_fmri_glm_nosmooth for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm_nosmooth.sh for GLM 22, subjects 5 1 4 6 2 7 8 3: output/ccnl_fmri_glm_nosmooth_22_goodSubjects_54816789.out -- Submitted batch job 54816789
+----------------
+--- Running ccnl_fmri_glm_nosmooth for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm_nosmooth.sh for GLM 22, subjects 5 1 3 7 2 8 6 4: output/ccnl_fmri_glm_nosmooth_22_goodSubjects_54818660.out -- Submitted batch job 54818660
+----------------
+--- Running ccnl_fmri_glm_nosmooth for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm_nosmooth.sh for GLM 1, subjects 5 2 3 7 6 1 4 8: output/ccnl_fmri_glm_nosmooth_1_goodSubjects_54819108.out -- Submitted batch job 54819108
+----------------
+--- Running ccnl_rsa_searchlight for subjects 1 2 3 4 5 6 7 8
+----------------
+-- rsa_idx 1 --
+ccnl_rsa_searchlight.sh for rsa_idx 1, 1-10000, subjects 3 1 4 5 2 8 6 7: output/ccnl_rsa_searchlight_1_1-10000_goodSubjects_.out --
+ccnl_rsa_searchlight.sh for rsa_idx 1, 10001-20000, subjects 1 6 7 8 4 5 3 2: output/ccnl_rsa_searchlight_1_10001-20000_goodSubjects_.out --
+----------------
+--- Sun May 3 17:46:36 EDT 2020 Running ccnl_rsa_searchlight for subjects 1 2 3 4 5 6 7 8
+----------------
+-- rsa_idx 1 --
+ccnl_rsa_searchlight.sh for rsa_idx 1, 1-10000, subjects 7 1 3 5 6 2 4 8: output/ccnl_rsa_searchlight_1_1-10000_goodSubjects_54819473.out -- Submitted batch job 54819473
+ccnl_rsa_searchlight.sh for rsa_idx 1, 10001-20000, subjects 7 5 4 2 6 1 3 8: output/ccnl_rsa_searchlight_1_10001-20000_goodSubjects_54819474.out -- Submitted batch job 54819474
+----------------
+--- Sun May 3 19:27:04 EDT 2020 Running ccnl_rsa_searchlight for subjects 1 2 3 4 5 6 7 8
+----------------
+-- rsa_idx 1 --
+ccnl_rsa_searchlight.sh for rsa_idx 1, 20001-30000, subjects 2 5 7 6 3 4 1 8: output/ccnl_rsa_searchlight_1_20001-30000_goodSubjects_54830397.out -- Submitted batch job 54830397
+----------------
+--- Sun May 3 20:36:16 EDT 2020 Running ccnl_rsa_searchlight for subjects 1 2 3 4 5 6 7 8
+----------------
+-- rsa_idx 1 --
+ccnl_rsa_searchlight.sh for rsa_idx 1, 30001-40000, subjects 4 1 5 7 3 8 6 2: output/ccnl_rsa_searchlight_1_30001-40000_goodSubjects_54843754.out -- Submitted batch job 54843754
+ccnl_rsa_searchlight.sh for rsa_idx 1, 40001-50000, subjects 6 2 4 8 5 3 1 7: output/ccnl_rsa_searchlight_1_40001-50000_goodSubjects_54843759.out -- Submitted batch job 54843759
+ccnl_rsa_searchlight.sh for rsa_idx 1, 50001-60000, subjects 7 2 4 1 5 3 6 8: output/ccnl_rsa_searchlight_1_50001-60000_goodSubjects_54843761.out -- Submitted batch job 54843761
+ccnl_rsa_searchlight.sh for rsa_idx 1, 60001-70000, subjects 6 4 5 2 3 8 7 1: output/ccnl_rsa_searchlight_1_60001-70000_goodSubjects_54843762.out -- Submitted batch job 54843762
+ccnl_rsa_searchlight.sh for rsa_idx 1, 70001-80000, subjects 6 3 1 8 7 2 4 5: output/ccnl_rsa_searchlight_1_70001-80000_goodSubjects_54843763.out -- Submitted batch job 54843763
+ccnl_rsa_searchlight.sh for rsa_idx 1, 80001-90000, subjects 3 5 8 4 6 2 1 7: output/ccnl_rsa_searchlight_1_80001-90000_goodSubjects_54843764.out -- Submitted batch job 54843764
+ccnl_rsa_searchlight.sh for rsa_idx 1, 90001-100000, subjects 8 2 5 6 1 7 3 4: output/ccnl_rsa_searchlight_1_90001-100000_goodSubjects_54843765.out -- Submitted batch job 54843765
+ccnl_rsa_searchlight.sh for rsa_idx 1, 100001-110000, subjects 5 4 3 8 6 2 1 7: output/ccnl_rsa_searchlight_1_100001-110000_goodSubjects_54843767.out -- Submitted batch job 54843767
+ccnl_rsa_searchlight.sh for rsa_idx 1, 110001-120000, subjects 6 8 7 4 2 1 5 3: output/ccnl_rsa_searchlight_1_110001-120000_goodSubjects_54843768.out -- Submitted batch job 54843768
+ccnl_rsa_searchlight.sh for rsa_idx 1, 120001-130000, subjects 5 3 1 7 2 8 4 6: output/ccnl_rsa_searchlight_1_120001-130000_goodSubjects_54843772.out -- Submitted batch job 54843772
+ccnl_rsa_searchlight.sh for rsa_idx 1, 130001-140000, subjects 6 1 4 2 8 3 7 5: output/ccnl_rsa_searchlight_1_130001-140000_goodSubjects_54843773.out -- Submitted batch job 54843773
+ccnl_rsa_searchlight.sh for rsa_idx 1, 140001-150000, subjects 7 8 3 5 4 6 2 1: output/ccnl_rsa_searchlight_1_140001-150000_goodSubjects_54843775.out -- Submitted batch job 54843775
+ccnl_rsa_searchlight.sh for rsa_idx 1, 150001-160000, subjects 8 2 3 7 1 6 4 5: output/ccnl_rsa_searchlight_1_150001-160000_goodSubjects_54843776.out -- Submitted batch job 54843776
+ccnl_rsa_searchlight.sh for rsa_idx 1, 160001-170000, subjects 2 7 4 3 5 6 1 8: output/ccnl_rsa_searchlight_1_160001-170000_goodSubjects_54843777.out -- Submitted batch job 54843777
+ccnl_rsa_searchlight.sh for rsa_idx 1, 170001-180000, subjects 3 2 5 4 6 1 8 7: output/ccnl_rsa_searchlight_1_170001-180000_goodSubjects_54843778.out -- Submitted batch job 54843778
+ccnl_rsa_searchlight.sh for rsa_idx 1, 180001-190000, subjects 1 4 2 5 8 3 6 7: output/ccnl_rsa_searchlight_1_180001-190000_goodSubjects_54843779.out -- Submitted batch job 54843779
+ccnl_rsa_searchlight.sh for rsa_idx 1, 190001-200000, subjects 8 7 1 3 2 4 6 5: output/ccnl_rsa_searchlight_1_190001-200000_goodSubjects_54843780.out -- Submitted batch job 54843780
+ccnl_rsa_searchlight.sh for rsa_idx 1, 200001-210000, subjects 7 6 4 3 2 1 8 5: output/ccnl_rsa_searchlight_1_200001-210000_goodSubjects_54843781.out -- Submitted batch job 54843781
+ccnl_rsa_searchlight.sh for rsa_idx 1, 210001-220000, subjects 8 7 3 1 6 5 4 2: output/ccnl_rsa_searchlight_1_210001-220000_goodSubjects_54843782.out -- Submitted batch job 54843782
+ccnl_rsa_searchlight.sh for rsa_idx 1, 220001-230000, subjects 5 2 8 6 7 4 3 1: output/ccnl_rsa_searchlight_1_220001-230000_goodSubjects_54843784.out -- Submitted batch job 54843784
+ccnl_rsa_searchlight.sh for rsa_idx 1, 230001-240000, subjects 4 8 6 2 7 3 5 1: output/ccnl_rsa_searchlight_1_230001-240000_goodSubjects_54843785.out -- Submitted batch job 54843785
+ccnl_rsa_searchlight.sh for rsa_idx 1, 240001-250000, subjects 2 6 5 8 1 3 7 4: output/ccnl_rsa_searchlight_1_240001-250000_goodSubjects_54843786.out -- Submitted batch job 54843786
+----------------
+--- Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(1, true, true, 10000, [177 294 365 38 293 174 194 118], 500): output/neurosynth_rsa_55119175.out -- Submitted batch job 55119175
+neurosynth_rsa.sh neurosynth_rsa(1, false, true, 10000, [177 38 94 29 86 333 294 365 38 293 174 194 118], 500): output/neurosynth_rsa_55119180.out -- Submitted batch job 55119180
+----------------
+--- Wed May 6 09:09:23 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(1, true, true, 10000, [177 294 365 38 293 174 194 118], 500): output/neurosynth_rsa_55179161.out -- Submitted batch job 55179161
+neurosynth_rsa.sh neurosynth_rsa(1, false, true, 10000, [177 38 94 29 86 333 294 365 38 293 174 194 118], 500): output/neurosynth_rsa_55179163.out -- Submitted batch job 55179163
+----------------
+--- Wed May 6 10:58:51 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 21, subjects 7 4 3 5 8 2 1 6: output/ccnl_fmri_glm_21_goodSubjects_55190435.out -- Submitted batch job 55190435
+----------------
+--- Wed May 6 10:59:09 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 3, subjects 6 1 4 2 7 3 8 5: output/ccnl_fmri_glm_3_goodSubjects_55190445.out -- Submitted batch job 55190445
+----------------
+--- Wed May 6 11:00:36 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 3, subjects 1 2 3 6 8 4 5 7: output/ccnl_fmri_glm_3_goodSubjects_55190593.out -- Submitted batch job 55190593
+----------------
+--- Wed May 6 11:01:07 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 3, subjects 2 1 3 8 7 5 4 6: output/ccnl_fmri_glm_3_goodSubjects_55190683.out -- Submitted batch job 55190683
+----------------
+--- Wed May 6 11:01:43 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(1, true, true, 10000, [177 294 365 38 293 174 194 118], 500): output/neurosynth_rsa_55190712.out -- Submitted batch job 55190712
+neurosynth_rsa.sh neurosynth_rsa(1, false, true, 10000, [177 38 94 29 86 333 294 365 38 293 174 194 118], 500): output/neurosynth_rsa_55190713.out -- Submitted batch job 55190713
+neurosynth_rsa.sh neurosynth_rsa(2, false, true, 100, [177 210 352 143 106 38 389], 10): output/neurosynth_rsa_55190714.out -- Submitted batch job 55190714
+----------------
+--- Wed May 6 11:02:34 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(1, true, true, 10000, [177 294 365 38 293 174 194 118], 500): output/neurosynth_rsa_55190823.out -- Submitted batch job 55190823
+----------------
+--- Wed May 6 11:03:01 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 3, subjects 4 5 7 2 3 1 8 6: output/ccnl_fmri_glm_3_goodSubjects_55190844.out -- Submitted batch job 55190844
+----------------
+--- Wed May 6 11:03:38 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 3, subjects 2 8 4 7 1 3 6 5: output/ccnl_fmri_glm_3_goodSubjects_55190899.out -- Submitted batch job 55190899
+----------------
+--- Wed May 6 11:04:03 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 3, subjects 8 6 2 7 3 5 1 4: output/ccnl_fmri_glm_3_goodSubjects_55190919.out -- Submitted batch job 55190919
+----------------
+--- Wed May 6 11:09:23 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 3, subjects 8 4 6 1 2 5 7 3: output/ccnl_fmri_glm_3_goodSubjects_55191442.out -- Submitted batch job 55191442
+----------------
+--- Wed May 6 11:43:23 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 3, subjects 5 7 1 3 4 8 6 2: output/ccnl_fmri_glm_3_goodSubjects_55195489.out -- Submitted batch job 55195489
+----------------
+--- Wed May 6 11:43:44 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 21, subjects 7 8 1 6 5 4 2 3: output/ccnl_fmri_glm_21_goodSubjects_55195490.out -- Submitted batch job 55195490
+----------------
+--- Wed May 6 13:37:56 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_55205182.out -- Submitted batch job 55205182
+----------------
+--- Wed May 6 15:48:57 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_55229236.out -- Submitted batch job 55229236
+----------------
+--- Wed May 6 15:49:49 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_55229365.out -- Submitted batch job 55229365
+----------------
+--- Wed May 6 17:58:31 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(2, false, true, 1000, [210 352 143 106 389], 10): output/neurosynth_rsa_55240361.out -- Submitted batch job 55240361
+----------------
+--- Wed May 6 18:58:10 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(2, false, true, 1000, [241 254 298 106 361 357 366 254 99 260], 10): output/neurosynth_rsa_55255642.out -- Submitted batch job 55255642
+----------------
+--- Wed May 6 18:59:51 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(2, false, true, 1000, [241 254 298 106 361 357 366 254 99 260], 50): output/neurosynth_rsa_55256124.out -- Submitted batch job 55256124
+----------------
+--- Wed May 6 19:00:56 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(2, false, true, 1000, [210 352 143 106 389 241 254 298 106 361 357 366 254 99 260], 50): output/neurosynth_rsa_55256500.out -- Submitted batch job 55256500
+----------------
+--- Thu May 7 19:37:25 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 23, subjects 3 5 7 4 6 1 2 8: output/ccnl_fmri_glm_23_goodSubjects_55384471.out -- Submitted batch job 55384471
+----------------
+--- Fri May 8 09:58:13 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 23, subjects 3 7 2 4 6 8 5 1: output/ccnl_fmri_glm_23_goodSubjects_55487681.out -- Submitted batch job 55487681
+----------------
+--- Fri May 8 09:59:34 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 23, subjects 3 7 6 5 1 4 8 2: output/ccnl_fmri_glm_23_goodSubjects_55487734.out -- Submitted batch job 55487734
+----------------
+--- Fri May 8 11:45:21 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 23, subjects 1 8 4 6 3 2 7 5: output/ccnl_fmri_glm_23_goodSubjects_55502734.out -- Submitted batch job 55502734
+----------------
+--- Fri May 8 11:47:59 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 23, subjects 1 4 6 2 8 3 5 7: output/ccnl_fmri_glm_23_goodSubjects_55504076.out -- Submitted batch job 55504076
+----------------
+--- Fri May 8 19:35:17 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(3, false, true, 0, [], 50): output/neurosynth_rsa_55553197.out -- Submitted batch job 55553197
+----------------
+--- Fri May 8 20:13:47 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(3, false, true, 0, [], 50): output/neurosynth_rsa_55556304.out -- Submitted batch job 55556304
+----------------
+--- Fri May 8 20:18:22 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(3, false, true, 0, [], 50): output/neurosynth_rsa_55556365.out -- Submitted batch job 55556365
+----------------
+--- Fri May 8 20:18:42 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(3, false, true, 0, [], 50): output/neurosynth_rsa_55556386.out -- Submitted batch job 55556386
+----------------
+--- Fri May 8 20:20:20 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(3, false, true, 0, [], 50): output/neurosynth_rsa_55556465.out -- Submitted batch job 55556465
+----------------
+--- Fri May 8 20:20:36 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(3, false, true, 0, [], 50): output/neurosynth_rsa_55556478.out -- Submitted batch job 55556478
+----------------
+--- Fri May 8 20:24:26 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(3, false, true, 0, [], 50): output/neurosynth_rsa_55556800.out -- Submitted batch job 55556800
+----------------
+--- Mon May 11 13:40:14 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(3, false, true, 1000, [177 146 293 190 47 341 140 230 353], 50): output/neurosynth_rsa_55835832.out -- Submitted batch job 55835832
+----------------
+--- Mon May 11 13:42:02 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(3, false, true, 1000, [177 146 293 190 47 341 140 230 353], 50): output/neurosynth_rsa_55835841.out -- Submitted batch job 55835841
+----------------
+--- Mon May 11 13:59:20 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(3, false, true, 1000, [177 146 293 190 47 341 140 230 353], 50): output/neurosynth_rsa_55838009.out -- Submitted batch job 55838009
+----------------
+--- Tue May 12 10:40:57 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 24, subjects 4 1 3 6 5 2 8 7: output/ccnl_fmri_glm_24_goodSubjects_55954800.out -- Submitted batch job 55954800
+----------------
+--- Tue May 12 10:49:03 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 24, subjects 6 5 1 4 3 7 8 2: output/ccnl_fmri_glm_24_goodSubjects_.out --
+----------------
+--- Tue May 12 10:49:15 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 24, subjects 3 7 5 1 4 8 6 2: output/ccnl_fmri_glm_24_goodSubjects_55955208.out -- Submitted batch job 55955208
+----------------
+--- Running ccnl_fmri_glm_nosmooth for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm_nosmooth.sh for GLM 24, subjects 1 5 3 7 8 4 2 6: output/ccnl_fmri_glm_nosmooth_24_goodSubjects_55994640.out -- Submitted batch job 55994640
+----------------
+--- Wed May 13 10:10:13 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(5, false, true, 0, [], 500): output/neurosynth_rsa_56088733.out -- Submitted batch job 56088733
+----------------
+--- Wed May 13 18:07:06 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(3, false, true, 200, [177 146 293 190 47 341 140 230 353], 50): output/neurosynth_rsa_56137613.out -- Submitted batch job 56137613
+----------------
+--- Wed May 13 18:07:50 EDT 2020 Running roi_rsa
+----------------
+roi_rsa.sh roi_rsa(3, false, true, 100, [], 50): output/roi_rsa_56137659.out -- Submitted batch job 56137659
+roi_rsa.sh roi_rsa(5, false, true, 1000, [], 500): output/roi_rsa_56137660.out -- Submitted batch job 56137660
+----------------
+--- Wed May 13 18:13:11 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(3, false, true, 200, [177 146 293 190 47 341 140 230 353], 50): output/neurosynth_rsa_56137876.out -- Submitted batch job 56137876
+----------------
+--- Wed May 13 18:13:19 EDT 2020 Running roi_rsa
+----------------
+roi_rsa.sh roi_rsa(3, false, true, 100, [], 50): output/roi_rsa_56137879.out -- Submitted batch job 56137879
+roi_rsa.sh roi_rsa(5, false, true, 1000, [], 500): output/roi_rsa_56137880.out -- Submitted batch job 56137880
+----------------
+--- Fri May 15 17:22:48 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(3, false, true, 200, [99, 77, 137, 51, 341], 50): output/neurosynth_rsa_56276000.out -- Submitted batch job 56276000
+----------------
+--- Mon May 18 18:22:05 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(1, true, true, 1000, [], 500): output/neurosynth_rsa_56600713.out -- Submitted batch job 56600713
+neurosynth_rsa.sh neurosynth_rsa(1, false, true, 1000, [], 500): output/neurosynth_rsa_56600715.out -- Submitted batch job 56600715
+----------------
+--- Mon May 18 18:29:41 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(1, true, true, 1000, [], 500): output/neurosynth_rsa_56601329.out -- Submitted batch job 56601329
+neurosynth_rsa.sh neurosynth_rsa(1, false, true, 1000, [], 500): output/neurosynth_rsa_56601333.out -- Submitted batch job 56601333
+----------------
+--- Mon May 18 18:34:50 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(5, false, true, 200, [149, 95,207, 56, 45, 91, 22,264,274,112, 94,305,169,209], 500): output/neurosynth_rsa_56601780.out -- Submitted batch job 56601780
+----------------
+--- Mon May 18 18:36:54 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(1, true, true, 1000, [], 500): output/neurosynth_rsa_56602084.out -- Submitted batch job 56602084
+neurosynth_rsa.sh neurosynth_rsa(1, false, true, 1000, [], 500): output/neurosynth_rsa_56602089.out -- Submitted batch job 56602089
+neurosynth_rsa.sh neurosynth_rsa(5, true, true, 0, [], 500): output/neurosynth_rsa_56602095.out -- Submitted batch job 56602095
+----------------
+--- Tue May 19 13:34:36 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 3, subjects 7 8 1 6 4 2 5 3: output/ccnl_fmri_glm_3_goodSubjects_56758401.out -- Submitted batch job 56758401
+----------------
+--- Tue May 19 13:35:50 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 21, subjects 2 1 3 8 7 6 4 5: output/ccnl_fmri_glm_21_goodSubjects_56758541.out -- Submitted batch job 56758541
+----------------
+--- Tue May 19 13:53:05 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 25, subjects 6 2 8 5 7 4 3 1: output/ccnl_fmri_glm_25_goodSubjects_56760731.out -- Submitted batch job 56760731
+----------------
+--- Tue May 19 16:10:47 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_56777756.out -- Submitted batch job 56777756
+----------------
+--- Tue May 19 16:21:07 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(6, true, true, 0, [], 500): output/neurosynth_rsa_56778686.out -- Submitted batch job 56778686
+neurosynth_rsa.sh neurosynth_rsa(6, false, true, 0, [], 500): output/neurosynth_rsa_56778690.out -- Submitted batch job 56778690
+----------------
+--- Running ccnl_fmri_glm_nosmooth for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm_nosmooth.sh for GLM 25, subjects 2 6 1 7 3 5 8 4: output/ccnl_fmri_glm_nosmooth_25_goodSubjects_56889998.out -- Submitted batch job 56889998
+----------------
+--- Running ccnl_fmri_glm_nosmooth for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm_nosmooth.sh for GLM 25, subjects 2 3 5 7 4 6 1 8: output/ccnl_fmri_glm_nosmooth_25_goodSubjects_56890111.out -- Submitted batch job 56890111
+----------------
+--- Running ccnl_fmri_glm_nosmooth for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm_nosmooth.sh for GLM 25, subjects 2 4 7 5 6 8 3 1: output/ccnl_fmri_glm_nosmooth_25_goodSubjects_56890148.out -- Submitted batch job 56890148
+----------------
+--- Running ccnl_fmri_glm_nosmooth for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm_nosmooth.sh for GLM 25, subjects 7 1 8 5 2 6 3 4: output/ccnl_fmri_glm_nosmooth_25_goodSubjects_56890258.out -- Submitted batch job 56890258
+----------------
+--- Wed May 20 12:29:48 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_56893977.out -- Submitted batch job 56893977
+----------------
+--- Wed May 20 13:43:36 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_56897860.out -- Submitted batch job 56897860
+----------------
+--- Wed May 20 13:44:32 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(6, false, true, 0, [], 500): output/neurosynth_rsa_56897877.out -- Submitted batch job 56897877
+neurosynth_rsa.sh neurosynth_rsa(5, false, true, 200, [277 ,351 ,239 ,383 ,234 ,106 , 77 ,126 ,335 , 72 ,347 , 55 ,300 ,313 , 40 ,168 ,298 ,175], 500): output/neurosynth_rsa_56897881.out -- Submitted batch job 56897881
+----------------
+--- Wed May 20 16:44:59 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(6, true, true, 1000, [], 500): output/neurosynth_rsa_56906805.out -- Submitted batch job 56906805
+neurosynth_rsa.sh neurosynth_rsa(6, false, true, 1000, [], 500): output/neurosynth_rsa_56906810.out -- Submitted batch job 56906810
+----------------
+--- Wed May 20 17:52:30 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_56915576.out -- Submitted batch job 56915576
+----------------
+--- Wed May 20 17:54:19 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_56915888.out -- Submitted batch job 56915888
+----------------
+--- Wed May 20 17:54:46 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_56916008.out -- Submitted batch job 56916008
+----------------
+--- Wed May 20 18:02:06 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_56916710.out -- Submitted batch job 56916710
+----------------
+--- Wed May 20 18:14:13 EDT 2020 Running neurosynth_cva
+----------------
+neurosynth_cva.sh neurosynth_cva(1, true, true, [], {\'vgfmri3_bait\', \'vgfmri3_chase\', \'vgfmri3_helper\', \'vgfmri3_lemmings\', \'vgfmri3_plaqueAttack\', \'vgfmri3_zelda\'}, 0.05): output/neurosynth_cva_56917647.out -- Submitted batch job 56917647
+neurosynth_cva.sh neurosynth_cva(1, false, true, [], {\'vgfmri3_bait\', \'vgfmri3_chase\', \'vgfmri3_helper\', \'vgfmri3_lemmings\', \'vgfmri3_plaqueAttack\', \'vgfmri3_zelda\'}, 0.05): output/neurosynth_cva_56917650.out -- Submitted batch job 56917650
+----------------
+--- Thu May 21 11:41:00 EDT 2020 Running neurosynth_cva
+----------------
+neurosynth_cva.sh neurosynth_cva(1, true, true, [], {\'vgfmri3_bait\', \'vgfmri3_chase\', \'vgfmri3_helper\', \'vgfmri3_lemmings\', \'vgfmri3_plaqueAttack\', \'vgfmri3_zelda\'}, 0.05): output/neurosynth_cva_56993867.out -- Submitted batch job 56993867
+neurosynth_cva.sh neurosynth_cva(1, false, true, [], {\'vgfmri3_bait\', \'vgfmri3_chase\', \'vgfmri3_helper\', \'vgfmri3_lemmings\', \'vgfmri3_plaqueAttack\', \'vgfmri3_zelda\'}, 0.05): output/neurosynth_cva_56993874.out -- Submitted batch job 56993874
+----------------
+--- Thu May 21 12:03:54 EDT 2020 Running neurosynth_cva
+----------------
+neurosynth_cva.sh neurosynth_cva(1, true, true, [], {\'vgfmri3_bait\', \'vgfmri3_chase\', \'vgfmri3_helper\', \'vgfmri3_lemmings\', \'vgfmri3_plaqueAttack\', \'vgfmri3_zelda\'}, 0.05): output/neurosynth_cva_56995264.out -- Submitted batch job 56995264
+neurosynth_cva.sh neurosynth_cva(1, false, true, [], {\'vgfmri3_bait\', \'vgfmri3_chase\', \'vgfmri3_helper\', \'vgfmri3_lemmings\', \'vgfmri3_plaqueAttack\', \'vgfmri3_zelda\'}, 0.05): output/neurosynth_cva_56995268.out -- Submitted batch job 56995268
+----------------
+--- Thu May 21 13:56:30 EDT 2020 Running roi_rsa
+----------------
+roi_rsa.sh roi_rsa(6, true, true, 1000, [], 500): output/roi_rsa_57001103.out -- Submitted batch job 57001103
+roi_rsa.sh roi_rsa(6, false, true, 1000, [], 500): output/roi_rsa_57001104.out -- Submitted batch job 57001104
+----------------
+--- Thu May 21 14:00:01 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(5, true, true, 200, [], 500): output/neurosynth_rsa_57001254.out -- Submitted batch job 57001254
+neurosynth_rsa.sh neurosynth_rsa(5, false, true, 200, [], 500): output/neurosynth_rsa_57001255.out -- Submitted batch job 57001255
+----------------
+--- Fri May 22 17:30:03 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(5, true, true, 500, [], 500): output/neurosynth_rsa_57087102.out -- Submitted batch job 57087102
+neurosynth_rsa.sh neurosynth_rsa(5, false, true, 500, [], 500): output/neurosynth_rsa_57087107.out -- Submitted batch job 57087107
+----------------
+--- Fri May 22 17:30:55 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 3, subjects 8 7 1 4 2 5 6 3: output/ccnl_fmri_glm_3_goodSubjects_57087141.out -- Submitted batch job 57087141
+----------------
+--- Fri May 22 17:32:21 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(5, true, true, 500, [], 500): output/neurosynth_rsa_57087182.out -- Submitted batch job 57087182
+----------------
+--- Fri May 22 17:32:33 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(5, true, true, 500, [], 500): output/neurosynth_rsa_57087184.out -- Submitted batch job 57087184
+----------------
+--- Fri May 22 17:33:07 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(5, true, true, 500, [], 500): output/neurosynth_rsa_57087199.out -- Submitted batch job 57087199
+----------------
+--- Fri May 22 17:33:21 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(5, true, true, 500, [], 500): output/neurosynth_rsa_57087201.out -- Submitted batch job 57087201
+----------------
+--- Fri May 22 17:33:48 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 3, subjects 4 3 1 6 2 7 5 8: output/ccnl_fmri_glm_3_goodSubjects_57087210.out -- Submitted batch job 57087210
+----------------
+--- Fri May 22 17:34:09 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 3, subjects 7 1 2 6 3 5 4 8: output/ccnl_fmri_glm_3_goodSubjects_57087219.out -- Submitted batch job 57087219
+----------------
+--- Fri May 22 18:48:55 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_57090937.out -- Submitted batch job 57090937
+----------------
+--- Fri May 22 18:50:17 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 26, subjects 1 6 8 4 3 5 7 2: output/ccnl_fmri_glm_26_goodSubjects_57090946.out -- Submitted batch job 57090946
+ccnl_fmri_glm.sh for GLM 27, subjects 8 5 6 7 2 3 1 4: output/ccnl_fmri_glm_27_goodSubjects_57090947.out -- Submitted batch job 57090947
+ccnl_fmri_glm.sh for GLM 28, subjects 5 7 3 6 2 4 8 1: output/ccnl_fmri_glm_28_goodSubjects_57090948.out -- Submitted batch job 57090948
+ccnl_fmri_glm.sh for GLM 29, subjects 4 3 8 2 7 1 5 6: output/ccnl_fmri_glm_29_goodSubjects_57090949.out -- Submitted batch job 57090949
+ccnl_fmri_glm.sh for GLM 30, subjects 6 8 7 5 1 2 4 3: output/ccnl_fmri_glm_30_goodSubjects_57090950.out -- Submitted batch job 57090950
+ccnl_fmri_glm.sh for GLM 31, subjects 7 2 4 5 3 1 8 6: output/ccnl_fmri_glm_31_goodSubjects_57090951.out -- Submitted batch job 57090951
+ccnl_fmri_glm.sh for GLM 32, subjects 2 3 6 5 7 1 4 8: output/ccnl_fmri_glm_32_goodSubjects_57090952.out -- Submitted batch job 57090952
+ccnl_fmri_glm.sh for GLM 33, subjects 4 6 2 5 3 1 8 7: output/ccnl_fmri_glm_33_goodSubjects_57090953.out -- Submitted batch job 57090953
+ccnl_fmri_glm.sh for GLM 34, subjects 8 3 5 4 1 7 2 6: output/ccnl_fmri_glm_34_goodSubjects_57090954.out -- Submitted batch job 57090954
+ccnl_fmri_glm.sh for GLM 35, subjects 3 6 7 5 2 4 1 8: output/ccnl_fmri_glm_35_goodSubjects_57090955.out -- Submitted batch job 57090955
+----------------
+--- Fri May 22 18:51:03 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 36, subjects 1 8 5 2 7 4 3 6: output/ccnl_fmri_glm_36_goodSubjects_57090958.out -- Submitted batch job 57090958
+ccnl_fmri_glm.sh for GLM 37, subjects 5 3 2 6 4 1 8 7: output/ccnl_fmri_glm_37_goodSubjects_57090959.out -- Submitted batch job 57090959
+ccnl_fmri_glm.sh for GLM 38, subjects 7 2 6 3 1 4 5 8: output/ccnl_fmri_glm_38_goodSubjects_57090960.out -- Submitted batch job 57090960
+ccnl_fmri_glm.sh for GLM 39, subjects 8 2 4 1 3 5 6 7: output/ccnl_fmri_glm_39_goodSubjects_57090961.out -- Submitted batch job 57090961
+ccnl_fmri_glm.sh for GLM 40, subjects 5 4 1 3 2 7 8 6: output/ccnl_fmri_glm_40_goodSubjects_57090962.out -- Submitted batch job 57090962
+ccnl_fmri_glm.sh for GLM 41, subjects 8 6 2 5 1 3 7 4: output/ccnl_fmri_glm_41_goodSubjects_57090965.out -- Submitted batch job 57090965
+ccnl_fmri_glm.sh for GLM 42, subjects 7 8 3 5 1 2 4 6: output/ccnl_fmri_glm_42_goodSubjects_57090966.out -- Submitted batch job 57090966
+ccnl_fmri_glm.sh for GLM 43, subjects 5 6 4 3 7 8 1 2: output/ccnl_fmri_glm_43_goodSubjects_57090968.out -- Submitted batch job 57090968
+ccnl_fmri_glm.sh for GLM 44, subjects 2 7 5 8 4 1 6 3: output/ccnl_fmri_glm_44_goodSubjects_57090969.out -- Submitted batch job 57090969
+----------------
+--- Fri May 22 18:55:31 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 21, subjects 8 5 3 7 4 2 1 6: output/ccnl_fmri_glm_21_goodSubjects_57090993.out -- Submitted batch job 57090993
+----------------
+--- Sun May 24 13:18:25 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_57213621.out -- Submitted batch job 57213621
+----------------
+--- Sun May 24 13:18:38 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_57213717.out -- Submitted batch job 57213717
+----------------
+--- Sun May 24 13:18:57 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_57213869.out -- Submitted batch job 57213869
+----------------
+--- Sun May 24 13:18:59 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_57213880.out -- Submitted batch job 57213880
+----------------
+--- Sun May 24 13:19:01 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_57213891.out -- Submitted batch job 57213891
+----------------
+--- Sun May 24 13:19:03 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_57213912.out -- Submitted batch job 57213912
+----------------
+--- Sun May 24 13:36:17 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_57214159.out -- Submitted batch job 57214159
+----------------
+--- Sun May 24 13:36:30 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_57214160.out -- Submitted batch job 57214160
+----------------
+--- Sun May 24 13:36:57 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_57214163.out -- Submitted batch job 57214163
+----------------
+--- Sun May 24 13:38:27 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_57214168.out -- Submitted batch job 57214168
+----------------
+--- Sun May 24 13:53:06 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_57214284.out -- Submitted batch job 57214284
+----------------
+--- Sun May 24 13:53:34 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 51, subjects 7 1 8 5 4 6 2 3: output/ccnl_fmri_glm_51_goodSubjects_57214294.out -- Submitted batch job 57214294
+ccnl_fmri_glm.sh for GLM 52, subjects 4 3 8 7 5 2 6 1: output/ccnl_fmri_glm_52_goodSubjects_57214295.out -- Submitted batch job 57214295
+ccnl_fmri_glm.sh for GLM 53, subjects 3 4 2 6 7 5 1 8: output/ccnl_fmri_glm_53_goodSubjects_57214296.out -- Submitted batch job 57214296
+----------------
+--- Sun May 24 13:54:15 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 51, subjects 2 4 1 8 6 5 3 7: output/ccnl_fmri_glm_51_goodSubjects_57214301.out -- Submitted batch job 57214301
+ccnl_fmri_glm.sh for GLM 52, subjects 1 4 3 2 5 8 7 6: output/ccnl_fmri_glm_52_goodSubjects_57214302.out -- Submitted batch job 57214302
+ccnl_fmri_glm.sh for GLM 53, subjects 7 6 3 8 1 4 5 2: output/ccnl_fmri_glm_53_goodSubjects_57214303.out -- Submitted batch job 57214303
+----------------
+--- Sun May 24 13:55:30 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 51, subjects 8 2 4 1 5 7 6 3: output/ccnl_fmri_glm_51_goodSubjects_57214310.out -- Submitted batch job 57214310
+----------------
+--- Sun May 24 13:56:16 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 51, subjects 3 4 8 5 7 1 2 6: output/ccnl_fmri_glm_51_goodSubjects_57214315.out -- Submitted batch job 57214315
+----------------
+--- Sun May 24 13:56:25 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_57214318.out -- Submitted batch job 57214318
+----------------
+--- Sun May 24 13:57:47 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_57214329.out -- Submitted batch job 57214329
+----------------
+--- Sun May 24 14:18:18 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_57215251.out -- Submitted batch job 57215251
+----------------
+--- Sun May 24 16:22:13 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_57225924.out -- Submitted batch job 57225924
+----------------
+--- Sun May 24 16:36:59 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_57227412.out -- Submitted batch job 57227412
+----------------
+--- Tue May 26 09:10:03 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 30, subjects 1 5 8 7 4 2 6 3: output/ccnl_fmri_glm_30_goodSubjects_57427966.out -- Submitted batch job 57427966
+ccnl_fmri_glm.sh for GLM 31, subjects 3 7 6 8 1 2 4 5: output/ccnl_fmri_glm_31_goodSubjects_57427978.out -- Submitted batch job 57427978
+----------------
+--- Tue May 26 09:10:25 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 30, subjects 3 2 4 7 5 1 6 8: output/ccnl_fmri_glm_30_goodSubjects_57427986.out -- Submitted batch job 57427986
+----------------
+--- Tue May 26 09:11:01 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 30, subjects 7 2 5 3 4 6 1 8: output/ccnl_fmri_glm_30_goodSubjects_57427993.out -- Submitted batch job 57427993
+----------------
+--- Tue May 26 09:12:20 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 45, subjects 8 3 5 1 2 7 4 6: output/ccnl_fmri_glm_45_goodSubjects_57428009.out -- Submitted batch job 57428009
+ccnl_fmri_glm.sh for GLM 46, subjects 3 8 4 1 5 7 2 6: output/ccnl_fmri_glm_46_goodSubjects_57428010.out -- Submitted batch job 57428010
+ccnl_fmri_glm.sh for GLM 47, subjects 1 4 7 6 3 8 2 5: output/ccnl_fmri_glm_47_goodSubjects_57428011.out -- Submitted batch job 57428011
+ccnl_fmri_glm.sh for GLM 48, subjects 8 6 7 1 5 2 4 3: output/ccnl_fmri_glm_48_goodSubjects_57428012.out -- Submitted batch job 57428012
+ccnl_fmri_glm.sh for GLM 49, subjects 7 2 4 3 5 6 1 8: output/ccnl_fmri_glm_49_goodSubjects_57428013.out -- Submitted batch job 57428013
+ccnl_fmri_glm.sh for GLM 50, subjects 2 4 1 3 7 5 8 6: output/ccnl_fmri_glm_50_goodSubjects_57428015.out -- Submitted batch job 57428015
+ccnl_fmri_glm.sh for GLM 51, subjects 2 6 4 7 8 1 3 5: output/ccnl_fmri_glm_51_goodSubjects_57428017.out -- Submitted batch job 57428017
+----------------
+--- Tue May 26 09:13:17 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 53, subjects 1 4 7 8 5 3 2 6: output/ccnl_fmri_glm_53_goodSubjects_57428024.out -- Submitted batch job 57428024
+ccnl_fmri_glm.sh for GLM 54, subjects 7 1 6 8 3 2 4 5: output/ccnl_fmri_glm_54_goodSubjects_57428026.out -- Submitted batch job 57428026
+----------------
+--- Tue May 26 09:17:09 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 38, subjects 8 6 1 2 4 3 5 7: output/ccnl_fmri_glm_38_goodSubjects_57428167.out -- Submitted batch job 57428167
+----------------
+--- Tue May 26 17:14:57 EDT 2020 Running ccnl_fmri_con 51 53 54
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_57466009.out -- Submitted batch job 57466009
+----------------
+--- Tue May 26 17:18:05 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 30, subjects 1 6 2 4 7 3 5 8: output/ccnl_fmri_glm_30_goodSubjects_57466261.out -- Submitted batch job 57466261
+ccnl_fmri_glm.sh for GLM 31, subjects 2 1 5 6 4 8 3 7: output/ccnl_fmri_glm_31_goodSubjects_57466270.out -- Submitted batch job 57466270
+----------------
+--- Tue May 26 17:20:42 EDT 2020 Running ccnl_fmri_con 38, 45..50
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_57466511.out -- Submitted batch job 57466511
+----------------
+--- Tue May 26 18:02:19 EDT 2020 Running might
+----------------
+might.sh might(1, 10, false, 'lda_shrinkage', 'none'): output/might_57471064.out -- Submitted batch job 57471064
+might.sh might(5, 4, false, 'lda_shrinkage', 'none'): output/might_57471066.out -- Submitted batch job 57471066
+might.sh might(5, 10, false, 'lda_shrinkage', 'none'): output/might_57471074.out -- Submitted batch job 57471074
+might.sh might(6, 4, false, 'lda_shrinkage', 'none'): output/might_57471076.out -- Submitted batch job 57471076
+might.sh might(6, 10, false, 'lda_shrinkage', 'none'): output/might_57471078.out -- Submitted batch job 57471078
+----------------
+--- Tue May 26 18:23:38 EDT 2020 Running might
+----------------
+might.sh might(1, 10, false, \'lda_shrinkage\', 'none'): output/might_57473658.out -- Submitted batch job 57473658
+might.sh might(5, 4, false, \'lda_shrinkage\', 'none'): output/might_57473660.out -- Submitted batch job 57473660
+might.sh might(5, 10, false, \'lda_shrinkage\', 'none'): output/might_57473666.out -- Submitted batch job 57473666
+might.sh might(6, 4, false, \'lda_shrinkage\', 'none'): output/might_57473669.out -- Submitted batch job 57473669
+might.sh might(6, 10, false, \'lda_shrinkage\', 'none'): output/might_57473676.out -- Submitted batch job 57473676
+----------------
+--- Tue May 26 18:30:46 EDT 2020 Running might
+----------------
+might.sh might(1, 10, false, \'lda_shrinkage\', \'none\'): output/might_57475115.out -- Submitted batch job 57475115 -- TL
+might.sh might(5, 4, false, \'lda_shrinkage\', \'none\'): output/might_57475117.out -- Submitted batch job 57475117
+might.sh might(5, 10, false, \'lda_shrinkage\', \'none\'): output/might_57475120.out -- Submitted batch job 57475120 -- TL
+might.sh might(6, 4, false, \'lda_shrinkage\', \'none\'): output/might_57475122.out -- Submitted batch job 57475122
+might.sh might(6, 10, false, \'lda_shrinkage\', \'none\'): output/might_57475125.out -- Submitted batch job 57475125 -- TL
+----------------
+--- Tue May 26 18:53:55 EDT 2020 Running might
+----------------
+might.sh might(1, 4, false, \'lda_shrinkage\', \'none\'): output/might_57476749.out -- Submitted batch job 57476749
+might.sh might(1, 10, false, \'lda_shrinkage\', \'none\'): output/might_57476755.out -- Submitted batch job 57476755
+might.sh might(5, 4, false, \'lda_shrinkage\', \'none\'): output/might_57476759.out -- Submitted batch job 57476759
+might.sh might(5, 10, false, \'lda_shrinkage\', \'none\'): output/might_57476762.out -- Submitted batch job 57476762
+might.sh might(6, 4, false, \'lda_shrinkage\', \'none\'): output/might_57476764.out -- Submitted batch job 57476764
+might.sh might(6, 10, false, \'lda_shrinkage\', \'none\'): output/might_57476774.out -- Submitted batch job 57476774
+might.sh might(1, 4, false, \'knn\', \'none\'): output/might_57476788.out -- Submitted batch job 57476788
+might.sh might(1, 10, false, \'knn\', \'none\'): output/might_57476806.out -- Submitted batch job 57476806
+might.sh might(5, 4, false, \'knn\', \'none\'): output/might_57476816.out -- Submitted batch job 57476816
+might.sh might(5, 10, false, \'knn\', \'none\'): output/might_57476833.out -- Submitted batch job 57476833
+might.sh might(6, 4, false, \'knn\', \'none\'): output/might_57476849.out -- Submitted batch job 57476849
+might.sh might(6, 10, false, \'knn\', \'none\'): output/might_57476867.out -- Submitted batch job 57476867
+might.sh might(1, 4, false, \'lda_shrinkage\', \'run\'): output/might_57476877.out -- Submitted batch job 57476877
+might.sh might(1, 10, false, \'lda_shrinkage\', \'run\'): output/might_57476900.out -- Submitted batch job 57476900
+might.sh might(5, 4, false, \'lda_shrinkage\', \'run\'): output/might_57476929.out -- Submitted batch job 57476929
+might.sh might(5, 10, false, \'lda_shrinkage\', \'run\'): output/might_57476954.out -- Submitted batch job 57476954
+might.sh might(6, 4, false, \'lda_shrinkage\', \'run\'): output/might_57476972.out -- Submitted batch job 57476972
+might.sh might(6, 10, false, \'lda_shrinkage\', \'run\'): output/might_57476979.out -- Submitted batch job 57476979
+might.sh might(1, 4, false, \'knn\', \'run\'): output/might_57476981.out -- Submitted batch job 57476981
+might.sh might(1, 10, false, \'knn\', \'run\'): output/might_57476985.out -- Submitted batch job 57476985
+might.sh might(5, 4, false, \'knn\', \'run\'): output/might_57476986.out -- Submitted batch job 57476986
+might.sh might(5, 10, false, \'knn\', \'run\'): output/might_57476988.out -- Submitted batch job 57476988
+might.sh might(6, 4, false, \'knn\', \'run\'): output/might_57476994.out -- Submitted batch job 57476994
+might.sh might(6, 10, false, \'knn\', \'run\'): output/might_57477000.out -- Submitted batch job 57477000
+----------------
+--- Thu May 28 11:42:14 EDT 2020 Running might
+----------------
+might.sh might(1, 10, true, \'knn\', \'none\'): output/might_57652761.out -- Submitted batch job 57652761
+might.sh might(5, 10, true, \'knn\', \'none\'): output/might_57652772.out -- Submitted batch job 57652772
+might.sh might(6, 10, true, \'knn\', \'none\'): output/might_57652787.out -- Submitted batch job 57652787
+----------------
+--- Thu May 28 14:24:15 EDT 2020 Running ccnl_fmri_con 30,31
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_57669419.out -- Submitted batch job 57669419
+----------------
+--- Fri May 29 12:19:22 EDT 2020 Running might
+----------------
+might.sh might(1, 10, false, \'knn\', \'none\'): output/might_57788157.out -- Submitted batch job 57788157
+might.sh might(5, 10, false, \'knn\', \'none\'): output/might_57788158.out -- Submitted batch job 57788158
+might.sh might(6, 10, false, \'knn\', \'none\'): output/might_57788159.out -- Submitted batch job 57788159
+----------------
+--- Fri May 29 12:22:41 EDT 2020 Running might
+----------------
+might.sh might(1, 10, false, \'knn\', \'none\'): output/might_57788392.out -- Submitted batch job 57788392
+might.sh might(5, 10, false, \'knn\', \'none\'): output/might_57788394.out -- Submitted batch job 57788394
+might.sh might(6, 10, false, \'knn\', \'none\'): output/might_57788396.out -- Submitted batch job 57788396
+----------------
+--- Fri May 29 13:26:55 EDT 2020 Running might
+----------------
+might.sh might(1, 10, false, \'svm_linear\', \'none\'): output/might_57798730.out -- Submitted batch job 57798730
+----------------
+--- Fri May 29 13:58:50 EDT 2020 Running might
+----------------
+might.sh might(1, 10, false, \'gnb_searchmight\', \'none\'): output/might_57800674.out -- Submitted batch job 57800674
+might.sh might(5, 10, false, \'gnb_searchmight\', \'none\'): output/might_57800675.out -- Submitted batch job 57800675
+might.sh might(6, 10, false, \'gnb_searchmight\', \'none\'): output/might_57800676.out -- Submitted batch job 57800676
+----------------
+--- Fri May 29 14:44:57 EDT 2020 Running might
+----------------
+might.sh might(5, 10, false, \'svm_linear\', \'none\'): output/might_57802216.out -- Submitted batch job 57802216
+might.sh might(6, 10, false, \'svm_linear\', \'none\'): output/might_57802218.out -- Submitted batch job 57802218
+----------------
+--- Fri May 29 14:46:40 EDT 2020 Running might
+----------------
+might.sh might(1, 10, false, \'svm_linear\', \'none\'): output/might_57802250.out -- Submitted batch job 57802250
+might.sh might(5, 10, false, \'svm_linear\', \'none\'): output/might_57802251.out -- Submitted batch job 57802251
+might.sh might(6, 10, false, \'svm_linear\', \'none\'): output/might_57802254.out -- Submitted batch job 57802254
+might.sh might(1, 10, false, \'svm_quadratic\', \'none\'): output/might_57802255.out -- Submitted batch job 57802255
+might.sh might(5, 10, false, \'svm_quadratic\', \'none\'): output/might_57802257.out -- Submitted batch job 57802257
+might.sh might(6, 10, false, \'svm_quadratic\', \'none\'): output/might_57802258.out -- Submitted batch job 57802258
+might.sh might(1, 10, false, \'svm_rbf\', \'none\'): output/might_57802260.out -- Submitted batch job 57802260
+might.sh might(5, 10, false, \'svm_rbf\', \'none\'): output/might_57802261.out -- Submitted batch job 57802261
+might.sh might(6, 10, false, \'svm_rbf\', \'none\'): output/might_57802262.out -- Submitted batch job 57802262
+----------------
+--- Sun May 31 16:10:19 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 3, subjects 8 6 3 4 5 1 2 7: output/ccnl_fmri_glm_3_goodSubjects_57981987.out -- Submitted batch job 57981987
+----------------
+--- Sun May 31 16:32:22 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 21, subjects 4 2 3 7 8 1 6 5: output/ccnl_fmri_glm_21_goodSubjects_57982960.out -- Submitted batch job 57982960
+----------------
+--- Sun May 31 17:21:49 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 51, subjects 5 8 7 6 2 3 4 1: output/ccnl_fmri_glm_51_goodSubjects_57992762.out -- Submitted batch job 57992762
+ccnl_fmri_glm.sh for GLM 52, subjects 8 6 1 5 3 2 7 4: output/ccnl_fmri_glm_52_goodSubjects_57992764.out -- Submitted batch job 57992764
+ccnl_fmri_glm.sh for GLM 53, subjects 4 5 6 7 8 1 2 3: output/ccnl_fmri_glm_53_goodSubjects_57992766.out -- Submitted batch job 57992766
+ccnl_fmri_glm.sh for GLM 54, subjects 2 8 3 7 5 1 6 4: output/ccnl_fmri_glm_54_goodSubjects_57992768.out -- Submitted batch job 57992768
+----------------
+--- Sun May 31 17:22:31 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 55, subjects 4 6 3 7 1 8 2 5: output/ccnl_fmri_glm_55_goodSubjects_57992803.out -- Submitted batch job 57992803
+ccnl_fmri_glm.sh for GLM 56, subjects 2 3 1 4 6 7 8 5: output/ccnl_fmri_glm_56_goodSubjects_57992808.out -- Submitted batch job 57992808
+----------------
+--- Sun May 31 17:56:49 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 57, subjects 7 1 4 2 6 3 8 5: output/ccnl_fmri_glm_57_goodSubjects_57996271.out -- Submitted batch job 57996271
+ccnl_fmri_glm.sh for GLM 58, subjects 5 6 1 8 4 2 7 3: output/ccnl_fmri_glm_58_goodSubjects_57996273.out -- Submitted batch job 57996273
+----------------
+--- Sun May 31 17:58:48 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 30, subjects 2 3 6 7 4 1 5 8: output/ccnl_fmri_glm_30_goodSubjects_57996608.out -- Submitted batch job 57996608
+ccnl_fmri_glm.sh for GLM 31, subjects 2 1 8 4 6 5 7 3: output/ccnl_fmri_glm_31_goodSubjects_57996609.out -- Submitted batch job 57996609
+----------------
+--- Mon Jun 1 05:38:16 EDT 2020 Running ccnl_fmri_con 3,21,30,31,57,58,55,56,51,52,53,54
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_58057543.out -- Submitted batch job 58057543
+----------------
+--- Mon Jun 1 06:27:33 EDT 2020 Running ccnl_fmri_con 55,56,51,52,53,54
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_58059782.out -- Submitted batch job 58059782
+----------------
+--- Mon Jun 1 06:37:28 EDT 2020 Running ccnl_fmri_con 51,52,53,54
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_58060142.out -- Submitted batch job 58060142
+----------------
+--- Mon Jun 1 18:59:48 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 26, subjects 8 1 5 6 2 4 3 7: output/ccnl_fmri_glm_26_goodSubjects_58131531.out -- Submitted batch job 58131531
+ccnl_fmri_glm.sh for GLM 27, subjects 8 7 5 4 1 3 2 6: output/ccnl_fmri_glm_27_goodSubjects_58131552.out -- Submitted batch job 58131552
+ccnl_fmri_glm.sh for GLM 28, subjects 1 7 4 6 5 3 2 8: output/ccnl_fmri_glm_28_goodSubjects_58131554.out -- Submitted batch job 58131554
+ccnl_fmri_glm.sh for GLM 29, subjects 4 5 2 7 8 1 3 6: output/ccnl_fmri_glm_29_goodSubjects_58131575.out -- Submitted batch job 58131575
+----------------
+--- Tue Jun 2 13:11:35 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 59, subjects 4 2 3 8 1 6 5 7: output/ccnl_fmri_glm_59_goodSubjects_58227507.out -- Submitted batch job 58227507
+ccnl_fmri_glm.sh for GLM 60, subjects 5 2 8 3 1 6 4 7: output/ccnl_fmri_glm_60_goodSubjects_58227508.out -- Submitted batch job 58227508
+ccnl_fmri_glm.sh for GLM 61, subjects 7 5 3 4 8 6 1 2: output/ccnl_fmri_glm_61_goodSubjects_58227509.out -- Submitted batch job 58227509
+----------------
+--- Tue Jun 2 13:42:10 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 59, subjects 2 3 7 1 4 5 6 8: output/ccnl_fmri_glm_59_goodSubjects_58228762.out -- Submitted batch job 58228762
+----------------
+--- Tue Jun 2 13:42:41 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 62, subjects 7 6 3 1 2 8 5 4: output/ccnl_fmri_glm_62_goodSubjects_58228784.out -- Submitted batch job 58228784
+ccnl_fmri_glm.sh for GLM 63, subjects 2 1 3 5 6 7 4 8: output/ccnl_fmri_glm_63_goodSubjects_58228786.out -- Submitted batch job 58228786
+ccnl_fmri_glm.sh for GLM 64, subjects 6 1 2 8 3 7 4 5: output/ccnl_fmri_glm_64_goodSubjects_58228789.out -- Submitted batch job 58228789
+----------------
+--- Tue Jun 2 15:21:14 EDT 2020 Running ccnl_fmri_con 59..61
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_58236474.out -- Submitted batch job 58236474
+----------------
+--- Tue Jun 2 15:22:34 EDT 2020 Running ccnl_fmri_con 62..64
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_58236509.out -- Submitted batch job 58236509
+----------------
+--- Tue Jun 2 15:59:12 EDT 2020 Running ccnl_fmri_con 26..31
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_58237784.out -- Submitted batch job 58237784
+----------------
+--- Tue Jun 2 16:41:16 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM {38}, subjects 6 7 8 5 1 2 3 4: output/ccnl_fmri_glm_{38}_goodSubjects_58239699.out -- Submitted batch job 58239699
+----------------
+--- Tue Jun 2 16:44:09 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 38, subjects 8 2 4 1 6 7 5 3: output/ccnl_fmri_glm_38_goodSubjects_58239814.out -- Submitted batch job 58239814
+----------------
+--- Tue Jun 2 18:00:18 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 68, subjects 1 5 3 6 2 8 7 4: output/ccnl_fmri_glm_68_goodSubjects_58243467.out -- Submitted batch job 58243467
+----------------
+--- Tue Jun 2 18:01:51 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 67, subjects 4 1 2 5 8 3 6 7: output/ccnl_fmri_glm_67_goodSubjects_58243568.out -- Submitted batch job 58243568
+----------------
+--- Tue Jun 2 18:15:08 EDT 2020 Running ccnl_fmri_con 38
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_58244533.out -- Submitted batch job 58244533
+----------------
+--- Tue Jun 2 18:45:35 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 69, subjects 6 5 4 7 2 3 1 8: output/ccnl_fmri_glm_69_goodSubjects_58246225.out -- Submitted batch job 58246225
+----------------
+--- Tue Jun 2 19:02:23 EDT 2020 Running might
+----------------
+might.sh might(5, 10, false, \'svm_quadratic\', \'none\'): output/might_.out --
+might.sh might(5, 10, false, \'svm_rbf\', \'none\'): output/might_.out --
+----------------
+--- Tue Jun 2 19:02:47 EDT 2020 Running might
+----------------
+might.sh might(5, 10, false, \'svm_quadratic\', \'none\'): output/might_58251388.out -- Submitted batch job 58251388
+----------------
+--- Thu Jun 4 10:17:37 EDT 2020 Running ccnl_fmri_con 67 68 69
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_58472453.out -- Submitted batch job 58472453
+----------------
+--- Thu Jun 4 11:06:45 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 69, subjects 8 7 1 3 4 5 2 6: output/ccnl_fmri_glm_69_goodSubjects_58476765.out -- Submitted batch job 58476765
+ccnl_fmri_glm.sh for GLM 70, subjects 2 8 6 4 1 3 7 5: output/ccnl_fmri_glm_70_goodSubjects_58476766.out -- Submitted batch job 58476766
+----------------
+--- Thu Jun 4 13:55:36 EDT 2020 Running ccnl_fmri_con 69 70
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_58493615.out -- Submitted batch job 58493615
+----------------
+--- Fri Jun 5 09:27:54 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 71, subjects 6 2 4 5 7 3 8 1: output/ccnl_fmri_glm_71_goodSubjects_58672169.out -- Submitted batch job 58672169
+ccnl_fmri_glm.sh for GLM 72, subjects 5 8 3 4 7 6 1 2: output/ccnl_fmri_glm_72_goodSubjects_58672171.out -- Submitted batch job 58672171
+----------------
+--- Fri Jun 5 11:36:20 EDT 2020 Running ccnl_fmri_con 71 72
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_58681543.out -- Submitted batch job 58681543
+----------------
+--- Wed Jun 10 21:17:03 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 3, subjects 8 7 1 2 4 3 5 6: output/ccnl_fmri_glm_3_goodSubjects_59710617.out -- Submitted batch job 59710617
+----------------
+--- Wed Jun 10 21:33:16 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 21, subjects 1 3 6 5 2 8 4 7: output/ccnl_fmri_glm_21_goodSubjects_59715087.out -- Submitted batch job 59715087
+----------------
+--- Wed Jun 10 21:41:09 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 26, subjects 6 8 7 2 5 4 1 3: output/ccnl_fmri_glm_26_goodSubjects_59716891.out -- Submitted batch job 59716891
+ccnl_fmri_glm.sh for GLM 27, subjects 6 4 7 2 3 5 1 8: output/ccnl_fmri_glm_27_goodSubjects_59716913.out -- Submitted batch job 59716913
+ccnl_fmri_glm.sh for GLM 28, subjects 7 8 2 4 5 3 6 1: output/ccnl_fmri_glm_28_goodSubjects_59716916.out -- Submitted batch job 59716916
+ccnl_fmri_glm.sh for GLM 29, subjects 7 5 3 8 2 4 1 6: output/ccnl_fmri_glm_29_goodSubjects_59716920.out -- Submitted batch job 59716920
+ccnl_fmri_glm.sh for GLM 30, subjects 2 4 1 6 5 3 7 8: output/ccnl_fmri_glm_30_goodSubjects_59716928.out -- Submitted batch job 59716928
+ccnl_fmri_glm.sh for GLM 31, subjects 6 3 2 8 4 7 1 5: output/ccnl_fmri_glm_31_goodSubjects_59716940.out -- Submitted batch job 59716940
+ccnl_fmri_glm.sh for GLM 32, subjects 7 8 1 4 3 2 6 5: output/ccnl_fmri_glm_32_goodSubjects_59716943.out -- Submitted batch job 59716943
+ccnl_fmri_glm.sh for GLM 33, subjects 5 7 6 2 4 1 3 8: output/ccnl_fmri_glm_33_goodSubjects_59716947.out -- Submitted batch job 59716947
+ccnl_fmri_glm.sh for GLM 34, subjects 7 2 5 6 4 3 1 8: output/ccnl_fmri_glm_34_goodSubjects_59716949.out -- Submitted batch job 59716949
+ccnl_fmri_glm.sh for GLM 35, subjects 8 6 4 2 1 3 7 5: output/ccnl_fmri_glm_35_goodSubjects_59716963.out -- Submitted batch job 59716963
+ccnl_fmri_glm.sh for GLM 36, subjects 6 3 5 7 4 8 1 2: output/ccnl_fmri_glm_36_goodSubjects_59716966.out -- Submitted batch job 59716966
+ccnl_fmri_glm.sh for GLM 37, subjects 5 8 3 7 1 6 4 2: output/ccnl_fmri_glm_37_goodSubjects_59716970.out -- Submitted batch job 59716970
+ccnl_fmri_glm.sh for GLM 38, subjects 2 5 4 6 3 7 1 8: output/ccnl_fmri_glm_38_goodSubjects_59716973.out -- Submitted batch job 59716973
+----------------
+--- Wed Jun 10 21:44:38 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 51, subjects 8 3 5 7 2 1 4 6: output/ccnl_fmri_glm_51_goodSubjects_59717772.out -- Submitted batch job 59717772
+ccnl_fmri_glm.sh for GLM 52, subjects 4 6 3 1 2 5 7 8: output/ccnl_fmri_glm_52_goodSubjects_59717775.out -- Submitted batch job 59717775
+ccnl_fmri_glm.sh for GLM 53, subjects 8 7 2 6 4 1 3 5: output/ccnl_fmri_glm_53_goodSubjects_59717779.out -- Submitted batch job 59717779
+ccnl_fmri_glm.sh for GLM 54, subjects 5 4 6 2 1 8 3 7: output/ccnl_fmri_glm_54_goodSubjects_59717783.out -- Submitted batch job 59717783
+ccnl_fmri_glm.sh for GLM 55, subjects 2 7 6 1 8 3 4 5: output/ccnl_fmri_glm_55_goodSubjects_59717790.out -- Submitted batch job 59717790
+ccnl_fmri_glm.sh for GLM 56, subjects 3 8 7 5 2 1 4 6: output/ccnl_fmri_glm_56_goodSubjects_59717802.out -- Submitted batch job 59717802
+ccnl_fmri_glm.sh for GLM 57, subjects 4 7 8 3 1 5 2 6: output/ccnl_fmri_glm_57_goodSubjects_59717816.out -- Submitted batch job 59717816
+ccnl_fmri_glm.sh for GLM 58, subjects 5 4 3 6 7 2 8 1: output/ccnl_fmri_glm_58_goodSubjects_59717821.out -- Submitted batch job 59717821
+----------------
+--- Wed Jun 10 21:44:58 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 74, subjects 1 2 3 8 5 7 4 6: output/ccnl_fmri_glm_74_goodSubjects_59717871.out -- Submitted batch job 59717871
+----------------
+--- Thu Jun 11 17:10:59 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 67, subjects 3 7 6 2 8 4 5 1: output/ccnl_fmri_glm_67_goodSubjects_59866742.out -- Submitted batch job 59866742
+ccnl_fmri_glm.sh for GLM 68, subjects 5 2 6 7 1 8 4 3: output/ccnl_fmri_glm_68_goodSubjects_59866748.out -- Submitted batch job 59866748
+ccnl_fmri_glm.sh for GLM 69, subjects 5 3 7 4 8 6 1 2: output/ccnl_fmri_glm_69_goodSubjects_59866759.out -- Submitted batch job 59866759
+ccnl_fmri_glm.sh for GLM 70, subjects 1 6 3 4 8 5 7 2: output/ccnl_fmri_glm_70_goodSubjects_59866773.out -- Submitted batch job 59866773
+ccnl_fmri_glm.sh for GLM 71, subjects 8 5 3 2 7 4 1 6: output/ccnl_fmri_glm_71_goodSubjects_59866783.out -- Submitted batch job 59866783
+ccnl_fmri_glm.sh for GLM 72, subjects 2 8 6 7 5 1 4 3: output/ccnl_fmri_glm_72_goodSubjects_59866797.out -- Submitted batch job 59866797
+ccnl_fmri_glm.sh for GLM 73, subjects 8 1 3 7 5 4 6 2: output/ccnl_fmri_glm_73_goodSubjects_59866812.out -- Submitted batch job 59866812
+ccnl_fmri_glm.sh for GLM 74, subjects 5 6 4 7 3 1 2 8: output/ccnl_fmri_glm_74_goodSubjects_59866816.out -- Submitted batch job 59866816
+----------------
+--- Tue Jun 16 19:01:35 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(1, false, true, 1000, [], 500, \'ktaub\', \'correlation\'): output/neurosynth_rsa_60907710.out -- Submitted batch job 60907710
+neurosynth_rsa.sh neurosynth_rsa(1, false, true, 1000, [], 500, \'ktaub\', \'euclidean\'): output/neurosynth_rsa_60907711.out -- Submitted batch job 60907711
+----------------
+--- Thu Jun 18 12:34:48 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(6, false, true, 1000, [], 500, \'ktaub\', \'correlation\'): output/neurosynth_rsa_61293616.out -- Submitted batch job 61293616
+neurosynth_rsa.sh neurosynth_rsa(6, false, true, 1000, [], 500, \'ktaub\', \'euclidean\'): output/neurosynth_rsa_61293627.out -- Submitted batch job 61293627
+----------------
+--- Thu Jun 18 15:39:03 EDT 2020 Running ccnl_fmri_con 26..34
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_61321232.out -- Submitted batch job 61321232
+----------------
+--- Thu Jun 18 16:26:28 EDT 2020 Running ccnl_fmri_con 34..38
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_61331396.out -- Submitted batch job 61331396
+----------------
+--- Thu Jun 18 16:46:58 EDT 2020 Running ccnl_fmri_con 51..54
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_61332649.out -- Submitted batch job 61332649
+----------------
+--- Thu Jun 18 16:47:31 EDT 2020 Running ccnl_fmri_con 55..58
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_61332690.out -- Submitted batch job 61332690
+----------------
+--- Thu Jun 18 16:48:19 EDT 2020 Running ccnl_fmri_con 59..64
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_61332741.out -- Submitted batch job 61332741
+----------------
+--- Thu Jun 18 16:49:13 EDT 2020 Running ccnl_fmri_con 67..72
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_61332837.out -- Submitted batch job 61332837
+----------------
+--- Thu Jun 18 16:50:52 EDT 2020 Running ccnl_fmri_con 73..74
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_61333250.out -- Submitted batch job 61333250
+----------------
+--- Thu Jun 18 16:53:21 EDT 2020 Running ccnl_fmri_con 51..74 (excluding old ones)
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_61333924.out -- Submitted batch job 61333924
+----------------
+----------------
+--- Thu Jun 18 18:19:56 EDT 2020 Running ccnl_fmri_con 3 21
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_61344713.out -- Submitted batch job 61344713
+----------------
+--- Thu Jun 18 18:24:46 EDT 2020 Running ccnl_fmri_con 3 21
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_61345254.out -- Submitted batch job 61345254
+----------------
+--- Thu Jun 18 20:01:06 EDT 2020 Running neurosynth_rsa
+----------------
+neurosynth_rsa.sh neurosynth_rsa(6, false, true, 0, [], 500, \'ktaub\', \'correlation\'): output/neurosynth_rsa_61356299.out -- Submitted batch job 61356299
+neurosynth_rsa.sh neurosynth_rsa(6, false, true, 0, [], 500, \'ktaub\', \'euclidean\'): output/neurosynth_rsa_61356304.out -- Submitted batch job 61356304
+----------------
+--- Thu Jun 18 20:16:06 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 30, subjects 5 4 3 7 6 1 2 8: output/ccnl_fmri_glm_30_goodSubjects_61357611.out -- Submitted batch job 61357611
+----------------
+--- Thu Jun 18 20:16:14 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 57, subjects 3 8 1 7 4 2 5 6: output/ccnl_fmri_glm_57_goodSubjects_61357647.out -- Submitted batch job 61357647
+----------------
+--- Thu Jun 18 20:16:36 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 75, subjects 5 8 6 4 1 7 2 3: output/ccnl_fmri_glm_75_goodSubjects_61357747.out -- Submitted batch job 61357747
+----------------
+--- Fri Jun 19 07:39:05 EDT 2020 Running ccnl_fmri_con 3 21
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_61399554.out -- Submitted batch job 61399554
+----------------
+--- Fri Jun 19 08:47:05 EDT 2020 Running ccnl_fmri_con 3 21
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_61401487.out -- Submitted batch job 61401487
+----------------
+--- Fri Jun 19 12:13:13 EDT 2020 Running searchlight_rsa
+----------------
+searchlight_rsa.sh searchlight_rsa(1, false, 0, 10000, \'ktaub\', \'correlation\', 6): output/searchlight_rsa_61414256.out -- Submitted batch job 61414256
+----------------
+--- Thu Jul 2 14:33:03 EDT 2020: Running fit_gp for subjects 1 in parallel
+----------------
+fit_gp.sh for subject 1: output/fit_gp_1_63038551.out -- Submitted batch job 63038551
+----------------
+--- Thu Jul 2 14:39:57 EDT 2020: Running fit_gp for subjects 2 in parallel
+----------------
+fit_gp.sh for subject 2: output/fit_gp_2_true_21_theory_63039230.out -- Submitted batch job 63039230
+----------------
+--- Thu Jul 2 14:50:36 EDT 2020: Running fit_gp for subjects 1 in parallel
+----------------
+fit_gp.sh for subject 1: output/fit_gp_1_true_21_theory_63040100.out -- Submitted batch job 63040100
+----------------
+--- Thu Jul 2 15:12:23 EDT 2020: Running fit_gp for subjects 2 3 4 5 6 7 8 in parallel
+----------------
+fit_gp.sh for subject 2: output/fit_gp_2_true_21_theory_63042019.out -- Submitted batch job 63042019
+fit_gp.sh for subject 3: output/fit_gp_3_true_21_theory_63042023.out -- Submitted batch job 63042023
+fit_gp.sh for subject 4: output/fit_gp_4_true_21_theory_63042027.out -- Submitted batch job 63042027
+fit_gp.sh for subject 5: output/fit_gp_5_true_21_theory_63042028.out -- Submitted batch job 63042028
+fit_gp.sh for subject 6: output/fit_gp_6_true_21_theory_63042030.out -- Submitted batch job 63042030
+fit_gp.sh for subject 7: output/fit_gp_7_true_21_theory_63042034.out -- Submitted batch job 63042034
+fit_gp.sh for subject 8: output/fit_gp_8_true_21_theory_63042036.out -- Submitted batch job 63042036
+----------------
+--- Mon Jul 6 12:02:23 EDT 2020: Running fit_gp for subjects 1 2 3 4 5 6 7 8 in parallel
+----------------
+fit_gp.sh for subject 1: output/fit_gp_1_true_21_sprite_63412897.out -- Submitted batch job 63412897
+fit_gp.sh for subject 2: output/fit_gp_2_true_21_sprite_63412898.out -- Submitted batch job 63412898
+fit_gp.sh for subject 3: output/fit_gp_3_true_21_sprite_63412907.out -- Submitted batch job 63412907
+fit_gp.sh for subject 4: output/fit_gp_4_true_21_sprite_63412911.out -- Submitted batch job 63412911
+fit_gp.sh for subject 5: output/fit_gp_5_true_21_sprite_63412914.out -- Submitted batch job 63412914
+fit_gp.sh for subject 6: output/fit_gp_6_true_21_sprite_63412918.out -- Submitted batch job 63412918
+fit_gp.sh for subject 7: output/fit_gp_7_true_21_sprite_63412921.out -- Submitted batch job 63412921
+fit_gp.sh for subject 8: output/fit_gp_8_true_21_sprite_63412923.out -- Submitted batch job 63412923
+----------------
+--- Mon Jul 6 15:51:47 EDT 2020: Running fit_gp for subjects 1 2 3 4 5 6 7 8 in parallel
+----------------
+fit_gp.sh for subject 1: output/fit_gp_1_true_21_interaction_63435490.out -- Submitted batch job 63435490
+fit_gp.sh for subject 2: output/fit_gp_2_true_21_interaction_63435493.out -- Submitted batch job 63435493
+fit_gp.sh for subject 3: output/fit_gp_3_true_21_interaction_63435501.out -- Submitted batch job 63435501
+fit_gp.sh for subject 4: output/fit_gp_4_true_21_interaction_63435505.out -- Submitted batch job 63435505
+fit_gp.sh for subject 5: output/fit_gp_5_true_21_interaction_63435508.out -- Submitted batch job 63435508
+fit_gp.sh for subject 6: output/fit_gp_6_true_21_interaction_63435519.out -- Submitted batch job 63435519
+fit_gp.sh for subject 7: output/fit_gp_7_true_21_interaction_63435529.out -- Submitted batch job 63435529
+fit_gp.sh for subject 8: output/fit_gp_8_true_21_interaction_63435539.out -- Submitted batch job 63435539
+----------------
+--- Mon Jul 6 15:52:14 EDT 2020: Running fit_gp for subjects 1 2 3 4 5 6 7 8 in parallel
+----------------
+fit_gp.sh for subject 1: output/fit_gp_1_true_21_termination_63435564.out -- Submitted batch job 63435564
+fit_gp.sh for subject 2: output/fit_gp_2_true_21_termination_63435566.out -- Submitted batch job 63435566
+fit_gp.sh for subject 3: output/fit_gp_3_true_21_termination_63435570.out -- Submitted batch job 63435570
+fit_gp.sh for subject 4: output/fit_gp_4_true_21_termination_63435576.out -- Submitted batch job 63435576
+fit_gp.sh for subject 5: output/fit_gp_5_true_21_termination_63435582.out -- Submitted batch job 63435582
+fit_gp.sh for subject 6: output/fit_gp_6_true_21_termination_63435587.out -- Submitted batch job 63435587
+fit_gp.sh for subject 7: output/fit_gp_7_true_21_termination_63435596.out -- Submitted batch job 63435596
+fit_gp.sh for subject 8: output/fit_gp_8_true_21_termination_63435608.out -- Submitted batch job 63435608
+----------------
+--- Mon Jul 6 18:23:41 EDT 2020: Running fit_gp for subjects 7 in parallel
+----------------
+fit_gp.sh for subject 7: output/fit_gp_7_true_21_termination_63466449.out -- Submitted batch job 63466449
+----------------
+--- Mon Jul 6 18:24:13 EDT 2020: Running fit_gp for subjects 8 in parallel
+----------------
+fit_gp.sh for subject 8: output/fit_gp_8_true_21_sprite_63466621.out -- Submitted batch job 63466621
+----------------
+--- Tue Jul 7 10:49:43 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 21, subjects 7 1 5 4 2 8 6 3: output/ccnl_fmri_glm_21_goodSubjects_63571236.out -- Submitted batch job 63571236
+----------------
+--- Tue Jul 7 20:36:07 EDT 2020: Running fit_gp_CV for subjects 1 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_sprite_1_63706270.out -- Submitted batch job 63706270
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_sprite_2_63706271.out -- Submitted batch job 63706271
+----------------
+--- Tue Jul 7 20:43:08 EDT 2020: Running fit_gp_CV for subjects 1 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_1_63706337.out -- Submitted batch job 63706337
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_2_63706338.out -- Submitted batch job 63706338
+----------------
+--- Tue Jul 7 20:43:57 EDT 2020: Running fit_gp_CV for subjects 1 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_1_63706362.out -- Submitted batch job 63706362
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_2_63706365.out -- Submitted batch job 63706365
+----------------
+--- Tue Jul 7 20:53:32 EDT 2020: Running fit_gp_CV for subjects 1 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_1_63706745.out -- Submitted batch job 63706745
+----------------
+--- Tue Jul 7 20:58:17 EDT 2020: Running fit_gp_CV for subjects 1 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_1_63706923.out -- Submitted batch job 63706923
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_2_63706924.out -- Submitted batch job 63706924
+----------------
+--- Tue Jul 7 20:59:59 EDT 2020: Running fit_gp_CV for subjects 1 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_1_63706942.out -- Submitted batch job 63706942
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_2_63706945.out -- Submitted batch job 63706945
+----------------
+--- Thu Jul 9 11:20:18 EDT 2020: Running fit_gp_CV for subjects 1 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_63886798.out -- Submitted batch job 63886798
+----------------
+--- Thu Jul 9 11:41:02 EDT 2020: Running fit_gp_CV for subjects 1 in parallel
+----------------
+----------------
+--- Thu Jul 9 11:41:30 EDT 2020: Running fit_gp_CV for subjects 1 in parallel -- sigma = 1, no logpredlik, no ceil
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_63890600.out -- Submitted batch job 63890600
+----------------
+--- Thu Jul 9 12:01:41 EDT 2020: Running fit_gp_CV for subjects 2 in parallel
+----------------
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_21_theory_63894006.out -- Submitted batch job 63894006
+----------------
+--- Thu Jul 9 12:13:47 EDT 2020: Running fit_gp_CV for subjects 1 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_63895548.out -- Submitted batch job 63895548
+----------------
+--- Thu Jul 9 12:23:11 EDT 2020: Running fit_gp_CV for subjects 1 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_63896498.out -- Submitted batch job 63896498
+----------------
+--- Thu Jul 9 12:28:32 EDT 2020: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_63896720.out -- Submitted batch job 63896720
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_21_theory_63896721.out -- Submitted batch job 63896721
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_21_theory_63896723.out -- Submitted batch job 63896723
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_21_theory_63896724.out -- Submitted batch job 63896724
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_21_theory_63896725.out -- Submitted batch job 63896725
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_21_theory_63896726.out -- Submitted batch job 63896726
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_21_theory_63896728.out -- Submitted batch job 63896728
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_21_theory_63896729.out -- Submitted batch job 63896729
+----------------
+--- Thu Jul 9 16:05:00 EDT 2020: Running fit_gp_CV for subjects 1 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_10000_1_63920177.out -- Submitted batch job 63920177
+----------------
+--- Thu Jul 9 16:14:18 EDT 2020: Running fit_gp_CV for subjects 1 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_10000_1_63920301.out -- Submitted batch job 63920301
+----------------
+--- Thu Jul 9 16:47:19 EDT 2020: Running fit_gp_CV for subjects 1 in parallel BATCH ceil
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_10000_2_63921777.out -- Submitted batch job 63921777
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_10000_3_63921778.out -- Submitted batch job 63921778
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_10000_4_63921781.out -- Submitted batch job 63921781
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_10000_5_63921782.out -- Submitted batch job 63921782
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_10000_6_63921783.out -- Submitted batch job 63921783
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_10000_7_63921784.out -- Submitted batch job 63921784
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_10000_8_63921785.out -- Submitted batch job 63921785
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_10000_9_63921786.out -- Submitted batch job 63921786
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_10000_10_63921787.out -- Submitted batch job 63921787
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_10000_11_63921788.out -- Submitted batch job 63921788
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_10000_12_63921789.out -- Submitted batch job 63921789
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_10000_13_63921790.out -- Submitted batch job 63921790
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_10000_14_63921791.out -- Submitted batch job 63921791
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_10000_15_63921792.out -- Submitted batch job 63921792
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_10000_16_63921793.out -- Submitted batch job 63921793
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_10000_17_63921794.out -- Submitted batch job 63921794
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_10000_18_63921795.out -- Submitted batch job 63921795
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_10000_19_63921796.out -- Submitted batch job 63921796
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_10000_20_63921797.out -- Submitted batch job 63921797
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_10000_21_63921799.out -- Submitted batch job 63921799
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_10000_22_63921800.out -- Submitted batch job 63921800
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_10000_23_63921801.out -- Submitted batch job 63921801
+----------------
+--- Thu Jul 9 16:54:23 EDT 2020: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_63921916.out -- Submitted batch job 63921916
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_21_theory_63921917.out -- Submitted batch job 63921917
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_21_theory_63921918.out -- Submitted batch job 63921918
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_21_theory_63921919.out -- Submitted batch job 63921919
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_21_theory_63921920.out -- Submitted batch job 63921920
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_21_theory_63921921.out -- Submitted batch job 63921921
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_21_theory_63921923.out -- Submitted batch job 63921923
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_21_theory_63921925.out -- Submitted batch job 63921925
+----------------
+--- Thu Jul 9 18:26:32 EDT 2020: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_sprite_63923750.out -- Submitted batch job 63923750
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_21_sprite_63923755.out -- Submitted batch job 63923755
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_21_sprite_63923759.out -- Submitted batch job 63923759
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_21_sprite_63923763.out -- Submitted batch job 63923763
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_21_sprite_63923765.out -- Submitted batch job 63923765
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_21_sprite_63923768.out -- Submitted batch job 63923768
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_21_sprite_63923769.out -- Submitted batch job 63923769
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_21_sprite_63923772.out -- Submitted batch job 63923772
+----------------
+--- Thu Jul 9 18:26:54 EDT 2020: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_interaction_63923790.out -- Submitted batch job 63923790
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_21_interaction_63923791.out -- Submitted batch job 63923791
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_21_interaction_63923795.out -- Submitted batch job 63923795
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_21_interaction_63923796.out -- Submitted batch job 63923796
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_21_interaction_63923798.out -- Submitted batch job 63923798
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_21_interaction_63923801.out -- Submitted batch job 63923801
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_21_interaction_63923802.out -- Submitted batch job 63923802
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_21_interaction_63923803.out -- Submitted batch job 63923803
+----------------
+--- Thu Jul 9 18:27:14 EDT 2020: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_termination_63923804.out -- Submitted batch job 63923804
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_21_termination_63923815.out -- Submitted batch job 63923815
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_21_termination_63923823.out -- Submitted batch job 63923823
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_21_termination_63923824.out -- Submitted batch job 63923824
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_21_termination_63923825.out -- Submitted batch job 63923825
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_21_termination_63923826.out -- Submitted batch job 63923826
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_21_termination_63923827.out -- Submitted batch job 63923827
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_21_termination_63923829.out -- Submitted batch job 63923829
+----------------
+--- Thu Jul 9 22:55:31 EDT 2020: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_21_theory_63933928.out -- Submitted batch job 63933928
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_21_theory_63933930.out -- Submitted batch job 63933930
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_21_theory_63933934.out -- Submitted batch job 63933934
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_21_theory_63933936.out -- Submitted batch job 63933936
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_21_theory_63933938.out -- Submitted batch job 63933938
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_21_theory_63933939.out -- Submitted batch job 63933939
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_21_theory_63933941.out -- Submitted batch job 63933941
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_21_theory_63933942.out -- Submitted batch job 63933942
+----------------
+--- Thu Jul 9 23:14:03 EDT 2020: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_9_theory_63936348.out -- Submitted batch job 63936348
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_9_theory_63936354.out -- Submitted batch job 63936354
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_9_theory_63936366.out -- Submitted batch job 63936366
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_9_theory_63936372.out -- Submitted batch job 63936372
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_9_theory_63936373.out -- Submitted batch job 63936373
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_9_theory_63936376.out -- Submitted batch job 63936376
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_9_theory_63936381.out -- Submitted batch job 63936381
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_9_theory_63936383.out -- Submitted batch job 63936383
+----------------
+--- Thu Jul 9 23:20:44 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 77, subjects 5 3 7 6 2 8 4 1: output/ccnl_fmri_glm_77_goodSubjects_63937169.out -- Submitted batch job 63937169
+----------------
+--- Thu Jul 9 23:20:59 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 77, subjects 6 7 1 4 3 5 2 8: output/ccnl_fmri_glm_77_goodSubjects_63937294.out -- Submitted batch job 63937294
+----------------
+--- Fri Jul 10 16:18:18 EDT 2020: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_77_theory_64002174.out -- Submitted batch job 64002174
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_77_theory_64002175.out -- Submitted batch job 64002175
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_77_theory_64002176.out -- Submitted batch job 64002176
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_77_theory_64002177.out -- Submitted batch job 64002177
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_77_theory_64002210.out -- Submitted batch job 64002210
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_77_theory_64002221.out -- Submitted batch job 64002221
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_77_theory_64002222.out -- Submitted batch job 64002222
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_77_theory_64002233.out -- Submitted batch job 64002233
+----------------
+--- Fri Jul 10 17:41:08 EDT 2020: Running fit_gp_CV_batch for subjects 1 in parallel
+----------------
+fit_gp_CV_batch.sh for subject 1: output/fit_gp_CV_batch_1_true_9_theory_10000_1_64011633.out -- Submitted batch job 64011633
+fit_gp_CV_batch.sh for subject 1: output/fit_gp_CV_batch_1_true_9_theory_10000_2_64011634.out -- Submitted batch job 64011634
+fit_gp_CV_batch.sh for subject 1: output/fit_gp_CV_batch_1_true_9_theory_10000_3_64011635.out -- Submitted batch job 64011635
+fit_gp_CV_batch.sh for subject 1: output/fit_gp_CV_batch_1_true_9_theory_10000_4_64011636.out -- Submitted batch job 64011636
+fit_gp_CV_batch.sh for subject 1: output/fit_gp_CV_batch_1_true_9_theory_10000_5_64011640.out -- Submitted batch job 64011640
+fit_gp_CV_batch.sh for subject 1: output/fit_gp_CV_batch_1_true_9_theory_10000_6_64011652.out -- Submitted batch job 64011652
+fit_gp_CV_batch.sh for subject 1: output/fit_gp_CV_batch_1_true_9_theory_10000_7_64011653.out -- Submitted batch job 64011653
+fit_gp_CV_batch.sh for subject 1: output/fit_gp_CV_batch_1_true_9_theory_10000_8_64011654.out -- Submitted batch job 64011654
+fit_gp_CV_batch.sh for subject 1: output/fit_gp_CV_batch_1_true_9_theory_10000_9_64011655.out -- Submitted batch job 64011655
+fit_gp_CV_batch.sh for subject 1: output/fit_gp_CV_batch_1_true_9_theory_10000_10_64011656.out -- Submitted batch job 64011656
+fit_gp_CV_batch.sh for subject 1: output/fit_gp_CV_batch_1_true_9_theory_10000_11_64011657.out -- Submitted batch job 64011657
+fit_gp_CV_batch.sh for subject 1: output/fit_gp_CV_batch_1_true_9_theory_10000_12_64011659.out -- Submitted batch job 64011659
+fit_gp_CV_batch.sh for subject 1: output/fit_gp_CV_batch_1_true_9_theory_10000_13_64011660.out -- Submitted batch job 64011660
+fit_gp_CV_batch.sh for subject 1: output/fit_gp_CV_batch_1_true_9_theory_10000_14_64011661.out -- Submitted batch job 64011661
+fit_gp_CV_batch.sh for subject 1: output/fit_gp_CV_batch_1_true_9_theory_10000_15_64011662.out -- Submitted batch job 64011662
+fit_gp_CV_batch.sh for subject 1: output/fit_gp_CV_batch_1_true_9_theory_10000_16_64011663.out -- Submitted batch job 64011663
+fit_gp_CV_batch.sh for subject 1: output/fit_gp_CV_batch_1_true_9_theory_10000_17_64011664.out -- Submitted batch job 64011664
+fit_gp_CV_batch.sh for subject 1: output/fit_gp_CV_batch_1_true_9_theory_10000_18_64011665.out -- Submitted batch job 64011665
+fit_gp_CV_batch.sh for subject 1: output/fit_gp_CV_batch_1_true_9_theory_10000_19_64011666.out -- Submitted batch job 64011666
+fit_gp_CV_batch.sh for subject 1: output/fit_gp_CV_batch_1_true_9_theory_10000_20_64011668.out -- Submitted batch job 64011668
+fit_gp_CV_batch.sh for subject 1: output/fit_gp_CV_batch_1_true_9_theory_10000_21_64011671.out -- Submitted batch job 64011671
+fit_gp_CV_batch.sh for subject 1: output/fit_gp_CV_batch_1_true_9_theory_10000_22_64011672.out -- Submitted batch job 64011672
+fit_gp_CV_batch.sh for subject 1: output/fit_gp_CV_batch_1_true_9_theory_10000_23_64011673.out -- Submitted batch job 64011673
+----------------
+--- Fri Jul 10 17:55:48 EDT 2020: Running fit_gp_CV_batch for subjects 2 3 4 5 6 7 8 in parallel
+----------------
+fit_gp_CV_batch.sh for subject 2: output/fit_gp_CV_batch_2_true_9_theory_10000_1_64013765.out -- Submitted batch job 64013765
+fit_gp_CV_batch.sh for subject 2: output/fit_gp_CV_batch_2_true_9_theory_10000_2_64013783.out -- Submitted batch job 64013783
+fit_gp_CV_batch.sh for subject 2: output/fit_gp_CV_batch_2_true_9_theory_10000_3_64013790.out -- Submitted batch job 64013790
+fit_gp_CV_batch.sh for subject 2: output/fit_gp_CV_batch_2_true_9_theory_10000_4_64013801.out -- Submitted batch job 64013801
+fit_gp_CV_batch.sh for subject 2: output/fit_gp_CV_batch_2_true_9_theory_10000_5_64013821.out -- Submitted batch job 64013821
+fit_gp_CV_batch.sh for subject 2: output/fit_gp_CV_batch_2_true_9_theory_10000_6_64013845.out -- Submitted batch job 64013845
+fit_gp_CV_batch.sh for subject 2: output/fit_gp_CV_batch_2_true_9_theory_10000_7_64013860.out -- Submitted batch job 64013860
+fit_gp_CV_batch.sh for subject 2: output/fit_gp_CV_batch_2_true_9_theory_10000_8_64013877.out -- Submitted batch job 64013877
+fit_gp_CV_batch.sh for subject 2: output/fit_gp_CV_batch_2_true_9_theory_10000_9_64013897.out -- Submitted batch job 64013897
+fit_gp_CV_batch.sh for subject 2: output/fit_gp_CV_batch_2_true_9_theory_10000_10_64013904.out -- Submitted batch job 64013904
+fit_gp_CV_batch.sh for subject 2: output/fit_gp_CV_batch_2_true_9_theory_10000_11_64013917.out -- Submitted batch job 64013917
+fit_gp_CV_batch.sh for subject 2: output/fit_gp_CV_batch_2_true_9_theory_10000_12_64013931.out -- Submitted batch job 64013931
+fit_gp_CV_batch.sh for subject 2: output/fit_gp_CV_batch_2_true_9_theory_10000_13_64013941.out -- Submitted batch job 64013941
+fit_gp_CV_batch.sh for subject 2: output/fit_gp_CV_batch_2_true_9_theory_10000_14_64013951.out -- Submitted batch job 64013951
+fit_gp_CV_batch.sh for subject 2: output/fit_gp_CV_batch_2_true_9_theory_10000_15_64013961.out -- Submitted batch job 64013961
+fit_gp_CV_batch.sh for subject 2: output/fit_gp_CV_batch_2_true_9_theory_10000_16_64013976.out -- Submitted batch job 64013976
+fit_gp_CV_batch.sh for subject 2: output/fit_gp_CV_batch_2_true_9_theory_10000_17_64013988.out -- Submitted batch job 64013988
+fit_gp_CV_batch.sh for subject 2: output/fit_gp_CV_batch_2_true_9_theory_10000_18_64013997.out -- Submitted batch job 64013997
+fit_gp_CV_batch.sh for subject 2: output/fit_gp_CV_batch_2_true_9_theory_10000_19_64014007.out -- Submitted batch job 64014007
+fit_gp_CV_batch.sh for subject 2: output/fit_gp_CV_batch_2_true_9_theory_10000_20_64014020.out -- Submitted batch job 64014020
+fit_gp_CV_batch.sh for subject 2: output/fit_gp_CV_batch_2_true_9_theory_10000_21_64014030.out -- Submitted batch job 64014030
+fit_gp_CV_batch.sh for subject 2: output/fit_gp_CV_batch_2_true_9_theory_10000_22_64014041.out -- Submitted batch job 64014041
+fit_gp_CV_batch.sh for subject 2: output/fit_gp_CV_batch_2_true_9_theory_10000_23_64014051.out -- Submitted batch job 64014051
+fit_gp_CV_batch.sh for subject 3: output/fit_gp_CV_batch_3_true_9_theory_10000_1_64014066.out -- Submitted batch job 64014066
+fit_gp_CV_batch.sh for subject 3: output/fit_gp_CV_batch_3_true_9_theory_10000_2_64014080.out -- Submitted batch job 64014080
+fit_gp_CV_batch.sh for subject 3: output/fit_gp_CV_batch_3_true_9_theory_10000_3_64014083.out -- Submitted batch job 64014083
+fit_gp_CV_batch.sh for subject 3: output/fit_gp_CV_batch_3_true_9_theory_10000_4_64014102.out -- Submitted batch job 64014102
+fit_gp_CV_batch.sh for subject 3: output/fit_gp_CV_batch_3_true_9_theory_10000_5_64014106.out -- Submitted batch job 64014106
+fit_gp_CV_batch.sh for subject 3: output/fit_gp_CV_batch_3_true_9_theory_10000_6_64014109.out -- Submitted batch job 64014109
+fit_gp_CV_batch.sh for subject 3: output/fit_gp_CV_batch_3_true_9_theory_10000_7_64014126.out -- Submitted batch job 64014126
+fit_gp_CV_batch.sh for subject 3: output/fit_gp_CV_batch_3_true_9_theory_10000_8_64014131.out -- Submitted batch job 64014131
+fit_gp_CV_batch.sh for subject 3: output/fit_gp_CV_batch_3_true_9_theory_10000_9_64014138.out -- Submitted batch job 64014138
+fit_gp_CV_batch.sh for subject 3: output/fit_gp_CV_batch_3_true_9_theory_10000_10_64014144.out -- Submitted batch job 64014144
+fit_gp_CV_batch.sh for subject 3: output/fit_gp_CV_batch_3_true_9_theory_10000_11_64014150.out -- Submitted batch job 64014150
+fit_gp_CV_batch.sh for subject 3: output/fit_gp_CV_batch_3_true_9_theory_10000_12_64014157.out -- Submitted batch job 64014157
+fit_gp_CV_batch.sh for subject 3: output/fit_gp_CV_batch_3_true_9_theory_10000_13_64014164.out -- Submitted batch job 64014164
+fit_gp_CV_batch.sh for subject 3: output/fit_gp_CV_batch_3_true_9_theory_10000_14_64014175.out -- Submitted batch job 64014175
+fit_gp_CV_batch.sh for subject 3: output/fit_gp_CV_batch_3_true_9_theory_10000_15_64014181.out -- Submitted batch job 64014181
+fit_gp_CV_batch.sh for subject 3: output/fit_gp_CV_batch_3_true_9_theory_10000_16_64014187.out -- Submitted batch job 64014187
+fit_gp_CV_batch.sh for subject 3: output/fit_gp_CV_batch_3_true_9_theory_10000_17_64014194.out -- Submitted batch job 64014194
+fit_gp_CV_batch.sh for subject 3: output/fit_gp_CV_batch_3_true_9_theory_10000_18_64014201.out -- Submitted batch job 64014201
+fit_gp_CV_batch.sh for subject 3: output/fit_gp_CV_batch_3_true_9_theory_10000_19_64014208.out -- Submitted batch job 64014208
+fit_gp_CV_batch.sh for subject 3: output/fit_gp_CV_batch_3_true_9_theory_10000_20_64014213.out -- Submitted batch job 64014213
+fit_gp_CV_batch.sh for subject 3: output/fit_gp_CV_batch_3_true_9_theory_10000_21_64014219.out -- Submitted batch job 64014219
+fit_gp_CV_batch.sh for subject 3: output/fit_gp_CV_batch_3_true_9_theory_10000_22_64014225.out -- Submitted batch job 64014225
+fit_gp_CV_batch.sh for subject 3: output/fit_gp_CV_batch_3_true_9_theory_10000_23_64014231.out -- Submitted batch job 64014231
+fit_gp_CV_batch.sh for subject 4: output/fit_gp_CV_batch_4_true_9_theory_10000_1_64014235.out -- Submitted batch job 64014235
+fit_gp_CV_batch.sh for subject 4: output/fit_gp_CV_batch_4_true_9_theory_10000_2_64014241.out -- Submitted batch job 64014241
+fit_gp_CV_batch.sh for subject 4: output/fit_gp_CV_batch_4_true_9_theory_10000_3_64014243.out -- Submitted batch job 64014243
+fit_gp_CV_batch.sh for subject 4: output/fit_gp_CV_batch_4_true_9_theory_10000_4_64014244.out -- Submitted batch job 64014244
+fit_gp_CV_batch.sh for subject 4: output/fit_gp_CV_batch_4_true_9_theory_10000_5_64014245.out -- Submitted batch job 64014245
+fit_gp_CV_batch.sh for subject 4: output/fit_gp_CV_batch_4_true_9_theory_10000_6_64014246.out -- Submitted batch job 64014246
+fit_gp_CV_batch.sh for subject 4: output/fit_gp_CV_batch_4_true_9_theory_10000_7_64014247.out -- Submitted batch job 64014247
+fit_gp_CV_batch.sh for subject 4: output/fit_gp_CV_batch_4_true_9_theory_10000_8_64014248.out -- Submitted batch job 64014248
+fit_gp_CV_batch.sh for subject 4: output/fit_gp_CV_batch_4_true_9_theory_10000_9_64014262.out -- Submitted batch job 64014262
+fit_gp_CV_batch.sh for subject 4: output/fit_gp_CV_batch_4_true_9_theory_10000_10_64014263.out -- Submitted batch job 64014263
+fit_gp_CV_batch.sh for subject 4: output/fit_gp_CV_batch_4_true_9_theory_10000_11_64014264.out -- Submitted batch job 64014264
+fit_gp_CV_batch.sh for subject 4: output/fit_gp_CV_batch_4_true_9_theory_10000_12_64014265.out -- Submitted batch job 64014265
+fit_gp_CV_batch.sh for subject 4: output/fit_gp_CV_batch_4_true_9_theory_10000_13_64014267.out -- Submitted batch job 64014267
+fit_gp_CV_batch.sh for subject 4: output/fit_gp_CV_batch_4_true_9_theory_10000_14_64014269.out -- Submitted batch job 64014269
+fit_gp_CV_batch.sh for subject 4: output/fit_gp_CV_batch_4_true_9_theory_10000_15_64014270.out -- Submitted batch job 64014270
+fit_gp_CV_batch.sh for subject 4: output/fit_gp_CV_batch_4_true_9_theory_10000_16_64014271.out -- Submitted batch job 64014271
+fit_gp_CV_batch.sh for subject 4: output/fit_gp_CV_batch_4_true_9_theory_10000_17_64014272.out -- Submitted batch job 64014272
+fit_gp_CV_batch.sh for subject 4: output/fit_gp_CV_batch_4_true_9_theory_10000_18_64014273.out -- Submitted batch job 64014273
+fit_gp_CV_batch.sh for subject 4: output/fit_gp_CV_batch_4_true_9_theory_10000_19_64014274.out -- Submitted batch job 64014274
+fit_gp_CV_batch.sh for subject 4: output/fit_gp_CV_batch_4_true_9_theory_10000_20_64014275.out -- Submitted batch job 64014275
+fit_gp_CV_batch.sh for subject 4: output/fit_gp_CV_batch_4_true_9_theory_10000_21_64014276.out -- Submitted batch job 64014276
+fit_gp_CV_batch.sh for subject 4: output/fit_gp_CV_batch_4_true_9_theory_10000_22_64014278.out -- Submitted batch job 64014278
+fit_gp_CV_batch.sh for subject 4: output/fit_gp_CV_batch_4_true_9_theory_10000_23_64014279.out -- Submitted batch job 64014279
+fit_gp_CV_batch.sh for subject 5: output/fit_gp_CV_batch_5_true_9_theory_10000_1_64014280.out -- Submitted batch job 64014280
+fit_gp_CV_batch.sh for subject 5: output/fit_gp_CV_batch_5_true_9_theory_10000_2_64014281.out -- Submitted batch job 64014281
+fit_gp_CV_batch.sh for subject 5: output/fit_gp_CV_batch_5_true_9_theory_10000_3_64014282.out -- Submitted batch job 64014282
+fit_gp_CV_batch.sh for subject 5: output/fit_gp_CV_batch_5_true_9_theory_10000_4_64014283.out -- Submitted batch job 64014283
+fit_gp_CV_batch.sh for subject 5: output/fit_gp_CV_batch_5_true_9_theory_10000_5_64014284.out -- Submitted batch job 64014284
+fit_gp_CV_batch.sh for subject 5: output/fit_gp_CV_batch_5_true_9_theory_10000_6_64014285.out -- Submitted batch job 64014285
+fit_gp_CV_batch.sh for subject 5: output/fit_gp_CV_batch_5_true_9_theory_10000_7_64014286.out -- Submitted batch job 64014286
+fit_gp_CV_batch.sh for subject 5: output/fit_gp_CV_batch_5_true_9_theory_10000_8_64014287.out -- Submitted batch job 64014287
+fit_gp_CV_batch.sh for subject 5: output/fit_gp_CV_batch_5_true_9_theory_10000_9_64014288.out -- Submitted batch job 64014288
+fit_gp_CV_batch.sh for subject 5: output/fit_gp_CV_batch_5_true_9_theory_10000_10_64014289.out -- Submitted batch job 64014289
+fit_gp_CV_batch.sh for subject 5: output/fit_gp_CV_batch_5_true_9_theory_10000_11_64014290.out -- Submitted batch job 64014290
+fit_gp_CV_batch.sh for subject 5: output/fit_gp_CV_batch_5_true_9_theory_10000_12_64014301.out -- Submitted batch job 64014301
+fit_gp_CV_batch.sh for subject 5: output/fit_gp_CV_batch_5_true_9_theory_10000_13_64014303.out -- Submitted batch job 64014303
+fit_gp_CV_batch.sh for subject 5: output/fit_gp_CV_batch_5_true_9_theory_10000_14_64014304.out -- Submitted batch job 64014304
+fit_gp_CV_batch.sh for subject 5: output/fit_gp_CV_batch_5_true_9_theory_10000_15_64014305.out -- Submitted batch job 64014305
+fit_gp_CV_batch.sh for subject 5: output/fit_gp_CV_batch_5_true_9_theory_10000_16_64014307.out -- Submitted batch job 64014307
+fit_gp_CV_batch.sh for subject 5: output/fit_gp_CV_batch_5_true_9_theory_10000_17_64014308.out -- Submitted batch job 64014308
+fit_gp_CV_batch.sh for subject 5: output/fit_gp_CV_batch_5_true_9_theory_10000_18_64014309.out -- Submitted batch job 64014309
+fit_gp_CV_batch.sh for subject 5: output/fit_gp_CV_batch_5_true_9_theory_10000_19_64014310.out -- Submitted batch job 64014310
+fit_gp_CV_batch.sh for subject 5: output/fit_gp_CV_batch_5_true_9_theory_10000_20_64014311.out -- Submitted batch job 64014311
+fit_gp_CV_batch.sh for subject 5: output/fit_gp_CV_batch_5_true_9_theory_10000_21_64014313.out -- Submitted batch job 64014313
+fit_gp_CV_batch.sh for subject 5: output/fit_gp_CV_batch_5_true_9_theory_10000_22_64014315.out -- Submitted batch job 64014315
+fit_gp_CV_batch.sh for subject 5: output/fit_gp_CV_batch_5_true_9_theory_10000_23_64014316.out -- Submitted batch job 64014316
+fit_gp_CV_batch.sh for subject 6: output/fit_gp_CV_batch_6_true_9_theory_10000_1_64014317.out -- Submitted batch job 64014317
+fit_gp_CV_batch.sh for subject 6: output/fit_gp_CV_batch_6_true_9_theory_10000_2_64014318.out -- Submitted batch job 64014318
+fit_gp_CV_batch.sh for subject 6: output/fit_gp_CV_batch_6_true_9_theory_10000_3_64014319.out -- Submitted batch job 64014319
+fit_gp_CV_batch.sh for subject 6: output/fit_gp_CV_batch_6_true_9_theory_10000_4_64014320.out -- Submitted batch job 64014320
+fit_gp_CV_batch.sh for subject 6: output/fit_gp_CV_batch_6_true_9_theory_10000_5_64014322.out -- Submitted batch job 64014322
+fit_gp_CV_batch.sh for subject 6: output/fit_gp_CV_batch_6_true_9_theory_10000_6_64014323.out -- Submitted batch job 64014323
+fit_gp_CV_batch.sh for subject 6: output/fit_gp_CV_batch_6_true_9_theory_10000_7_64014324.out -- Submitted batch job 64014324
+fit_gp_CV_batch.sh for subject 6: output/fit_gp_CV_batch_6_true_9_theory_10000_8_64014325.out -- Submitted batch job 64014325
+fit_gp_CV_batch.sh for subject 6: output/fit_gp_CV_batch_6_true_9_theory_10000_9_64014326.out -- Submitted batch job 64014326
+fit_gp_CV_batch.sh for subject 6: output/fit_gp_CV_batch_6_true_9_theory_10000_10_64014328.out -- Submitted batch job 64014328
+fit_gp_CV_batch.sh for subject 6: output/fit_gp_CV_batch_6_true_9_theory_10000_11_64014329.out -- Submitted batch job 64014329
+fit_gp_CV_batch.sh for subject 6: output/fit_gp_CV_batch_6_true_9_theory_10000_12_64014341.out -- Submitted batch job 64014341
+fit_gp_CV_batch.sh for subject 6: output/fit_gp_CV_batch_6_true_9_theory_10000_13_64014343.out -- Submitted batch job 64014343
+fit_gp_CV_batch.sh for subject 6: output/fit_gp_CV_batch_6_true_9_theory_10000_14_64014344.out -- Submitted batch job 64014344
+fit_gp_CV_batch.sh for subject 6: output/fit_gp_CV_batch_6_true_9_theory_10000_15_64014345.out -- Submitted batch job 64014345
+fit_gp_CV_batch.sh for subject 6: output/fit_gp_CV_batch_6_true_9_theory_10000_16_64014347.out -- Submitted batch job 64014347
+fit_gp_CV_batch.sh for subject 6: output/fit_gp_CV_batch_6_true_9_theory_10000_17_64014348.out -- Submitted batch job 64014348
+fit_gp_CV_batch.sh for subject 6: output/fit_gp_CV_batch_6_true_9_theory_10000_18_64014349.out -- Submitted batch job 64014349
+fit_gp_CV_batch.sh for subject 6: output/fit_gp_CV_batch_6_true_9_theory_10000_19_64014350.out -- Submitted batch job 64014350
+fit_gp_CV_batch.sh for subject 6: output/fit_gp_CV_batch_6_true_9_theory_10000_20_64014351.out -- Submitted batch job 64014351
+fit_gp_CV_batch.sh for subject 6: output/fit_gp_CV_batch_6_true_9_theory_10000_21_64014352.out -- Submitted batch job 64014352
+fit_gp_CV_batch.sh for subject 6: output/fit_gp_CV_batch_6_true_9_theory_10000_22_64014353.out -- Submitted batch job 64014353
+fit_gp_CV_batch.sh for subject 6: output/fit_gp_CV_batch_6_true_9_theory_10000_23_64014354.out -- Submitted batch job 64014354
+fit_gp_CV_batch.sh for subject 7: output/fit_gp_CV_batch_7_true_9_theory_10000_1_64014355.out -- Submitted batch job 64014355
+fit_gp_CV_batch.sh for subject 7: output/fit_gp_CV_batch_7_true_9_theory_10000_2_64014356.out -- Submitted batch job 64014356
+fit_gp_CV_batch.sh for subject 7: output/fit_gp_CV_batch_7_true_9_theory_10000_3_64014357.out -- Submitted batch job 64014357
+fit_gp_CV_batch.sh for subject 7: output/fit_gp_CV_batch_7_true_9_theory_10000_4_64014358.out -- Submitted batch job 64014358
+fit_gp_CV_batch.sh for subject 7: output/fit_gp_CV_batch_7_true_9_theory_10000_5_64014359.out -- Submitted batch job 64014359
+fit_gp_CV_batch.sh for subject 7: output/fit_gp_CV_batch_7_true_9_theory_10000_6_64014360.out -- Submitted batch job 64014360
+fit_gp_CV_batch.sh for subject 7: output/fit_gp_CV_batch_7_true_9_theory_10000_7_64014361.out -- Submitted batch job 64014361
+fit_gp_CV_batch.sh for subject 7: output/fit_gp_CV_batch_7_true_9_theory_10000_8_64014362.out -- Submitted batch job 64014362
+fit_gp_CV_batch.sh for subject 7: output/fit_gp_CV_batch_7_true_9_theory_10000_9_64014363.out -- Submitted batch job 64014363
+fit_gp_CV_batch.sh for subject 7: output/fit_gp_CV_batch_7_true_9_theory_10000_10_64014364.out -- Submitted batch job 64014364
+fit_gp_CV_batch.sh for subject 7: output/fit_gp_CV_batch_7_true_9_theory_10000_11_64014365.out -- Submitted batch job 64014365
+fit_gp_CV_batch.sh for subject 7: output/fit_gp_CV_batch_7_true_9_theory_10000_12_64014366.out -- Submitted batch job 64014366
+fit_gp_CV_batch.sh for subject 7: output/fit_gp_CV_batch_7_true_9_theory_10000_13_64014367.out -- Submitted batch job 64014367
+fit_gp_CV_batch.sh for subject 7: output/fit_gp_CV_batch_7_true_9_theory_10000_14_64014368.out -- Submitted batch job 64014368
+fit_gp_CV_batch.sh for subject 7: output/fit_gp_CV_batch_7_true_9_theory_10000_15_64014369.out -- Submitted batch job 64014369
+fit_gp_CV_batch.sh for subject 7: output/fit_gp_CV_batch_7_true_9_theory_10000_16_64014370.out -- Submitted batch job 64014370
+fit_gp_CV_batch.sh for subject 7: output/fit_gp_CV_batch_7_true_9_theory_10000_17_64014381.out -- Submitted batch job 64014381
+fit_gp_CV_batch.sh for subject 7: output/fit_gp_CV_batch_7_true_9_theory_10000_18_64014382.out -- Submitted batch job 64014382
+fit_gp_CV_batch.sh for subject 7: output/fit_gp_CV_batch_7_true_9_theory_10000_19_64014383.out -- Submitted batch job 64014383
+fit_gp_CV_batch.sh for subject 7: output/fit_gp_CV_batch_7_true_9_theory_10000_20_64014384.out -- Submitted batch job 64014384
+fit_gp_CV_batch.sh for subject 7: output/fit_gp_CV_batch_7_true_9_theory_10000_21_64014385.out -- Submitted batch job 64014385
+fit_gp_CV_batch.sh for subject 7: output/fit_gp_CV_batch_7_true_9_theory_10000_22_64014386.out -- Submitted batch job 64014386
+fit_gp_CV_batch.sh for subject 7: output/fit_gp_CV_batch_7_true_9_theory_10000_23_64014387.out -- Submitted batch job 64014387
+fit_gp_CV_batch.sh for subject 8: output/fit_gp_CV_batch_8_true_9_theory_10000_1_64014388.out -- Submitted batch job 64014388
+fit_gp_CV_batch.sh for subject 8: output/fit_gp_CV_batch_8_true_9_theory_10000_2_64014389.out -- Submitted batch job 64014389
+fit_gp_CV_batch.sh for subject 8: output/fit_gp_CV_batch_8_true_9_theory_10000_3_64014390.out -- Submitted batch job 64014390
+fit_gp_CV_batch.sh for subject 8: output/fit_gp_CV_batch_8_true_9_theory_10000_4_64014392.out -- Submitted batch job 64014392
+fit_gp_CV_batch.sh for subject 8: output/fit_gp_CV_batch_8_true_9_theory_10000_5_64014393.out -- Submitted batch job 64014393
+fit_gp_CV_batch.sh for subject 8: output/fit_gp_CV_batch_8_true_9_theory_10000_6_64014394.out -- Submitted batch job 64014394
+fit_gp_CV_batch.sh for subject 8: output/fit_gp_CV_batch_8_true_9_theory_10000_7_64014395.out -- Submitted batch job 64014395
+fit_gp_CV_batch.sh for subject 8: output/fit_gp_CV_batch_8_true_9_theory_10000_8_64014396.out -- Submitted batch job 64014396
+fit_gp_CV_batch.sh for subject 8: output/fit_gp_CV_batch_8_true_9_theory_10000_9_64014397.out -- Submitted batch job 64014397
+fit_gp_CV_batch.sh for subject 8: output/fit_gp_CV_batch_8_true_9_theory_10000_10_64014398.out -- Submitted batch job 64014398
+fit_gp_CV_batch.sh for subject 8: output/fit_gp_CV_batch_8_true_9_theory_10000_11_64014399.out -- Submitted batch job 64014399
+fit_gp_CV_batch.sh for subject 8: output/fit_gp_CV_batch_8_true_9_theory_10000_12_64014400.out -- Submitted batch job 64014400
+fit_gp_CV_batch.sh for subject 8: output/fit_gp_CV_batch_8_true_9_theory_10000_13_64014401.out -- Submitted batch job 64014401
+fit_gp_CV_batch.sh for subject 8: output/fit_gp_CV_batch_8_true_9_theory_10000_14_64014402.out -- Submitted batch job 64014402
+fit_gp_CV_batch.sh for subject 8: output/fit_gp_CV_batch_8_true_9_theory_10000_15_64014403.out -- Submitted batch job 64014403
+fit_gp_CV_batch.sh for subject 8: output/fit_gp_CV_batch_8_true_9_theory_10000_16_64014404.out -- Submitted batch job 64014404
+fit_gp_CV_batch.sh for subject 8: output/fit_gp_CV_batch_8_true_9_theory_10000_17_64014405.out -- Submitted batch job 64014405
+fit_gp_CV_batch.sh for subject 8: output/fit_gp_CV_batch_8_true_9_theory_10000_18_64014407.out -- Submitted batch job 64014407
+fit_gp_CV_batch.sh for subject 8: output/fit_gp_CV_batch_8_true_9_theory_10000_19_64014408.out -- Submitted batch job 64014408
+fit_gp_CV_batch.sh for subject 8: output/fit_gp_CV_batch_8_true_9_theory_10000_20_64014409.out -- Submitted batch job 64014409
+fit_gp_CV_batch.sh for subject 8: output/fit_gp_CV_batch_8_true_9_theory_10000_21_64014411.out -- Submitted batch job 64014411
+fit_gp_CV_batch.sh for subject 8: output/fit_gp_CV_batch_8_true_9_theory_10000_22_64014420.out -- Submitted batch job 64014420
+fit_gp_CV_batch.sh for subject 8: output/fit_gp_CV_batch_8_true_9_theory_10000_23_64014421.out -- Submitted batch job 64014421
+----------------
+--- Sat Jul 18 18:52:58 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 42, subjects 7 6 3 4 5 1 8 2: output/ccnl_fmri_glm_42_goodSubjects_64718411.out -- Submitted batch job 64718411
+ccnl_fmri_glm.sh for GLM 43, subjects 6 5 7 8 3 2 4 1: output/ccnl_fmri_glm_43_goodSubjects_64718412.out -- Submitted batch job 64718412
+----------------
+--- Sat Jul 18 18:54:27 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 46, subjects 7 5 3 1 4 8 6 2: output/ccnl_fmri_glm_46_goodSubjects_64718424.out -- Submitted batch job 64718424
+ccnl_fmri_glm.sh for GLM 47, subjects 7 4 1 8 5 6 2 3: output/ccnl_fmri_glm_47_goodSubjects_64718425.out -- Submitted batch job 64718425
+ccnl_fmri_glm.sh for GLM 48, subjects 5 1 4 8 6 3 2 7: output/ccnl_fmri_glm_48_goodSubjects_64718426.out -- Submitted batch job 64718426
+----------------
+--- Sun Jul 19 12:07:32 EDT 2020 Running ccnl_fmri_con 3 21
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_64748930.out -- Submitted batch job 64748930
+----------------
+--- Sun Jul 19 13:15:01 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 76, subjects 3 5 6 2 7 4 8 1: output/ccnl_fmri_glm_76_goodSubjects_64753067.out -- Submitted batch job 64753067
+----------------
+--- Sun Jul 19 13:15:16 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 80, subjects 1 7 3 6 8 5 2 4: output/ccnl_fmri_glm_80_goodSubjects_64753090.out -- Submitted batch job 64753090
+ccnl_fmri_glm.sh for GLM 81, subjects 5 6 2 4 3 1 8 7: output/ccnl_fmri_glm_81_goodSubjects_64753093.out -- Submitted batch job 64753093
+ccnl_fmri_glm.sh for GLM 82, subjects 8 6 7 2 4 3 1 5: output/ccnl_fmri_glm_82_goodSubjects_64753096.out -- Submitted batch job 64753096
+ccnl_fmri_glm.sh for GLM 83, subjects 1 6 4 2 5 7 3 8: output/ccnl_fmri_glm_83_goodSubjects_64753098.out -- Submitted batch job 64753098
+----------------
+--- Sun Jul 19 13:22:47 EDT 2020: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_9_sprite_64753442.out -- Submitted batch job 64753442
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_9_sprite_64753445.out -- Submitted batch job 64753445
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_9_sprite_64753448.out -- Submitted batch job 64753448
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_9_sprite_64753451.out -- Submitted batch job 64753451
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_9_sprite_64753454.out -- Submitted batch job 64753454
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_9_sprite_64753457.out -- Submitted batch job 64753457
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_9_sprite_64753460.out -- Submitted batch job 64753460
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_9_sprite_64753462.out -- Submitted batch job 64753462
+----------------
+--- Sun Jul 19 13:23:45 EDT 2020: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_9_interaction_64753540.out -- Submitted batch job 64753540
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_9_interaction_64753543.out -- Submitted batch job 64753543
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_9_interaction_64753546.out -- Submitted batch job 64753546
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_9_interaction_64753549.out -- Submitted batch job 64753549
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_9_interaction_64753552.out -- Submitted batch job 64753552
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_9_interaction_64753554.out -- Submitted batch job 64753554
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_9_interaction_64753557.out -- Submitted batch job 64753557
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_9_interaction_64753560.out -- Submitted batch job 64753560
+----------------
+--- Sun Jul 19 13:24:02 EDT 2020: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_9_termination_64753575.out -- Submitted batch job 64753575
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_9_termination_64753578.out -- Submitted batch job 64753578
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_9_termination_64753581.out -- Submitted batch job 64753581
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_9_termination_64753584.out -- Submitted batch job 64753584
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_9_termination_64753586.out -- Submitted batch job 64753586
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_9_termination_64753589.out -- Submitted batch job 64753589
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_9_termination_64753592.out -- Submitted batch job 64753592
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_9_termination_64753595.out -- Submitted batch job 64753595
+----------------
+--- Sun Jul 19 13:54:31 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 45, subjects 4 1 3 5 2 8 6 7: output/ccnl_fmri_glm_45_goodSubjects_64754542.out -- Submitted batch job 64754542
+----------------
+--- Sun Jul 19 15:13:52 EDT 2020 Running ccnl_fmri_con 3 21
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_64759727.out -- Submitted batch job 64759727
+----------------
+--- Sun Jul 19 15:16:01 EDT 2020 Running ccnl_fmri_con 3 21
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_64760336.out -- Submitted batch job 64760336
+----------------
+--- Sun Jul 19 16:52:25 EDT 2020 Running ccnl_fmri_con 3 21
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_64771216.out -- Submitted batch job 64771216
+----------------
+--- Sun Jul 19 18:02:37 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 49, subjects 4 3 2 7 1 5 6 8: output/ccnl_fmri_glm_49_goodSubjects_64773908.out -- Submitted batch job 64773908
+----------------
+--- Tue Jul 21 12:19:04 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_64868632.out -- Submitted batch job 64868632

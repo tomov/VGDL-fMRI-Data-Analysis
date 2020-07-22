@@ -1,4 +1,15 @@
 
+[mask, Vmask] = ccnl_load_mask('masks/mask.nii');
+EXPT = vgdl_expt();
+
+load('mat/collapsed_corrs_blocks.mat');
+
+map = zeros(size(mask));
+map(mask) = mydata;
+
+bspmview_wrapper(EXPT, map);
+
+
 %{
 %% get voxel coordinates for Daphne
 
@@ -67,6 +78,7 @@ assert(immse(R1, R2) < 1e-20);
 
 
 %% generate searchlight ROIs with different params
+%{
 
 r = [4 6 10] / 1.5;
 
@@ -87,6 +99,7 @@ for use_smooth = 0:1
         save(sprintf('mat/get_searchlight_rois_us=%d_r=%.4f.mat', use_smooth, radius), '-v7.3');
     end
 end
+%}
 
 % https://www.mathworks.com/help/database/ug/mongo.html#d117e86584
 %conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54')
