@@ -1,15 +1,4 @@
 
-[mask, Vmask] = ccnl_load_mask('masks/mask.nii');
-EXPT = vgdl_expt();
-
-load('mat/collapsed_corrs_blocks.mat');
-
-map = zeros(size(mask));
-map(mask) = mydata;
-
-bspmview_wrapper(EXPT, map);
-
-
 %{
 %% get voxel coordinates for Daphne
 

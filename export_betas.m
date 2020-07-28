@@ -1,4 +1,5 @@
 % export betas for MVPA analysis in python
+% for Daphne
 
 rsa_idxs = [1 6 5];
 
