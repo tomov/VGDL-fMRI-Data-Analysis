@@ -51,11 +51,12 @@ function [fields, visuals] = get_visuals(subj_id, run, conn, do_cache)
                 play_post = plays_post(1);
 
                 for i = 1:numel(fields)
-                    visuals.(fields{i}) = [visuals.(fields{i}); play_post.(fields{i})];
+                    visuals.(fields{i}) = [visuals.(fields{i}); play_post.(fields{i})(2:end-1,:)]; % skip first and last frame to align with output of get_regressors, b/c EMPA does too
                 end
 
-                durations = play_post.timestamps(2:end) - play_post.timestamps(1:end-1);
-                durations = [durations; mean(durations)]; % guesstimate duration of last frame
+                %durations = play_post.timestamps(2:end) - play_post.timestamps(1:end-1);
+                %durations = [durations; mean(durations)]; % guesstimate duration of last frame
+                durations = play_post.timestamps(3:end) - play_post.timestamps(2:end-1); % skip first and last frame
                 visuals.durations = [visuals.durations; durations];
             end
         end

@@ -10,7 +10,7 @@ else
 end
 
 subjects = 1:length(EXPT.subject);
-what = 'sprite';
+what = 'termination';
 glmodel = 9;
 
 agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_%s.mat', use_smooth, glmodel, what);
@@ -80,6 +80,7 @@ logGBF = sum(logBF,1);
 
 % t-test Pearson corr across subjects
 [h,p,ci,stats] = ttest(zs);
+%[h,p,ci,stats] = ttest(zs, null_zs);
 ts = stats.tstat;
 
 %{

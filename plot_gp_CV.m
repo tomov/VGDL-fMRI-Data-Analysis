@@ -4,6 +4,11 @@ close all;
 clear all;
 
 load('mat/agg_gp_CV_us=1_glm=9_theory.mat');
+%load('mat/agg_gp_CV_us=1_glm=9_sprite.mat');
+%load('mat/agg_gp_CV_us=1_glm=9_interaction.mat');
+%load('mat/agg_gp_CV_us=1_glm=9_termination.mat');
+
+
 %load('mat/agg_gp_CV_noRKW_us=1_glm=21_theory.mat');
 %load('mat/agg_gp_CV_us=1_sprite.mat');
 %load('mat/agg_gp_CV_us=1_glm=21_theory.mat');

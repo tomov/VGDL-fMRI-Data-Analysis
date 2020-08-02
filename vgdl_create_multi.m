@@ -1370,7 +1370,7 @@ save_output = true;
             end
     
 
-        % surprise, likelihood, sum_lik_play, n_ts
+        % surprise, likelihood, sum_lik_play
         %  + control regressors
         % see GLM 21 
         %
@@ -1378,7 +1378,7 @@ save_output = true;
 
             idx = 0;
 
-            % from GLM 30,31,32,57: sprite_change_flag, interaction_change_flag, termination_change_flag 
+            % from GLM 30,31,32
 
             %
             [regs, ~, ~] = get_regressors(subj_id, run, conn, true);
@@ -2135,6 +2135,101 @@ save_output = true;
                 multi.durations{idx} = zeros(size(multi.onsets{idx}));
             end
     
+
+        % likelihood
+        %  + control regressors
+        % see GLM 21 and/or 69
+        %
+        case 84
+
+            idx = 0;
+
+            % from GLM 30 
+
+            [regs, ~, ~] = get_regressors(subj_id, run, conn, true);
+            fields = {
+                'likelihood', ...
+                }
+
+            idx = idx + 1;
+            multi.names{idx} = 'frames';
+            multi.onsets{idx} = regs.timestamps';
+            multi.durations{idx} = regs.durations';
+
+            multi.orth{1} = 0; % do not orthogonalise them
+
+            for i = 1:numel(fields)
+                field = fields{i};
+
+                multi.pmod(idx).name{i} = field;
+                multi.pmod(idx).param{i} = regs.(field);
+                multi.pmod(idx).poly{i} = 1;
+
+                multi.pmod(idx).param{i}(isnan(multi.pmod(idx).param{i})) = 0; % TODO happens for lik during first few timesteps; ideally, remove altogether
+            end
+
+            % from GLM 1: game instance boxcar regressor
+            %
+            [game_names, onsets, durs] = get_games(subj_id, run, conn);
+            for i = 1:numel(game_names)
+                idx = idx + 1;
+                multi.names{idx} = game_names{i};
+                multi.onsets{idx} = onsets{i};
+                multi.durations{idx} = durs{i};
+            end
+
+            % from GLM 5: keyholds nuisance regressors
+            %
+            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
+            if subj_id == 1
+                % we screwed up keyholds for subject 1, so we use estimates from keypresses
+                keyholds = keyholds_post
+            end
+            % key hold boxcar regressors
+            for k = 1:numel(keyNames)
+                if size(keyholds{k}, 1) > 0
+                    idx = idx + 1;
+                    multi.names{idx} = keyNames{k};
+                    multi.onsets{idx} = keyholds{k}(:,1)';
+                    multi.durations{idx} = keyholds{k}(:,2)';
+                end
+            end
+
+            % GLM 7: frame nuisance regressors
+            %
+            [fields, visuals] = get_visuals(subj_id, run, conn, true);
+            idx = idx + 1;
+            multi.names{idx} = 'frames';
+            multi.onsets{idx} = visuals.timestamps';
+            multi.durations{idx} = visuals.durations';
+
+            multi.orth{idx} = 0; % do not orthogonalise them
+
+            pix = 0;
+            for i = 1:numel(fields)
+                if ~ismember(fields{i}, {'timestamps', 'durations'}) 
+                    if all(visuals.(fields{i}) == visuals.(fields{i})(1))
+                        % constant
+                        continue
+                    end
+                    pix = pix + 1;
+                    multi.pmod(idx).name{pix} = fields{i};
+                    multi.pmod(idx).param{pix} = visuals.(fields{i});
+                    multi.pmod(idx).poly{pix} = 1;
+                end
+            end
+
+            % GLM 8: on/off nuisance regressors
+            %
+            [onoff] = get_onoff(subj_id, run, conn, true);
+            fields = fieldnames(onoff);
+            for i = 1:numel(fields)
+                idx = idx + 1;
+                multi.names{idx} = fields{i};
+                multi.onsets{idx} = onoff.(fields{i});
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));
+            end
+   
 
 
 
