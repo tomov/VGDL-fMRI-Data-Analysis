@@ -1,5 +1,5 @@
 
-%clear all;
+clear all;
 close all;
 
 load('../glmOutput/model3/subj1/multi1.mat');
@@ -68,7 +68,7 @@ bounds = union(bounds, find(avatar_collision_flags))
 
 
 
-% actually populate HRRs
+% actually populate HRRs from unique HRRs (theory id -> HRR) and theory id sequence
 %
 
 
@@ -79,9 +79,7 @@ ts = ts';
 assert(immse(timestamps, ts) < 1e-20);
 assert(length(ts) == length(theory_id_seq));
 
-unique_HRRs = squeeze(theory_HRRs(1,:,:)); % TODO sample idx
-
-
+% sanity
 for r = 1:6
     multi = vgdl_create_multi(3, 1, r);
     assert(immse(ts(theory_change_flags & run_id == r), multi.onsets{1}) < 1e-20);
@@ -90,48 +88,80 @@ for r = 1:6
     assert(immse(ts(theory_change_flags & run_id == r), onsets{1}) < 1e-20);
 end
 
-tic;
 
-HRRs = nan(length(ts), size(unique_HRRs,2));
-for i = 1:size(unique_HRRs,1)
-    theory_id = i - 1; % b/c python is 0-indexed
-    ix = find(theory_id_seq == theory_id);
-    %HRRs(theory_id_seq == theory_id, :) = unique_HRRs(i,:);
-    for j = 1:length(ix)
-        HRRs(ix(j), :) = unique_HRRs(i,:);
+
+sigma_w = 1; % TODO regenerate
+
+clear Ks;
+for j = 1:nsamples
+
+    unique_HRRs = squeeze(theory_HRRs(j,:,:));
+
+    % populate HRRs from unique_HRRs
+    HRRs = nan(length(ts), size(unique_HRRs,2));
+    for i = 1:size(unique_HRRs,1)
+        theory_id = i - 1; % b/c python is 0-indexed
+        ix = find(theory_id_seq == theory_id);
+        %HRRs(theory_id_seq == theory_id, :) = unique_HRRs(i,:); -- don't work
+        for k = 1:length(ix)
+            HRRs(ix(k), :) = unique_HRRs(i,:);
+        end
     end
+
+    %{
+    % for sanity -- do with theory_change_flag, compare with GLM 3 
+    for i = 1:size(HRRs,2)
+        HRRs(:,i) = theory_change_flags;
+    end
+    %}
+
+    [Xx, r_id] = convolve_HRRs(HRRs, ts, run_id);
+
+    Sigma_w = eye(size(Xx,2)) * sigma_w; % Sigma_p in Rasmussen, Eq. 2.4
+
+    K = Xx * Sigma_w * Xx';
+
+    if ~exist('Ks', 'var')
+        Ks = nan(nsamples, size(K,1), size(K,2));
+    end
+    Ks(j,:,:) = K;
 end
 
-
-% TODO RM sanity
-for j = 1:size(HRRs,2)
-    HRRs(:,j) = theory_change_flags;
-end
-
-toc;
+theory_kernel = squeeze(mean(Ks,1));
+theory_kernel_std = squeeze(std(Ks,0,1));
 
 
-[Xx, r_id] = convolve_HRRs(HRRs, ts, run_id);
-
+%{
+% for sanity -- do with theory_change_flag, compare with GLM 3 
 
 load('../glmOutput/model3/subj1/SPM.mat');
 
 Xt = sum(SPM.xX.X(:,contains(SPM.xX.name, 'theory_change_flag')),2);
 
-%TODO Why tf are these different
 
 figure;
 subplot(1,2,1);
 imagesc(Xt);
+title('from SPM');
 subplot(1,2,2);
 imagesc(Xx);
+title('manual');
+%}
+
+
+figure;
+imagesc(Xx);
+
+figure;
+imagesc(theory_kernel);
+
+
 
 %
 % from convolve_HRRs() in HRR.py
 %
 function [Xx, r_id] = convolve_HRRs(HRRs, ts, run_id)
 
-    tic;
 
     load('mat/SPM73.mat');
 
@@ -140,6 +170,12 @@ function [Xx, r_id] = convolve_HRRs(HRRs, ts, run_id)
 
     Xx = [];
     r_id = [];
+
+    tot_1 = 0;
+    tot_2 = 0;
+    tot_3 = 0;
+    tot_4 = 0;
+    tot_5 = 0;
 
     for s = 1:nruns
         
@@ -165,40 +201,70 @@ function [Xx, r_id] = convolve_HRRs(HRRs, ts, run_id)
 
         % from spm_get_ons.m
         %
+
+        tic;
+
         ons = ts(which);
         u = HRRs(which,:);
         ton = round(ons*TR/dt) + 33; % 32 bin offset
-        toff = ton + 1; % REMOVE ME for impulse regressors only
-        %toff = ton(2:end); % frames are back-to-back
-        %toff = [toff; ton(end) + T]; % 1 s duration for last one, to match other between-block / level durations TODO more rigorous
-        sf = sparse((k*T + 128), size(u,2));
+        %toff = ton + 1; % for sanity, with impulse regressors only, e.g. theory_change_flag w/ GLM 3
+        toff = ton(2:end); % frames are back-to-back
+        toff = [toff; ton(end) + T]; % 1 s duration for last one, to match other between-block / level durations TODO more rigorous
+        sf = zeros((k*T + 128), size(u,2));
 
         assert(all(ton >= 0));
         assert(all(ton < size(sf,1)));
         assert(all(toff >= 0));
         assert(all(toff < size(sf,1)));
 
+        tot_1 = tot_1 + toc;
+
+        tic;
+
         for j = 1:length(ton)
             sf(ton(j),:) = sf(ton(j),:) + u(j,:);
             sf(toff(j),:) = sf(toff(j),:) - u(j,:);
         end
+        
+        tot_2 = tot_2 + toc;
+
+        tic;
 
         sf = cumsum(sf);
         sf = sf(1:(k*T + 32),:);                 %  32 bin offset
 
+        tot_3 = tot_3 + toc;
+
         % from spm_Volterra.m
         %
+
+        tic;
+
+        %{
+        % don't use convolution matrix; it's slower...
+        if ~exist('A', 'var')
+            A = convmtx(bf, size(sf,1));
+            d = 1:size(sf,1);
+        end
+        X = A * sf;
+        X = X(d,:);
+        %}
         X = zeros(size(sf));
         for i = 1:size(sf,2)
             x = sf(:,i);
             d = 1:length(x);
-            x = conv(full(x), bf);
+            x = conv(x, bf);
             x = x(d);
             X(:,i) = x;
         end
 
+        tot_4 = tot_4 + toc;
+
         % from spm_fMRI_design.m
         %
+
+        tic;
+
         fMRI_T = SPM.xBF.T;
         fMRI_T0 = SPM.xBF.T0;
 
@@ -208,9 +274,15 @@ function [Xx, r_id] = convolve_HRRs(HRRs, ts, run_id)
 
         Xx = [Xx; X];
         r_id = [r_id; ones(size(X,1),1) * s];
+
+        tot_5 = tot_5 + toc;
     end
 
-    toc;
+    tot_1
+    tot_2
+    tot_3
+    tot_4
+    tot_5
 
 end
 
