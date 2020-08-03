@@ -2,7 +2,7 @@
 clear all;
 close all;
 
-load('../glmOutput/model3/subj1/multi1.mat');
+%load('../glmOutput/model3/subj1/multi1.mat');
 
 subj_id = 1;
 
@@ -72,7 +72,7 @@ bounds = union(bounds, find(avatar_collision_flags))
 %
 
 
-load('mat/unique_HRR_subject_subj=1_K=10_N=10_E=0.050_nsamples=100_norm=0.mat');
+load('mat/unique_HRR_subject_subj=1_K=10_N=10_E=0.050_nsamples=10_norm=1.mat');
 run_id = run_id';
 assert(all(run_id == run_id_2));
 ts = ts';
@@ -88,12 +88,21 @@ for r = 1:6
     assert(immse(ts(theory_change_flags & run_id == r), onsets{1}) < 1e-20);
 end
 
+nsamples = 10;
 
+sigma_w = 1; % TODO param
 
-sigma_w = 1; % TODO regenerate
+tot_1 = 0;
+tot_2 = 0;
+tot_3 = 0;
+
+load('mat/SPM73.mat');
 
 clear Ks;
 for j = 1:nsamples
+
+    j
+    tic;
 
     unique_HRRs = squeeze(theory_HRRs(j,:,:));
 
@@ -108,6 +117,9 @@ for j = 1:nsamples
         end
     end
 
+    tot_1 = tot_1 + toc;
+    tic;
+
     %{
     % for sanity -- do with theory_change_flag, compare with GLM 3 
     for i = 1:size(HRRs,2)
@@ -115,7 +127,10 @@ for j = 1:nsamples
     end
     %}
 
-    [Xx, r_id] = convolve_HRRs(HRRs, ts, run_id);
+    [Xx, r_id] = convolve_HRRs(HRRs, ts, run_id, SPM);
+
+    tot_2 = tot_2 + toc;
+    tic;
 
     Sigma_w = eye(size(Xx,2)) * sigma_w; % Sigma_p in Rasmussen, Eq. 2.4
 
@@ -125,14 +140,36 @@ for j = 1:nsamples
         Ks = nan(nsamples, size(K,1), size(K,2));
     end
     Ks(j,:,:) = K;
+
+    tot_3 = tot_3 + toc;
 end
+
+tot_1
+tot_2
+tot_3
 
 theory_kernel = squeeze(mean(Ks,1));
 theory_kernel_std = squeeze(std(Ks,0,1));
 
 
+
+
+use_smooth = true;
+glmodel = 9;
+maskfile = 'masks/ROI_x=42_y=28_z=26_1voxels_Sphere1.nii';
+[r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj_id, use_smooth, glmodel, maskfile, theory_kernel);
+
+r_CV_1 = r_CV;
+R2_CV_1 = R2_CV;
+load('mat/fit_gp_CV_HRR_subj=1_us=1_glm=9_mask=mask_theory.mat', 'r_CV', 'R2_CV', 'mask');
+whole_brain_mask = mask;
+[mask] = ccnl_load_mask(maskfile);
+which = mask(whole_brain_mask);
+r_CV = r_CV(:,which);
+R2_CV = R2_CV(:,which);
+
 %{
-% for sanity -- do with theory_change_flag, compare with GLM 3 
+% for sanity -- after convolning theory_change_flag manually, compare with GLM 3 
 
 load('../glmOutput/model3/subj1/SPM.mat');
 
@@ -160,22 +197,13 @@ imagesc(theory_kernel);
 %
 % from convolve_HRRs() in HRR.py
 %
-function [Xx, r_id] = convolve_HRRs(HRRs, ts, run_id)
-
-
-    load('mat/SPM73.mat');
+function [Xx, r_id] = convolve_HRRs(HRRs, ts, run_id, SPM)
 
     nruns = length(SPM.nscan);
     assert(nruns == 6);
 
     Xx = [];
     r_id = [];
-
-    tot_1 = 0;
-    tot_2 = 0;
-    tot_3 = 0;
-    tot_4 = 0;
-    tot_5 = 0;
 
     for s = 1:nruns
         
@@ -202,8 +230,6 @@ function [Xx, r_id] = convolve_HRRs(HRRs, ts, run_id)
         % from spm_get_ons.m
         %
 
-        tic;
-
         ons = ts(which);
         u = HRRs(which,:);
         ton = round(ons*TR/dt) + 33; % 32 bin offset
@@ -217,28 +243,16 @@ function [Xx, r_id] = convolve_HRRs(HRRs, ts, run_id)
         assert(all(toff >= 0));
         assert(all(toff < size(sf,1)));
 
-        tot_1 = tot_1 + toc;
-
-        tic;
-
         for j = 1:length(ton)
             sf(ton(j),:) = sf(ton(j),:) + u(j,:);
             sf(toff(j),:) = sf(toff(j),:) - u(j,:);
         end
         
-        tot_2 = tot_2 + toc;
-
-        tic;
-
         sf = cumsum(sf);
         sf = sf(1:(k*T + 32),:);                 %  32 bin offset
 
-        tot_3 = tot_3 + toc;
-
         % from spm_Volterra.m
         %
-
-        tic;
 
         %{
         % don't use convolution matrix; it's slower...
@@ -258,12 +272,8 @@ function [Xx, r_id] = convolve_HRRs(HRRs, ts, run_id)
             X(:,i) = x;
         end
 
-        tot_4 = tot_4 + toc;
-
         % from spm_fMRI_design.m
         %
-
-        tic;
 
         fMRI_T = SPM.xBF.T;
         fMRI_T0 = SPM.xBF.T0;
@@ -274,15 +284,7 @@ function [Xx, r_id] = convolve_HRRs(HRRs, ts, run_id)
 
         Xx = [Xx; X];
         r_id = [r_id; ones(size(X,1),1) * s];
-
-        tot_5 = tot_5 + toc;
     end
-
-    tot_1
-    tot_2
-    tot_3
-    tot_4
-    tot_5
 
 end
 

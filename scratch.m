@@ -1,5 +1,33 @@
 
 %{
+use_smooth = true;
+glmodel = 9;
+maskfile = 'masks/ROI_x=42_y=28_z=26_1voxels_Sphere1.nii';
+[r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj_id, use_smooth, glmodel, maskfile, theory_kernel);
+%}
+
+for subj_id = 1:8
+    %r_CV_1 = r_CV;
+    %R2_CV_1 = R2_CV;
+    load(sprintf('mat/fit_gp_CV_HRR_subj=%d_us=1_glm=9_mask=mask_theory.mat', subj_id), 'r_CV', 'R2_CV', 'mask');
+    whole_brain_mask = mask;
+    [mask] = ccnl_load_mask(maskfile);
+    which = mask(whole_brain_mask);
+    r_CV = r_CV(:,which);
+    R2_CV = R2_CV(:,which);
+
+    rs(subj_id,:) = mean(r_CV,1);
+end
+
+% Fisher z transform
+zs = atanh(rs);
+
+% t-test Pearson corr across subjects
+[h,p,ci,stats] = ttest(zs);
+ts = stats.tstat;
+
+
+%{
 %% get voxel coordinates for Daphne
 
 [mask, Vmask] = ccnl_load_mask('masks/mask_nosmooth.nii');

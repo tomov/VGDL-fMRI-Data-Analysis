@@ -30,6 +30,7 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, fast, debug)
 
 
     [~,maskname,~] = fileparts(mask);
+    TODO rename -- ceil or no?
     filename = sprintf('mat/fit_gp_CV_ceil_HRR_subj=%d_us=%d_glm=%d_mask=%s_%s.mat', subj, use_smooth, glmodel, maskname, what);
     filename
 
@@ -55,7 +56,7 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, fast, debug)
     % whiten, filter & project out nuisance regressors
     Y = R*K*W*Y;
     ker = R*K*W*ker*W'*K'*R';
-    null_ker = R*K*W*null_ker*W'*K'*R'; % TODO technically, this should project out the null kernel! b/c game identity features were already part of GLM 1
+    null_ker = R*K*W*null_ker*W'*K'*R'; % TODO technically, R should project out the null kernel! b/c game identity features were already part of GLM 1
 
     % get partitions from RSA 3
     rsa = vgdl_create_rsa(3, subj);
@@ -448,97 +449,6 @@ function [sigma, logmarglik, logpseudolik, y_hat, R2, adjR2, r, MSE, SMSE, hyp] 
 end
 
 
-% fit gp sigmas manually; optionally sanity check with gp() library
-%
-function [sigma, logmarglik, logpredlik, y_hat, R2, adjR2, r, MSE, SMSE] = fit_gp_helper(x, y, train, test, ker, hyp, meanfun, covfun, likfun, sigmas, invKi, ldB2, sn2, solveKiW, ker_invKi, fast, debug)
-
-    n = sum(train);
-
-    % for each sigma, compute marginal likelihood = loglik = -NLZ
-    %
-    for j = 1:length(sigmas)
-        s = sigmas(j);
-            
-        % from infGaussLik.m
-        nlz(j) = y(train)'*invKi{j}*y(train)/2 + ldB2(j) + n*log(2*pi*sn2(j))/2;    % -log marginal likelihood TODO there is no sn2 term in Eq 2.30 in the Rasmussen book?
-
-        if debug
-            % sanity checks
-            hyp.lik = log(s);
-
-            % GP log lik
-            nlz_gp(j) = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x(train), y(train));
-
-            % from infGaussLik
-            alpha = solveKiW{j}(y(train));
-            nlz_gp2 = y(train)'*alpha/2 + ldB2(j) + n*log(2*pi*sn2(j))/2;    % -log marginal likelihood
-
-            %{
-            nlz_gp(j)
-            nlz_gp2
-            nlz(j)
-            immse(nlz_gp(j), nlz_gp2)
-            immse(nlz_gp(j), nlz(j))
-            %}
-            assert(immse(nlz_gp(j), nlz_gp2) < 1e-1);
-            assert(immse(nlz_gp(j), nlz(j)) < 1e-1);
-        end
-    end
-
-    % pick best sigma
-    [~,j] = min(nlz);
-    sigma = sigmas(j);
-    logmarglik = -nlz(j); % marginal log lik
-
-    % compute predictive log lik
-    if fast
-        logpredlik = nan; % it's slow
-    else
-        hyp.lik = log(sigma);
-        [~,~,~,~,lp] = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x(train), y(train), x(test), y(test));
-        logpredlik = sum(lp);
-    end
-
-    % posterior predictive on test dataset (Eq. 2.23 in Rasmussen)
-    y_hat = ker_invKi{j} * y(train);
-
-    % R^2
-    assert(all(train == test) || ~any(train == test));
-    if all(train == test)
-        p = 1; % # 1 (hyper)param = sigma; b/c we fit on same data 
-    else
-        p = 0; % 0 params, b/c evaluating on held out data
-    end
-    [R2, adjR2] = calc_R2(y(test), y_hat, 1);
-
-    % Pearson
-    r = corr(y_hat, y(test));
-
-    % MSE and SMSE, Sec. 2.5 in Rasmussen
-    MSE = immse(y(test), y_hat);
-    SMSE = MSE / var(y(test));
-
-    if debug
-        hyp.lik = log(sigma);
-        y_hat_gp = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x(train), y(train), x(test));
-
-        assert(immse(y_hat, y_hat_gp) < 1e-10);
-
-        y_hat_2 = ker(test, train) * invKi{j} * y(train); % too slow => precompute
-        assert(immse(y_hat, y_hat_2) < 1e-10);
-
-
-        %figure;
-        %hold on;
-        %plot(y);
-        %plot(y_hat);
-        %plot(y_hat_gp);
-        %legend({'y', 'y_hat', 'y_hat_gp'}, 'interpreter', 'none');
-    end
-
-end
-
-
 % load game identity kernel based on GLM 1
 %
 function [ker] = load_null_kernel(EXPT, subj_id)
@@ -579,111 +489,3 @@ function [ker] = load_HRR_kernel(subj_id, what)
 end
 
 
-function [Y, K, W, R, run_id] = load_BOLD(EXPT, glmodel, subj_id, mask, Vmask)
-    % load subject data
-    % Y = raw BOLD
-    % K = filter matrix
-    % W = whitening matrix
-    % R = residual forming matrix
-    %
-    % 
-    % Y = Xb + Gg + e              (Y = BOLD, X = HRR features; G = nuisance regressors (X in GLM 21), e = noise)
-    % KWY = KWXb + KWGg + KWe      (whiten & filter w.r.t. G, as in GLM 21)
-    % R = (I - KWG (KWG)^+)        (residual forming matrix w.r.t. G from GLM 21)
-    % RKWY = RKWXb + 0 + RKWe      (project out nuisance regressors)
-    % but...use GP regression instead
-    %
-    % TODO RKWe not gaussian, also maybe correlated => need to whiten again after GP fit
-
-    modeldir = fullfile(EXPT.modeldir,['model',num2str(glmodel)],['subj',num2str(subj_id)]);
-    load(fullfile(modeldir,'SPM.mat'));
-    assert(isempty(Vmask) || isequal(SPM.xY.VY(1).dim, Vmask.dim), 'Different dimensions between mask and activations');
-    assert(ndims(mask) < 3 || isequal(SPM.Vbeta(1).dim, size(mask)), 'Different dimensions between mask and betas');
-
-    % extract data and design matrix from confound GLM
-    %
-
-    Y = spm_data_read(SPM.xY.VY, find(mask)); % BOLD data
-
-    X = SPM.xX.X; % original design matrix
-    K = SPM.xX.K; % high-pass filter
-    W = SPM.xX.W; % whitening matrix
-    KWX = SPM.xX.xKXs.X; % high-pass filtered & whitened design matrix
-
-    R = spm_sp('r',SPM.xX.xKXs); % residual forming matrix R = I - X * pinv(X)
-
-    KWY = spm_filter(K,W*Y); % high-pass filtered & whitened data
-
-    % convert filter K to matrix form
-    % see spm_filter.m
-    for s = 1:length(K)
-        I(K(s).row,K(s).row) = eye(length(K(s).row));
-        X0X0(K(s).row, K(s).row) = K(s).X0*K(s).X0';
-    end
-    K = I - X0X0; % high-pass filter matrix
-
-    assert(immse(K*W*X, KWX) < 1e-15);
-    assert(immse(K*W*Y, KWY) < 1e-15);
-    assert(immse(R, eye(size(X,1)) - SPM.xX.xKXs.u*SPM.xX.xKXs.u') < 1e-15);
-
-    for r = 1:length(SPM.Sess)
-        run_id(SPM.Sess(r).row,:) = r;
-    end
-end
-
-
-
-function [R2, adjR2] = calc_R2(y, y_hat, p)
-    % calculate R^2 https://en.wikipedia.org/wiki/Coefficient_of_determination
-    %
-    % p = # of free parameters (e.g. sigma)
-    %
-    n = length(y);
-
-    SStot = sum((y - mean(y)).^2); 
-    assert(immse(SStot, var(y) * (n - 1)) < 1e-15);
-    SSres = sum((y - y_hat).^2);
-
-    R2 = 1 - SSres/SStot;
-
-    adjR2 = 1 - (1 - R2) * (n - 1) / (n - p - 1);
-end
-
-
-% init hyperparams from kernel for gp() toolbox
-%
-function [hyp] = hyp_from_ker(ker)
-    n = size(ker, 1);
-
-    % init hyperparams for kernel
-    L = cholcov(ker); % not chol b/c sometimes positive semi-definite
-    L(1:(n+1):end) = log(diag(L));  % see covDiscrete.m
-    covhyp = L(triu(true(n)));  % see covDiscrete.m
-
-    % GP hyperparams
-    %hyp = struct('mean', zeros(1, n), 'cov', covhyp, 'lik', nan);
-    hyp = struct('mean', 0, 'cov', covhyp, 'lik', nan);
-end
-
-
-function [sn2, ldB2, solveKiW, invKi] = calc_invKi(ker, x, s, hyp, covfun)
-    n = size(ker, 1);
-    hyp.lik = log(s);
-
-    % from infLikGauss.m
-    sn2 = exp(2*hyp.lik); W = ones(n,1)/sn2;            % noise variance of likGauss
-    K_gp = apx(hyp,covfun,x,[]);                        % set up covariance approximation
-    [ldB2,solveKiW,dW,dhyp,post.L] = K_gp.fun(W); % obtain functionality depending on W
-
-    assert(immse(K_gp.mvm(eye(size(ker))), ker) < 1e-15); % should be identical
-
-    % compute inverse the gp()-way (for sanity check)
-    invKi_gp = solveKiW(eye(n));
-
-    % compute inverse the standard way
-    I = eye(n);
-    invKi = (ker + s^2 * I)^(-1);
-
-    %assert(immse(invKi, invKi_gp) < 1e-15); % those are different! what matters is if the log likelihoods below match
-
-end

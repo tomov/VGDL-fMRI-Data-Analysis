@@ -70,10 +70,11 @@ for s = 1:length(subjects)
     rs(s,:) = mean(r_CV, 1);
     null_rs(s,:) = mean(null_r_CV, 1);
 
-    % Fisher z transform
-    zs = atanh(rs);
-    null_zs = atand(null_rs);
 end
+
+% Fisher z transform
+zs = atanh(rs);
+null_zs = atand(null_rs);
 
 % group log BF = sum of log BF across subjects (Stephan et al. 2009)
 logGBF = sum(logBF,1);
