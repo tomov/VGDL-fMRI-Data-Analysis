@@ -10,7 +10,11 @@ subj_id = 1;
 % from vgdl_create_multi.m
 %
 
-conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54')
+try
+    conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54')
+catch
+    disp('NCF....................');
+end
 
 timestamps = [];
 collision_flags = [];
@@ -21,14 +25,23 @@ theory_change_flags = [];
 
 run_id_2 = [];
 for r = 1:6
-    query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, r) % in python we index runs from 0 (but not subjects) 
+    query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, r); % in python we index runs from 0 (but not subjects) 
 
-    run = find(conn, 'runs', 'query', query)
-    assert(length(run) == 1);
+    try
+        run = find(conn, 'runs', 'query', query)
+        assert(length(run) == 1);
 
-    regs = get_regressors(subj_id, run, conn, true);
+        regs = get_regressors(subj_id, run, conn, true);
 
-    [~, visuals] = get_visuals(subj_id, run, conn, true);
+        [~, visuals] = get_visuals(subj_id, run, conn, true);
+
+    catch e
+        e
+        fprintf('loading from cache...');
+        load(sprintf('mat/get_regressors_subj%d_run%d.mat', subj_id, r));
+        load(sprintf('mat/get_visuals_subj%d_run%d.mat', subj_id, r));
+    end
+        
     assert(length(visuals.durations) == length(regs.timestamps));
 
     timestamps = [timestamps; regs.timestamps];
@@ -84,19 +97,22 @@ for r = 1:6
     multi = vgdl_create_multi(3, 1, r);
     assert(immse(ts(theory_change_flags & run_id == r), multi.onsets{1}) < 1e-20);
 
+    %{
+    % for local sanity check
     load(sprintf('../glmOutput/model3/subj1/multi%d.mat', r));
     assert(immse(ts(theory_change_flags & run_id == r), onsets{1}) < 1e-20);
+    %}
 end
 
-nsamples = 10;
+%nsamples = 10;
+
+load('mat/SPM73.mat');
 
 sigma_w = 1; % TODO param
 
 tot_1 = 0;
 tot_2 = 0;
 tot_3 = 0;
-
-load('mat/SPM73.mat');
 
 clear Ks;
 for j = 1:nsamples
@@ -198,6 +214,7 @@ imagesc(theory_kernel);
 % from convolve_HRRs() in HRR.py
 %
 function [Xx, r_id] = convolve_HRRs(HRRs, ts, run_id, SPM)
+
 
     nruns = length(SPM.nscan);
     assert(nruns == 6);

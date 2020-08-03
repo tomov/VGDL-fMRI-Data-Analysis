@@ -1,10 +1,28 @@
 
+
 %{
+
+% sanity check to run after decode_gp_CV
+
+subj_id = 1;
 use_smooth = true;
 glmodel = 9;
 maskfile = 'masks/ROI_x=42_y=28_z=26_1voxels_Sphere1.nii';
 [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj_id, use_smooth, glmodel, maskfile, theory_kernel);
-%}
+
+r_CV_1 = r_CV;
+R2_CV_1 = R2_CV;
+theory_kernel_1 = theory_kernel;
+
+
+
+
+load(sprintf('mat/HRR_subject_kernel_subj=%d_K=10_N=10_E=0.050_nsamples=100_sigma_w=1.000_norm=1.mat', subj_id), 'theory_kernel');
+[r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj_id, use_smooth, glmodel, maskfile, theory_kernel);
+
+r_CV_2 = r_CV;
+R2_CV_2 = R2_CV;
+
 
 for subj_id = 1:8
     %r_CV_1 = r_CV;
@@ -25,6 +43,8 @@ zs = atanh(rs);
 % t-test Pearson corr across subjects
 [h,p,ci,stats] = ttest(zs);
 ts = stats.tstat;
+
+%}
 
 
 %{

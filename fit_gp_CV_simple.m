@@ -12,6 +12,8 @@ function [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj, use_smooth, glm
         debug = false;
     end
 
+    fast = false;
+
     % load mask
     [mask_format, mask, Vmask] = get_mask_format_helper(mask);
 
@@ -63,23 +65,6 @@ function [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj, use_smooth, glm
         s = sigmas(j);
 
         fprintf('inverting kernel for subj %d, sigma %.3f\n', subj, s);
-        tic
-
-        [sn2(j), ...
-         ldB2(j), ...
-         solveKiW{j}, ...
-         invKi{j}] = calc_invKi(ker, x, s, hyp, covfun);
-
-        ker_invKi{j} = ker * invKi{j};
-
-        [null_sn2(j), ...
-         null_ldB2(j), ...
-         null_solveKiW{j}, ...
-         null_invKi{j}] = calc_invKi(null_ker, x, s, null_hyp, covfun);
-
-        null_ker_invKi{j} = null_ker * null_invKi{j};
-
-        toc
 
         disp('    ... for CV');
         tic
@@ -97,13 +82,6 @@ function [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj, use_smooth, glm
              invKi_CV{p,j}] = calc_invKi(ker(train, train), x(train), s, hyp, covfun);
 
             ker_invKi_CV{p,j} = ker(test, train) * invKi_CV{p,j};
-
-            [null_sn2_CV(p,j), ...
-             null_ldB2_CV(p,j), ...
-             null_solveKiW_CV{p,j}, ...
-             null_invKi_CV{p,j}] = calc_invKi(null_ker(train, train), x(train), s, null_hyp, covfun);
-
-            null_ker_invKi_CV{p,j} = null_ker(test, train) * null_invKi_CV{p,j};
         end
 
         toc
@@ -131,12 +109,6 @@ function [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj, use_smooth, glm
     %
     for i = 1:size(Y, 2)
 
-        if (fast && mod(i,1000) == 0) || (~fast)
-            i
-            toc
-            tic
-        end
-
         y = Y(:,i);
 
         % CV; use predictive likelihood for model comparison
@@ -158,11 +130,13 @@ function [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj, use_smooth, glm
 
         end
 
+        %{
         figure;
         hold on;
         plot(y);
         plot(y_hat);
         legend({'y', 'y_hat'}, 'interpreter', 'none');
+        %}
 
     end
 
