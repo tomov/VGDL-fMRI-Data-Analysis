@@ -16,6 +16,11 @@ catch
     disp('NCF....................');
 end
 
+
+%
+% extract event sequence, to form bounds where we will keep the theory constant
+%
+
 timestamps = [];
 collision_flags = [];
 avatar_collision_flags = [];
@@ -75,19 +80,36 @@ termination_change_flags = logical(termination_change_flags);
 
 % frames between which the theory is const
 %
-bounds = union(find(interaction_change_flags), find(termination_change_flags))
-bounds = union(bounds, find(avatar_collision_flags))
+bounds = union(find(interaction_change_flags), find(termination_change_flags));
+bounds = union(bounds, find(avatar_collision_flags));
+bounds = [1; bounds; length(theory_change_flags) + 1];
 %bounds = union(bounds, find(collision_flags)) % -- too many...
 
+
+%{
+% optionally remove 1-frame short intervals by concatenating them
+%
+clear_which = logical(zeros(size(bounds)));
+prev_len = nan;
+for i = 1:length(bounds)-1
+    len = bounds(i+1) - bounds(i);
+    if len <= 4 && prev_len <= 4
+        clear_which(i) = 1;
+    end
+    prev_len = len;
+end
+bounds(clear_which) = [];
+%}
 
 
 % actually populate HRRs from unique HRRs (theory id -> HRR) and theory id sequence
 %
 
 
-load('mat/unique_HRR_subject_subj=1_K=10_N=10_E=0.050_nsamples=10_norm=1.mat');
-run_id = run_id';
-assert(all(run_id == run_id_2));
+load('mat/unique_HRR_subject_subj=1_K=10_N=10_E=0.050_nsamples=10_norm=1.mat', 'theory_HRRs', 'run_id', 'ts', 'theory_id_seq');
+unique_theory_HRRs = theory_HRRs;
+run_id_frames = run_id';
+assert(all(run_id_frames == run_id_2));
 ts = ts';
 assert(immse(timestamps, ts) < 1e-20);
 assert(length(ts) == length(theory_id_seq));
@@ -95,7 +117,7 @@ assert(length(ts) == length(theory_id_seq));
 % sanity
 for r = 1:6
     multi = vgdl_create_multi(3, 1, r);
-    assert(immse(ts(theory_change_flags & run_id == r), multi.onsets{1}) < 1e-20);
+    assert(immse(ts(theory_change_flags & run_id_frames == r), multi.onsets{1}) < 1e-20);
 
     %{
     % for local sanity check
@@ -104,69 +126,82 @@ for r = 1:6
     %}
 end
 
-%nsamples = 10;
 
-load('mat/SPM73.mat');
+% create kernel from theory id sequence
+%
+[theory_kernel, ~, HRRs, Xx] = gen_kernel_from_theory_id_seq(unique_theory_HRRs, theory_id_seq, ts, run_id_frames);
 
-sigma_w = 1; % TODO param
-
-tot_1 = 0;
-tot_2 = 0;
-tot_3 = 0;
-
-clear Ks;
-for j = 1:nsamples
-
-    j
-    tic;
-
-    unique_HRRs = squeeze(theory_HRRs(j,:,:));
-
-    % populate HRRs from unique_HRRs
-    HRRs = nan(length(ts), size(unique_HRRs,2));
-    for i = 1:size(unique_HRRs,1)
-        theory_id = i - 1; % b/c python is 0-indexed
-        ix = find(theory_id_seq == theory_id);
-        %HRRs(theory_id_seq == theory_id, :) = unique_HRRs(i,:); -- don't work
-        for k = 1:length(ix)
-            HRRs(ix(k), :) = unique_HRRs(i,:);
-        end
-    end
-
-    tot_1 = tot_1 + toc;
-    tic;
-
-    %{
-    % for sanity -- do with theory_change_flag, compare with GLM 3 
-    for i = 1:size(HRRs,2)
-        HRRs(:,i) = theory_change_flags;
-    end
-    %}
-
-    [Xx, r_id] = convolve_HRRs(HRRs, ts, run_id, SPM);
-
-    tot_2 = tot_2 + toc;
-    tic;
-
-    Sigma_w = eye(size(Xx,2)) * sigma_w; % Sigma_p in Rasmussen, Eq. 2.4
-
-    K = Xx * Sigma_w * Xx';
-
-    if ~exist('Ks', 'var')
-        Ks = nan(nsamples, size(K,1), size(K,2));
-    end
-    Ks(j,:,:) = K;
-
-    tot_3 = tot_3 + toc;
+% pre-load BOLD
+%
+use_smooth = true;
+if use_smooth
+    EXPT = vgdl_expt();
+else
+    EXPT = vgdl_expt_nosmooth();
 end
+glmodel = 9;
+maskfile = 'masks/ROI_x=42_y=28_z=26_1voxels_Sphere1.nii';
+[mask_format, mask, Vmask] = get_mask_format_helper(maskfile);
+[Y, K, W, R, run_id_TRs] = load_BOLD(EXPT, glmodel, subj_id, mask, Vmask);
+Y = R*K*W*Y;
 
-tot_1
-tot_2
-tot_3
 
-theory_kernel = squeeze(mean(Ks,1));
-theory_kernel_std = squeeze(std(Ks,0,1));
+%[r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj_id, use_smooth, glmodel, maskfile, theory_kernel);
+ker = R*K*W*theory_kernel*W'*K'*R';
+[r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj_id, use_smooth, glmodel, Y, ker, run_id_TRs);
+assert(size(r_CV,2) == 1);
+r_orig = mean(r_CV, 1);
+theory_id_seq_orig = theory_id_seq;
+r_orig
 
+% decode
+%
+n_theories = max(theory_id_seq);
+r_best = r_orig;
+theory_id_seq_best = theory_id_seq_orig;
+
+while (true) % repeat until we keep improving
+
+    for b = 1:length(bounds) - 1 % for each time point / set of consecutive time points
+        st = bounds(b);
+        en = bounds(b+1)-1;
+
+        fprintf('between %d and %d\n', st, en);
+
+        for tid = 1:n_theories % try assigning each candidate theory to that time point
+            fprintf('     assign %d\n', tid);
+
+            % change theory 
+            theory_id_seq(st:en) = tid - 1; % python
+
+            % get kernel
+            tic
+            [theory_kernel, ~, HRRs, Xx] = gen_kernel_from_theory_id_seq(unique_theory_HRRs, theory_id_seq, ts, run_id_frames);
+            toc
+
+            % fit BOLD
+            %[r_CV] = fit_gp_CV_simple(subj_id, use_smooth, glmodel, maskfile, theory_kernel);
+            tic
+            ker = R*K*W*theory_kernel*W'*K'*R';
+            toc
+            tic
+            [r_CV] = fit_gp_CV_simple(subj_id, use_smooth, glmodel, Y, ker, run_id_TRs);
+            toc
+            r = mean(r_CV, 1);
+
+            % assess fit
+            if r > r_best
+                fprintf('             it''s better!! %d vs. %d\n', r, r_best);
+
+                r_best = r;
+                theory_id_seq_best = theory_id_seq;
+            end
+        end
+
+        theory_id_seq = theory_id_seq_best;
+    end
+
+end
 
 
 
@@ -207,6 +242,74 @@ imagesc(Xx);
 
 figure;
 imagesc(theory_kernel);
+
+%
+% theory id sequence & unique theory HRRs => HRRs => Xx (convolved HRRs) => kernel
+%
+function [theory_kernel, theory_kernel_std, HRRs, Xx] = gen_kernel_from_theory_id_seq(unique_theory_HRRs, theory_id_seq, ts, run_id)
+
+    load('mat/SPM73.mat');
+
+    sigma_w = 1; % TODO param
+
+    tot_1 = 0;
+    tot_2 = 0;
+    tot_3 = 0;
+
+    nsamples = size(unique_theory_HRRs, 1); 
+
+    clear Ks;
+    for j = 1:nsamples
+
+        tic;
+
+        unique_HRRs = squeeze(unique_theory_HRRs(j,:,:));
+
+        % populate HRRs from unique_HRRs
+        HRRs = nan(length(theory_id_seq), size(unique_HRRs,2));
+        for i = 1:size(unique_HRRs,1)
+            theory_id = i - 1; % b/c python is 0-indexed
+            ix = find(theory_id_seq == theory_id);
+            %HRRs(theory_id_seq == theory_id, :) = unique_HRRs(i,:); -- don't work
+            for k = 1:length(ix)
+                HRRs(ix(k), :) = unique_HRRs(i,:);
+            end
+        end
+
+        tot_1 = tot_1 + toc;
+        tic;
+
+        %{
+        % for sanity -- do with theory_change_flag, compare with GLM 3 
+        for i = 1:size(HRRs,2)
+            HRRs(:,i) = theory_change_flags;
+        end
+        %}
+
+        [Xx, r_id] = convolve_HRRs(HRRs, ts, run_id, SPM);
+
+        tot_2 = tot_2 + toc;
+        tic;
+
+        Sigma_w = eye(size(Xx,2)) * sigma_w; % Sigma_p in Rasmussen, Eq. 2.4
+
+        K = Xx * Sigma_w * Xx';
+
+        if ~exist('Ks', 'var')
+            Ks = nan(nsamples, size(K,1), size(K,2));
+        end
+        Ks(j,:,:) = K;
+
+        tot_3 = tot_3 + toc;
+    end
+
+    %tot_1
+    %tot_2
+    %tot_3
+
+    theory_kernel = squeeze(mean(Ks,1));
+    theory_kernel_std = squeeze(std(Ks,0,1));
+end
 
 
 

@@ -1,6 +1,7 @@
 % meat of fit_gp_CV.m, helper for decode_gp_CV.m TODO dedupe w/ fit_gp_CV.m
 
-function [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj, use_smooth, glmodel, mask, ker, debug)
+%function [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj, use_smooth, glmodel, mask, ker, debug)
+function [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj, use_smooth, glmodel, Y, ker, run_id, debug)
 
     if use_smooth
         EXPT = vgdl_expt();
@@ -14,16 +15,14 @@ function [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj, use_smooth, glm
 
     fast = false;
 
-    % load mask
-    [mask_format, mask, Vmask] = get_mask_format_helper(mask);
-
     addpath(genpath('/ncf/gershman/Lab/scripts/gpml'));
 
+    % load mask
+    %{
+    [mask_format, mask, Vmask] = get_mask_format_helper(mask);
 
-    fprintf('loading BOLD for subj %d\n', subj);
-    tic
+    %fprintf('loading BOLD for subj %d\n', subj);
     [Y, K, W, R, run_id] = load_BOLD(EXPT, glmodel, subj, mask, Vmask);
-    toc
 
     assert(size(Y,1) == size(ker,1));
     assert(size(Y,1) == size(ker,2));
@@ -31,6 +30,7 @@ function [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj, use_smooth, glm
     % whiten, filter & project out nuisance regressors
     Y = R*K*W*Y;
     ker = R*K*W*ker*W'*K'*R';
+    %}
 
     % get partitions from RSA 3
     rsa = vgdl_create_rsa(3, subj);
@@ -64,10 +64,7 @@ function [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj, use_smooth, glm
     for j = 1:length(sigmas)
         s = sigmas(j);
 
-        fprintf('inverting kernel for subj %d, sigma %.3f\n', subj, s);
-
-        disp('    ... for CV');
-        tic
+        %fprintf('inverting kernel for subj %d, sigma %.3f\n', subj, s);
 
         %
         % CV
@@ -84,14 +81,12 @@ function [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj, use_smooth, glm
             ker_invKi_CV{p,j} = ker(test, train) * invKi_CV{p,j};
         end
 
-        toc
     end
 
 
     assert(size(Y,2) == 1);
 
-    fprintf('solving GP for subj %d, %d voxels\n', subj, size(Y,2));
-    tic
+    %fprintf('solving GP for subj %d, %d voxels\n', subj, size(Y,2));
 
     % same but cross-validated
     sigma_CV = nan(n_partitions, size(Y,2));
@@ -140,4 +135,3 @@ function [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj, use_smooth, glm
 
     end
 
-    toc
