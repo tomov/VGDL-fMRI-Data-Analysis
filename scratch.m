@@ -1,19 +1,53 @@
 
 
-%{
+%
+%% sanity check to run after decode_gp_CV
+%
 
-% sanity check to run after decode_gp_CV
+load decode_gp_CV.mat
 
-subj_id = 1;
+% load BOLD
 use_smooth = true;
 glmodel = 9;
 maskfile = 'masks/ROI_x=42_y=28_z=26_1voxels_Sphere1.nii';
-[r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj_id, use_smooth, glmodel, maskfile, theory_kernel);
+[mask_format, mask, Vmask] = get_mask_format_helper(maskfile);
+[Y, K, W, R, run_id_TRs] = load_BOLD(EXPT, glmodel, subj_id, mask, Vmask);
+Y = R*K*W*Y;
+assert(size(Y,2) == 1); % single voxel
+y = Y;
 
+% fit GP w/ CV to get r
+[theory_kernel, ~, HRRs, Xx] = gen_kernel_from_theory_id_seq(unique_theory_HRRs, theory_id_seq_orig, ts, run_id_frames);
+ker = R*K*W*theory_kernel*W'*K'*R';
+[r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj_id, use_smooth, glmodel, Y, ker, run_id_TRs);
+
+% fit manually too to get LME
+hyp = hyp_from_ker(nearestSPD(ker));
+hyp.lik = log(1); % TODO sigma_n = 1 const
+nlz = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x, y);
+logmarglik = -nlz;
+
+
+% compare with pre-computed 
+%
 r_CV_1 = r_CV;
 R2_CV_1 = R2_CV;
-theory_kernel_1 = theory_kernel;
+logmarglik_1 = logmarglik;
+load('mat/fit_gp_CV_HRR_subj=1_us=1_glm=9_mask=mask_theory.mat', 'r_CV', 'R2_CV', 'mask');
+whole_brain_mask = mask;
+[mask] = ccnl_load_mask(maskfile);
+which = mask(whole_brain_mask);
+r_CV = r_CV(:,which);
+R2_CV = R2_CV(:,which);
 
+r_CV_1
+r_CV
+
+logmarglik_1
+logmarglik
+
+
+%{
 
 
 

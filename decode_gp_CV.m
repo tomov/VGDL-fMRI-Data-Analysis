@@ -1,10 +1,23 @@
+function decode_gp_CV(subj_id)
 
+%{
 clear all;
 close all;
-
-%load('../glmOutput/model3/subj1/multi1.mat');
-
 subj_id = 1;
+%}
+
+use_smooth = true;
+if use_smooth
+    EXPT = vgdl_expt();
+else
+    EXPT = vgdl_expt_nosmooth();
+end
+glmodel = 9;
+maskfile = 'masks/ROI_x=42_y=28_z=26_1voxels_Sphere1.nii';
+
+
+filename = sprintf('mat/decode_gp_CV_HRR_subj=%d.mat', subj_id);
+filename
 
 %
 % from vgdl_create_multi.m
@@ -141,14 +154,6 @@ end
 
 % pre-load BOLD
 %
-use_smooth = true;
-if use_smooth
-    EXPT = vgdl_expt();
-else
-    EXPT = vgdl_expt_nosmooth();
-end
-glmodel = 9;
-maskfile = 'masks/ROI_x=42_y=28_z=26_1voxels_Sphere1.nii';
 [mask_format, mask, Vmask] = get_mask_format_helper(maskfile);
 [Y, K, W, R, run_id_TRs] = load_BOLD(EXPT, glmodel, subj_id, mask, Vmask);
 Y = R*K*W*Y;
@@ -168,7 +173,6 @@ likfun = @likGauss;
 
 % fit GP with original kernel
 %
-%[r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj_id, use_smooth, glmodel, maskfile, theory_kernel);
 ker = R*K*W*theory_kernel*W'*K'*R';
 [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj_id, use_smooth, glmodel, Y, ker, run_id_TRs);
 
@@ -279,31 +283,20 @@ for iter = 1:10000
         theory_id_seq_best = theory_id_seq;
     end
 
+    % optionally save
     if mod(iter,100) == 0 
         disp('saving');
         tic
-        save('decode_gp_CV.mat', '-v7.3');
+        iter
+        save(filename, '-v7.3');
         toc
     end
 end
 
         
-save('decode_gp_CV.mat', '-v7.3');
+save(filename, '-v7.3');
+disp('Done');
 
-
-use_smooth = true;
-glmodel = 9;
-maskfile = 'masks/ROI_x=42_y=28_z=26_1voxels_Sphere1.nii';
-[r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj_id, use_smooth, glmodel, maskfile, theory_kernel);
-
-r_CV_1 = r_CV;
-R2_CV_1 = R2_CV;
-load('mat/fit_gp_CV_HRR_subj=1_us=1_glm=9_mask=mask_theory.mat', 'r_CV', 'R2_CV', 'mask');
-whole_brain_mask = mask;
-[mask] = ccnl_load_mask(maskfile);
-which = mask(whole_brain_mask);
-r_CV = r_CV(:,which);
-R2_CV = R2_CV(:,which);
 
 %{
 % for sanity -- after convolning theory_change_flag manually, compare with GLM 3 
@@ -323,10 +316,12 @@ title('manual');
 %}
 
 
+%{
 figure;
 imagesc(Xx);
 
 figure;
 imagesc(theory_kernel);
+%}
 
 
