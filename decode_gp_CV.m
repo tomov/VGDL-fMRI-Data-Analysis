@@ -144,25 +144,49 @@ maskfile = 'masks/ROI_x=42_y=28_z=26_1voxels_Sphere1.nii';
 [mask_format, mask, Vmask] = get_mask_format_helper(maskfile);
 [Y, K, W, R, run_id_TRs] = load_BOLD(EXPT, glmodel, subj_id, mask, Vmask);
 Y = R*K*W*Y;
+assert(size(Y,2) == 1); % single voxel
+y = Y;
+
+% init GP stuff
+%
+addpath(genpath('/ncf/gershman/Lab/scripts/gpml'));
+
+n = size(y, 1);
+x = [1:n]';
+meanfun = @meanConst;
+covfun = {@covDiscrete, n};
+likfun = @likGauss;
 
 
+% fit GP with original kernel
+%
 %[r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj_id, use_smooth, glmodel, maskfile, theory_kernel);
 ker = R*K*W*theory_kernel*W'*K'*R';
 [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj_id, use_smooth, glmodel, Y, ker, run_id_TRs);
+
+% fit manually too -- faster?
+hyp = hyp_from_ker(nearestSPD(ker));
+hyp.lik = log(1); % TODO sigma_n = 1 const
+nlz = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x, y);
+
 assert(size(r_CV,2) == 1);
 r_orig = mean(r_CV, 1);
+nlz_orig = nlz;
 theory_id_seq_orig = theory_id_seq;
+nlz_orig
 r_orig
 
 % decode
 %
 n_theories = max(theory_id_seq);
 r_best = r_orig;
+nlz_best = nlz_orig;
 theory_id_seq_best = theory_id_seq_orig;
 
 while (true) % repeat until we keep improving
 
-    for b = 1:length(bounds) - 1 % for each time point / set of consecutive time points
+    %for b = 1:length(bounds) - 1 % for each time point / set of consecutive time points
+    for b = length(bounds)-1:-1:1 % for each time point / set of consecutive time points
         st = bounds(b);
         en = bounds(b+1)-1;
 
@@ -184,16 +208,28 @@ while (true) % repeat until we keep improving
             tic
             ker = R*K*W*theory_kernel*W'*K'*R';
             toc
+
+            %{
             tic
             [r_CV] = fit_gp_CV_simple(subj_id, use_smooth, glmodel, Y, ker, run_id_TRs);
-            toc
             r = mean(r_CV, 1);
+            toc
+            %}
+
+            tic
+            clear r;
+            hyp = hyp_from_ker(nearestSPD(ker));
+            hyp.lik = log(1); % TODO sigma_n = 1 const
+            nlz = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x, y);
+            toc
 
             % assess fit
-            if r > r_best
-                fprintf('             it''s better!! %d vs. %d\n', r, r_best);
-
-                r_best = r;
+            %if r > r_best
+            if nlz < nlz_best
+                %fprintf('             it''s better!! %d vs. %d\n', r, r_best);
+                fprintf('             it''s better!! %d vs. %d\n', nlz, nlz_best);
+                %r_best = r;
+                nlz_best = nlz;
                 theory_id_seq_best = theory_id_seq;
             end
         end
