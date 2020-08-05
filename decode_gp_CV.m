@@ -27,6 +27,8 @@ avatar_collision_flags = [];
 interaction_change_flags = [];
 termination_change_flags = [];
 theory_change_flags = [];
+game_ids = [];
+block_ids = [];
 
 run_id_2 = [];
 for r = 1:6
@@ -63,6 +65,8 @@ for r = 1:6
     av = logical(av);
     avatar_collision_flags = [avatar_collision_flags; av];
 
+    game_ids = [game_ids; regs.game_ids];
+    block_ids = [block_ids; regs.block_ids];
     theory_change_flags = [theory_change_flags; regs.theory_change_flag];
     interaction_change_flags = [interaction_change_flags; regs.interaction_change_flag];
     termination_change_flags = [termination_change_flags; regs.termination_change_flag];
@@ -77,11 +81,15 @@ theory_change_flags = logical(theory_change_flags);
 interaction_change_flags = logical(interaction_change_flags);
 termination_change_flags = logical(termination_change_flags);
 
+new_block_flag = block_ids(2:end) ~= block_ids(1:end-1);
+new_block_flag = [0; new_block_flag];
 
 % frames between which the theory is const
 %
-bounds = union(find(interaction_change_flags), find(termination_change_flags));
+%bounds = union(find(interaction_change_flags), find(termination_change_flags));
+bounds = find(theory_change_flags); % to be consistent
 bounds = union(bounds, find(avatar_collision_flags));
+bounds = union(bounds, find(new_block_flag));
 bounds = [1; bounds; length(theory_change_flags) + 1];
 %bounds = union(bounds, find(collision_flags)) % -- too many...
 
@@ -106,7 +114,7 @@ bounds(clear_which) = [];
 %
 
 
-load('mat/unique_HRR_subject_subj=1_K=10_N=10_E=0.050_nsamples=10_norm=1.mat', 'theory_HRRs', 'run_id', 'ts', 'theory_id_seq');
+load('mat/unique_HRR_subject_subj=1_K=10_N=10_E=0.050_nsamples=100_norm=1.mat', 'theory_HRRs', 'run_id', 'ts', 'theory_id_seq');
 unique_theory_HRRs = theory_HRRs;
 run_id_frames = run_id';
 assert(all(run_id_frames == run_id_2));
@@ -176,69 +184,111 @@ theory_id_seq_orig = theory_id_seq;
 nlz_orig
 r_orig
 
-% decode
+% init best theory sequence
 %
 n_theories = max(theory_id_seq);
 r_best = r_orig;
 nlz_best = nlz_orig;
 theory_id_seq_best = theory_id_seq_orig;
+nlz = nlz_orig; % for MCMC
+theory_id_seq = theory_id_seq_orig; % for MCMC
 
-while (true) % repeat until we keep improving
-
-    %for b = 1:length(bounds) - 1 % for each time point / set of consecutive time points
-    for b = length(bounds)-1:-1:1 % for each time point / set of consecutive time points
-        st = bounds(b);
-        en = bounds(b+1)-1;
-
-        fprintf('between %d and %d\n', st, en);
-
-        for tid = 1:n_theories % try assigning each candidate theory to that time point
-            fprintf('     assign %d\n', tid);
-
-            % change theory 
-            theory_id_seq(st:en) = tid - 1; % python
-
-            % get kernel
-            tic
-            [theory_kernel, ~, HRRs, Xx] = gen_kernel_from_theory_id_seq(unique_theory_HRRs, theory_id_seq, ts, run_id_frames);
-            toc
-
-            % fit BOLD
-            %[r_CV] = fit_gp_CV_simple(subj_id, use_smooth, glmodel, maskfile, theory_kernel);
-            tic
-            ker = R*K*W*theory_kernel*W'*K'*R';
-            toc
-
-            %{
-            tic
-            [r_CV] = fit_gp_CV_simple(subj_id, use_smooth, glmodel, Y, ker, run_id_TRs);
-            r = mean(r_CV, 1);
-            toc
-            %}
-
-            tic
-            clear r;
-            hyp = hyp_from_ker(nearestSPD(ker));
-            hyp.lik = log(1); % TODO sigma_n = 1 const
-            nlz = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x, y);
-            toc
-
-            % assess fit
-            %if r > r_best
-            if nlz < nlz_best
-                %fprintf('             it''s better!! %d vs. %d\n', r, r_best);
-                fprintf('             it''s better!! %d vs. %d\n', nlz, nlz_best);
-                %r_best = r;
-                nlz_best = nlz;
-                theory_id_seq_best = theory_id_seq;
-            end
-        end
-
-        theory_id_seq = theory_id_seq_best;
-    end
-
+% init theory id candidates for each game
+%
+tid_candidates = cell(max(game_ids),1);
+for g = 1:max(game_ids)
+    tid_candidates{g} = unique(theory_id_seq(game_ids == g));
 end
 
+% decode
+%
+%while (true) % repeat until we keep improving
+for iter = 1:10000
+
+    % pick random interval
+    b = randi(length(bounds)-1);
+    %for b = 1:length(bounds) - 1 % for each time point / set of consecutive time points
+    st = bounds(b);
+    en = bounds(b+1)-1;
+
+    fprintf('between %d and %d\n', st, en);
+
+    % pick theory id candidate at random
+    assert(game_ids(st) == game_ids(en));
+    assert(block_ids(st) == block_ids(en));
+    g = game_ids(st);
+    tid = randsample(tid_candidates{g}, 1);
+    %for tid = 0:n_theories-1 % try assigning each candidate theory to that time point; note b/c of python, tid's are 0-indexed
+
+    fprintf('     assign %d\n', tid);
+
+    % candidate theory sequence = curreth theory, with one interval changed
+    theory_id_seq_cand = theory_id_seq;
+    theory_id_seq_cand(st:en) = tid;
+
+    % get kernel for candidate theory sequence
+    tic
+    [theory_kernel, ~, HRRs, Xx] = gen_kernel_from_theory_id_seq(unique_theory_HRRs, theory_id_seq, ts, run_id_frames);
+    toc
+
+    tic
+    ker = R*K*W*theory_kernel*W'*K'*R';
+    toc
+
+    % fit BOLD using CV and compare using r
+    %
+    %{
+    tic
+    [r_CV] = fit_gp_CV_simple(subj_id, use_smooth, glmodel, Y, ker, run_id_TRs);
+    r = mean(r_CV, 1);
+    toc
+
+    % assess fit
+    if r > r_best
+        fprintf('             it''s better!! %d vs. %d\n', r, r_best);
+        r_best = r;
+        theory_id_seq_best = theory_id_seq;
+    else
+        theory_id_seq = theory_id_seq_best;
+    end
+    %}
+
+    % fit BOLD w/o CV and compare using log marg lik
+    %
+    tic
+    hyp = hyp_from_ker(nearestSPD(ker));
+    hyp.lik = log(1); % TODO sigma_n = 1 const
+    nlz_cand = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x, y);
+    toc
+
+    % metropolis rule b/c proposal for tid is symmetric
+    lme_cand = -nlz_cand;
+    lme = -nlz;
+    log_alpha = lme_cand - lme; % negative log marg liks
+    u = rand();
+    if log(u) <= log_alpha
+        fprintf('             accept: %f vs. %f (log alpha = %f; %f <= %f\n', lme_cand, lme, log_alpha, u, exp(log_alpha));
+        nlz = nlz_cand;
+        theory_id_seq = theory_id_seq_cand;
+    end
+
+    % assess fit
+    if nlz < nlz_best
+        fprintf('             new best: %d vs. %d\n', nlz, nlz_best);
+        nlz_best = nlz;
+        theory_id_seq_best = theory_id_seq;
+    end
+
+    if mod(iter,100) == 0 
+        disp('saving');
+        tic
+        save('decode_gp_CV.mat', '-v7.3');
+        toc
+    end
+end
+
+        
+save('decode_gp_CV.mat', '-v7.3');
 
 
 use_smooth = true;
@@ -278,170 +328,5 @@ imagesc(Xx);
 
 figure;
 imagesc(theory_kernel);
-
-%
-% theory id sequence & unique theory HRRs => HRRs => Xx (convolved HRRs) => kernel
-%
-function [theory_kernel, theory_kernel_std, HRRs, Xx] = gen_kernel_from_theory_id_seq(unique_theory_HRRs, theory_id_seq, ts, run_id)
-
-    load('mat/SPM73.mat');
-
-    sigma_w = 1; % TODO param
-
-    tot_1 = 0;
-    tot_2 = 0;
-    tot_3 = 0;
-
-    nsamples = size(unique_theory_HRRs, 1); 
-
-    clear Ks;
-    for j = 1:nsamples
-
-        tic;
-
-        unique_HRRs = squeeze(unique_theory_HRRs(j,:,:));
-
-        % populate HRRs from unique_HRRs
-        HRRs = nan(length(theory_id_seq), size(unique_HRRs,2));
-        for i = 1:size(unique_HRRs,1)
-            theory_id = i - 1; % b/c python is 0-indexed
-            ix = find(theory_id_seq == theory_id);
-            %HRRs(theory_id_seq == theory_id, :) = unique_HRRs(i,:); -- don't work
-            for k = 1:length(ix)
-                HRRs(ix(k), :) = unique_HRRs(i,:);
-            end
-        end
-
-        tot_1 = tot_1 + toc;
-        tic;
-
-        %{
-        % for sanity -- do with theory_change_flag, compare with GLM 3 
-        for i = 1:size(HRRs,2)
-            HRRs(:,i) = theory_change_flags;
-        end
-        %}
-
-        [Xx, r_id] = convolve_HRRs(HRRs, ts, run_id, SPM);
-
-        tot_2 = tot_2 + toc;
-        tic;
-
-        Sigma_w = eye(size(Xx,2)) * sigma_w; % Sigma_p in Rasmussen, Eq. 2.4
-
-        K = Xx * Sigma_w * Xx';
-
-        if ~exist('Ks', 'var')
-            Ks = nan(nsamples, size(K,1), size(K,2));
-        end
-        Ks(j,:,:) = K;
-
-        tot_3 = tot_3 + toc;
-    end
-
-    %tot_1
-    %tot_2
-    %tot_3
-
-    theory_kernel = squeeze(mean(Ks,1));
-    theory_kernel_std = squeeze(std(Ks,0,1));
-end
-
-
-
-%
-% from convolve_HRRs() in HRR.py
-%
-function [Xx, r_id] = convolve_HRRs(HRRs, ts, run_id, SPM)
-
-
-    nruns = length(SPM.nscan);
-    assert(nruns == 6);
-
-    Xx = [];
-    r_id = [];
-
-    for s = 1:nruns
-        
-        which = run_id == s;
-
-        % from spm_get_ons.m
-        %
-        k = SPM.nscan(s);
-        assert(k == 283);
-
-        T = SPM.xBF.T;
-        assert(T == 16);
-
-        dt = SPM.xBF.dt;
-        assert(dt == 0.1250);
-
-        UNITS = SPM.xBF.UNITS;
-        assert(isequal(SPM.xBF.UNITS, 'secs'));
-        TR = 1;
-
-        bf = SPM.xBF.bf;
-        assert(size(bf,1) == 257);
-
-        % from spm_get_ons.m
-        %
-
-        ons = ts(which);
-        u = HRRs(which,:);
-        ton = round(ons*TR/dt) + 33; % 32 bin offset
-        %toff = ton + 1; % for sanity, with impulse regressors only, e.g. theory_change_flag w/ GLM 3
-        toff = ton(2:end); % frames are back-to-back
-        toff = [toff; ton(end) + T]; % 1 s duration for last one, to match other between-block / level durations TODO more rigorous
-        sf = zeros((k*T + 128), size(u,2));
-
-        assert(all(ton >= 0));
-        assert(all(ton < size(sf,1)));
-        assert(all(toff >= 0));
-        assert(all(toff < size(sf,1)));
-
-        for j = 1:length(ton)
-            sf(ton(j),:) = sf(ton(j),:) + u(j,:);
-            sf(toff(j),:) = sf(toff(j),:) - u(j,:);
-        end
-        
-        sf = cumsum(sf);
-        sf = sf(1:(k*T + 32),:);                 %  32 bin offset
-
-        % from spm_Volterra.m
-        %
-
-        %{
-        % don't use convolution matrix; it's slower...
-        if ~exist('A', 'var')
-            A = convmtx(bf, size(sf,1));
-            d = 1:size(sf,1);
-        end
-        X = A * sf;
-        X = X(d,:);
-        %}
-        X = zeros(size(sf));
-        for i = 1:size(sf,2)
-            x = sf(:,i);
-            d = 1:length(x);
-            x = conv(x, bf);
-            x = x(d);
-            X(:,i) = x;
-        end
-
-        % from spm_fMRI_design.m
-        %
-
-        fMRI_T = SPM.xBF.T;
-        fMRI_T0 = SPM.xBF.T0;
-
-        assert(k == 283);
-        idx = (0:(k - 1))*fMRI_T + fMRI_T0 + 32;
-        X = X(idx,:);
-
-        Xx = [Xx; X];
-        r_id = [r_id; ones(size(X,1),1) * s];
-    end
-
-end
 
 
