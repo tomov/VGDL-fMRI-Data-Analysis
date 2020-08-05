@@ -34,13 +34,13 @@ end
 
 
 %bspmview_wrapper(EXPT, SMSE_tmap);
-bspmview_wrapper(EXPT, tmap);
+%bspmview_wrapper(EXPT, tmap);
 %bspmview_wrapper(EXPT, diff_R2map);
 %bspmview_wrapper(EXPT, null_R2map);
 %bspmview_wrapper(EXPT, R2map);
 %bspmview_wrapper(EXPT, adjR2map);
 %bspmview_wrapper(EXPT, Wmap);
 %bspmview_wrapper(EXPT, logGBFmap);
-%bspmview_wrapper(EXPT, loglikmap);
+bspmview_wrapper(EXPT, loglikmap);
 %bspmview_wrapper(EXPT, null_loglikmap);
 %bspmview_wrapper(EXPT, null_loglikmap);

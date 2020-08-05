@@ -10,7 +10,7 @@ else
 end
 
 subjects = 1:length(EXPT.subject);
-what = 'termination';
+what = 'theory';
 glmodel = 9;
 
 agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_%s.mat', use_smooth, glmodel, what);
@@ -44,8 +44,8 @@ for s = 1:length(subjects)
         null_MSEs = nan(length(subjects), size(r,2));
         null_SMSEs = nan(length(subjects), size(r,2));
 
-        log_group_marglik = nan(1, size(r,2));
-        null_log_group_marglik = nan(1, size(r,2));
+        log_group_marglik = zeros(1, size(r,2));
+        null_log_group_marglik = zeros(1, size(r,2));
     end
 
     log_group_marglik = log_group_marglik + logmarglik;
