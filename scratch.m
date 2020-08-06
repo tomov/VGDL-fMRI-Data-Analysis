@@ -3,6 +3,7 @@
 %
 %% sanity check to run after decode_gp_CV
 %
+%{
 
 load decode_gp_CV.mat
 
@@ -45,6 +46,7 @@ r_CV
 
 logmarglik_1
 logmarglik
+%}
 
 
 %{

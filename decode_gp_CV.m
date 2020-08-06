@@ -42,8 +42,7 @@ termination_change_flags = [];
 theory_change_flags = [];
 game_ids = [];
 block_ids = [];
-
-run_id_2 = [];
+run_ids = [];
 for r = 1:6
     query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, r); % in python we index runs from 0 (but not subjects) 
 
@@ -80,11 +79,12 @@ for r = 1:6
 
     game_ids = [game_ids; regs.game_ids];
     block_ids = [block_ids; regs.block_ids];
+    run_ids = [run_ids; ones(length(regs.theory_change_flag),1) * r];
+
     theory_change_flags = [theory_change_flags; regs.theory_change_flag];
     interaction_change_flags = [interaction_change_flags; regs.interaction_change_flag];
     termination_change_flags = [termination_change_flags; regs.termination_change_flag];
 
-    run_id_2 = [run_id_2; ones(length(regs.theory_change_flag),1) * r];
     % theory_change_flag is unreliable -- sprite types flicker randomly, 
     % so sanity check with other flags
     %assert(all(ismember(find(regs.interaction_change_flag), find(visuals.effectsByCol))));
@@ -127,22 +127,22 @@ bounds(clear_which) = [];
 %
 
 
-load('mat/unique_HRR_subject_subj=1_K=10_N=10_E=0.050_nsamples=100_norm=1.mat', 'theory_HRRs', 'run_id', 'ts', 'theory_id_seq');
+load(sprintf('mat/unique_HRR_subject_subj=%d_K=10_N=10_E=0.050_nsamples=100_norm=1.mat', subj_id), 'theory_HRRs', 'run_id', 'ts', 'theory_id_seq');
 unique_theory_HRRs = theory_HRRs;
 run_id_frames = run_id';
-assert(all(run_id_frames == run_id_2));
+assert(all(run_id_frames == run_ids));
 ts = ts';
 assert(immse(timestamps, ts) < 1e-20);
 assert(length(ts) == length(theory_id_seq));
 
 % sanity
 for r = 1:6
-    multi = vgdl_create_multi(3, 1, r);
+    multi = vgdl_create_multi(3, subj_id, r);
     assert(immse(ts(theory_change_flags & run_id_frames == r), multi.onsets{1}) < 1e-20);
 
     %{
     % for local sanity check
-    load(sprintf('../glmOutput/model3/subj1/multi%d.mat', r));
+    load(sprintf('../glmOutput/model3/subj%d/multi%d.mat', subj_id, r));
     assert(immse(ts(theory_change_flags & run_id == r), onsets{1}) < 1e-20);
     %}
 end
