@@ -1,10 +1,8 @@
-function decode_gp_CV(subj_id)
+%function decode_gp_CV(subj_id)
 
-%{
 clear all;
 close all;
 subj_id = 1;
-%}
 
 use_smooth = true;
 if use_smooth
@@ -16,7 +14,7 @@ glmodel = 9;
 maskfile = 'masks/ROI_x=42_y=28_z=26_1voxels_Sphere1.nii';
 
 
-filename = sprintf('mat/decode_gp_CV_HRR_subj=%d.mat', subj_id);
+filename = sprintf('mat/decode_gp_CV_HRR_subj=%d_minint=300.mat', subj_id);
 filename
 
 %
@@ -43,7 +41,7 @@ theory_change_flags = [];
 game_ids = [];
 block_ids = [];
 run_ids = [];
-for r = 1:6
+for r = 1:6  % TODO hardcoded
     query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, r); % in python we index runs from 0 (but not subjects) 
 
     try
@@ -107,9 +105,9 @@ bounds = [1; bounds; length(theory_change_flags) + 1];
 %bounds = union(bounds, find(collision_flags)) % -- too many...
 
 
-%{
 % optionally remove 1-frame short intervals by concatenating them
 %
+%{
 clear_which = logical(zeros(size(bounds)));
 prev_len = nan;
 for i = 1:length(bounds)-1
@@ -121,6 +119,47 @@ for i = 1:length(bounds)-1
 end
 bounds(clear_which) = [];
 %}
+
+% keep merging smallest interval into neighbor,
+% until there are no small intervals
+% o/w, the temporal resolution is insufficient
+%
+bounds_orig = bounds;
+while true
+    intervals = diff(bounds);
+
+    % find smallest interval
+    [min_interval, i] = min(intervals);
+    if min_interval >= 300 %60 % 1 TR ~= 30 frames
+        break
+    end
+
+    % get neighbors
+    left_interval = inf;
+    if i - 1 >= 1
+        left_interval = intervals(i - 1);
+    end
+    right_interval = inf;
+    if i + 1 <= length(intervals)
+        right_interval = intervals(i + 1);
+    end
+
+    % merge w/ shorter neighbor
+    if left_interval < right_interval
+        bounds(i) = [];
+    else
+        bounds(i+1) = [];
+    end
+end
+
+%{
+figure;
+subplot(2,1,1);
+plot(bounds_orig);
+subplot(2,1,2);
+plot(bounds);
+%}
+
 
 
 % actually populate HRRs from unique HRRs (theory id -> HRR) and theory id sequence
@@ -218,8 +257,8 @@ for iter = 1:10000
     fprintf('between %d and %d\n', st, en);
 
     % pick theory id candidate at random
-    assert(game_ids(st) == game_ids(en));
-    assert(block_ids(st) == block_ids(en));
+    %assert(game_ids(st) == game_ids(en));
+    %assert(block_ids(st) == block_ids(en));
     g = game_ids(st);
     tid = randsample(tid_candidates{g}, 1);
     %for tid = 0:n_theories-1 % try assigning each candidate theory to that time point; note b/c of python, tid's are 0-indexed

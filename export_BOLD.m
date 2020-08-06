@@ -68,7 +68,7 @@ for s = 1:length(subjects)
 
         game_ids = [game_ids; regs.game_ids];
         block_ids = [block_ids; regs.block_ids];
-        level_ids = [level_ids; regs.level_ids];
+        level_ids = [level_ids; regs.instance_ids];
         run_ids = [run_ids; ones(length(regs.theory_change_flag),1) * r];
 
         theory_change_flags = [theory_change_flags; regs.theory_change_flag];
@@ -146,7 +146,8 @@ for s = 1:length(subjects)
 
     % BOLD
     [B, runs] = ccnl_get_activations(EXPT, glmodel, mask, subj, false, false);
-    filename = sprintf('mat/BOLD_subj%d_%s.mat', glmodel, subj, suffix);
+    B = B{1};
+    filename = sprintf('mat/BOLD_subj%d_%s.mat', subj, suffix);
 
     filename
     save(filename, 'B', 'runs', 'mask', 'Vmask', 'block', 'run', 'instance', 'level', 'game', 'theory_change_flag_cnt', 'theory_change_flag', 'interaction_change_flag_cnt', 'interaction_change_flag', 'termination_change_flag_cnt', 'termination_change_flag', '-v7.3');
