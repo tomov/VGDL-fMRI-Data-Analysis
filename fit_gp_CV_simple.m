@@ -1,7 +1,7 @@
 % meat of fit_gp_CV.m, helper for decode_gp_CV.m TODO dedupe w/ fit_gp_CV.m
 
 %function [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj, use_smooth, glmodel, mask, ker, debug)
-function [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj, use_smooth, glmodel, Y, ker, run_id, debug)
+function [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj, use_smooth, glmodel, Y, ker, run_id, x, y, meanfun, covfun, likfun, debug)
 
     if use_smooth
         EXPT = vgdl_expt();
@@ -13,7 +13,7 @@ function [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj, use_smooth, glm
         debug = false;
     end
 
-    fast = false;
+    fast = true;
 
     addpath(genpath('/ncf/gershman/Lab/scripts/gpml'));
 
@@ -40,9 +40,11 @@ function [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj, use_smooth, glm
 
     % find nearest symmetric positive definite matrix (it's not b/c of numerical issues, floating points, etc.)
     ker = nearestSPD(ker);
+    hyp = hyp_from_ker(ker);
 
     % init GP stuff
     %
+    %{
     n = size(ker, 1);
     x = [1:n]';
     ceil_x = x + run_id * 10000; % do not extrapolate RBF across runs
@@ -52,7 +54,7 @@ function [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj, use_smooth, glm
     meanfun = @meanConst;
     covfun = {@covDiscrete, n};
     likfun = @likGauss;
-    hyp = hyp_from_ker(ker);
+    %}
 
 
     sigmas = 1; % TODO param
@@ -84,7 +86,7 @@ function [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj, use_smooth, glm
     end
 
 
-    assert(size(Y,2) == 1);
+    %assert(size(Y,2) == 1);
 
     %fprintf('solving GP for subj %d, %d voxels\n', subj, size(Y,2));
 

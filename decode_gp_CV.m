@@ -1,5 +1,6 @@
 %function decode_gp_CV(subj_id)
 
+%{
 clear all;
 close all;
 subj_id = 1;
@@ -104,61 +105,13 @@ bounds = union(bounds, find(new_block_flag));
 bounds = [1; bounds; length(theory_change_flags) + 1];
 %bounds = union(bounds, find(collision_flags)) % -- too many...
 
+bounds = cleanup_bounds(bounds);
 
-% optionally remove 1-frame short intervals by concatenating them
-%
-%{
-clear_which = logical(zeros(size(bounds)));
-prev_len = nan;
-for i = 1:length(bounds)-1
-    len = bounds(i+1) - bounds(i);
-    if len <= 4 && prev_len <= 4
-        clear_which(i) = 1;
-    end
-    prev_len = len;
-end
-bounds(clear_which) = [];
-%}
-
-% keep merging smallest interval into neighbor,
-% until there are no small intervals
-% o/w, the temporal resolution is insufficient
-%
-bounds_orig = bounds;
-while true
-    intervals = diff(bounds);
-
-    % find smallest interval
-    [min_interval, i] = min(intervals);
-    if min_interval >= 300 %60 % 1 TR ~= 30 frames
-        break
-    end
-
-    % get neighbors
-    left_interval = inf;
-    if i - 1 >= 1
-        left_interval = intervals(i - 1);
-    end
-    right_interval = inf;
-    if i + 1 <= length(intervals)
-        right_interval = intervals(i + 1);
-    end
-
-    % merge w/ shorter neighbor
-    if left_interval < right_interval
-        bounds(i) = [];
-    else
-        bounds(i+1) = [];
-    end
-end
-
-%{
-figure;
-subplot(2,1,1);
-plot(bounds_orig);
-subplot(2,1,2);
-plot(bounds);
-%}
+%figure;
+%subplot(2,1,1);
+%plot(bounds_orig);
+%subplot(2,1,2);
+%plot(bounds);
 
 
 
@@ -167,6 +120,7 @@ plot(bounds);
 
 
 load(sprintf('mat/unique_HRR_subject_subj=%d_K=10_N=10_E=0.050_nsamples=100_norm=1.mat', subj_id), 'theory_HRRs', 'run_id', 'ts', 'theory_id_seq');
+%unique_theory_HRRs = unique_theory_HRRs(1:3,:,:); % TODO !!!!!!!!!!!!!!!!
 unique_theory_HRRs = theory_HRRs;
 run_id_frames = run_id';
 assert(all(run_id_frames == run_ids));
@@ -179,25 +133,45 @@ for r = 1:6
     multi = vgdl_create_multi(3, subj_id, r);
     assert(immse(ts(theory_change_flags & run_id_frames == r), multi.onsets{1}) < 1e-20);
 
-    %{
     % for local sanity check
-    load(sprintf('../glmOutput/model3/subj%d/multi%d.mat', subj_id, r));
-    assert(immse(ts(theory_change_flags & run_id == r), onsets{1}) < 1e-20);
-    %}
+    %load(sprintf('../glmOutput/model3/subj%d/multi%d.mat', subj_id, r));
+    %assert(immse(ts(theory_change_flags & run_id == r), onsets{1}) < 1e-20);
 end
 
 
+
+
+tc = find(theory_id_seq(2:end) ~= theory_id_seq(1:end-1)) + 1; % frame indices of theory changes 
+tc = [1 tc length(theory_id_seq)+1];
+bounds = union(bounds, tc);
+
+blk = find(block_ids(2:end) ~= block_ids(1:end-1)) + 1; % frame after block change
+bounds = union(bounds, blk);
+
+
+
+%}
+
 % create kernel from theory id sequence
 %
-[theory_kernel, ~, HRRs, Xx] = gen_kernel_from_theory_id_seq(unique_theory_HRRs, theory_id_seq, ts, run_id_frames);
+
+load('mat/SPM73.mat');
+
+tic
+[theory_kernel, ~, HRRs, Xx] = gen_kernel_from_theory_id_seq(unique_theory_HRRs, theory_id_seq, ts, run_id_frames, SPM);
+toc
+
+
 
 % pre-load BOLD
 %
 [mask_format, mask, Vmask] = get_mask_format_helper(maskfile);
-[Y, K, W, R, run_id_TRs] = load_BOLD(EXPT, glmodel, subj_id, mask, Vmask);
+%[Y, K, W, R, run_id_TRs] = load_BOLD(EXPT, glmodel, subj_id, mask, Vmask);
+load mat/load_BOLD_39.mat % TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 Y = R*K*W*Y;
-assert(size(Y,2) == 1); % single voxel
-y = Y;
+%assert(size(Y,2) == 1); % single voxel
+y = Y; % TODO rename to Y
 
 % init GP stuff
 %
@@ -213,14 +187,19 @@ likfun = @likGauss;
 % fit GP with original kernel
 %
 ker = R*K*W*theory_kernel*W'*K'*R';
-[r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj_id, use_smooth, glmodel, Y, ker, run_id_TRs);
+[r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj_id, use_smooth, glmodel, Y, ker, run_id_TRs, x, y, meanfun, covfun, likfun);
 
 % fit manually too -- faster?
+%{
 hyp = hyp_from_ker(nearestSPD(ker));
 hyp.lik = log(1); % TODO sigma_n = 1 const
 nlz = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x, y);
+%}
+nlz = fit_gp_simple(Y, ker, x, y, meanfun, covfun, likfun);
+nlz = mean(nlz);
 
-assert(size(r_CV,2) == 1);
+%assert(size(r_CV,2) == 1);
+r_CV = mean(r_CV, 2);
 r_orig = mean(r_CV, 1);
 nlz_orig = nlz;
 theory_id_seq_orig = theory_id_seq;
@@ -245,8 +224,151 @@ end
 
 % decode
 %
+
+
+
+
+figure;
+
+t_next = nan;
+% go backwards, b/c 
+% 1) we have more data (BOLD) for later intervals b/c they are larger b/c EMPA (and humans?) have more or less stopped learning
+% 2) we are more certain about the later theories b/c of convergence / prior doesn't matter as much
+for i = length(tc)-1:-1:2
+
+    %i = randi(length(tc)-2) + 1;
+    i
+
+    if isnan(t_next)
+        t_next = tc(i+1); % next theory change
+    else
+        t_next = t; % from lant
+    end
+    t = tc(i); % current theory_change frame; we will try moving it around
+    t_prev = tc(i-1); % previous theory change; we don't want to go past it
+
+    % keep pushing change theory change point back, until we hit the previous change point
+    % or the start of the block (so we don't assign the same theory across blocks)
+    % note that if we hit the previous change point, we push it back on the next iteration of the outer loop
+    %
+    j = find(bounds == t);
+    assert(length(j) == 1);
+
+    fprintf('LEFT: b = %d, t_prev = %d, b_prev = %d\n', bounds(j), t_prev, bounds(j-1));
+
+    nlz_left = nlz;
+    j_left = j;
+    theory_id_seq_left = theory_id_seq;
+    theory_id_seq_cand = theory_id_seq;
+    while j > 1 && bounds(j) > t_prev
+        j = j - 1;
+        if block_ids(bounds(j)) ~= block_ids(t)
+            break
+        end
+        theory_id_seq_cand(bounds(j):t-1) = theory_id_seq(t);
+
+        tic
+        nlz_cand = get_theory_seq_nlz(unique_theory_HRRs, theory_id_seq_cand, ts, run_id_frames, R, K, W, x, y, meanfun, covfun, likfun, SPM);
+        toc
+
+        fprintf('%d -> %d: nlz = %.5f vs. %.5f\n', t, bounds(j), nlz_cand, nlz_left);
+        if nlz_cand <= nlz_left
+            fprintf('                        new best: %d vs. %d\n', nlz_cand, nlz_left);
+            nlz_left = nlz_cand;
+            j_left = j;
+            theory_id_seq_left = theory_id_seq_cand;
+        else
+            disp('                                          not better');
+            break;
+        end
+
+        fprintf('%d -> %d\n', t, bounds(j));
+        plot(theory_id_seq);
+        hold on;
+        plot(block_ids * 100 + 100);
+        plot(bounds(j), theory_id_seq(t), '*', 'color', 'red');
+        hold off;
+        drawnow
+        %pause(1);
+    end
+
+
+    % same but go right
+    %
+    j = find(bounds == t);
+    assert(length(j) == 1);
+
+    fprintf('RIGHT: b = %d, t_next = %d, b_next = %d\n', bounds(j), t_next, bounds(j+1));
+
+    nlz_right = nlz;
+    j_right = j;
+    theory_id_seq_right = theory_id_seq;
+    theory_id_seq_cond = theory_id_seq;
+    while j < length(bounds) && bounds(j) < t_next
+        j = j + 1;
+        if bounds(j) < length(block_ids) && block_ids(bounds(j)) ~= block_ids(t - 1)
+            break
+        end
+        theory_id_seq(t:bounds(j)-1) = theory_id_seq(t - 1);
+
+        tic
+        nlz_cand = get_theory_seq_nlz(unique_theory_HRRs, theory_id_seq_cand, ts, run_id_frames, R, K, W, x, y, meanfun, covfun, likfun, SPM);
+        toc
+
+        fprintf('%d -> %d: nlz = %.5f vs. %.5f\n', t, bounds(j), nlz_cand, nlz_right);
+        if nlz_cand <= nlz_right
+            fprintf('                        new best: %d vs. %d\n', nlz_cand, nlz_right);
+            nlz_right = nlz_cand;
+            j_right = j;
+            theory_id_seq_right = theory_id_seq_cand;
+        else
+            disp('                                          not better');
+            break
+        end
+
+        plot(theory_id_seq);
+        hold on;
+        plot(block_ids * 100 + 100);
+        plot(bounds(j), theory_id_seq(t - 1), '*', 'color', 'red');
+        hold off;
+        drawnow
+        %pause(1);
+    end
+
+
+    % figure out if left or right was better
+    if nlz_left < nlz_right
+        nlz = nlz_left;
+        theory_id_seq = theory_id_seq_left;
+        j = j_left;
+    else
+        nlz = nlz_right;
+        theory_id_seq = theory_id_seq_right;
+        j = j_right;
+    end
+
+    % assess fit
+    assert(nlz <= nlz_best); % we're doing greedy => we gotta get better
+    if nlz < nlz_best
+        fprintf('             new best: %d vs. %d\n', nlz, nlz_best);
+        nlz_best = nlz;
+        theory_id_seq_best = theory_id_seq;
+    end
+
+    % set theory change frame for next interation
+    t = bounds(j);
+end
+
+
+save(filename, '-v7.3');
+
+
+
+
+
 %while (true) % repeat until we keep improving
 for iter = 1:10000
+    tic
 
     % pick random interval
     b = randi(length(bounds)-1);
@@ -269,40 +391,7 @@ for iter = 1:10000
     theory_id_seq_cand = theory_id_seq;
     theory_id_seq_cand(st:en) = tid;
 
-    % get kernel for candidate theory sequence
-    tic
-    [theory_kernel, ~, HRRs, Xx] = gen_kernel_from_theory_id_seq(unique_theory_HRRs, theory_id_seq, ts, run_id_frames);
-    toc
-
-    tic
-    ker = R*K*W*theory_kernel*W'*K'*R';
-    toc
-
-    % fit BOLD using CV and compare using r
-    %
-    %{
-    tic
-    [r_CV] = fit_gp_CV_simple(subj_id, use_smooth, glmodel, Y, ker, run_id_TRs);
-    r = mean(r_CV, 1);
-    toc
-
-    % assess fit
-    if r > r_best
-        fprintf('             it''s better!! %d vs. %d\n', r, r_best);
-        r_best = r;
-        theory_id_seq_best = theory_id_seq;
-    else
-        theory_id_seq = theory_id_seq_best;
-    end
-    %}
-
-    % fit BOLD w/o CV and compare using log marg lik
-    %
-    tic
-    hyp = hyp_from_ker(nearestSPD(ker));
-    hyp.lik = log(1); % TODO sigma_n = 1 const
-    nlz_cand = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x, y);
-    toc
+    nlz_cand = get_theory_seq_nlz(unique_theory_HRRs, theory_id_seq, ts, run_id_frames, R, K, W, x, y, meanfun, covfun, likfun, SPM);
 
     % metropolis rule b/c proposal for tid is symmetric
     lme_cand = -nlz_cand;
@@ -325,11 +414,11 @@ for iter = 1:10000
     % optionally save
     if mod(iter,100) == 0 
         disp('saving');
-        tic
         iter
         save(filename, '-v7.3');
-        toc
     end
+
+    toc
 end
 
         
@@ -364,3 +453,91 @@ imagesc(theory_kernel);
 %}
 
 
+
+function nlz = get_theory_seq_nlz(unique_theory_HRRs, theory_id_seq, ts, run_id_frames, R, K, W, x, y, meanfun, covfun, likfun, SPM)
+
+    % get kernel for candidate theory sequence
+    [theory_kernel, ~, HRRs, Xx] = gen_kernel_from_theory_id_seq(unique_theory_HRRs, theory_id_seq, ts, run_id_frames, SPM);
+
+    ker = R*K*W*theory_kernel*W'*K'*R';
+
+    % fit BOLD using CV and compare using r
+    %
+    %{
+    tic
+    [r_CV] = fit_gp_CV_simple(subj_id, use_smooth, glmodel, Y, ker, run_id_TRs);
+    r = mean(r_CV, 1);
+    toc
+
+    % assess fit
+    if r > r_best
+        fprintf('             it''s better!! %d vs. %d\n', r, r_best);
+        r_best = r;
+        theory_id_seq_best = theory_id_seq;
+    else
+        theory_id_seq = theory_id_seq_best;
+    end
+    %}
+
+    % fit BOLD w/o CV and compare using log marg lik
+    %
+    %{
+    hyp = hyp_from_ker(nearestSPD(ker));
+    hyp.lik = log(1); % TODO sigma_n = 1 const
+    nlz = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x, y);
+    %}
+    nlz = fit_gp_simple(y, ker, x, y, meanfun, covfun, likfun);
+    nlz = mean(nlz);
+
+end
+
+
+function bounds = cleanup_bounds(bounds)
+
+    % optionally remove 1-frame short intervals by concatenating them
+    %
+    %{
+    clear_which = logical(zeros(size(bounds)));
+    prev_len = nan;
+    for i = 1:length(bounds)-1
+        len = bounds(i+1) - bounds(i);
+        if len <= 4 && prev_len <= 4
+            clear_which(i) = 1;
+        end
+        prev_len = len;
+    end
+    bounds(clear_which) = [];
+    %}
+
+    % keep merging smallest interval into neighbor,
+    % until there are no small intervals
+    % o/w, the temporal resolution is insufficient
+    %
+    bounds_orig = bounds;
+    while true
+        intervals = diff(bounds);
+
+        % find smallest interval
+        [min_interval, i] = min(intervals);
+        if min_interval >= 300 %60 % 1 TR ~= 30 frames
+            break
+        end
+
+        % get neighbors
+        left_interval = inf;
+        if i - 1 >= 1
+            left_interval = intervals(i - 1);
+        end
+        right_interval = inf;
+        if i + 1 <= length(intervals)
+            right_interval = intervals(i + 1);
+        end
+
+        % merge w/ shorter neighbor
+        if left_interval < right_interval
+            bounds(i) = [];
+        else
+            bounds(i+1) = [];
+        end
+    end
+end
