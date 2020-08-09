@@ -1,6 +1,5 @@
 %function decode_gp_CV(subj_id)
 
-%{
 clear all;
 close all;
 subj_id = 1;
@@ -120,8 +119,8 @@ bounds = cleanup_bounds(bounds);
 
 
 load(sprintf('mat/unique_HRR_subject_subj=%d_K=10_N=10_E=0.050_nsamples=100_norm=1.mat', subj_id), 'theory_HRRs', 'run_id', 'ts', 'theory_id_seq');
-%unique_theory_HRRs = unique_theory_HRRs(1:3,:,:); % TODO !!!!!!!!!!!!!!!!
 unique_theory_HRRs = theory_HRRs;
+unique_theory_HRRs = unique_theory_HRRs(1:20,:,:); % TODO !!!!!!!!!!!!!!!!
 run_id_frames = run_id';
 assert(all(run_id_frames == run_ids));
 ts = ts';
@@ -150,7 +149,6 @@ bounds = union(bounds, blk);
 
 
 
-%}
 
 % create kernel from theory id sequence
 %
@@ -365,6 +363,7 @@ save(filename, '-v7.3');
 
 
 
+%{
 
 %while (true) % repeat until we keep improving
 for iter = 1:10000
@@ -420,6 +419,7 @@ for iter = 1:10000
 
     toc
 end
+%}
 
         
 save(filename, '-v7.3');
