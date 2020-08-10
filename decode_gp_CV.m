@@ -148,8 +148,6 @@ blk = find(block_ids(2:end) ~= block_ids(1:end-1)) + 1; % frame after block chan
 bounds = union(bounds, blk);
 
 
-
-
 % create kernel from theory id sequence
 %
 
@@ -187,12 +185,10 @@ likfun = @likGauss;
 ker = R*K*W*theory_kernel*W'*K'*R';
 [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj_id, use_smooth, glmodel, Y, ker, run_id_TRs, x, y, meanfun, covfun, likfun);
 
-% fit manually too -- faster?
-%{
-hyp = hyp_from_ker(nearestSPD(ker));
-hyp.lik = log(1); % TODO sigma_n = 1 const
-nlz = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x, y);
-%}
+% fit manually too -- faster? for 1 voxel only
+%hyp = hyp_from_ker(nearestSPD(ker));
+%hyp.lik = log(1); % TODO sigma_n = 1 const
+%nlz = gp(hyp, @infGaussLik, meanfun, covfun, likfun, x, y);
 nlz = fit_gp_simple(Y, ker, x, y, meanfun, covfun, likfun);
 nlz = mean(nlz);
 
@@ -210,8 +206,9 @@ n_theories = max(theory_id_seq);
 r_best = r_orig;
 nlz_best = nlz_orig;
 theory_id_seq_best = theory_id_seq_orig;
-nlz = nlz_orig; % for MCMC
-theory_id_seq = theory_id_seq_orig; % for MCMC
+
+nlz = nlz_orig; % for greedy
+theory_id_seq = theory_id_seq_orig; % for greedy
 
 % init theory id candidates for each game
 %
@@ -225,25 +222,45 @@ end
 
 
 
+%
+% step 1) first fit the theory change flag points
+% for each change point, greedily try moving it left or right, until it stops improving fit
+% pick the side that gives best fit
+% rationale: GP is kind of like RSA; change points would be more salient (RDM blocks)
+% even if the underlying theories are slightly incorrect
+% also note that these changes are mostly local, as in they are mostly affected by (and affecting) what's going on nearby
+%
 
 figure;
 
 t_next = nan;
+t_prev = nan;
 % go backwards, b/c 
 % 1) we have more data (BOLD) for later intervals b/c they are larger b/c EMPA (and humans?) have more or less stopped learning
 % 2) we are more certain about the later theories b/c of convergence / prior doesn't matter as much
-for i = length(tc)-1:-1:2
+for i = length(tc)-1:-1:2 %
+%for i = 2:1:length(tc)-1 % not as good of a fit, and it makes sense to go in reverse direction
 
     %i = randi(length(tc)-2) + 1;
     i
 
+    % NOTE: do this only if iterating in reverse
     if isnan(t_next)
         t_next = tc(i+1); % next theory change
     else
-        t_next = t; % from lant
+        t_next = t; % from last iteration
     end
     t = tc(i); % current theory_change frame; we will try moving it around
-    t_prev = tc(i-1); % previous theory change; we don't want to go past it
+    %t_next = tc(i+1); % next theory change NOTE: do this only if iterating forward
+    t_prev = tc(i-1); % previous theory change; we don't want to go past it, NOTE: do this only if iterating in reverse
+    %{
+    % NOTE: do this only if iterating forward
+    if isnan(t_prev)
+        t_prev = tc(i-1); % next theory change
+    else
+        t_prev = t; % from last iteration
+    end
+    %}
 
     % keep pushing change theory change point back, until we hit the previous change point
     % or the start of the block (so we don't assign the same theory across blocks)
@@ -358,12 +375,61 @@ for i = length(tc)-1:-1:2
 end
 
 
+theory_id_seq_best_step1 = theory_id_seq_best;
+nlz_best_step1 = nlz_best;
+
 save(filename, '-v7.3');
 
 
 
+% backwards
+%>> scratch
+%original
+%
+%nlz =
+%
+%   1.8703e+03
+%
+%
+%r =
+%
+%    0.0408
+%
+%>> scratch
+%best
+%
+%nlz =
+%
+%   1.8654e+03
+%
+%
+%r =
+%
+%    0.1581
+%
+%>> 
 
-%{
+
+%
+% step 2) then fit the actual theories
+% use MCMC within Gibbs -- sample from marginal likelihood
+% do it stochastically this time b/c now you are changing entire intervals, which might substantially
+% change fit for other theories too
+%
+
+
+
+% for MCMC
+theory_id_seq = theory_id_seq_best;
+nlz = nlz_best;
+
+
+tc = find(theory_id_seq(2:end) ~= theory_id_seq(1:end-1)) + 1; % frame indices of theory changes 
+tc = [1 tc length(theory_id_seq)+1];
+
+old_bounds = bounds;
+bounds = tc; % only consider theory change points
+%bounds = cleanup_bounds(bounds); DO NOT cleanup, even though a bit underpowered for some intervals
 
 %while (true) % repeat until we keep improving
 for iter = 1:10000
@@ -386,7 +452,7 @@ for iter = 1:10000
 
     fprintf('     assign %d\n', tid);
 
-    % candidate theory sequence = curreth theory, with one interval changed
+    % candidate theory sequence = current theory, with one interval changed
     theory_id_seq_cand = theory_id_seq;
     theory_id_seq_cand(st:en) = tid;
 
@@ -419,7 +485,6 @@ for iter = 1:10000
 
     toc
 end
-%}
 
         
 save(filename, '-v7.3');
