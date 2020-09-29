@@ -1634,3 +1634,51 @@ ccnl_fmri_glm.sh for GLM 49, subjects 4 3 2 7 1 5 6 8: output/ccnl_fmri_glm_49_g
 --- Tue Jul 21 12:19:04 EDT 2020 Running ccnl_fmri_con
 ----------------
 ccnl_fmri_con.sh: output/ccnl_fmri_con_64868632.out -- Submitted batch job 64868632
+----------------
+--- Sun Aug 2 18:41:15 EDT 2020 Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8
+----------------
+ccnl_fmri_glm.sh for GLM 84, subjects 3 5 4 7 2 6 8 1: output/ccnl_fmri_glm_84_goodSubjects_65827809.out -- Submitted batch job 65827809
+----------------
+--- Sun Aug 2 20:26:57 EDT 2020 Running ccnl_fmri_con
+----------------
+ccnl_fmri_con.sh: output/ccnl_fmri_con_65836807.out -- Submitted batch job 65836807
+----------------
+--- Wed Aug 5 10:23:53 EDT 2020: Running decode_gp_CV for subjects 1 2 3 4 5 6 7 8 in parallel
+----------------
+decode_gp_CV.sh for subject 1: output/decode_gp_CV_1_66043324.out -- Submitted batch job 66043324
+decode_gp_CV.sh for subject 2: output/decode_gp_CV_2_66043329.out -- Submitted batch job 66043329
+decode_gp_CV.sh for subject 3: output/decode_gp_CV_3_66043333.out -- Submitted batch job 66043333
+decode_gp_CV.sh for subject 4: output/decode_gp_CV_4_66043341.out -- Submitted batch job 66043341
+decode_gp_CV.sh for subject 5: output/decode_gp_CV_5_66043352.out -- Submitted batch job 66043352
+decode_gp_CV.sh for subject 6: output/decode_gp_CV_6_66043356.out -- Submitted batch job 66043356
+decode_gp_CV.sh for subject 7: output/decode_gp_CV_7_66043365.out -- Submitted batch job 66043365
+decode_gp_CV.sh for subject 8: output/decode_gp_CV_8_66043370.out -- Submitted batch job 66043370
+----------------
+--- Wed Aug 5 10:55:41 EDT 2020: Running decode_gp_CV for subjects 2 3 4 6 7 8 in parallel
+----------------
+decode_gp_CV.sh for subject 2: output/decode_gp_CV_2_66048186.out -- Submitted batch job 66048186
+decode_gp_CV.sh for subject 3: output/decode_gp_CV_3_66048193.out -- Submitted batch job 66048193
+decode_gp_CV.sh for subject 4: output/decode_gp_CV_4_66048207.out -- Submitted batch job 66048207
+decode_gp_CV.sh for subject 6: output/decode_gp_CV_6_66048220.out -- Submitted batch job 66048220
+decode_gp_CV.sh for subject 7: output/decode_gp_CV_7_66048232.out -- Submitted batch job 66048232
+decode_gp_CV.sh for subject 8: output/decode_gp_CV_8_66048245.out -- Submitted batch job 66048245
+----------------
+--- Thu Aug 6 14:00:38 EDT 2020: Running decode_gp_CV for subjects 1 in parallel
+----------------
+decode_gp_CV.sh for subject 1: output/decode_gp_CV_1_66132242.out -- Submitted batch job 66132242
+----------------
+--- Thu Aug 6 14:01:23 EDT 2020: Running decode_gp_CV for subjects 1 in parallel
+----------------
+decode_gp_CV.sh for subject 1: output/decode_gp_CV_1_66132269.out -- Submitted batch job 66132269
+----------------
+--- Thu Aug 6 17:50:05 EDT 2020: Running decode_gp_CV for subjects 1 in parallel
+----------------
+decode_gp_CV.sh for subject 1: output/decode_gp_CV_1_66145418.out -- Submitted batch job 66145418
+----------------
+--- Thu Aug 6 17:57:24 EDT 2020: Running decode_gp_CV for subjects 1 in parallel
+----------------
+decode_gp_CV.sh for subject 1: output/decode_gp_CV_1_66146267.out -- Submitted batch job 66146267
+----------------
+--- Thu Aug 6 19:11:48 EDT 2020: Running decode_gp_CV for subjects 1 in parallel
+----------------
+decode_gp_CV.sh for subject 1: output/decode_gp_CV_1_66154505.out -- Submitted batch job 66154505

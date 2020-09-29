@@ -118,7 +118,7 @@ bounds = cleanup_bounds(bounds);
 %
 
 
-load(sprintf('mat/unique_HRR_subject_subj=%d_K=10_N=10_E=0.050_nsamples=100_norm=1.mat', subj_id), 'theory_HRRs', 'run_id', 'ts', 'theory_id_seq');
+load(sprintf('mat/unique_HRR_subject_subj=%d_K=10_N=10_E=0.050_nsamples=100_norm=1.mat', subj_id), 'theory_HRRs', 'run_id', 'ts', 'theory_id_seq', 'play_key', 'gameStrings', 'unique_theories_filename');
 unique_theory_HRRs = theory_HRRs;
 unique_theory_HRRs = unique_theory_HRRs(1:20,:,:); % TODO !!!!!!!!!!!!!!!!
 run_id_frames = run_id';
@@ -490,6 +490,17 @@ end
 save(filename, '-v7.3');
 disp('Done');
 
+
+% temporary (nsamples = 1) to get the other stuff that we didn't log before, but we log now TODO re-run HRR.py w/ nsamples = 100
+load(sprintf('mat/unique_HRR_subject_subj=%d_K=10_N=10_E=0.050_nsamples=1_norm=1.mat', subj_id), 'play_key', 'gameStrings', 'unique_theories_filename');
+
+play_key_seq = cell(size(play_key,1),1);
+for i = 1:size(play_key_seq,1)
+    play_key_seq{i} = play_key(i,:);
+end
+
+save(filename, '-v7.3');
+disp('Done 2');
 
 %{
 % for sanity -- after convolning theory_change_flag manually, compare with GLM 3 
