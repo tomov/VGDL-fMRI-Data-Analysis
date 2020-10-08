@@ -1,6 +1,5 @@
 %function fit_ridge_CV(subj, use_smooth, glmodel, mask)
 
-%{
 clear all;
 
 % copied from fit_gp_CV.m and decode_gp_CV.m
@@ -8,9 +7,9 @@ clear all;
 subj = 1;
 use_smooth = true;
 glmodel = 21;
-%mask = 'masks/ROI_x=48_y=12_z=32_62voxels_Sphere6.nii';
+mask = 'masks/ROI_x=48_y=12_z=32_62voxels_Sphere6.nii';
 %mask = 'masks/ROI_x=48_y=12_z=32_1voxels_Sphere1.nii';
-mask = 'masks/ROI_x=42_y=28_z=26_1voxels_Sphere1.nii';
+%mask = 'masks/ROI_x=42_y=28_z=26_1voxels_Sphere1.nii';
 what = 'theory';
 
 assert(isequal(what, 'theory'));
@@ -71,17 +70,102 @@ assert(size(partition_id, 1) == size(Y, 1));
 n_partitions = max(partition_id);
 
 
-        
+    
+% precompute pseudoinverses for all folds for all lambdas
+% 
+% TODO
 
 
-y = Y(:,1);
 
-%}
+fprintf('solving ridge for subj %d, %d voxels\n', subj, size(Y,2));
+tic
+
+lambdas = logspace(-5,5,20);
+
+lambda = nan(1, size(Y,2)); % lambdas
+R2 = nan(1, size(Y,2)); % R^2
+adjR2 = nan(1, size(Y,2)); % adjusted R^2
+r = nan(1, size(Y,2)); % Pearson correlation
+MSE = nan(1, size(Y,2)); % MSE
+SMSE = nan(1, size(Y,2)); % SMSE
+
+for i = 1:size(Y, 2)
+
+    if mod(i,1000) == 0
+        i
+        toc
+        tic
+    end
+
+    y = Y(:,i);
+
+    % k-fold CV to pick lambda only
+    % for leave-one-subject-out CV for lambda
+    %
+
+    y_hat = nan(size(y));
+
+    % pick lambda using CV
+    %
+    for j = 1:length(lambdas) % grid search lambda
+        l = lambdas(j);
+
+        y_pred = nan(size(y));
+
+        for k = 1:n_partitions % validate fold: for fitting lambda
+            validate = partition_id == k;
+            train = partition_id ~= k;
+
+            % see test_gp.m TODO precompute
+            X = Xx(train,:);
+            beta = pinv(X' * X + l * eye(size(X,2))) * X' * y(train,:);
+            
+            y_pred(validate,:) = Xx(validate,:) * beta;
+
+        end
+
+        mses(j) = immse(y, y_pred);
+    end
+
+    [~,ix] = min(mses);
+    lambda(i) = lambdas(ix);
+
+    % totally overfit
+    X = Xx;
+    beta = pinv(X' * X + lambda(i) * eye(size(X,2))) * X' * y;
+    y_hat = X * beta;
+
+    %{
+    figure;
+    hold on;
+    plot(y);
+    plot(y_hat);
+    %}
+
+    [R2(i), adjR2(i)] = calc_R2(y, y_hat, 1);
+
+    % Pearson
+    r(i) = corr(y_hat, y);
+
+    % MSE and SMSE, Sec. 2.5 in Rasmussen
+    MSE(i) = immse(y, y_hat);
+    SMSE(i) = MSE(i) / var(y);
+end
+
+toc
 
 
-lambdas = logspace(-3,3,30);
 
-y_hat = nan(size(y));
+
+
+filename
+
+save(filename, 'lambda', 'R2', 'adjR2', 'r', 'MSE', 'SMSE', '-v7.3');
+
+disp('Done');
+
+
+
 
 
 %{
@@ -127,7 +211,6 @@ for k = 1:n_partitions % test fold: evaluate fit, for model comparison e.g. w/ G
     y_hat(test,:) = Xx(test,:) * beta;
 end
 
-%{
 % totally overfit
 X = Xx;
 beta = pinv(X' * X + lambda * var(diag(X))) * X' * y; % note that ridge regression is not scale invariant, that is, X(:,i) * 2 doesn't make b(i) * 2
@@ -135,55 +218,3 @@ y_hat = X * beta;
 %}
 
 
-figure;
-hold on;
-plot(y);
-plot(y_hat);
-%}
-
-
-
-% k-fold CV to pick lambda only
-% for leave-one-subject-out CV for lambda
-%
-
-y_hat = nan(size(y));
-
-% pick lambda using CV
-%
-for i = 1:length(lambdas) % grid search lambda
-    lambda = lambdas(i);
-
-    y_pred = nan(size(y));
-
-    for j = 1:n_partitions % validate fold: for fitting lambda
-        validate = partition_id == j;
-        train = partition_id ~= j;
-
-        % see test_gp.m TODO precompute
-
-        X = Xx(train,:);
-        beta = pinv(X' * X + lambda * eye(size(X,2))) * X' * y(train,:);
-        
-        y_pred(validate,:) = Xx(validate,:) * beta;
-
-    end
-
-    mses(i) = immse(y, y_pred);
-end
-
-[~,ix] = min(mses);
-lambda = lambdas(ix);
-fold_lambdas(k) = lambda;
-
-
-% totally overfit
-X = Xx;
-beta = pinv(X' * X + lambda * eye(size(X,2))) * X' * y;
-y_hat = X * beta;
-
-
-figure;
-hold on;
-plot(y);
-plot(y_hat);

@@ -61,7 +61,7 @@ function [sigma, logmarglik, logpredlik, y_hat, R2, adjR2, r, MSE, SMSE] = fit_g
     else
         p = 0; % 0 params, b/c evaluating on held out data
     end
-    [R2, adjR2] = calc_R2(y(test), y_hat, 1);
+    [R2, adjR2] = calc_R2(y(test), y_hat, 1); % TODO p here?
 
     % Pearson
     r = corr(y_hat, y(test));
