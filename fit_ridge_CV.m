@@ -1,7 +1,6 @@
 function fit_ridge_CV(subj, use_smooth, glmodel, mask)
-
-
     % copied from fit_gp_CV.m and decode_gp_CV.m
+
 
     %{
     clear all;
@@ -13,6 +12,7 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask)
     %mask = 'masks/ROI_x=48_y=12_z=32_1voxels_Sphere1.nii';
     %mask = 'masks/ROI_x=42_y=28_z=26_1voxels_Sphere1.nii';
     %}
+
     what = 'theory';
 
     assert(isequal(what, 'theory'));
@@ -103,11 +103,11 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask)
     fprintf('solving ridge for subj %d, %d voxels\n', subj, size(Y,2));
 
     lambda = nan(1, size(Y,2)); % lambdas
-    R2 = nan(1, size(Y,2)); % R^2
-    adjR2 = nan(1, size(Y,2)); % adjusted R^2
-    r = nan(1, size(Y,2)); % Pearson correlation
-    MSE = nan(1, size(Y,2)); % MSE
-    SMSE = nan(1, size(Y,2)); % SMSE
+    R2_CV = nan(3, size(Y,2)); % R^2
+    adjR2_CV = nan(3, size(Y,2)); % adjusted R^2
+    r_CV = nan(3, size(Y,2)); % Pearson correlation
+    MSE_CV = nan(3, size(Y,2)); % MSE
+    SMSE_CV = nan(3, size(Y,2)); % SMSE
 
     batch_size = 10000;
 
@@ -155,6 +155,29 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask)
         [~,ix] = min(mses, [], 1);
         lambda(s:e) = lambdas(ix);
 
+        % CV evaluate/predict TODO double dipping lambda
+        %
+        for j = 1:length(ix) % for each voxel
+            y_hat = nan(size(y,1),1);
+
+            for k = 1:n_partitions 
+                test = partition_id == k;
+                train = partition_id ~= k;
+
+                beta = pX_CV{ix(j),k} * y(train,j);
+                y_hat(test,:) = Xx(test,:) * beta;
+
+                [R2_CV(k,s+j-1), adjR2_CV(k,s+j-1)] = calc_R2(y(test,j), y_hat(test,:), 1);
+
+                % Pearson
+                r_CV(k,s+j-1) = corr(y_hat(test,:), y(test,j));
+
+                % MSE and SMSE, Sec. 2.5 in Rasmussen
+                MSE_CV(k,s+j-1) = immse(y(test,j), y_hat(test,:));
+                SMSE_CV(k,s+j-1) = MSE_CV(k,s+j-1) / var(y(test,j));
+            end
+        end
+        %{
         % totally overfit
         %
         for j = 1:length(ix)
@@ -170,27 +193,24 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask)
             MSE(s+j-1) = immse(y(:,j), y_hat);
             SMSE(s+j-1) = MSE(s+j-1) / var(y(:,j));
         end
+        %}
 
         toc
     end
 
-    %{
     y = y(:,end);
-    beta = pX{ix(end)} * y;
-    y_hat = X * beta;
 
     figure;
     hold on;
     plot(y);
     plot(y_hat);
-    %}
 
     filename
 
-    save(filename, 'lambda', 'R2', 'adjR2', 'r', 'MSE', 'SMSE', ...
-                   'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'lambdas', 'HRRs', ...
+    save(filename, 'lambda', 'R2_CV', 'adjR2_CV', 'r_CV', 'MSE_CV', 'SMSE_CV', ...
+                   'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'lambdas', 'HRRs', 'Xx', ...
     '-v7.3');
 
     disp('Done');
 
-end
+%end

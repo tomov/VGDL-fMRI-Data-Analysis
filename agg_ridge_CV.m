@@ -24,15 +24,15 @@ for s = 1:length(subjects)
     load(filename);
 
     % MSEs
-    MSEs(s,:) = MSE;
-    SMSEs(s,:) = SMSE;
+    MSEs(s,:) = mean(MSE_CV, 1);
+    SMSEs(s,:) = mean(SMSE_CV, 1);
 
     % R2s
-    R2s(s,:) = R2;
-    adjR2s(s,:) = adjR2;
+    R2s(s,:) = mean(R2_CV, 1);
+    adjR2s(s,:) = mean(adjR2s_CV, 1);;
 
     % CV Pearson r's across subjects
-    rs(s,:) = r;
+    rs(s,:) = mean(r_CV, 1);
 end
 
 % Fisher z transform
