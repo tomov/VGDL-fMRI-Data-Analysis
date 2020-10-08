@@ -13,12 +13,14 @@ subjects = 1:length(EXPT.subject);
 what = 'theory';
 glmodel = 9;
 
-agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_%s.mat', use_smooth, glmodel, what);
+%agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_%s_fast.mat', use_smooth, glmodel, what);
+agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_%s_nsamples=1_fast.mat', use_smooth, glmodel, what);
 
 for s = 1:length(subjects)
     subj_id = subjects(s);
 
-    filename = sprintf('mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_%s.mat', subj_id, use_smooth, glmodel, what);
+    %filename = sprintf('mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_%s_fast.mat', subj_id, use_smooth, glmodel, what);
+    filename = sprintf('mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_%s_nsamples=1_fast.mat', subj_id, use_smooth, glmodel, what);
     %filename = sprintf('mat/fit_gp_CV_noRKW_HRR_subj=%d_us=%d_glm=21_mask=mask_%s.mat', subj_id, use_smooth, what);
     load(filename, 'n', 'logmarglik', 'null_logmarglik', 'adjR2', 'R2_CV', 'null_adjR2', 'null_R2_CV', 'sigma', 'mask', 'r', 'null_r', 'r_CV', 'null_r_CV', 'mask', 'MSE', 'null_MSE', 'SMSE', 'null_SMSE', 'MSE_CV', 'SMSE_CV', 'null_MSE_CV', 'null_SMSE_CV');
 

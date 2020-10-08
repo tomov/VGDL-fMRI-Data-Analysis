@@ -187,7 +187,9 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask)
 
     filename
 
-    save(filename, 'lambda', 'R2', 'adjR2', 'r', 'MSE', 'SMSE', '-v7.3');
+    save(filename, 'lambda', 'R2', 'adjR2', 'r', 'MSE', 'SMSE', ...
+                   'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'lambdas', 'HRRs', ...
+    '-v7.3');
 
     disp('Done');
 
