@@ -4,6 +4,7 @@
 %% sanity check to run after decode_gp_CV
 %
 
+%{
 load('mat/decode_gp_CV_HRR_subj=1_minint=300.mat');
 
 
@@ -28,6 +29,32 @@ nlz = fit_gp_simple(Y, ker, x, y, meanfun, covfun, likfun);
 nlz = mean(nlz);
 nlz
 r
+%}
+
+
+
+
+%
+% sanity check HRR generation in decade_gp_CV
+%
+
+load(sprintf('mat/unique_HRR_subject_subj=%d_K=10_N=10_E=0.050_nsamples=100_norm=1.mat', subj_id), 'theory_HRRs', 'run_id', 'ts', 'theory_id_seq', 'play_key', 'gameStrings', 'unique_theories_filename');
+unique_theory_HRRs = theory_HRRs;
+unique_theory_HRRs = unique_theory_HRRs(1,:,:); % TODO !!!!!!!!!!!!!!!!
+run_id_frames = run_id';
+ts = ts';
+
+
+
+
+% create kernel from theory id sequence
+%
+
+load('mat/SPM73.mat');
+
+tic
+[theory_kernel, ~, HRRs, Xx] = gen_kernel_from_theory_id_seq(unique_theory_HRRs, theory_id_seq, ts, run_id_frames, SPM);
+toc
 
 
 

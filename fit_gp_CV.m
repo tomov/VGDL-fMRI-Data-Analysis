@@ -31,9 +31,9 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, fast, debug)
 
     [~,maskname,~] = fileparts(mask);
     if fast
-        filename = sprintf('mat/fit_gp_CV_ceil_HRR_subj=%d_us=%d_glm=%d_mask=%s_%s_fast.mat', subj, use_smooth, glmodel, maskname, what);
+        filename = sprintf('mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_%s_nsamples=1_fast.mat', subj, use_smooth, glmodel, maskname, what);
     else
-        filename = sprintf('mat/fit_gp_CV_ceil_HRR_subj=%d_us=%d_glm=%d_mask=%s_%s_notfast.mat', subj, use_smooth, glmodel, maskname, what);
+        filename = sprintf('mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_%s_nsamples=1_notfast.mat', subj, use_smooth, glmodel, maskname, what);
     end
     filename
 
@@ -485,7 +485,7 @@ end
 % load HRR kernel
 %
 function [ker] = load_HRR_kernel(subj_id, what)
-    filename = sprintf('mat/HRR_subject_kernel_subj=%d_K=10_N=10_E=0.050_nsamples=100_sigma_w=1.000_norm=1.mat', subj_id);
+    filename = sprintf('mat/HRR_subject_kernel_subj=%d_K=10_N=10_E=0.050_nsamples=1_sigma_w=1.000_norm=1.mat', subj_id);
     load(filename, 'theory_kernel', 'sprite_kernel', 'interaction_kernel', 'termination_kernel');
 
     ker = eval([what, '_kernel']);
