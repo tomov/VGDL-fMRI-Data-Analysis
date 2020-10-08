@@ -30,8 +30,11 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, fast, debug)
 
 
     [~,maskname,~] = fileparts(mask);
-    TODO rename -- ceil or no?
-    filename = sprintf('mat/fit_gp_CV_ceil_HRR_subj=%d_us=%d_glm=%d_mask=%s_%s.mat', subj, use_smooth, glmodel, maskname, what);
+    if fast
+        filename = sprintf('mat/fit_gp_CV_ceil_HRR_subj=%d_us=%d_glm=%d_mask=%s_%s_fast.mat', subj, use_smooth, glmodel, maskname, what);
+    else
+        filename = sprintf('mat/fit_gp_CV_ceil_HRR_subj=%d_us=%d_glm=%d_mask=%s_%s_notfast.mat', subj, use_smooth, glmodel, maskname, what);
+    end
     filename
 
     % load mask
