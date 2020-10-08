@@ -4,6 +4,20 @@
 %% sanity check to run after decode_gp_CV
 %
 
+load('mat/decode_gp_CV_HRR_subj=1_minint=300.mat');
+
+
+disp('original')
+[theory_kernel, ~, HRRs, Xx] = gen_kernel_from_theory_id_seq(unique_theory_HRRs, theory_id_seq_orig, ts, run_id_frames, SPM);
+ker = R*K*W*theory_kernel*W'*K'*R';
+[r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj_id, use_smooth, glmodel, Y, ker, run_id_TRs, x, y, meanfun, covfun, likfun);
+r = mean(mean(r_CV,2),1);
+nlz = fit_gp_simple(Y, ker, x, y, meanfun, covfun, likfun);
+nlz = mean(nlz);
+nlz
+r
+
+
 
 disp('best')
 [theory_kernel, ~, HRRs, Xx] = gen_kernel_from_theory_id_seq(unique_theory_HRRs, theory_id_seq_best, ts, run_id_frames, SPM);
@@ -14,6 +28,8 @@ nlz = fit_gp_simple(Y, ker, x, y, meanfun, covfun, likfun);
 nlz = mean(nlz);
 nlz
 r
+
+
 
 
 

@@ -14,7 +14,7 @@ glmodel = 9;
 maskfile = 'masks/ROI_x=42_y=28_z=26_1voxels_Sphere1.nii';
 
 
-filename = sprintf('mat/decode_gp_CV_HRR_subj=%d_minint=300.mat', subj_id);
+filename = sprintf('mat/decode_gp_CV_HRR_subj=%d_minint=300_2.mat', subj_id);
 filename
 
 %
