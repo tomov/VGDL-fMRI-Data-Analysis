@@ -1,10 +1,10 @@
 mkdir output
 
 #subjects=( 1 2 3 4 5 6 7 8 )  #  e.g. subjects=( 1 2 5 6 7 10 )
-subjects=( 2 3 4 5 6 7 8  )  #  e.g. subjects=( 1 2 5 6 7 10 )
+subjects=( 8  )  #  e.g. subjects=( 1 2 5 6 7 10 )
 subj_arg="${subjects[@]}" # stringify it
 
-what="theory"
+what="sprite"
 mask="masks/mask.nii"
 glmodel=21
 use_smooth=true

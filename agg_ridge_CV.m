@@ -1,6 +1,8 @@
 % aggregate results from fit_ridge_CV.m
 % copy of agg_gp_CV.m
 
+clear all;
+
 use_smooth = true;
 
 if use_smooth
@@ -29,7 +31,7 @@ for s = 1:length(subjects)
 
     % R2s
     R2s(s,:) = mean(R2_CV, 1);
-    adjR2s(s,:) = mean(adjR2s_CV, 1);;
+    adjR2s(s,:) = mean(adjR2_CV, 1);;
 
     % CV Pearson r's across subjects
     rs(s,:) = mean(r_CV, 1);

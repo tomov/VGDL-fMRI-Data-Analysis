@@ -1,7 +1,7 @@
 % meat of fit_gp_CV.m, helper for decode_gp_CV.m TODO dedupe w/ fit_gp_CV.m
 
 %function [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj, use_smooth, glmodel, mask, ker, debug)
-function [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj, use_smooth, glmodel, Y, ker, run_id, x, y, meanfun, covfun, likfun, debug)
+function [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj, use_smooth, glmodel, Y, ker, run_id, x, y, meanfun, covfun, likfun, partition_id, debug)
 
     if use_smooth
         EXPT = vgdl_expt();
@@ -32,9 +32,11 @@ function [r_CV, R2_CV, MSE_CV, SMSE_CV] = fit_gp_CV_simple(subj, use_smooth, glm
     ker = R*K*W*ker*W'*K'*R';
     %}
 
-    % get partitions from RSA 3
-    rsa = vgdl_create_rsa(3, subj);
-    partition_id = rsa.model(1).partitions;
+    if ~exist('partition_id', 'var')
+        % get partitions from RSA 3
+        rsa = vgdl_create_rsa(3, subj);
+        partition_id = rsa.model(1).partitions;
+    end
     assert(size(partition_id, 1) == size(Y, 1));
     n_partitions = max(partition_id);
 

@@ -72,7 +72,6 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask)
     assert(size(partition_id, 1) == size(Y, 1));
     n_partitions = max(partition_id);
 
-    %}
 
     lambdas = logspace(-5,5,20);
 
@@ -198,12 +197,14 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask)
         toc
     end
 
+    %{
     y = y(:,end);
 
     figure;
     hold on;
     plot(y);
     plot(y_hat);
+    %}
 
     filename
 
