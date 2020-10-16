@@ -1,4 +1,18 @@
 
+figure;
+plot(HRRs(:,1));
+
+[Xx_c, r_id] = convolve_HRRs(HRRs, ts, run_id, SPM);
+[Xx_s, r_id] = subsample_HRRs(HRRs, ts, run_id, SPM);
+xlabel('frame');
+
+
+figure;
+hold on;
+plot(Xx_c(4:end,1));
+plot(Xx_s(1:end-3,1));
+legend({'convolved & subsampled', 'subsampled & shifted'});
+xlabel('TR');
 
 %
 %% sanity check to run after decode_gp_CV
@@ -38,11 +52,13 @@ r
 % sanity check HRR generation in decade_gp_CV
 %
 
+%{
 load(sprintf('mat/unique_HRR_subject_subj=%d_K=10_N=10_E=0.050_nsamples=100_norm=1.mat', subj_id), 'theory_HRRs', 'run_id', 'ts', 'theory_id_seq', 'play_key', 'gameStrings', 'unique_theories_filename');
 unique_theory_HRRs = theory_HRRs;
 unique_theory_HRRs = unique_theory_HRRs(1,:,:); % TODO !!!!!!!!!!!!!!!!
 run_id_frames = run_id';
 ts = ts';
+%}
 
 
 
@@ -50,11 +66,13 @@ ts = ts';
 % create kernel from theory id sequence
 %
 
+%{
 load('mat/SPM73.mat');
 
 tic
 [theory_kernel, ~, HRRs, Xx] = gen_kernel_from_theory_id_seq(unique_theory_HRRs, theory_id_seq, ts, run_id_frames, SPM);
 toc
+%}
 
 
 

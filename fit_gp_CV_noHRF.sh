@@ -1,14 +1,14 @@
 mkdir output
 
 #subjects=( 1 2 3 4 5 6 7 8 )  #  e.g. subjects=( 1 2 5 6 7 10 )
-#subjects=( 1  )  #  e.g. subjects=( 1 2 5 6 7 10 )
-subjects=( 2 3 4 5 6 7 8 )  #  e.g. subjects=( 1 2 5 6 7 10 )
+#subjects=( 2  )  #  e.g. subjects=( 1 2 5 6 7 10 )
+subjects=( 1 2 3 4 5 6 7 8 )  #  e.g. subjects=( 1 2 5 6 7 10 )
 subj_arg="${subjects[@]}" # stringify it
 
 mask="masks/mask.nii"
 glmodel=9
 use_smooth=true
-subsample_only=true
+subsample_only=false
 
 echo ---------------- >> jobs.txt
 echo --- $(date): Running fit_gp_CV_noHRF for subjects ${subj_arg} in parallel >> jobs.txt

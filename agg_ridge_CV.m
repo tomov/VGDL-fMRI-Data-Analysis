@@ -17,12 +17,14 @@ glmodel = 9;
 
 [mask_format, mask, Vmask] = get_mask_format_helper('masks/mask.nii'); % TODO 
 
-agg_filename = sprintf('mat/agg_ridge_CV_us=%d_glm=%d_%s.mat', use_smooth, glmodel, what);
+%agg_filename = sprintf('mat/agg_ridge_CV_us=%d_glm=%d_%s.mat', use_smooth, glmodel, what);
+agg_filename = sprintf('mat/agg_ridge_CV_us=%d_glm=%d_subsample=1_%s.mat', use_smooth, glmodel, what);
 
 for s = 1:length(subjects)
     subj_id = subjects(s);
 
-    filename = sprintf('mat/fit_ridge_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_%s.mat', subj_id, use_smooth, glmodel, what);
+    %filename = sprintf('mat/fit_ridge_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_%s.mat', subj_id, use_smooth, glmodel, what);
+    filename = sprintf('mat/fit_ridge_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_subsample=1_%s.mat', subj_id, use_smooth, glmodel, what);
     load(filename);
 
     % MSEs

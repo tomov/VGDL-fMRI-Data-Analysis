@@ -1,4 +1,4 @@
-function fit_ridge_CV(subj, use_smooth, glmodel, mask)
+function fit_ridge_CV(subj, use_smooth, glmodel, mask, subsample_only)
     % copied from fit_gp_CV.m and decode_gp_CV.m
 
 
@@ -11,6 +11,7 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask)
     mask = 'masks/ROI_x=48_y=12_z=32_62voxels_Sphere6.nii';
     %mask = 'masks/ROI_x=48_y=12_z=32_1voxels_Sphere1.nii';
     %mask = 'masks/ROI_x=42_y=28_z=26_1voxels_Sphere1.nii';
+    subsample_only = true;
     %}
 
     what = 'theory';
@@ -25,7 +26,7 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask)
 
 
     [~,maskname,~] = fileparts(mask);
-    filename = sprintf('mat/fit_ridge_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_%s.mat', subj, use_smooth, glmodel, maskname, what);
+    filename = sprintf('mat/fit_ridge_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_subsample=%d_%s.mat', subj, use_smooth, glmodel, maskname, subsample_only, what);
     filename
 
 
@@ -46,7 +47,7 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask)
 
     load('mat/SPM73.mat');
 
-    [theory_kernel, ~, HRRs, Xx] = gen_kernel_from_theory_id_seq(unique_theory_HRRs, theory_id_seq, ts, run_id_frames, SPM);
+    [theory_kernel, ~, HRRs, Xx] = gen_kernel_from_theory_id_seq(unique_theory_HRRs, theory_id_seq, ts, run_id_frames, SPM, subsample_only);
 
     toc
 
@@ -65,10 +66,18 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask)
 
     X = Xx;
 
+    % offset by 3 TRs if not convolving with HRF
+    if subsample_only
+        Y = Y(4:end,:);
+        X = X(1:end-3,:);
+    end
 
     % get partitions from RSA 3
     rsa = vgdl_create_rsa(3, subj);
     partition_id = rsa.model(1).partitions;
+    if subsample_only
+        partition_id = partition_id(4:end,:);
+    end
     assert(size(partition_id, 1) == size(Y, 1));
     n_partitions = max(partition_id);
 

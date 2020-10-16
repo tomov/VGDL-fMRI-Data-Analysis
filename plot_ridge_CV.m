@@ -1,6 +1,7 @@
 clear all;
 
-load('mat/agg_ridge_CV_us=1_glm=9_theory.mat');
+%load('mat/agg_ridge_CV_us=1_glm=9_theory.mat');
+load('mat/agg_ridge_CV_us=1_glm=9_subsample=1_theory.mat');
 
 if use_smooth
     EXPT = vgdl_expt();

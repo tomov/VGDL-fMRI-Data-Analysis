@@ -14,7 +14,7 @@ what = 'theory';
 glmodel = 9;
 
 %agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_%s_fast.mat', use_smooth, glmodel, what);
-agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_%s_nsamples=1_fast.mat', use_smooth, glmodel, what);
+%agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_%s_nsamples=1_fast.mat', use_smooth, glmodel, what);
 
 for s = 1:length(subjects)
     subj_id = subjects(s);
