@@ -45,9 +45,6 @@ function [theory_kernel, theory_kernel_std, HRRs, Xx] = gen_kernel_from_theory_i
             [Xx, r_id] = convolve_HRRs(HRRs, ts, run_id, SPM);
         end
 
-        save wtfuck.mat
-        sthaoeu
-
         Sigma_w = eye(size(Xx,2)) * sigma_w; % Sigma_p in Rasmussen, Eq. 2.4
 
         K = Xx * Sigma_w * Xx';

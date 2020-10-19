@@ -3,7 +3,7 @@ function fit_gp_CV_noHRF(subj, use_smooth, glmodel, mask, subsample_only)
 %{
     clear all;
 
-    subj = 1;
+    subj = 2;
     use_smooth = true;
     glmodel = 9;
     mask = 'masks/ROI_x=48_y=12_z=32_62voxels_Sphere6.nii';
@@ -94,6 +94,6 @@ function fit_gp_CV_noHRF(subj, use_smooth, glmodel, mask, subsample_only)
 
     save(filename, 'sigmas', 'R2_CV', 'r_CV', 'MSE_CV', 'SMSE_CV', ...
                    'subj', 'use_smooth', 'glmodel', 'mask', 'what', ...
-    '-v7.3');
+                   '-v7.3');
 
     disp('Done');
