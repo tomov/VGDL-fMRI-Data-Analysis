@@ -4,7 +4,7 @@
 conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54')
 
 subj_id = 1;
-run_id = 1;
+run_id = 2;
 
 % https://www.mathworks.com/help/database/ug/mongo.find.html
 %runs = find(conn, 'runs', 'query', sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id), 'limit', 10)
@@ -86,7 +86,8 @@ for r = 1:length(runs)
                 end
 
                 q = sprintf('{"subj_id": "%d", "run_id": %d, "block_id": %d, "instance_id": %d, "play_id": %d}', subj_id, run.run_id, block.block_id, instance.instance_id, play.play_id);
-                regressors = find(conn, 'regressors', 'query', q);
+                %regressors = find(conn, 'regressors', 'query', q);
+                regressors = find(conn, 'regressors_cannon_spriteEvery20', 'query', q);
 
                 if length(regressors) > 0
                     assert(length(regressors) == 1);
@@ -95,8 +96,8 @@ for r = 1:length(runs)
                     for i = 1:length(tc)
                         if tc{i}{1} % theory changed
                             j = round((tc{i}{3} - run.scan_start_ts + offs) * 1000);
-                            tt(j) = 7;
-                            text(j + 10, 4 + rand()*3, sprintf('%.2f', j / 1000.0 - 1), 'interpreter', 'none', 'FontSize', 8, 'color', 'red');
+                         %   tt(j) = 7;
+                         %   text(j + 10, 4 + rand()*3, sprintf('%.2f', j / 1000.0 - 1), 'interpreter', 'none', 'FontSize', 8, 'color', 'red');
                             tc_ons{r} = [tc_ons{r} tc{i}{3} - run.scan_start_ts];
                         end
                     end
@@ -112,6 +113,8 @@ for r = 1:length(runs)
                     for i = 1:length(ic)
                         if ic{i}{1} % theory changed
                             j = round((ic{i}{3} - run.scan_start_ts + offs) * 1000);
+                            tt(j) = 7;
+                            text(j + 10, 4 + rand()*3, sprintf('%.2f', j / 1000.0 - 1), 'interpreter', 'none', 'FontSize', 8, 'color', 'red');
                             ic_ons{r} = [ic_ons{r} ic{i}{3} - run.scan_start_ts];
                         end
                     end

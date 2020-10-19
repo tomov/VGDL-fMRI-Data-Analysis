@@ -1,4 +1,7 @@
 
+%{
+% compare convolved vs non-convolved HRF
+
 figure;
 plot(HRRs(:,1));
 
@@ -14,12 +17,15 @@ plot(Xx_s(1:end-3,1));
 legend({'convolved & subsampled', 'subsampled & shifted'});
 xlabel('TR');
 
+%}
+
+
 %
 %% sanity check to run after decode_gp_CV
 %
 
-%{
-load('mat/decode_gp_CV_HRR_subj=1_minint=300.mat');
+%load('mat/decode_gp_CV_HRR_subj=1_minint=300.mat');
+load('mat/decode_gp_CV_subj=1_test.mat');
 
 
 disp('original')
@@ -43,7 +49,6 @@ nlz = fit_gp_simple(Y, ker, x, y, meanfun, covfun, likfun);
 nlz = mean(nlz);
 nlz
 r
-%}
 
 
 
