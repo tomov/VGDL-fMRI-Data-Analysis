@@ -3,8 +3,8 @@
 % https://www.mathworks.com/help/database/ug/mongo.html#d117e86584
 conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54')
 
-subj_id = 1;
-run_id = 2;
+subj_id = 10;
+run_id = 1;
 
 % https://www.mathworks.com/help/database/ug/mongo.find.html
 %runs = find(conn, 'runs', 'query', sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id), 'limit', 10)
@@ -17,6 +17,11 @@ tc_ons = cell(1, length(runs));
 sc_ons = cell(1, length(runs));
 ic_ons = cell(1, length(runs));
 tec_ons = cell(1, length(runs));
+
+
+tc_ons_game_names = cell(1, length(runs));
+ic_ons_game_names = cell(1, length(runs));
+tec_ons_game_names = cell(1, length(runs));
 
 for r = 1:length(runs)
     run = runs(r);
@@ -99,6 +104,7 @@ for r = 1:length(runs)
                          %   tt(j) = 7;
                          %   text(j + 10, 4 + rand()*3, sprintf('%.2f', j / 1000.0 - 1), 'interpreter', 'none', 'FontSize', 8, 'color', 'red');
                             tc_ons{r} = [tc_ons{r} tc{i}{3} - run.scan_start_ts];
+                            tc_ons_game_names{r} = [tc_ons_game_names{r} {regressors(1).game_name}];
                         end
                     end
 
@@ -116,6 +122,7 @@ for r = 1:length(runs)
                             tt(j) = 7;
                             text(j + 10, 4 + rand()*3, sprintf('%.2f', j / 1000.0 - 1), 'interpreter', 'none', 'FontSize', 8, 'color', 'red');
                             ic_ons{r} = [ic_ons{r} ic{i}{3} - run.scan_start_ts];
+                            ic_ons_game_names{r} = [ic_ons_game_names{r} {regressors(1).game_name}];
                         end
                     end
                     tec = regressors(1).regressors.termination_change_flag;
@@ -123,6 +130,7 @@ for r = 1:length(runs)
                         if tec{i}{1} % theory changed
                             j = round((tec{i}{3} - run.scan_start_ts + offs) * 1000);
                             tec_ons{r} = [tec_ons{r} tec{i}{3} - run.scan_start_ts];
+                            tec_ons_game_names{r} = [tec_ons_game_names{r} {regressors(1).game_name}];
                         end
                     end
                 end
