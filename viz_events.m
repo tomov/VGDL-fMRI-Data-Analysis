@@ -91,8 +91,8 @@ for r = 1:length(runs)
                 end
 
                 q = sprintf('{"subj_id": "%d", "run_id": %d, "block_id": %d, "instance_id": %d, "play_id": %d}', subj_id, run.run_id, block.block_id, instance.instance_id, play.play_id);
-                %regressors = find(conn, 'regressors', 'query', q);
-                regressors = find(conn, 'regressors_cannon_spriteEvery20', 'query', q);
+                regressors = find(conn, 'regressors', 'query', q);
+                %regressors = find(conn, 'regressors_cannon_spriteEvery20', 'query', q);
 
                 if length(regressors) > 0
                     assert(length(regressors) == 1);
@@ -138,7 +138,7 @@ for r = 1:length(runs)
         end
     end
 
-    title(['Subject ', subj_id]);
+    title(['Subject ', num2str(subj_id)]);
 
     plot(x, rr);
     plot(x, bb);
