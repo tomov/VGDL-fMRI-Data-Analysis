@@ -6,7 +6,7 @@ function [ subjects, subjdirs, goodRuns, goodSubjects ] = vgdl_getSubjectsDirsAn
 
 
 % the participant id as entered in psychopy
-subjects = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+subjects = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
 
 % should be identical to the list of subjects in the csv file
 % and in the same order
@@ -19,7 +19,8 @@ subjects = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
 subjdirs = {'200311_VGDL_001', '200312_VGDL_002', '200313_VGDL_003', '200313_VGDL_004', ...
             '200314_VGDL_005', '200314_VGDL_006', '200315_VGDL_007', '200315_VGDL_008', ...
             '210121_VGDL_009', '210122_VGDL_010', '210126_VGDL_011', '210407_VGDL_012', ...
-            '210411_VGDL_013'};
+            '210411_VGDL_013', '212104_VGDL_014', '210422_VGDL_015', '210425_VGDL_016', ...
+            '210425_VGDL_017'};
 
 
 % assumes runs are always in order: 1,2,3,4,...
@@ -29,6 +30,7 @@ subjdirs = {'200311_VGDL_001', '200312_VGDL_002', '200313_VGDL_003', '200313_VGD
 goodRuns = {logical([1 1 1 1 1 1]), logical([1 1 1 1 1 1]), logical([1 1 1 1 1 1]), logical([1 1 1 1 1 1]), ...
             logical([1 1 1 1 1 1]), logical([1 1 1 1 1 1]), logical([1 1 1 1 1 1]), logical([1 1 1 1 1 1]), ...
             logical([1 1 1 1 1]),   logical([1 1 1 1 1 1]), logical([1 1 1 1 0 1]), logical([1 1 1 1 1 1]), ...
+            logical([1 1 1 1 1 1]), logical([1 1 1 1 1 1]), logical([1 1 1 1 1 1]), logical([1 1 1 1 1 1]), ...
             logical([1 1 1 1 1 1])};
 
 % optionally, only use odd runs
@@ -45,7 +47,7 @@ goodRuns = {logical([1 1 1 1 1 1]), logical([1 1 1 1 1 1]), logical([1 1 1 1 1 1
 
 
 % which subjects are good
-goodSubjects = 1:13;
+goodSubjects = 1:17;
  
 assert(numel(subjects) == numel(subjdirs));
 assert(numel(subjects) == numel(goodRuns));
