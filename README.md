@@ -32,7 +32,8 @@ Useful links:
    * Make sure all files are in the data directory (compare with previous subjects).
 7. Open MATLAB with a GUI and cd into scripts directory
    * Log into one of the cluster terminals in Northwest (e.g. by the fMRI scanner),
-   * or download [XQuartz](https://www.xquartz.org/) on your Mac, `ssh -X` into the cluster on one of the nvdi nodes, e.g. `ssh -X mtomov13@ncfvdi.rc.fas.harvard.edu`, and run `matlab` on the command line. You should see the MATLAB splash screen
+   * or download [XQuartz](https://www.xquartz.org/) on your Mac, `ssh -X` into the cluster on one of the nvdi nodes, e.g. `ssh -X mtomov13@ncfvdi.rc.fas.harvard.edu`, and run `matlab` on the command line. You should see the MATLAB splash screen,
+   * or create an interactive VDI session through the [NCFood](https://ncfood.rc.fas.harvard.edu/pun/sys/dashboard/batch_connect/sessions) website
 8. Run `ccnl_plot_movement(vgdl_expt(), XX)`, where XX is the subject index (e.g. 1)
    * Make sure subject didn't move too much during runs
 9. Run `ccnl_check_registration(vgdl_expt(), XX)`, where XX is the subject index
@@ -61,7 +62,7 @@ Common errors and mistakes
        * make sure that the directories in the scripts are correct
    * Runs (run###.nii) or structurals (struct.nii) missing or empty -> make sure the file order in `fileNames` in the script `downloadConvert.sh` is the same as the session order of the subject
        * e.g. if another structural was acquired after run 4, it should be `fileNames=(struct_1 run001 run002 run004 run004 struct_2 run005 run006 run007 run008)`
-       * e.g. if run 6 was interrupted and restarted, it should be `fileNames=(struct run001 run002 run004 run004 run005 run006_bad run006 run007 run008
+       * e.g. if run 6 was interrupted and restarted, it should be `fileNames=(struct run001 run002 run004 run004 run005 run006_bad run006 run007 run008)`
 
 ## To create and run a new GLM
 
