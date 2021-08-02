@@ -460,7 +460,11 @@ function [ker] = load_null_kernel(EXPT, subj_id)
     modeldir = fullfile(EXPT.modeldir,['model',num2str(feature_glm)],['subj',num2str(subj_id)]);
     load(fullfile(modeldir,'SPM.mat'));
 
-    game_names = {'vgfmri3_chase','vgfmri3_helper','vgfmri3_bait','vgfmri3_lemmings','vgfmri3_plaqueAttack','vgfmri3_zelda'};
+    if subj_id <= 11
+        game_names = {'vgfmri3_chase','vgfmri3_helper','vgfmri3_bait','vgfmri3_lemmings','vgfmri3_plaqueAttack','vgfmri3_zelda'};
+    else:
+        game_names = {'vgfmri4_chase', 'vgfmri4_helper', 'vgfmri4_bait', 'vgfmri4_lemmings', 'vgfmri4_avoidgeorge', 'vgfmri4_zelda'};
+    end
 
     % use convolved game boxcars from GLM 1
     % that will take HRF into account and even the slight overlap between games

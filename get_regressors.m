@@ -37,7 +37,7 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, collec
     assert(isequal(run.subj_id, num2str(subj_id)));
 
     switch collection
-        case 'regressors'
+        case {'regressors', 'regressors_DELETEME'}
             % current one -- regressors_and_playspost_2020_05_31_finalTS_block
 
             % TODO termination_change_flag & interaction_change_flag differ between regressors and plays_post; latter seem more correct
@@ -91,7 +91,11 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, collec
     %}
 
     % TODO dedupe w/ vgdl_create_rsa and others
-    game_names_ordered = {'vgfmri3_chase','vgfmri3_helper','vgfmri3_bait','vgfmri3_lemmings','vgfmri3_plaqueAttack','vgfmri3_zelda'};
+    if subj_id <= 11
+        game_names_ordered = {'vgfmri3_chase','vgfmri3_helper','vgfmri3_bait','vgfmri3_lemmings','vgfmri3_plaqueAttack','vgfmri3_zelda'};
+    else
+        game_names_ordered = {'vgfmri4_chase', 'vgfmri4_helper', 'vgfmri4_bait', 'vgfmri4_lemmings', 'vgfmri4_avoidgeorge', 'vgfmri4_zelda'};
+    end
     game_name_to_id = containers.Map(game_names_ordered, 1:6);
 
     regs = struct;
@@ -194,6 +198,7 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, collec
                 regs.play_ids = [regs.instance_ids; ones(size(durations)) * play.play_id];
                 regs.keystate_timestamps = [regs.keystate_timestamps; t - run.scan_start_ts]; % assuming all have the same ts; notice those are keystate timestamps (slightly off from state timestamps... sorry; see core.py)
 
+                ttt = t;
 
                 plays_post = find(conn, 'plays_post', 'query', q);
                 assert(length(plays_post) == 1);
@@ -234,8 +239,19 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, collec
                 end
 
                 % note we skip first and last state timestamp b/c EMPA skips them too when fMRI logging TODO 
-                regs.state_timestamps = [regs.state_timestamps; play_post.timestamps(2:end-1) - run.scan_start_ts]; % assuming all have the same ts; notice those are keystate timestamps (slightly off from state timestamps... sorry; see core.py)
+                %if length(play_post.timestamps(2:end-1)) ~= length(t)
 
+                regs.state_timestamps = [regs.state_timestamps; play_post.timestamps(2:end-1) - run.scan_start_ts]; % assuming all have the same ts; notice those are keystate timestamps (slightly off from state timestamps... sorry; see core.py)
+                fprintf('  after  %d %d -- %d %d\n', length(regs.state_timestamps), length(regs.keystate_timestamps), length(play_post.timestamps(2:end-1)), length(ttt - run.scan_start_ts)); 
+
+                if length(play_post.timestamps(2:end-1)) ~= length(ttt - run.scan_start_ts)
+                    disp(' aaa')
+                    keyboard
+                end
+                if length(regs.state_timestamps) ~= length(regs.keystate_timestamps)
+                    disp('w t f')
+                    keyboard
+                end
             end
 
         end

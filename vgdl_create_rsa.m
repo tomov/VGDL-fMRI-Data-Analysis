@@ -53,7 +53,11 @@ function [rsa, game_names_ordered] = vgdl_create_rsa(rsa_idx, subj_id, seed)
         return
     end
 
-    game_names_ordered = {'vgfmri3_chase','vgfmri3_helper','vgfmri3_bait','vgfmri3_lemmings','vgfmri3_plaqueAttack','vgfmri3_zelda'};
+    if subj_id <= 11
+        game_names_ordered = {'vgfmri3_chase','vgfmri3_helper','vgfmri3_bait','vgfmri3_lemmings','vgfmri3_plaqueAttack','vgfmri3_zelda'};
+    else
+        game_names_ordered = {'vgfmri4_chase', 'vgfmri4_helper', 'vgfmri4_bait', 'vgfmri4_lemmings', 'vgfmri4_avoidgeorge', 'vgfmri4_zelda'};
+    end
     game_name_to_id = containers.Map(game_names_ordered, 1:6);
 
     % RSAs

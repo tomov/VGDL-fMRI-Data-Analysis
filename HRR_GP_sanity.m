@@ -1,5 +1,6 @@
 %load('mat/HRR_subject_kernel_subj=1_K=10_N=10_E=0.050_nsamples=10_sigma_w=1.mat')
-load('mat/HRR_subject_kernel_subj=1_K=10_N=10_E=0.050_nsamples=10_sigma_w=1.000_norm=1.mat');
+%load('mat/HRR_subject_kernel_subj=1_K=10_N=10_E=0.050_nsamples=10_sigma_w=1.000_norm=1.mat');
+load('../py_vgdl/mat/HRR_subject_kernel_subj=32_K=10_N=10_E=0.050_nsamples=100_sigma_w=1.000_norm=1.mat');
 
 figure;
 
