@@ -1,6 +1,30 @@
-
+function run_ccnl_fmri_con(glmodel)
 
 [~,~,~,subjs] = vgdl_getSubjectsDirsAndRuns();
+subjs = 1:32;
+
+switch (glmodel)
+
+    case {3}
+        ccnl_fmri_con(vgdl_expt(), glmodel, ...
+            {'theory_change_flag'}, ...
+             subjs);
+
+    case 21
+        ccnl_fmri_con(vgdl_expt(), 21, ...
+            {'theory_change_flag', ...
+             'vgfmri3_bait', 'vgfmri3_chase', 'vgfmri3_helper', 'vgfmri3_lemmings', 'vgfmri3_plaqueAttack', 'vgfmri3_zelda', ... % games
+             'vgfmri3_chase + vgfmri3_helper + vgfmri3_lemmings + vgfmri3_plaqueAttack - vgfmri3_bait - vgfmri3_zelda', ... % agents - no agents
+             'vgfmri3_lemmings + vgfmri3_plaqueAttack + vgfmri3_zelda - vgfmri3_bait - vgfmri3_chase - vgfmri3_helper', ... % shoot vs no shoot
+             'up', 'down', 'left', 'right', 'spacebar', ... % keyholds
+             'frames', 'new_sprites', 'killed_sprites', 'sprites', 'non_walls', 'avatar_moved', 'moved', 'movable', 'collisions', 'effects', 'sprite_groups', 'changed', ... % frame visuals
+             'block_start', 'block_end', 'instance_start', 'instance_end', 'play_start', 'play_end'}, ... % game start/end
+             subjs);
+
+    otherwise
+        assert(false, 'invalid glmodel -- should be one of the above');
+
+end
 
 %ccnl_fmri_con(vgdl_expt(), 67, ...
 %    {'interaction_or_termination_change_flag'}, ...
@@ -41,9 +65,9 @@
 %    {'interaction_or_termination_change_flag'}, ...
 %	subjs);
 %
-ccnl_fmri_con(vgdl_expt(), 84, ...
-    {'likelihood'}, ...
-	subjs);
+%ccnl_fmri_con(vgdl_expt(), 84, ...
+%    {'likelihood'}, ...
+%	subjs);
 
 
 
@@ -83,9 +107,6 @@ ccnl_fmri_con(vgdl_expt(), 84, ...
 %    {'frames', 'new_sprites', 'killed_sprites', 'sprites', 'non_walls', 'avatar_moved', 'moved', 'movable', 'collisions', 'effects', 'sprite_groups', 'changed'}, ...
 %     subjs);
 
-%ccnl_fmri_con(vgdl_expt(), 3, ...
-%    {'theory_change_flag'}, ...
-%     subjs);
 
 %ccnl_fmri_con(vgdl_expt(), 8, ...
 %    {'block_start', 'block_end', 'instance_start', 'instance_end', 'play_start', 'play_end'}, ...
@@ -101,15 +122,6 @@ ccnl_fmri_con(vgdl_expt(), 84, ...
 %     subjs);
 %
 
-%ccnl_fmri_con(vgdl_expt(), 21, ...
-%    {'theory_change_flag', ...
-%     'vgfmri3_bait', 'vgfmri3_chase', 'vgfmri3_helper', 'vgfmri3_lemmings', 'vgfmri3_plaqueAttack', 'vgfmri3_zelda', ... % games
-%     'vgfmri3_chase + vgfmri3_helper + vgfmri3_lemmings + vgfmri3_plaqueAttack - vgfmri3_bait - vgfmri3_zelda', ... % agents - no agents
-%     'vgfmri3_lemmings + vgfmri3_plaqueAttack + vgfmri3_zelda - vgfmri3_bait - vgfmri3_chase - vgfmri3_helper', ... % shoot vs no shoot
-%     'up', 'down', 'left', 'right', 'spacebar', ... % keyholds
-%     'frames', 'new_sprites', 'killed_sprites', 'sprites', 'non_walls', 'avatar_moved', 'moved', 'movable', 'collisions', 'effects', 'sprite_groups', 'changed', ... % frame visuals
-%     'block_start', 'block_end', 'instance_start', 'instance_end', 'play_start', 'play_end'}, ... % game start/end
-%     subjs);
 
 
 %ccnl_fmri_con(vgdl_expt(), 26, ...

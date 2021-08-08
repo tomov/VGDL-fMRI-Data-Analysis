@@ -496,10 +496,12 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             regs = get_regressors(subj_id, run, conn, true);
             onsets = regs.interaction_change_flag_onsets;
 
-            idx = idx + 1;
-            multi.names{idx} = 'interaction_change_flag';
-            multi.onsets{idx} = onsets;
-            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            if length(regs.interaction_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'interaction_change_flag';
+                multi.onsets{idx} = onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
 
 
         % termination_change_flag 
@@ -512,10 +514,12 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             regs = get_regressors(subj_id, run, conn, true);
             onsets = regs.termination_change_flag_onsets;
 
-            idx = idx + 1;
-            multi.names{idx} = 'termination_change_flag';
-            multi.onsets{idx} = onsets;
-            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            if length(regs.termination_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'termination_change_flag';
+                multi.onsets{idx} = onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
 
         % sprite_change_flag, interaction_change_flag, termination_change_flag 
         % union GLMs 51..52 + sprites
@@ -533,16 +537,20 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
                 multi.durations{idx} = zeros(size(multi.onsets{idx}));;
             end
 
-            idx = idx + 1;
-            multi.names{idx} = 'interaction_change_flag';
-            multi.onsets{idx} = regs.interaction_change_flag_onsets;
-            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            if length(regs.interaction_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'interaction_change_flag';
+                multi.onsets{idx} = regs.interaction_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
 
 
-            idx = idx + 1;
-            multi.names{idx} = 'termination_change_flag';
-            multi.onsets{idx} = regs.termination_change_flag_onsets;
-            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            if length(regs.termination_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'termination_change_flag';
+                multi.onsets{idx} = regs.termination_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
 
 
         % sprite_change_flag, interaction_change_flag, termination_change_flag as pmods
@@ -568,10 +576,12 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
                 multi.pmod(1).poly{idx} = 1;
             end
 
-            idx = idx + 1;
-            multi.pmod(1).name{idx} = 'interaction_change_flag';
-            multi.pmod(1).param{idx} = regs.interaction_change_flag;
-            multi.pmod(1).poly{idx} = 1;
+            if any(regs.interaction_change_flag)
+                idx = idx + 1;
+                multi.pmod(1).name{idx} = 'interaction_change_flag';
+                multi.pmod(1).param{idx} = regs.interaction_change_flag;
+                multi.pmod(1).poly{idx} = 1;
+            end
 
             idx = idx + 1;
             multi.pmod(1).name{idx} = 'termination_change_flag';

@@ -56,6 +56,7 @@ function [onoff] = get_onoff(subj_id, run, conn, do_cache)
                 onoff.play_start = [onoff.play_start; play.start_time - run.scan_start_ts];
                 onoff.play_end = [onoff.play_end; play.end_time - run.scan_start_ts];
         
+                disp(play.win);
             end
         end
 
