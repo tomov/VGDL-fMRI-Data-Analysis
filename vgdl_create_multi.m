@@ -278,7 +278,7 @@ save_output = true;
                         % constant
                         continue
                     end
-                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
                         % collinearity, special case
                         continue
                     end
@@ -360,7 +360,7 @@ save_output = true;
                         % constant
                         continue
                     end
-                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
                         % collinearity, special case
                         continue
                     end
@@ -479,7 +479,7 @@ save_output = true;
                         % constant
                         continue
                     end
-                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
                         % collinearity, special case
                         continue
                     end
@@ -958,7 +958,7 @@ save_output = true;
                         % constant
                         continue
                     end
-                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
                         % collinearity, special case
                         continue
                     end
@@ -1044,7 +1044,7 @@ save_output = true;
                         % constant
                         continue
                     end
-                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
                         % collinearity, special case
                         continue
                     end
@@ -1130,7 +1130,7 @@ save_output = true;
                         % constant
                         continue
                     end
-                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
                         % collinearity, special case
                         continue
                     end
@@ -1375,7 +1375,7 @@ save_output = true;
                         % constant
                         continue
                     end
-                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
                         % collinearity, special case
                         continue
                     end
@@ -1476,7 +1476,7 @@ save_output = true;
                         % constant
                         continue
                     end
-                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
                         % collinearity, special case
                         continue
                     end
@@ -1612,7 +1612,7 @@ save_output = true;
                         % constant
                         continue
                     end
-                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
                         % collinearity, special case
                         continue
                     end
@@ -1716,7 +1716,7 @@ save_output = true;
                         % constant
                         continue
                     end
-                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
                         % collinearity, special case
                         continue
                     end
@@ -1779,7 +1779,7 @@ save_output = true;
                         % constant
                         continue
                     end
-                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
                         % collinearity, special case
                         continue
                     end
@@ -1922,7 +1922,7 @@ save_output = true;
                         % constant
                         continue
                     end
-                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
                         % collinearity, special case
                         continue
                     end
@@ -2007,7 +2007,7 @@ save_output = true;
                         % constant
                         continue
                     end
-                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
                         % collinearity, special case
                         continue
                     end
@@ -2090,7 +2090,7 @@ save_output = true;
                         % constant
                         continue
                     end
-                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
                         % collinearity, special case
                         continue
                     end
@@ -2173,7 +2173,7 @@ save_output = true;
                         % constant
                         continue
                     end
-                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
                         % collinearity, special case
                         continue
                     end
@@ -2272,7 +2272,7 @@ save_output = true;
                         % constant
                         continue
                     end
-                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
                         % collinearity, special case
                         continue
                     end
