@@ -1,10 +1,10 @@
 function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
-%glmodel = 7;
-%subj_id = 1;
-%run_id = 1;
+    %glmodel = 7;
+    %subj_id = 1;
+    %run_id = 1;
 
-clear multi;
-save_output = true;
+    clear multi;
+    save_output = true;
 
     % Create multi structure, helper function for creating EXPT in
     % vgdl_expt.m
@@ -85,6 +85,10 @@ save_output = true;
     % - AlexNet layers
     % 
 
+    multi.names = {};
+    multi.onsets = {};
+    multi.durations = {};
+
     % GLMs
     %
     switch glmodel
@@ -95,18 +99,7 @@ save_output = true;
         %
         case 1 
 
-            idx = 0;
-
-            [game_names, onsets, durs] = get_games(subj_id, run, conn);
-
-            for i = 1:numel(game_names)
-                % instance boxcar regressor
-                idx = idx + 1;
-                multi.names{idx} = game_names{i};
-                multi.onsets{idx} = onsets{i};
-                multi.durations{idx} = durs{i};
-            end
-
+            multi = add_games_to_multi(multi, subj_id, run, conn);
 
         % key holds vs. button presses vs. key holds from button presses   NOT A REAL GLM for viz only
         % nuisance regressors
@@ -217,24 +210,7 @@ save_output = true;
         %
         case 5
 
-            idx = 0;
-
-            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
-
-            if subj_id == 1
-                % we screwed up keyholds for subject 1, so we use estimates from keypresses
-                keyholds = keyholds_post
-            end
-
-            % key hold boxcar regressors
-            for k = 1:numel(keyNames)
-                if size(keyholds{k}, 1) > 0
-                    idx = idx + 1;
-                    multi.names{idx} = keyNames{k};
-                    multi.onsets{idx} = keyholds{k}(:,1)';
-                    multi.durations{idx} = keyholds{k}(:,2)';
-                end
-            end
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
 
 
         % key presses, (copied) subset of GLM 2, compare to GLM 5
@@ -243,18 +219,7 @@ save_output = true;
         %
         case 6
 
-            idx = 0;
-
-            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
-
-            for k = 1:numel(keyNames)
-                if size(keypresses{k}, 1) > 0
-                    idx = idx + 1;
-                    multi.names{idx} = ['keypresses_', keyNames{k}]; % TODO rm prefix... but already ran
-                    multi.onsets{idx} = keypresses{k}(:,1)';
-                    multi.durations{idx} = zeros(size(multi.onsets{idx}));
-                end
-            end
+            multi = add_keypresses_to_multi(multi, subj_id, run, conn);
 
 
         % frame nuisance regressors: visual control regressors for each frame
@@ -262,125 +227,37 @@ save_output = true;
         %
         case 7
 
-            [fields, visuals] = get_visuals(subj_id, run, conn, true);
-
-            multi.names{1} = 'frames';
-            multi.onsets{1} = visuals.timestamps';
-            multi.durations{1} = visuals.durations';
-
-            multi.orth{1} = 0; % do not orthogonalise them
-
-            idx = 0;
-
-            for i = 1:numel(fields)
-                if ~ismember(fields{i}, {'timestamps', 'durations'}) 
-                    if all(visuals.(fields{i}) == visuals.(fields{i})(1))
-                        % constant
-                        continue
-                    end
-                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
-                        % collinearity, special case
-                        continue
-                    end
-                    idx = idx + 1;
-                    multi.pmod(1).name{idx} = fields{i};
-                    multi.pmod(1).param{idx} = visuals.(fields{i});
-                    multi.pmod(1).poly{idx} = 1;
-                end
-            end
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
 
         % on/off nuisance regressors: visual control regressors for start/end block, instance, play
         % this is exploratory, so ok to look at them separately and incorporate into other GLMs later
         %
         case 8
 
-            [onoff] = get_onoff(subj_id, run, conn, true);
-            fields = fieldnames(onoff);
-
-            idx = 0;
-
-            for i = 1:numel(fields)
-                idx = idx + 1;
-                multi.names{idx} = fields{i};
-                multi.onsets{idx} = onoff.(fields{i});
-                multi.durations{idx} = zeros(size(multi.onsets{idx}));
-            end
-
+            multi = add_onoff_to_multi(multi, subj_id, run, conn);
 
         % condition = game, boxcars over blocks (GLM 1)
         % + nuisance regressors (buttons, frames, on/off) (GLMs 5, 7, 8)
         % look for systematic differences across games for things like agency, etc
         % e.g. contrast: 'chase + helper - butterflies - aliens'
-        % 
+        %
         case 9
-
-            idx = 0;
 
             % from GLM 1: game instance boxcar regressor
             %
-            [game_names, onsets, durs] = get_games(subj_id, run, conn);
-            for i = 1:numel(game_names)
-                idx = idx + 1;
-                multi.names{idx} = game_names{i};
-                multi.onsets{idx} = onsets{i};
-                multi.durations{idx} = durs{i};
-            end
+            multi = add_games_to_multi(multi, subj_id, run, conn);
 
             % from GLM 5: keyholds nuisance regressors
             %
-            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
-            if subj_id == 1
-                % we screwed up keyholds for subject 1, so we use estimates from keypresses
-                keyholds = keyholds_post
-            end
-            % key hold boxcar regressors
-            for k = 1:numel(keyNames)
-                if size(keyholds{k}, 1) > 0
-                    idx = idx + 1;
-                    multi.names{idx} = keyNames{k};
-                    multi.onsets{idx} = keyholds{k}(:,1)';
-                    multi.durations{idx} = keyholds{k}(:,2)';
-                end
-            end
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
 
             % GLM 7: frame nuisance regressors
             %
-            [fields, visuals] = get_visuals(subj_id, run, conn, true);
-            idx = idx + 1;
-            multi.names{idx} = 'frames';
-            multi.onsets{idx} = visuals.timestamps';
-            multi.durations{idx} = visuals.durations';
-
-            multi.orth{idx} = 0; % do not orthogonalise them
-
-            pix = 0;
-            for i = 1:numel(fields)
-                if ~ismember(fields{i}, {'timestamps', 'durations'}) 
-                    if all(visuals.(fields{i}) == visuals.(fields{i})(1))
-                        % constant
-                        continue
-                    end
-                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
-                        % collinearity, special case
-                        continue
-                    end
-                    pix = pix + 1;
-                    multi.pmod(idx).name{pix} = fields{i};
-                    multi.pmod(idx).param{pix} = visuals.(fields{i});
-                    multi.pmod(idx).poly{pix} = 1;
-                end
-            end
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
 
             % GLM 8: on/off nuisance regressors
             %
-            [onoff] = get_onoff(subj_id, run, conn, true);
-            fields = fieldnames(onoff);
-            for i = 1:numel(fields)
-                idx = idx + 1;
-                multi.names{idx} = fields{i};
-                multi.onsets{idx} = onoff.(fields{i});
-                multi.durations{idx} = zeros(size(multi.onsets{idx}));
-            end
+            multi = add_onoff_to_multi(multi, subj_id, run, conn);
 
 
         % frame nuisance regressors: visual control regressors for each frame 
@@ -435,71 +312,12 @@ save_output = true;
             multi.onsets{idx} = onsets;
             multi.durations{idx} = zeros(size(multi.onsets{idx}));;
 
-            % from GLM 1: game instance boxcar regressor
-            %
-            [game_names, onsets, durs] = get_games(subj_id, run, conn);
-            for i = 1:numel(game_names)
-                idx = idx + 1;
-                multi.names{idx} = game_names{i};
-                multi.onsets{idx} = onsets{i};
-                multi.durations{idx} = durs{i};
-            end
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn);
 
-            % from GLM 5: keyholds nuisance regressors
-            %
-            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
-            if subj_id == 1
-                % we screwed up keyholds for subject 1, so we use estimates from keypresses
-                keyholds = keyholds_post
-            end
-            % key hold boxcar regressors
-            for k = 1:numel(keyNames)
-                if size(keyholds{k}, 1) > 0
-                    idx = idx + 1;
-                    multi.names{idx} = keyNames{k};
-                    multi.onsets{idx} = keyholds{k}(:,1)';
-                    multi.durations{idx} = keyholds{k}(:,2)';
-                end
-            end
-
-            % GLM 7: frame nuisance regressors
-            %
-            [fields, visuals] = get_visuals(subj_id, run, conn, true);
-            idx = idx + 1;
-            multi.names{idx} = 'frames';
-            multi.onsets{idx} = visuals.timestamps';
-            multi.durations{idx} = visuals.durations';
-
-            multi.orth{idx} = 0; % do not orthogonalise them
-
-            pix = 0;
-            for i = 1:numel(fields)
-                if ~ismember(fields{i}, {'timestamps', 'durations'}) 
-                    if all(visuals.(fields{i}) == visuals.(fields{i})(1))
-                        % constant
-                        continue
-                    end
-                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
-                        % collinearity, special case
-                        continue
-                    end
-                    pix = pix + 1;
-                    multi.pmod(idx).name{pix} = fields{i};
-                    multi.pmod(idx).param{pix} = visuals.(fields{i});
-                    multi.pmod(idx).poly{pix} = 1;
-                end
-            end
-
-            % GLM 8: on/off nuisance regressors
-            %
-            [onoff] = get_onoff(subj_id, run, conn, true);
-            fields = fieldnames(onoff);
-            for i = 1:numel(fields)
-                idx = idx + 1;
-                multi.names{idx} = fields{i};
-                multi.onsets{idx} = onoff.(fields{i});
-                multi.durations{idx} = zeros(size(multi.onsets{idx}));
-            end
     
         % momchil TODO FIXME: this is a bad idea; events are too close => must use actual deconvolution
         % beta series -- separate regressor for each TR for each level for each game
@@ -914,72 +732,11 @@ save_output = true;
             multi.onsets{idx} = onsets;
             multi.durations{idx} = zeros(size(multi.onsets{idx}));;
 
-            % from GLM 1: game instance boxcar regressor
-            %
-            [game_names, onsets, durs] = get_games(subj_id, run, conn);
-            for i = 1:numel(game_names)
-                idx = idx + 1;
-                multi.names{idx} = game_names{i};
-                multi.onsets{idx} = onsets{i};
-                multi.durations{idx} = durs{i};
-            end
-
-            % from GLM 5: keyholds nuisance regressors
-            %
-            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
-            if subj_id == 1
-                % we screwed up keyholds for subject 1, so we use estimates from keypresses
-                keyholds = keyholds_post
-            end
-            % key hold boxcar regressors
-            for k = 1:numel(keyNames)
-                if size(keyholds{k}, 1) > 0
-                    idx = idx + 1;
-                    multi.names{idx} = keyNames{k};
-                    multi.onsets{idx} = keyholds{k}(:,1)';
-                    multi.durations{idx} = keyholds{k}(:,2)';
-                end
-            end
-
-            % GLM 7: frame nuisance regressors
-            %
-            [fields, visuals] = get_visuals(subj_id, run, conn, true);
-            idx = idx + 1;
-            multi.names{idx} = 'frames';
-            multi.onsets{idx} = visuals.timestamps';
-            multi.durations{idx} = visuals.durations';
-
-            multi.orth{idx} = 0; % do not orthogonalise them
-
-            pix = 0;
-            for i = 1:numel(fields)
-                if ~ismember(fields{i}, {'timestamps', 'durations'}) 
-                    if all(visuals.(fields{i}) == visuals.(fields{i})(1))
-                        % constant
-                        continue
-                    end
-                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
-                        % collinearity, special case
-                        continue
-                    end
-                    pix = pix + 1;
-                    multi.pmod(idx).name{pix} = fields{i};
-                    multi.pmod(idx).param{pix} = visuals.(fields{i});
-                    multi.pmod(idx).poly{pix} = 1;
-                end
-            end
-
-            % GLM 8: on/off nuisance regressors
-            %
-            [onoff] = get_onoff(subj_id, run, conn, true);
-            fields = fieldnames(onoff);
-            for i = 1:numel(fields)
-                idx = idx + 1;
-                multi.names{idx} = fields{i};
-                multi.onsets{idx} = onoff.(fields{i});
-                multi.durations{idx} = zeros(size(multi.onsets{idx}));
-            end
-    
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn);
 
 
         % old theory_change_flag + control regressors
@@ -998,74 +755,13 @@ save_output = true;
             idx = idx + 1;
             multi.names{idx} = 'theory_change_flag';
             multi.onsets{idx} = onsets;
-            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            multi.durations{idx} = zeros(size(multi.onsets{idx}));
 
-            % from GLM 1: game instance boxcar regressor
-            %
-            [game_names, onsets, durs] = get_games(subj_id, run, conn);
-            for i = 1:numel(game_names)
-                idx = idx + 1;
-                multi.names{idx} = game_names{i};
-                multi.onsets{idx} = onsets{i};
-                multi.durations{idx} = durs{i};
-            end
-
-            % from GLM 5: keyholds nuisance regressors
-            %
-            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
-            if subj_id == 1
-                % we screwed up keyholds for subject 1, so we use estimates from keypresses
-                keyholds = keyholds_post
-            end
-            % key hold boxcar regressors
-            for k = 1:numel(keyNames)
-                if size(keyholds{k}, 1) > 0
-                    idx = idx + 1;
-                    multi.names{idx} = keyNames{k};
-                    multi.onsets{idx} = keyholds{k}(:,1)';
-                    multi.durations{idx} = keyholds{k}(:,2)';
-                end
-            end
-
-            % GLM 7: frame nuisance regressors
-            %
-            [fields, visuals] = get_visuals(subj_id, run, conn, true);
-            idx = idx + 1;
-            multi.names{idx} = 'frames';
-            multi.onsets{idx} = visuals.timestamps';
-            multi.durations{idx} = visuals.durations';
-
-            multi.orth{idx} = 0; % do not orthogonalise them
-
-            pix = 0;
-            for i = 1:numel(fields)
-                if ~ismember(fields{i}, {'timestamps', 'durations'}) 
-                    if all(visuals.(fields{i}) == visuals.(fields{i})(1))
-                        % constant
-                        continue
-                    end
-                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
-                        % collinearity, special case
-                        continue
-                    end
-                    pix = pix + 1;
-                    multi.pmod(idx).name{pix} = fields{i};
-                    multi.pmod(idx).param{pix} = visuals.(fields{i});
-                    multi.pmod(idx).poly{pix} = 1;
-                end
-            end
-
-            % GLM 8: on/off nuisance regressors
-            %
-            [onoff] = get_onoff(subj_id, run, conn, true);
-            fields = fieldnames(onoff);
-            for i = 1:numel(fields)
-                idx = idx + 1;
-                multi.names{idx} = fields{i};
-                multi.onsets{idx} = onoff.(fields{i});
-                multi.durations{idx} = zeros(size(multi.onsets{idx}));
-            end
-    
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn);
 
 
         % old theory_change_flag + control regressors
@@ -1086,72 +782,12 @@ save_output = true;
             multi.onsets{idx} = onsets;
             multi.durations{idx} = zeros(size(multi.onsets{idx}));;
 
-            % from GLM 1: game instance boxcar regressor
-            %
-            [game_names, onsets, durs] = get_games(subj_id, run, conn);
-            for i = 1:numel(game_names)
-                idx = idx + 1;
-                multi.names{idx} = game_names{i};
-                multi.onsets{idx} = onsets{i};
-                multi.durations{idx} = durs{i};
-            end
 
-            % from GLM 5: keyholds nuisance regressors
-            %
-            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
-            if subj_id == 1
-                % we screwed up keyholds for subject 1, so we use estimates from keypresses
-                keyholds = keyholds_post
-            end
-            % key hold boxcar regressors
-            for k = 1:numel(keyNames)
-                if size(keyholds{k}, 1) > 0
-                    idx = idx + 1;
-                    multi.names{idx} = keyNames{k};
-                    multi.onsets{idx} = keyholds{k}(:,1)';
-                    multi.durations{idx} = keyholds{k}(:,2)';
-                end
-            end
-
-            % GLM 7: frame nuisance regressors
-            %
-            [fields, visuals] = get_visuals(subj_id, run, conn, true);
-            idx = idx + 1;
-            multi.names{idx} = 'frames';
-            multi.onsets{idx} = visuals.timestamps';
-            multi.durations{idx} = visuals.durations';
-
-            multi.orth{idx} = 0; % do not orthogonalise them
-
-            pix = 0;
-            for i = 1:numel(fields)
-                if ~ismember(fields{i}, {'timestamps', 'durations'}) 
-                    if all(visuals.(fields{i}) == visuals.(fields{i})(1))
-                        % constant
-                        continue
-                    end
-                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
-                        % collinearity, special case
-                        continue
-                    end
-                    pix = pix + 1;
-                    multi.pmod(idx).name{pix} = fields{i};
-                    multi.pmod(idx).param{pix} = visuals.(fields{i});
-                    multi.pmod(idx).poly{pix} = 1;
-                end
-            end
-
-            % GLM 8: on/off nuisance regressors
-            %
-            [onoff] = get_onoff(subj_id, run, conn, true);
-            fields = fieldnames(onoff);
-            for i = 1:numel(fields)
-                idx = idx + 1;
-                multi.names{idx} = fields{i};
-                multi.onsets{idx} = onoff.(fields{i});
-                multi.durations{idx} = zeros(size(multi.onsets{idx}));
-            end
-    
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn);
 
         % old sprite_change_flag, interaction_change_flag, termination_change_flag 
         % same as GLM 53 but with regressors_2020_04_01_fullTSList_nonrefactor
@@ -1331,72 +967,12 @@ save_output = true;
             multi.onsets{idx} = regs.termination_change_flag_onsets;
             multi.durations{idx} = zeros(size(multi.onsets{idx}));;
 
-            % from GLM 1: game instance boxcar regressor
-            %
-            [game_names, onsets, durs] = get_games(subj_id, run, conn);
-            for i = 1:numel(game_names)
-                idx = idx + 1;
-                multi.names{idx} = game_names{i};
-                multi.onsets{idx} = onsets{i};
-                multi.durations{idx} = durs{i};
-            end
 
-            % from GLM 5: keyholds nuisance regressors
-            %
-            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
-            if subj_id == 1
-                % we screwed up keyholds for subject 1, so we use estimates from keypresses
-                keyholds = keyholds_post
-            end
-            % key hold boxcar regressors
-            for k = 1:numel(keyNames)
-                if size(keyholds{k}, 1) > 0
-                    idx = idx + 1;
-                    multi.names{idx} = keyNames{k};
-                    multi.onsets{idx} = keyholds{k}(:,1)';
-                    multi.durations{idx} = keyholds{k}(:,2)';
-                end
-            end
-
-            % GLM 7: frame nuisance regressors
-            %
-            [fields, visuals] = get_visuals(subj_id, run, conn, true);
-            idx = idx + 1;
-            multi.names{idx} = 'frames';
-            multi.onsets{idx} = visuals.timestamps';
-            multi.durations{idx} = visuals.durations';
-
-            multi.orth{idx} = 0; % do not orthogonalise them
-
-            pix = 0;
-            for i = 1:numel(fields)
-                if ~ismember(fields{i}, {'timestamps', 'durations'}) 
-                    if all(visuals.(fields{i}) == visuals.(fields{i})(1))
-                        % constant
-                        continue
-                    end
-                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
-                        % collinearity, special case
-                        continue
-                    end
-                    pix = pix + 1;
-                    multi.pmod(idx).name{pix} = fields{i};
-                    multi.pmod(idx).param{pix} = visuals.(fields{i});
-                    multi.pmod(idx).poly{pix} = 1;
-                end
-            end
-
-            % GLM 8: on/off nuisance regressors
-            %
-            [onoff] = get_onoff(subj_id, run, conn, true);
-            fields = fieldnames(onoff);
-            for i = 1:numel(fields)
-                idx = idx + 1;
-                multi.names{idx} = fields{i};
-                multi.onsets{idx} = onoff.(fields{i});
-                multi.durations{idx} = zeros(size(multi.onsets{idx}));
-            end
-    
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn);
 
         % surprise, likelihood, sum_lik_play
         %  + control regressors
@@ -1432,72 +1008,12 @@ save_output = true;
                 multi.pmod(idx).param{i}(isnan(multi.pmod(idx).param{i})) = 0; % TODO happens for lik during first few timesteps; ideally, remove altogether
             end
 
-            % from GLM 1: game instance boxcar regressor
-            %
-            [game_names, onsets, durs] = get_games(subj_id, run, conn);
-            for i = 1:numel(game_names)
-                idx = idx + 1;
-                multi.names{idx} = game_names{i};
-                multi.onsets{idx} = onsets{i};
-                multi.durations{idx} = durs{i};
-            end
 
-            % from GLM 5: keyholds nuisance regressors
-            %
-            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
-            if subj_id == 1
-                % we screwed up keyholds for subject 1, so we use estimates from keypresses
-                keyholds = keyholds_post
-            end
-            % key hold boxcar regressors
-            for k = 1:numel(keyNames)
-                if size(keyholds{k}, 1) > 0
-                    idx = idx + 1;
-                    multi.names{idx} = keyNames{k};
-                    multi.onsets{idx} = keyholds{k}(:,1)';
-                    multi.durations{idx} = keyholds{k}(:,2)';
-                end
-            end
-
-            % GLM 7: frame nuisance regressors
-            %
-            [fields, visuals] = get_visuals(subj_id, run, conn, true);
-            idx = idx + 1;
-            multi.names{idx} = 'frames';
-            multi.onsets{idx} = visuals.timestamps';
-            multi.durations{idx} = visuals.durations';
-
-            multi.orth{idx} = 0; % do not orthogonalise them
-
-            pix = 0;
-            for i = 1:numel(fields)
-                if ~ismember(fields{i}, {'timestamps', 'durations'}) 
-                    if all(visuals.(fields{i}) == visuals.(fields{i})(1))
-                        % constant
-                        continue
-                    end
-                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
-                        % collinearity, special case
-                        continue
-                    end
-                    pix = pix + 1;
-                    multi.pmod(idx).name{pix} = fields{i};
-                    multi.pmod(idx).param{pix} = visuals.(fields{i});
-                    multi.pmod(idx).poly{pix} = 1;
-                end
-            end
-
-            % GLM 8: on/off nuisance regressors
-            %
-            [onoff] = get_onoff(subj_id, run, conn, true);
-            fields = fieldnames(onoff);
-            for i = 1:numel(fields)
-                idx = idx + 1;
-                multi.names{idx} = fields{i};
-                multi.onsets{idx} = onoff.(fields{i});
-                multi.durations{idx} = zeros(size(multi.onsets{idx}));
-            end
-   
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn);
 
         % sum_lik_play vs. n_ts
         %
@@ -1568,71 +1084,11 @@ save_output = true;
             multi.onsets{idx} = regs.timestamps(ic | tec);
             multi.durations{idx} = zeros(size(multi.onsets{idx}));;
 
-            % from GLM 1: game instance boxcar regressor
-            %
-            [game_names, onsets, durs] = get_games(subj_id, run, conn);
-            for i = 1:numel(game_names)
-                idx = idx + 1;
-                multi.names{idx} = game_names{i};
-                multi.onsets{idx} = onsets{i};
-                multi.durations{idx} = durs{i};
-            end
-
-            % from GLM 5: keyholds nuisance regressors
-            %
-            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
-            if subj_id == 1
-                % we screwed up keyholds for subject 1, so we use estimates from keypresses
-                keyholds = keyholds_post
-            end
-            % key hold boxcar regressors
-            for k = 1:numel(keyNames)
-                if size(keyholds{k}, 1) > 0
-                    idx = idx + 1;
-                    multi.names{idx} = keyNames{k};
-                    multi.onsets{idx} = keyholds{k}(:,1)';
-                    multi.durations{idx} = keyholds{k}(:,2)';
-                end
-            end
-
-            % GLM 7: frame nuisance regressors
-            %
-            [fields, visuals] = get_visuals(subj_id, run, conn, true);
-            idx = idx + 1;
-            multi.names{idx} = 'frames';
-            multi.onsets{idx} = visuals.timestamps';
-            multi.durations{idx} = visuals.durations';
-
-            multi.orth{idx} = 0; % do not orthogonalise them
-
-            pix = 0;
-            for i = 1:numel(fields)
-                if ~ismember(fields{i}, {'timestamps', 'durations'}) 
-                    if all(visuals.(fields{i}) == visuals.(fields{i})(1))
-                        % constant
-                        continue
-                    end
-                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
-                        % collinearity, special case
-                        continue
-                    end
-                    pix = pix + 1;
-                    multi.pmod(idx).name{pix} = fields{i};
-                    multi.pmod(idx).param{pix} = visuals.(fields{i});
-                    multi.pmod(idx).poly{pix} = 1;
-                end
-            end
-
-            % GLM 8: on/off nuisance regressors
-            %
-            [onoff] = get_onoff(subj_id, run, conn, true);
-            fields = fieldnames(onoff);
-            for i = 1:numel(fields)
-                idx = idx + 1;
-                multi.names{idx} = fields{i};
-                multi.onsets{idx} = onoff.(fields{i});
-                multi.durations{idx} = zeros(size(multi.onsets{idx}));
-            end
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn);
 
         % spriteKL
         %  + control regressors
@@ -1672,134 +1128,21 @@ save_output = true;
                 multi.pmod(idx).param{i}(isnan(multi.pmod(idx).param{i})) = 0; % TODO happens for lik during first few timesteps; ideally, remove altogether
             end
 
-            % from GLM 1: game instance boxcar regressor
-            %
-            [game_names, onsets, durs] = get_games(subj_id, run, conn);
-            for i = 1:numel(game_names)
-                idx = idx + 1;
-                multi.names{idx} = game_names{i};
-                multi.onsets{idx} = onsets{i};
-                multi.durations{idx} = durs{i};
-            end
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn);
 
-            % from GLM 5: keyholds nuisance regressors
-            %
-            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
-            if subj_id == 1
-                % we screwed up keyholds for subject 1, so we use estimates from keypresses
-                keyholds = keyholds_post
-            end
-            % key hold boxcar regressors
-            for k = 1:numel(keyNames)
-                if size(keyholds{k}, 1) > 0
-                    idx = idx + 1;
-                    multi.names{idx} = keyNames{k};
-                    multi.onsets{idx} = keyholds{k}(:,1)';
-                    multi.durations{idx} = keyholds{k}(:,2)';
-                end
-            end
 
-            % GLM 7: frame nuisance regressors
-            %
-            [fields, visuals] = get_visuals(subj_id, run, conn, true);
-            idx = idx + 1;
-            multi.names{idx} = 'frames';
-            multi.onsets{idx} = visuals.timestamps';
-            multi.durations{idx} = visuals.durations';
-
-            multi.orth{idx} = 0; % do not orthogonalise them
-
-            pix = 0;
-            for i = 1:numel(fields)
-                if ~ismember(fields{i}, {'timestamps', 'durations'}) 
-                    if all(visuals.(fields{i}) == visuals.(fields{i})(1))
-                        % constant
-                        continue
-                    end
-                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
-                        % collinearity, special case
-                        continue
-                    end
-                    pix = pix + 1;
-                    multi.pmod(idx).name{pix} = fields{i};
-                    multi.pmod(idx).param{pix} = visuals.(fields{i});
-                    multi.pmod(idx).poly{pix} = 1;
-                end
-            end
-
-            % GLM 8: on/off nuisance regressors
-            %
-            [onoff] = get_onoff(subj_id, run, conn, true);
-            fields = fieldnames(onoff);
-            for i = 1:numel(fields)
-                idx = idx + 1;
-                multi.names{idx} = fields{i};
-                multi.onsets{idx} = onoff.(fields{i});
-                multi.durations{idx} = zeros(size(multi.onsets{idx}));
-            end
-  
         % GLM 9 but without game id
         % i.e. 5, 7, 8
         %
         case 77
 
-            idx = 0;
-
-            % from GLM 5: keyholds nuisance regressors
-            %
-            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
-            if subj_id == 1
-                % we screwed up keyholds for subject 1, so we use estimates from keypresses
-                keyholds = keyholds_post
-            end
-            % key hold boxcar regressors
-            for k = 1:numel(keyNames)
-                if size(keyholds{k}, 1) > 0
-                    idx = idx + 1;
-                    multi.names{idx} = keyNames{k};
-                    multi.onsets{idx} = keyholds{k}(:,1)';
-                    multi.durations{idx} = keyholds{k}(:,2)';
-                end
-            end
-
-            % GLM 7: frame nuisance regressors
-            %
-            [fields, visuals] = get_visuals(subj_id, run, conn, true);
-            idx = idx + 1;
-            multi.names{idx} = 'frames';
-            multi.onsets{idx} = visuals.timestamps';
-            multi.durations{idx} = visuals.durations';
-
-            multi.orth{idx} = 0; % do not orthogonalise them
-
-            pix = 0;
-            for i = 1:numel(fields)
-                if ~ismember(fields{i}, {'timestamps', 'durations'}) 
-                    if all(visuals.(fields{i}) == visuals.(fields{i})(1))
-                        % constant
-                        continue
-                    end
-                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
-                        % collinearity, special case
-                        continue
-                    end
-                    pix = pix + 1;
-                    multi.pmod(idx).name{pix} = fields{i};
-                    multi.pmod(idx).param{pix} = visuals.(fields{i});
-                    multi.pmod(idx).poly{pix} = 1;
-                end
-            end
-
-            % GLM 8: on/off nuisance regressors
-            %
-            [onoff] = get_onoff(subj_id, run, conn, true);
-            fields = fieldnames(onoff);
-            for i = 1:numel(fields)
-                idx = idx + 1;
-                multi.names{idx} = fields{i};
-                multi.onsets{idx} = onoff.(fields{i});
-                multi.durations{idx} = zeros(size(multi.onsets{idx}));
-            end
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn);
    
 
         % condition = game, boxcars over blocks (GLM 1)
@@ -1807,34 +1150,8 @@ save_output = true;
         % 
         case 78
 
-            idx = 0;
-
-            % from GLM 1: game instance boxcar regressor
-            %
-            [game_names, onsets, durs] = get_games(subj_id, run, conn);
-            for i = 1:numel(game_names)
-                idx = idx + 1;
-                multi.names{idx} = game_names{i};
-                multi.onsets{idx} = onsets{i};
-                multi.durations{idx} = durs{i};
-            end
-
-            % from GLM 5: keyholds nuisance regressors
-            %
-            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
-            if subj_id == 1
-                % we screwed up keyholds for subject 1, so we use estimates from keypresses
-                keyholds = keyholds_post
-            end
-            % key hold boxcar regressors
-            for k = 1:numel(keyNames)
-                if size(keyholds{k}, 1) > 0
-                    idx = idx + 1;
-                    multi.names{idx} = keyNames{k};
-                    multi.onsets{idx} = keyholds{k}(:,1)';
-                    multi.durations{idx} = keyholds{k}(:,2)';
-                end
-            end
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
 
         % surprise_flag 
         % see 58
@@ -1878,72 +1195,12 @@ save_output = true;
             multi.onsets{idx} = onsets;
             multi.durations{idx} = zeros(size(multi.onsets{idx}));;
 
-            % from GLM 1: game instance boxcar regressor
-            %
-            [game_names, onsets, durs] = get_games(subj_id, run, conn);
-            for i = 1:numel(game_names)
-                idx = idx + 1;
-                multi.names{idx} = game_names{i};
-                multi.onsets{idx} = onsets{i};
-                multi.durations{idx} = durs{i};
-            end
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn);
 
-            % from GLM 5: keyholds nuisance regressors
-            %
-            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
-            if subj_id == 1
-                % we screwed up keyholds for subject 1, so we use estimates from keypresses
-                keyholds = keyholds_post
-            end
-            % key hold boxcar regressors
-            for k = 1:numel(keyNames)
-                if size(keyholds{k}, 1) > 0
-                    idx = idx + 1;
-                    multi.names{idx} = keyNames{k};
-                    multi.onsets{idx} = keyholds{k}(:,1)';
-                    multi.durations{idx} = keyholds{k}(:,2)';
-                end
-            end
-
-            % GLM 7: frame nuisance regressors
-            %
-            [fields, visuals] = get_visuals(subj_id, run, conn, true);
-            idx = idx + 1;
-            multi.names{idx} = 'frames';
-            multi.onsets{idx} = visuals.timestamps';
-            multi.durations{idx} = visuals.durations';
-
-            multi.orth{idx} = 0; % do not orthogonalise them
-
-            pix = 0;
-            for i = 1:numel(fields)
-                if ~ismember(fields{i}, {'timestamps', 'durations'}) 
-                    if all(visuals.(fields{i}) == visuals.(fields{i})(1))
-                        % constant
-                        continue
-                    end
-                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
-                        % collinearity, special case
-                        continue
-                    end
-                    pix = pix + 1;
-                    multi.pmod(idx).name{pix} = fields{i};
-                    multi.pmod(idx).param{pix} = visuals.(fields{i});
-                    multi.pmod(idx).poly{pix} = 1;
-                end
-            end
-
-            % GLM 8: on/off nuisance regressors
-            %
-            [onoff] = get_onoff(subj_id, run, conn, true);
-            fields = fieldnames(onoff);
-            for i = 1:numel(fields)
-                idx = idx + 1;
-                multi.names{idx} = fields{i};
-                multi.onsets{idx} = onoff.(fields{i});
-                multi.durations{idx} = zeros(size(multi.onsets{idx}));
-            end
-   
 
         % replan_flag + control regressors
         % like GLM 21
@@ -1963,72 +1220,12 @@ save_output = true;
             multi.onsets{idx} = onsets;
             multi.durations{idx} = zeros(size(multi.onsets{idx}));;
 
-            % from GLM 1: game instance boxcar regressor
-            %
-            [game_names, onsets, durs] = get_games(subj_id, run, conn);
-            for i = 1:numel(game_names)
-                idx = idx + 1;
-                multi.names{idx} = game_names{i};
-                multi.onsets{idx} = onsets{i};
-                multi.durations{idx} = durs{i};
-            end
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn);
 
-            % from GLM 5: keyholds nuisance regressors
-            %
-            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
-            if subj_id == 1
-                % we screwed up keyholds for subject 1, so we use estimates from keypresses
-                keyholds = keyholds_post
-            end
-            % key hold boxcar regressors
-            for k = 1:numel(keyNames)
-                if size(keyholds{k}, 1) > 0
-                    idx = idx + 1;
-                    multi.names{idx} = keyNames{k};
-                    multi.onsets{idx} = keyholds{k}(:,1)';
-                    multi.durations{idx} = keyholds{k}(:,2)';
-                end
-            end
-
-            % GLM 7: frame nuisance regressors
-            %
-            [fields, visuals] = get_visuals(subj_id, run, conn, true);
-            idx = idx + 1;
-            multi.names{idx} = 'frames';
-            multi.onsets{idx} = visuals.timestamps';
-            multi.durations{idx} = visuals.durations';
-
-            multi.orth{idx} = 0; % do not orthogonalise them
-
-            pix = 0;
-            for i = 1:numel(fields)
-                if ~ismember(fields{i}, {'timestamps', 'durations'}) 
-                    if all(visuals.(fields{i}) == visuals.(fields{i})(1))
-                        % constant
-                        continue
-                    end
-                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
-                        % collinearity, special case
-                        continue
-                    end
-                    pix = pix + 1;
-                    multi.pmod(idx).name{pix} = fields{i};
-                    multi.pmod(idx).param{pix} = visuals.(fields{i});
-                    multi.pmod(idx).poly{pix} = 1;
-                end
-            end
-
-            % GLM 8: on/off nuisance regressors
-            %
-            [onoff] = get_onoff(subj_id, run, conn, true);
-            fields = fieldnames(onoff);
-            for i = 1:numel(fields)
-                idx = idx + 1;
-                multi.names{idx} = fields{i};
-                multi.onsets{idx} = onoff.(fields{i});
-                multi.durations{idx} = zeros(size(multi.onsets{idx}));
-            end
-    
     
         % interaction_change_flag 
         %  + control regressors
@@ -2046,72 +1243,12 @@ save_output = true;
             multi.onsets{idx} = regs.interaction_change_flag_onsets;
             multi.durations{idx} = zeros(size(multi.onsets{idx}));;
 
-            % from GLM 1: game instance boxcar regressor
-            %
-            [game_names, onsets, durs] = get_games(subj_id, run, conn);
-            for i = 1:numel(game_names)
-                idx = idx + 1;
-                multi.names{idx} = game_names{i};
-                multi.onsets{idx} = onsets{i};
-                multi.durations{idx} = durs{i};
-            end
 
-            % from GLM 5: keyholds nuisance regressors
-            %
-            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
-            if subj_id == 1
-                % we screwed up keyholds for subject 1, so we use estimates from keypresses
-                keyholds = keyholds_post
-            end
-            % key hold boxcar regressors
-            for k = 1:numel(keyNames)
-                if size(keyholds{k}, 1) > 0
-                    idx = idx + 1;
-                    multi.names{idx} = keyNames{k};
-                    multi.onsets{idx} = keyholds{k}(:,1)';
-                    multi.durations{idx} = keyholds{k}(:,2)';
-                end
-            end
-
-            % GLM 7: frame nuisance regressors
-            %
-            [fields, visuals] = get_visuals(subj_id, run, conn, true);
-            idx = idx + 1;
-            multi.names{idx} = 'frames';
-            multi.onsets{idx} = visuals.timestamps';
-            multi.durations{idx} = visuals.durations';
-
-            multi.orth{idx} = 0; % do not orthogonalise them
-
-            pix = 0;
-            for i = 1:numel(fields)
-                if ~ismember(fields{i}, {'timestamps', 'durations'}) 
-                    if all(visuals.(fields{i}) == visuals.(fields{i})(1))
-                        % constant
-                        continue
-                    end
-                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
-                        % collinearity, special case
-                        continue
-                    end
-                    pix = pix + 1;
-                    multi.pmod(idx).name{pix} = fields{i};
-                    multi.pmod(idx).param{pix} = visuals.(fields{i});
-                    multi.pmod(idx).poly{pix} = 1;
-                end
-            end
-
-            % GLM 8: on/off nuisance regressors
-            %
-            [onoff] = get_onoff(subj_id, run, conn, true);
-            fields = fieldnames(onoff);
-            for i = 1:numel(fields)
-                idx = idx + 1;
-                multi.names{idx} = fields{i};
-                multi.onsets{idx} = onoff.(fields{i});
-                multi.durations{idx} = zeros(size(multi.onsets{idx}));
-            end
-    
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn);
 
         % termination_change_flag 
         %  + control regressors
@@ -2129,72 +1266,12 @@ save_output = true;
             multi.onsets{idx} = regs.termination_change_flag_onsets;
             multi.durations{idx} = zeros(size(multi.onsets{idx}));;
 
-            % from GLM 1: game instance boxcar regressor
-            %
-            [game_names, onsets, durs] = get_games(subj_id, run, conn);
-            for i = 1:numel(game_names)
-                idx = idx + 1;
-                multi.names{idx} = game_names{i};
-                multi.onsets{idx} = onsets{i};
-                multi.durations{idx} = durs{i};
-            end
 
-            % from GLM 5: keyholds nuisance regressors
-            %
-            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
-            if subj_id == 1
-                % we screwed up keyholds for subject 1, so we use estimates from keypresses
-                keyholds = keyholds_post
-            end
-            % key hold boxcar regressors
-            for k = 1:numel(keyNames)
-                if size(keyholds{k}, 1) > 0
-                    idx = idx + 1;
-                    multi.names{idx} = keyNames{k};
-                    multi.onsets{idx} = keyholds{k}(:,1)';
-                    multi.durations{idx} = keyholds{k}(:,2)';
-                end
-            end
-
-            % GLM 7: frame nuisance regressors
-            %
-            [fields, visuals] = get_visuals(subj_id, run, conn, true);
-            idx = idx + 1;
-            multi.names{idx} = 'frames';
-            multi.onsets{idx} = visuals.timestamps';
-            multi.durations{idx} = visuals.durations';
-
-            multi.orth{idx} = 0; % do not orthogonalise them
-
-            pix = 0;
-            for i = 1:numel(fields)
-                if ~ismember(fields{i}, {'timestamps', 'durations'}) 
-                    if all(visuals.(fields{i}) == visuals.(fields{i})(1))
-                        % constant
-                        continue
-                    end
-                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
-                        % collinearity, special case
-                        continue
-                    end
-                    pix = pix + 1;
-                    multi.pmod(idx).name{pix} = fields{i};
-                    multi.pmod(idx).param{pix} = visuals.(fields{i});
-                    multi.pmod(idx).poly{pix} = 1;
-                end
-            end
-
-            % GLM 8: on/off nuisance regressors
-            %
-            [onoff] = get_onoff(subj_id, run, conn, true);
-            fields = fieldnames(onoff);
-            for i = 1:numel(fields)
-                idx = idx + 1;
-                multi.names{idx} = fields{i};
-                multi.onsets{idx} = onoff.(fields{i});
-                multi.durations{idx} = zeros(size(multi.onsets{idx}));
-            end
-    
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn);
 
         % likelihood
         %  + control regressors
@@ -2228,72 +1305,12 @@ save_output = true;
                 multi.pmod(idx).param{i}(isnan(multi.pmod(idx).param{i})) = 0; % TODO happens for lik during first few timesteps; ideally, remove altogether
             end
 
-            % from GLM 1: game instance boxcar regressor
-            %
-            [game_names, onsets, durs] = get_games(subj_id, run, conn);
-            for i = 1:numel(game_names)
-                idx = idx + 1;
-                multi.names{idx} = game_names{i};
-                multi.onsets{idx} = onsets{i};
-                multi.durations{idx} = durs{i};
-            end
 
-            % from GLM 5: keyholds nuisance regressors
-            %
-            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
-            if subj_id == 1
-                % we screwed up keyholds for subject 1, so we use estimates from keypresses
-                keyholds = keyholds_post
-            end
-            % key hold boxcar regressors
-            for k = 1:numel(keyNames)
-                if size(keyholds{k}, 1) > 0
-                    idx = idx + 1;
-                    multi.names{idx} = keyNames{k};
-                    multi.onsets{idx} = keyholds{k}(:,1)';
-                    multi.durations{idx} = keyholds{k}(:,2)';
-                end
-            end
-
-            % GLM 7: frame nuisance regressors
-            %
-            [fields, visuals] = get_visuals(subj_id, run, conn, true);
-            idx = idx + 1;
-            multi.names{idx} = 'frames';
-            multi.onsets{idx} = visuals.timestamps';
-            multi.durations{idx} = visuals.durations';
-
-            multi.orth{idx} = 0; % do not orthogonalise them
-
-            pix = 0;
-            for i = 1:numel(fields)
-                if ~ismember(fields{i}, {'timestamps', 'durations'}) 
-                    if all(visuals.(fields{i}) == visuals.(fields{i})(1))
-                        % constant
-                        continue
-                    end
-                    if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
-                        % collinearity, special case
-                        continue
-                    end
-                    pix = pix + 1;
-                    multi.pmod(idx).name{pix} = fields{i};
-                    multi.pmod(idx).param{pix} = visuals.(fields{i});
-                    multi.pmod(idx).poly{pix} = 1;
-                end
-            end
-
-            % GLM 8: on/off nuisance regressors
-            %
-            [onoff] = get_onoff(subj_id, run, conn, true);
-            fields = fieldnames(onoff);
-            for i = 1:numel(fields)
-                idx = idx + 1;
-                multi.names{idx} = fields{i};
-                multi.onsets{idx} = onoff.(fields{i});
-                multi.durations{idx} = zeros(size(multi.onsets{idx}));
-            end
-   
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn);
 
 
 
@@ -2310,3 +1327,114 @@ save_output = true;
         close(conn);
     end
 
+end
+
+% helper functions that augment the multi structure 
+
+function multi = add_games_to_multi(multi, subj_id, run, conn)
+    % from GLM 1: game instance boxcar regressor
+    %
+    assert(length(multi.names) == length(multi.onsets));
+    assert(length(multi.names) == length(multi.durations));
+    idx = length(multi.names);
+
+    [game_names, onsets, durs] = get_games(subj_id, run, conn);
+    for i = 1:numel(game_names)
+        % instance boxcar regressor
+        idx = idx + 1;
+        multi.names{idx} = game_names{i};
+        multi.onsets{idx} = onsets{i};
+        multi.durations{idx} = durs{i};
+    end
+end
+
+function multi = add_keypresses_to_multi(multi, subj_id, run, conn)
+    assert(length(multi.names) == length(multi.onsets));
+    assert(length(multi.names) == length(multi.durations));
+    idx = length(multi.names);
+
+    [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
+
+    for k = 1:numel(keyNames)
+        if size(keypresses{k}, 1) > 0
+            idx = idx + 1;
+            multi.names{idx} = keyNames{k}; % TODO rm prefix... but already ran
+            multi.onsets{idx} = keypresses{k}(:,1)';
+            multi.durations{idx} = zeros(size(multi.onsets{idx}));
+        end
+    end
+end
+
+function multi = add_keyholds_to_multi(multi, subj_id, run, conn)
+    % from GLM 5: keyholds nuisance regressors
+    %
+    assert(length(multi.names) == length(multi.onsets));
+    assert(length(multi.names) == length(multi.durations));
+    idx = length(multi.names);
+
+    [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
+    if subj_id == 1
+        % we screwed up keyholds for subject 1, so we use estimates from keypresses
+        keyholds = keyholds_post
+    end
+    % key hold boxcar regressors
+    for k = 1:numel(keyNames)
+        if size(keyholds{k}, 1) > 0
+            idx = idx + 1;
+            multi.names{idx} = keyNames{k};
+            multi.onsets{idx} = keyholds{k}(:,1)';
+            multi.durations{idx} = keyholds{k}(:,2)';
+        end
+    end
+end
+
+function multi = add_visuals_to_multi(multi, subj_id, run, conn)
+    % GLM 7: frame nuisance regressors
+    %
+    assert(length(multi.names) == length(multi.onsets));
+    assert(length(multi.names) == length(multi.durations));
+    idx = length(multi.names);
+
+    [fields, visuals] = get_visuals(subj_id, run, conn, true);
+    idx = idx + 1;
+    multi.names{idx} = 'frames';
+    multi.onsets{idx} = visuals.timestamps';
+    multi.durations{idx} = visuals.durations';
+
+    multi.orth{idx} = 0; % do not orthogonalise them
+
+    pix = 0;
+    for i = 1:numel(fields)
+        if ~ismember(fields{i}, {'timestamps', 'durations'}) 
+            if all(visuals.(fields{i}) == visuals.(fields{i})(1))
+                % constant
+                continue
+            end
+            if ((subj_id == 18 && run.run_id == 2) || (subj_id == 30 && run.run_id == 4)) && strcmp(fields{i}, 'effectsByCol')
+                % collinearity, special case
+                continue
+            end
+            pix = pix + 1;
+            multi.pmod(idx).name{pix} = fields{i};
+            multi.pmod(idx).param{pix} = visuals.(fields{i});
+            multi.pmod(idx).poly{pix} = 1;
+        end
+    end
+end
+
+function multi = add_onoff_to_multi(multi, subj_id, run, conn)
+    % GLM 8: on/off nuisance regressors
+    %
+    assert(length(multi.names) == length(multi.onsets));
+    assert(length(multi.names) == length(multi.durations));
+    idx = length(multi.names);
+
+    [onoff] = get_onoff(subj_id, run, conn, true);
+    fields = fieldnames(onoff);
+    for i = 1:numel(fields)
+        idx = idx + 1;
+        multi.names{idx} = fields{i};
+        multi.onsets{idx} = onoff.(fields{i});
+        multi.durations{idx} = zeros(size(multi.onsets{idx}));
+    end
+end
