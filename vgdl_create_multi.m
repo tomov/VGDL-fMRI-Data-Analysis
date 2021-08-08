@@ -583,10 +583,12 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
                 multi.pmod(1).poly{idx} = 1;
             end
 
-            idx = idx + 1;
-            multi.pmod(1).name{idx} = 'termination_change_flag';
-            multi.pmod(1).param{idx} = regs.termination_change_flag;
-            multi.pmod(1).poly{idx} = 1;
+            if any(regs.termination_change_flag)
+                idx = idx + 1;
+                multi.pmod(1).name{idx} = 'termination_change_flag';
+                multi.pmod(1).param{idx} = regs.termination_change_flag;
+                multi.pmod(1).poly{idx} = 1;
+            end
 
 
         % theory_change_flag - avatar_collision_flag (orth)
@@ -816,16 +818,20 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
                 multi.durations{idx} = zeros(size(multi.onsets{idx}));;
             end
 
-            idx = idx + 1;
-            multi.names{idx} = 'interaction_change_flag';
-            multi.onsets{idx} = regs.interaction_change_flag_onsets;
-            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            if length(regs.interaction_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'interaction_change_flag';
+                multi.onsets{idx} = regs.interaction_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
 
 
-            idx = idx + 1;
-            multi.names{idx} = 'termination_change_flag';
-            multi.onsets{idx} = regs.termination_change_flag_onsets;
-            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            if length(regs.termination_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'termination_change_flag';
+                multi.onsets{idx} = regs.termination_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
 
 
         % old sprite_change_flag, interaction_change_flag, termination_change_flag 
@@ -845,16 +851,19 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
                 multi.durations{idx} = zeros(size(multi.onsets{idx}));;
             end
 
-            idx = idx + 1;
-            multi.names{idx} = 'interaction_change_flag';
-            multi.onsets{idx} = regs.interaction_change_flag_onsets;
-            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            if length(regs.interaction_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'interaction_change_flag';
+                multi.onsets{idx} = regs.interaction_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
 
-
-            idx = idx + 1;
-            multi.names{idx} = 'termination_change_flag';
-            multi.onsets{idx} = regs.termination_change_flag_onsets;
-            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            if length(regs.termination_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'termination_change_flag';
+                multi.onsets{idx} = regs.termination_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
 
 
         % interaction_change_flag or termination_change_flag 
@@ -966,16 +975,20 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
                 multi.durations{idx} = zeros(size(multi.onsets{idx}));;
             end
 
-            idx = idx + 1;
-            multi.names{idx} = 'interaction_change_flag';
-            multi.onsets{idx} = regs.interaction_change_flag_onsets;
-            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            if length(regs.interaction_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'interaction_change_flag';
+                multi.onsets{idx} = regs.interaction_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
 
 
-            idx = idx + 1;
-            multi.names{idx} = 'termination_change_flag';
-            multi.onsets{idx} = regs.termination_change_flag_onsets;
-            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            if length(regs.termination_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'termination_change_flag';
+                multi.onsets{idx} = regs.termination_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
 
 
             % GLM 9: nuisance regressors
@@ -1248,10 +1261,12 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
 
             regs = get_regressors(subj_id, run, conn, true);
 
-            idx = idx + 1;
-            multi.names{idx} = 'interaction_change_flag';
-            multi.onsets{idx} = regs.interaction_change_flag_onsets;
-            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            if length(regs.interaction_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'interaction_change_flag';
+                multi.onsets{idx} = regs.interaction_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
 
 
             % GLM 9: nuisance regressors
@@ -1271,10 +1286,12 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
 
             regs = get_regressors(subj_id, run, conn, true);
 
-            idx = idx + 1;
-            multi.names{idx} = 'termination_change_flag';
-            multi.onsets{idx} = regs.termination_change_flag_onsets;
-            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            if length(regs.termination_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'termination_change_flag';
+                multi.onsets{idx} = regs.termination_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
 
 
             % GLM 9: nuisance regressors
@@ -1321,6 +1338,24 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             multi = add_keyholds_to_multi(multi, subj_id, run, conn);
             multi = add_visuals_to_multi(multi, subj_id, run, conn);
             multi = add_onoff_to_multi(multi, subj_id, run, conn);
+
+        % sprite_change_flag
+        % c/p GLM 3
+        %
+        case 85
+
+            idx = 0;
+
+            regs = get_regressors(subj_id, run, conn, true);
+            onsets = regs.sprite_change_flag_onsets;
+
+            if length(regs.sprite_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'sprite_change_flag';
+                multi.onsets{idx} = onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
+
 
 
 
