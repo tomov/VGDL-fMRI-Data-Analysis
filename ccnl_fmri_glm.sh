@@ -6,15 +6,17 @@ mkdir output
 
 # this is crucial -- we can't simulate the subjects that don't have the full data; we don't want ccnl_fmri_glm to error out (note that when we were doing them in parallel before, it didn't matter if one subject failed b/c all other jobs would still continue)
 #
-goodSubjects=( 1 2 3 4 5 6 7 8 )  # same as getGoodSubjects(), e.g. goodSubjects = ( 1 2 3 5 7 10 )
+goodSubjects=( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 )  # same as getGoodSubjects(), e.g. goodSubjects = ( 1 2 3 5 7 10 )
 subj_arg="${goodSubjects[@]}" # stringify it
+
+models=(55 56 51 52 71 79 85 )
 
 echo ---------------- >> jobs.txt
 echo --- $(date): Running ccnl_fmri_glm for subjects ${subj_arg} >> jobs.txt
 echo ---------------- >> jobs.txt
 
 
-for model in {22..22}
+for model in "${models[@]}"
 do
     shuffledSubjects=( $(printf '%s\n' "${goodSubjects[@]}" | shuf ) )   # shuffle subjects so parallel GLM's don't use the same hard disk
     subj_arg="${shuffledSubjects[@]}" # stringify it
@@ -24,7 +26,7 @@ do
 
     # send the job to NCF
     #
-    sbatch_output=`sbatch -p ncf --mem 20000 -t 1-12:20 -o ${outfileprefix}_%j.out -e ${outfileprefix}_%j.err --wrap="matlab -nodisplay -nosplash -nojvm -r $'ccnl_fmri_glm(vgdl_expt(), $model, [$subj_arg]);exit'"`
+    sbatch_output=`sbatch -p ncf --mem 10000 -t 1-12:20 -o ${outfileprefix}_%j.out -e ${outfileprefix}_%j.err --wrap="matlab -nodisplay -nosplash -nojvm -r $'ccnl_fmri_glm(vgdl_expt(), $model, [$subj_arg]);exit'"`
     # for local testing
     #sbatch_output=`echo Submitted batch job 88725418`
     echo $sbatch_output

@@ -545,7 +545,8 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             end
 
 
-            if length(regs.termination_change_flag_onsets) > 0
+            % sometimes interactions and terminations are identical
+            if length(regs.termination_change_flag_onsets) > 0 && (length(regs.termination_change_flag_onsets) ~= length(regs.interaction_change_flag_onsets) || any(regs.interaction_change_flag_onsets ~= regs.termination_change_flag_onsets))
                 idx = idx + 1;
                 multi.names{idx} = 'termination_change_flag';
                 multi.onsets{idx} = regs.termination_change_flag_onsets;
@@ -583,7 +584,8 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
                 multi.pmod(1).poly{idx} = 1;
             end
 
-            if any(regs.termination_change_flag)
+            % sometimes interactions and terminations are identical
+            if any(regs.termination_change_flag) && any(xor(regs.interaction_change_flag, regs.termination_change_flag))
                 idx = idx + 1;
                 multi.pmod(1).name{idx} = 'termination_change_flag';
                 multi.pmod(1).param{idx} = regs.termination_change_flag;
@@ -883,10 +885,12 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             tec = logical(tec);
             assert(all(regs.timestamps(tec) == regs.termination_change_flag_onsets));
 
-            idx = idx + 1;
-            multi.names{idx} = 'interaction_or_termination_change_flag';
-            multi.onsets{idx} = regs.timestamps(ic | tec);
-            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            if any(ic | tec)
+                idx = idx + 1;
+                multi.names{idx} = 'interaction_or_termination_change_flag';
+                multi.onsets{idx} = regs.timestamps(ic | tec);
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
 
 
             %{
@@ -1102,10 +1106,12 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             tec = logical(tec);
             assert(all(regs.timestamps(tec) == regs.termination_change_flag_onsets));
 
-            idx = idx + 1;
-            multi.names{idx} = 'interaction_or_termination_change_flag';
-            multi.onsets{idx} = regs.timestamps(ic | tec);
-            multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            if any(ic | tec)
+                idx = idx + 1;
+                multi.names{idx} = 'interaction_or_termination_change_flag';
+                multi.onsets{idx} = regs.timestamps(ic | tec);
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
 
             % GLM 9: nuisance regressors
             multi = add_games_to_multi(multi, subj_id, run, conn);
