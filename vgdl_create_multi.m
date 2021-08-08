@@ -42,9 +42,9 @@ save_output = true;
     SPM_run_id = run_id; % save the SPM run_id (SPM doesn't see bad run_ids)
   
     % skip bad run_ids
-    % TODO enable
-    %run_ids = find(goodRuns{find(subj_id == allSubjects)});
-    %run_id = run_ids(run_id);
+    assert(find(subj_id == allSubjects) == subj_id); % not sure if this works if we skip subjects
+    run_ids = find(goodRuns{find(subj_id == allSubjects)});
+    run_id = run_ids(run_id);
     fprintf('run_id %d \n', run_id);
 
     filename = sprintf('mat/vgdl_create_multi_glm%d_subj%d_run%d.mat', glmodel, subj_id, run_id)
@@ -278,6 +278,10 @@ save_output = true;
                         % constant
                         continue
                     end
+                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                        % collinearity, special case
+                        continue
+                    end
                     idx = idx + 1;
                     multi.pmod(1).name{idx} = fields{i};
                     multi.pmod(1).param{idx} = visuals.(fields{i});
@@ -354,6 +358,10 @@ save_output = true;
                 if ~ismember(fields{i}, {'timestamps', 'durations'}) 
                     if all(visuals.(fields{i}) == visuals.(fields{i})(1))
                         % constant
+                        continue
+                    end
+                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                        % collinearity, special case
                         continue
                     end
                     pix = pix + 1;
@@ -469,6 +477,10 @@ save_output = true;
                 if ~ismember(fields{i}, {'timestamps', 'durations'}) 
                     if all(visuals.(fields{i}) == visuals.(fields{i})(1))
                         % constant
+                        continue
+                    end
+                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                        % collinearity, special case
                         continue
                     end
                     pix = pix + 1;
@@ -946,6 +958,10 @@ save_output = true;
                         % constant
                         continue
                     end
+                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                        % collinearity, special case
+                        continue
+                    end
                     pix = pix + 1;
                     multi.pmod(idx).name{pix} = fields{i};
                     multi.pmod(idx).param{pix} = visuals.(fields{i});
@@ -1028,6 +1044,10 @@ save_output = true;
                         % constant
                         continue
                     end
+                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                        % collinearity, special case
+                        continue
+                    end
                     pix = pix + 1;
                     multi.pmod(idx).name{pix} = fields{i};
                     multi.pmod(idx).param{pix} = visuals.(fields{i});
@@ -1108,6 +1128,10 @@ save_output = true;
                 if ~ismember(fields{i}, {'timestamps', 'durations'}) 
                     if all(visuals.(fields{i}) == visuals.(fields{i})(1))
                         % constant
+                        continue
+                    end
+                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                        % collinearity, special case
                         continue
                     end
                     pix = pix + 1;
@@ -1351,6 +1375,10 @@ save_output = true;
                         % constant
                         continue
                     end
+                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                        % collinearity, special case
+                        continue
+                    end
                     pix = pix + 1;
                     multi.pmod(idx).name{pix} = fields{i};
                     multi.pmod(idx).param{pix} = visuals.(fields{i});
@@ -1446,6 +1474,10 @@ save_output = true;
                 if ~ismember(fields{i}, {'timestamps', 'durations'}) 
                     if all(visuals.(fields{i}) == visuals.(fields{i})(1))
                         % constant
+                        continue
+                    end
+                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                        % collinearity, special case
                         continue
                     end
                     pix = pix + 1;
@@ -1580,6 +1612,10 @@ save_output = true;
                         % constant
                         continue
                     end
+                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                        % collinearity, special case
+                        continue
+                    end
                     pix = pix + 1;
                     multi.pmod(idx).name{pix} = fields{i};
                     multi.pmod(idx).param{pix} = visuals.(fields{i});
@@ -1680,6 +1716,10 @@ save_output = true;
                         % constant
                         continue
                     end
+                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                        % collinearity, special case
+                        continue
+                    end
                     pix = pix + 1;
                     multi.pmod(idx).name{pix} = fields{i};
                     multi.pmod(idx).param{pix} = visuals.(fields{i});
@@ -1737,6 +1777,10 @@ save_output = true;
                 if ~ismember(fields{i}, {'timestamps', 'durations'}) 
                     if all(visuals.(fields{i}) == visuals.(fields{i})(1))
                         % constant
+                        continue
+                    end
+                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                        % collinearity, special case
                         continue
                     end
                     pix = pix + 1;
@@ -1878,6 +1922,10 @@ save_output = true;
                         % constant
                         continue
                     end
+                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                        % collinearity, special case
+                        continue
+                    end
                     pix = pix + 1;
                     multi.pmod(idx).name{pix} = fields{i};
                     multi.pmod(idx).param{pix} = visuals.(fields{i});
@@ -1959,6 +2007,10 @@ save_output = true;
                         % constant
                         continue
                     end
+                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                        % collinearity, special case
+                        continue
+                    end
                     pix = pix + 1;
                     multi.pmod(idx).name{pix} = fields{i};
                     multi.pmod(idx).param{pix} = visuals.(fields{i});
@@ -2038,6 +2090,10 @@ save_output = true;
                         % constant
                         continue
                     end
+                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                        % collinearity, special case
+                        continue
+                    end
                     pix = pix + 1;
                     multi.pmod(idx).name{pix} = fields{i};
                     multi.pmod(idx).param{pix} = visuals.(fields{i});
@@ -2115,6 +2171,10 @@ save_output = true;
                 if ~ismember(fields{i}, {'timestamps', 'durations'}) 
                     if all(visuals.(fields{i}) == visuals.(fields{i})(1))
                         % constant
+                        continue
+                    end
+                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                        % collinearity, special case
                         continue
                     end
                     pix = pix + 1;
@@ -2210,6 +2270,10 @@ save_output = true;
                 if ~ismember(fields{i}, {'timestamps', 'durations'}) 
                     if all(visuals.(fields{i}) == visuals.(fields{i})(1))
                         % constant
+                        continue
+                    end
+                    if subj_id == 18 && run.run_id == 2 && strcmp(fields{i}, 'effectsByCol')
+                        % collinearity, special case
                         continue
                     end
                     pix = pix + 1;

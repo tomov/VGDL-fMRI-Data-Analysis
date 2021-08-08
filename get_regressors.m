@@ -201,6 +201,10 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, collec
                 ttt = t;
 
                 plays_post = find(conn, 'plays_post', 'query', q);
+                if length(plays_post) ~= 1
+                    disp('bbb')
+                    keyboard
+                end
                 assert(length(plays_post) == 1);
                 play_post = plays_post(1);
 
@@ -263,7 +267,7 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, collec
         % this is a challenge b/c we log ones in state timestamps and the others in keystate timestamps (logged separately in core.py), and b/c they have different lengths (b/c EMPA skips initial and last state)
         % so we have to manually adjust for that; in the end, we treat the keystates timestamps as ground truth
         assert(all(regs.state_timestamps > regs.keystate_timestamps)); % states are logged after keystates
-        assert(mean(regs.state_timestamps - regs.keystate_timestamps) < 0.02); % ...but not too long after (~0.05 is the difference between two frames); notice if we're misaligned, lots of them will be off; maybe compare w/ mean(regs.state_timestamps(2:end) - regs.state_timestamps(1:end-1))
+        assert(mean(regs.state_timestamps - regs.keystate_timestamps) < 0.025); % ...but not too long after (~0.05 is the difference between two frames); notice if we're misaligned, lots of them will be off; maybe compare w/ mean(regs.state_timestamps(2:end) - regs.state_timestamps(1:end-1))
 
         regs.timestamps = regs.keystate_timestamps;
 

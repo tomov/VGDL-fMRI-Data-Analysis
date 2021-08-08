@@ -3,7 +3,7 @@
 % https://www.mathworks.com/help/database/ug/mongo.html#d117e86584
 conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54')
 
-subj_id = 18;
+subj_id = 24;
 run_id = 1;
 
 % https://www.mathworks.com/help/database/ug/mongo.find.html
@@ -138,7 +138,7 @@ for r = 1:length(runs)
         end
     end
 
-    title(['Subject ', num2str(subj_id)]);
+    title(['Subject ', num2str(subj_id), ', run ', num2str(run.run_id)]);
 
     plot(x, rr);
     plot(x, bb);
