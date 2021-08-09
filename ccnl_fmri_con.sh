@@ -9,7 +9,7 @@ subj_arg="${goodSubjects[@]}" # stringify it
 models=(55 56 51 52 71 79 85 )
 
 echo ---------------- >> jobs.txt
-echo --- $(date): Running ccnl_fmri_con for GLMs ${models}, subjects ${subj_arg} >> jobs.txt
+echo --- $(date): Running ccnl_fmri_con for subjects ${subj_arg} >> jobs.txt
 echo ---------------- >> jobs.txt
 
 

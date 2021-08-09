@@ -1363,6 +1363,81 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             end
 
 
+        case 86
+
+            idx = 0;
+
+            regs = get_regressors(subj_id, run, conn, true);
+
+            if length(regs.sprite_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'sprite_change_flag';
+                multi.onsets{idx} = regs.sprite_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
+
+
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn);
+
+        % interaction_change_flag, termination_change_flag 
+        % union GLMs 51..52
+        %
+        case 87
+
+            idx = 0;
+
+            regs = get_regressors(subj_id, run, conn, true);
+
+            if length(regs.interaction_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'interaction_change_flag';
+                multi.onsets{idx} = regs.interaction_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
+
+
+            % sometimes interactions and terminations are identical
+            if length(regs.termination_change_flag_onsets) > 0 && (length(regs.termination_change_flag_onsets) ~= length(regs.interaction_change_flag_onsets) || any(regs.interaction_change_flag_onsets ~= regs.termination_change_flag_onsets))
+                idx = idx + 1;
+                multi.names{idx} = 'termination_change_flag';
+                multi.onsets{idx} = regs.termination_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
+
+        % interaction_change_flag, termination_change_flag 
+        % union GLMs 51..52 + nuisance regressors
+        %
+        case 88
+
+            idx = 0;
+
+            regs = get_regressors(subj_id, run, conn, true);
+
+            if length(regs.interaction_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'interaction_change_flag';
+                multi.onsets{idx} = regs.interaction_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
+
+
+            % sometimes interactions and terminations are identical
+            if length(regs.termination_change_flag_onsets) > 0 && (length(regs.termination_change_flag_onsets) ~= length(regs.interaction_change_flag_onsets) || any(regs.interaction_change_flag_onsets ~= regs.termination_change_flag_onsets))
+                idx = idx + 1;
+                multi.names{idx} = 'termination_change_flag';
+                multi.onsets{idx} = regs.termination_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
+
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn);
 
 
         otherwise
