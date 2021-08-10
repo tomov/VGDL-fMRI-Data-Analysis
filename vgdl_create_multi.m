@@ -987,7 +987,7 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             end
 
 
-            if length(regs.termination_change_flag_onsets) > 0
+            if length(regs.termination_change_flag_onsets) > 0 && (length(regs.termination_change_flag_onsets) ~= length(regs.interaction_change_flag_onsets) || any(regs.interaction_change_flag_onsets ~= regs.termination_change_flag_onsets))
                 idx = idx + 1;
                 multi.names{idx} = 'termination_change_flag';
                 multi.onsets{idx} = regs.termination_change_flag_onsets;
