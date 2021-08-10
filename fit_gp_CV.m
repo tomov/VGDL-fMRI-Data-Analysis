@@ -1,4 +1,4 @@
-function fit_gp_CV(subj, use_smooth, glmodel, mask, what, fast, debug)
+function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, fast, debug)
 
 %{
     subj = 1;
@@ -8,6 +8,7 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, fast, debug)
     mask = 'masks/ROI_x=48_y=12_z=32_1voxels_Sphere1.nii';
     %mask = 'masks/mask_batchsize=1000_batch=2.nii';
     %mask = 'masks/mask.nii';
+    model
     what = 'theory';
     fast = true;
     debug = false;
@@ -26,14 +27,13 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, fast, debug)
         debug = false;
     end
 
-    assert(ismember(what, {'theory', 'sprite', 'interaction', 'termination'}));
 
 
     [~,maskname,~] = fileparts(mask);
     if fast
-        filename = sprintf('mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_%s_nsamples=1_fast.mat', subj, use_smooth, glmodel, maskname, what);
+        filename = sprintf('mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=1_fast.mat', subj, use_smooth, glmodel, maskname, model_name, what);
     else
-        filename = sprintf('mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_%s_nsamples=1_notfast.mat', subj, use_smooth, glmodel, maskname, what);
+        filename = sprintf('mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=1_notfast.mat', subj, use_smooth, glmodel, maskname, model_name, what);
     end
     filename
 
@@ -52,14 +52,23 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, fast, debug)
 
     fprintf('loading kernel for subj %d\n', subj);
     tic
-    ker = load_HRR_kernel(subj, what);
-    null_ker = load_null_kernel(EXPT, subj); % GLM 1 game id features
+    switch model_name
+        case 'EMPA'
+            assert(ismember(what, {'theory', 'sprite', 'interaction', 'termination'}));
+            ker = load_HRR_kernel(subj, what);
+        case 'DQN'
+            assert(ismember(what, {'conv1', 'conv2', 'conv3', 'linear1', 'linear2'}));
+            ker = load_DQN_kernel(subj, what)
+        case 'game'
+            ker = load_game_kernel(EXPT, subj); % GLM 1 game id features
+        otherwise
+            assert(false, 'invalid model name')
+    end
     toc
 
     % whiten, filter & project out nuisance regressors
     Y = R*K*W*Y;
     ker = R*K*W*ker*W'*K'*R';
-    null_ker = R*K*W*null_ker*W'*K'*R'; % TODO technically, R should project out the null kernel! b/c game identity features were already part of GLM 1
 
     % get partitions from RSA 3
     rsa = vgdl_create_rsa(3, subj);
@@ -69,7 +78,6 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, fast, debug)
 
     % find nearest symmetric positive definite matrix (it's not b/c of numerical issues, floating points, etc.)
     ker = nearestSPD(ker);
-    null_ker = nearestSPD(null_ker);
 
 
     %
@@ -99,12 +107,6 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, fast, debug)
     covfun = {@covDiscrete, n};
     likfun = @likGauss;
     hyp = hyp_from_ker(ker);
-
-    % same for null model
-    null_meanfun = @meanConst;
-    null_covfun = {@covDiscrete, n};
-    null_likfun = @likGauss;
-    null_hyp = hyp_from_ker(null_ker);
 
     % same for noise ceiling model
     % from http://www.gaussianprocess.org/gpml/code/matlab/doc/, section 4a)
@@ -136,13 +138,6 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, fast, debug)
 
         ker_invKi{j} = ker * invKi{j};
 
-        [null_sn2(j), ...
-         null_ldB2(j), ...
-         null_solveKiW{j}, ...
-         null_invKi{j}] = calc_invKi(null_ker, x, s, null_hyp, covfun);
-
-        null_ker_invKi{j} = null_ker * null_invKi{j};
-
         toc
 
         disp('    ... for CV');
@@ -161,13 +156,6 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, fast, debug)
              invKi_CV{p,j}] = calc_invKi(ker(train, train), x(train), s, hyp, covfun);
 
             ker_invKi_CV{p,j} = ker(test, train) * invKi_CV{p,j};
-
-            [null_sn2_CV(p,j), ...
-             null_ldB2_CV(p,j), ...
-             null_solveKiW_CV{p,j}, ...
-             null_invKi_CV{p,j}] = calc_invKi(null_ker(train, train), x(train), s, null_hyp, covfun);
-
-            null_ker_invKi_CV{p,j} = null_ker(test, train) * null_invKi_CV{p,j};
         end
 
         toc
@@ -197,26 +185,6 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, fast, debug)
     r_CV = nan(n_partitions, size(Y,2));
     MSE_CV = nan(n_partitions, size(Y,2));
     SMSE_CV = nan(n_partitions, size(Y,2));
-
-    % same but null kernel
-    null_sigma = nan(1, size(Y,2)); % fitted noise std's
-    null_logmarglik = nan(1, size(Y,2)); % marginal log likelihoods
-    null_logpredlik = nan(1, size(Y,2)); % predictive log likelihoods
-    null_R2 = nan(1, size(Y,2)); % R^2
-    null_adjR2 = nan(1, size(Y,2)); % adjusted R^2
-    null_r = nan(1, size(Y,2)); % Pearson correlation
-    null_MSE = nan(1, size(Y,2)); % MSE 
-    null_SMSE = nan(1, size(Y,2)); % SMSE 
-
-    % same but cross-validated
-    null_sigma_CV = nan(n_partitions, size(Y,2));
-    null_logmarglik_CV = nan(n_partitions, size(Y,2));
-    null_logpredlik_CV = nan(n_partitions, size(Y,2));
-    null_R2_CV = nan(n_partitions, size(Y,2));
-    null_adjR2_CV = nan(n_partitions, size(Y,2));
-    null_r_CV = nan(n_partitions, size(Y,2));
-    null_MSE_CV = nan(n_partitions, size(Y,2));
-    null_SMSE_CV = nan(n_partitions, size(Y,2));
 
     % same but noise ceiling kernel
     ceil_sigma = nan(1, size(Y,2)); % fitted noise std's
@@ -266,17 +234,6 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, fast, debug)
          MSE(i), ...
          SMSE(i)] = fit_gp_helper(x, y, train, test, ker, hyp, meanfun, covfun, likfun, sigmas, invKi, ldB2, sn2, solveKiW, ker_invKi, fast, debug);
 
-        % fit null model
-        [null_sigma(i), ...
-         null_logmarglik(i), ...
-         null_logpredlik(i), ...
-         null_y_hat, ...
-         null_R2(i), ...
-         null_adjR2(i), ...
-         null_r(i), ...
-         null_MSE(i), ... 
-         null_SMSE(i)] = fit_gp_helper(x, y, train, test, null_ker, null_hyp, null_meanfun, null_covfun, null_likfun, sigmas, null_invKi, null_ldB2, null_sn2, null_solveKiW, null_ker_invKi, fast, debug);
-
         % fit noise ceiling model
         if ~fast
             [ceil_sigma(i), ...
@@ -307,17 +264,6 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, fast, debug)
              r_CV(p,i), ...
              MSE_CV(p,i), ...
              SMSE_CV(p,i)] = fit_gp_helper(x, y, train, test, ker, hyp, meanfun, covfun, likfun, sigmas, invKi_CV(p,:), ldB2_CV(p,:), sn2_CV(p,:), solveKiW_CV(p,:), ker_invKi_CV(p,:), fast, debug);
-
-            % null model
-            [null_sigma_CV(p,i), ...
-             null_logmarglik_CV(p,i), ...
-             null_logpredlik_CV(p,i), ...
-             null_y_hat_CV(test), ...
-             null_R2_CV(p,i), ...
-             null_adjR2_CV(p,i), ...
-             null_r_CV(p,i), ...
-             null_MSE_CV(p,i), ...
-             null_SMSE_CV(p,i)] = fit_gp_helper(x, y, train, test, null_ker, null_hyp, null_meanfun, null_covfun, null_likfun, sigmas, null_invKi_CV(p,:), null_ldB2_CV(p,:), null_sn2_CV(p,:), null_solveKiW_CV(p,:), null_ker_invKi_CV(p,:), fast, debug);
 
             % noise ceiling model
             if ~fast
@@ -375,8 +321,6 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, what, fast, debug)
     %}
     save(filename, 'sigma', 'logmarglik', 'logpredlik', 'R2', 'adjR2', 'r', 'MSE', 'SMSE', ... 
                    'sigma_CV', 'logmarglik_CV', 'logpredlik_CV', 'R2_CV', 'adjR2_CV', 'r_CV', 'MSE_CV', 'SMSE_CV', ...
-                   'null_sigma', 'null_logmarglik', 'null_logpredlik', 'null_R2', 'null_adjR2', 'null_r', 'null_MSE', 'null_SMSE', ...
-                   'null_sigma_CV', 'null_logmarglik_CV', 'null_logpredlik_CV', 'null_R2_CV', 'null_adjR2_CV', 'null_r_CV', 'null_MSE_CV', 'null_SMSE_CV', ...
                    'ceil_sigma', 'ceil_logmarglik', 'ceil_logpseudolik', 'ceil_R2', 'ceil_adjR2', 'ceil_r', 'ceil_MSE', 'ceil_SMSE', ...
                    'ceil_sigma_CV', 'ceil_logmarglik_CV', 'ceil_logpseudolik_CV', 'ceil_R2_CV', 'ceil_adjR2_CV', 'ceil_r_CV', 'ceil_MSE_CV', 'ceil_SMSE_CV', ...
                    'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'sigmas', 'n', ...
@@ -454,7 +398,7 @@ end
 
 % load game identity kernel based on GLM 1
 %
-function [ker] = load_null_kernel(EXPT, subj_id)
+function [ker] = load_game_kernel(EXPT, subj_id)
     feature_glm = 1;
 
     modeldir = fullfile(EXPT.modeldir,['model',num2str(feature_glm)],['subj',num2str(subj_id)]);
@@ -496,3 +440,9 @@ function [ker] = load_HRR_kernel(subj_id, what)
 end
 
 
+function [ker] = load_DQN_kernel(subj_id, what)
+    filename = sprintf('mat/DQN_subject_kernel_subj=%d_sigma_w=1.000_norm=1.mat', subj_id);
+    load(filename, 'layer_conv1_output_kernel', 'layer_conv2_output_kernel', 'layer_conv3_output_kernel', 'layer_linear1_output_kernel', 'layer_linear2_output_kernel');
+
+    ker = eval(['layer_', what, '_output_kernel']);
+end
