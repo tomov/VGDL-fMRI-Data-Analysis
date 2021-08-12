@@ -1,4 +1,4 @@
-function fit_ridge_CV(subj, use_smooth, glmodel, mask, subsample_only)
+function fit_ridge_CV(subj, use_smooth, glmodel, mask, model_name, what, subsample_only)
     % copied from fit_gp_CV.m and decode_gp_CV.m
 
 
@@ -14,7 +14,7 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask, subsample_only)
     subsample_only = true;
     %}
 
-    what = 'theory';
+    %what = 'theory';
 
     assert(isequal(what, 'theory'));
 
@@ -26,7 +26,7 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask, subsample_only)
 
 
     [~,maskname,~] = fileparts(mask);
-    filename = sprintf('mat/fit_ridge_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_subsample=%d_%s.mat', subj, use_smooth, glmodel, maskname, subsample_only, what);
+    filename = sprintf('mat/fit_ridge_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_subsample=%d.mat', subj, use_smooth, glmodel, maskname, model_name, what, subsample_only);
     filename
 
 
@@ -36,19 +36,30 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask, subsample_only)
 
     % create kernel and HRR regressors from theory id sequence
     %
-
-    fprintf('loading HRRs for subj %d\n', subj);
-    tic
-
-    load(sprintf('mat/unique_HRR_subject_subj=%d_K=10_N=10_E=0.050_nsamples=1_norm=1.mat', subj), 'theory_HRRs', 'run_id', 'ts', 'theory_id_seq', 'play_key', 'gameStrings', 'unique_theories_filename');
-    unique_theory_HRRs = theory_HRRs;
-    run_id_frames = run_id';
-    ts = ts';
-
     load('mat/SPM73.mat');
 
-    [theory_kernel, ~, HRRs, Xx] = gen_kernel_from_theory_id_seq(unique_theory_HRRs, theory_id_seq, ts, run_id_frames, SPM, subsample_only);
+    fprintf('loading HRRs/embeddings for subj %d\n', subj);
+    tic
 
+    switch model_name
+        case 'EMPA'
+            assert(ismember(what, {'theory', 'sprite', 'interaction', 'termination'}));
+            load(sprintf('mat/unique_HRR_subject_subj=%d_K=10_N=10_E=0.050_nsamples=1_norm=1.mat', subj), 'theory_HRRs', 'sprite_HRRs', 'interaction_HRRs', 'termination_HRRs', 'run_id', 'ts', 'theory_id_seq', 'play_key', 'gameStrings', 'unique_theories_filename');
+
+            unique_HRRs = eval([what, '_HRRs']);
+            run_id_frames = run_id';
+            ts = ts';
+            [ker, ~, HRRs, Xx] = gen_kernel_from_theory_id_seq(unique_HRRs, theory_id_seq, ts, run_id_frames, SPM, subsample_only);
+
+        case 'DQN'
+            assert(ismember(what, {'conv1', 'conv2', 'conv3', 'linear1', 'linear2'}));
+            load(sprintf('mat/DQN_subject_Xx_subj=%d_sigma_w=1.000_norm=1.mat', subj_id), 'layer_conv1_output_Xx', 'layer_conv2_output_Xx', 'layer_conv3_output_Xx', 'layer_linear1_output_Xx', 'layer_linear2_output_Xx');
+        
+            Xx = eval(['layer_', what, '_output_Xx']);
+
+        otherwise
+            assert(false, 'invalid model name')
+    end
     toc
 
 
@@ -218,7 +229,7 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask, subsample_only)
     filename
 
     save(filename, 'lambda', 'R2_CV', 'adjR2_CV', 'r_CV', 'MSE_CV', 'SMSE_CV', ...
-                   'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'lambdas', 'HRRs', 'Xx', ...
+                   'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'lambdas', 'Xx', ...
     '-v7.3');
 
     disp('Done');
