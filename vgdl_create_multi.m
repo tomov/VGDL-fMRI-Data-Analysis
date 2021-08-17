@@ -1146,7 +1146,9 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
                 field = fields{i};
 
                 assert(size(regs.(field), 2) == 1);
-                if all(regs.(field) == regs.(field)(1))
+                if max(regs.(field)) - min(regs.(field)) < 1e-3
+                    % all values are basically the same (0)
+                    % if we check for strict equality, will get invalid contrasts
                     continue;
                 end
 
