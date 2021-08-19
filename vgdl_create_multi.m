@@ -16,7 +16,7 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
     %   glmodel - positive integer indicating general linear model
     %   subj_id - integer specifying which subject is being analyzed
     %   run_id - integer specifying the run_id (1-indexed)
-    %
+    %w
 
     % OUTPUTS:
     %   multi - a sctructure with the folloowing fields
@@ -443,13 +443,13 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
                 'I_len', ...
                 'T_len', ...
                 'Igen_len', ...
-                'Tnov_len', ...
-                'Ip_len', ...
-                'dS_len', ...
-                'dI_len', ...
-                'dT_len', ...
-                'dIgen_len', ...
-                'dTnov_len', ...
+                'Tnov_len', ... % 43
+                'Ip_len', ... % 44
+                'dS_len', ... % 45
+                'dI_len', ... % 46
+                'dT_len', ... % 47
+                'dIgen_len', ... % 48
+                'dTnov_len', ... $ 49
                 'dIp_len'}
             map = containers.Map(26:50, fields);
             map(57) = 'surprise';
@@ -1007,34 +1007,12 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
         %
         case 69
 
-            idx = 0;
-
             % from GLM 30,31,32
-
-            %
-            [regs, ~, ~] = get_regressors(subj_id, run, conn, true);
             fields = {
                 'likelihood', ...
                 'sum_lik_play', ...
                 'surprise'}
-
-            idx = idx + 1;
-            multi.names{idx} = 'frames';
-            multi.onsets{idx} = regs.timestamps';
-            multi.durations{idx} = regs.durations';
-
-            multi.orth{1} = 0; % do not orthogonalise them
-
-            for i = 1:numel(fields)
-                field = fields{i};
-
-                multi.pmod(idx).name{i} = field;
-                multi.pmod(idx).param{i} = regs.(field);
-                multi.pmod(idx).poly{i} = 1;
-
-                multi.pmod(idx).param{i}(isnan(multi.pmod(idx).param{i})) = 0; % TODO happens for lik during first few timesteps; ideally, remove altogether
-            end
-
+            multi = add_frames_with_pmods(struct, subj_id, run, conn, fields)
 
             % GLM 9: nuisance regressors
             multi = add_games_to_multi(multi, subj_id, run, conn);
@@ -1046,34 +1024,14 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
         %
         case 70
 
-            idx = 0;
-
             % from GLM 30,31,32,57: sprite_change_flag, interaction_change_flag, termination_change_flag 
 
             %
-            [regs, ~, ~] = get_regressors(subj_id, run, conn, true);
             fields = {
                 'sum_lik_play', ...
                 'n_ts' ...
                 }
-
-            idx = idx + 1;
-            multi.names{idx} = 'frames';
-            multi.onsets{idx} = regs.timestamps';
-            multi.durations{idx} = regs.durations';
-
-            multi.orth{1} = 0; % do not orthogonalise them
-
-            for i = 1:numel(fields)
-                field = fields{i};
-
-                multi.pmod(idx).name{i} = field;
-                multi.pmod(idx).param{i} = regs.(field);
-                multi.pmod(idx).poly{i} = 1;
-
-                multi.pmod(idx).param{i}(isnan(multi.pmod(idx).param{i})) = 0; % TODO happens for lik during first few timesteps; ideally, remove altogether
-            end
-
+            multi = add_frames_with_pmods(struct, subj_id, run, conn, fields)
 
         % replan_flag 
         %
@@ -1125,39 +1083,13 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
         %
         case 76
 
-            idx = 0;
-
             % from GLM 30,31,32,57: sprite_change_flag, interaction_change_flag, termination_change_flag 
 
             %
-            [regs, ~, ~] = get_regressors(subj_id, run, conn, true);
             fields = {
                 'spriteKL', ...
                 }
-
-            idx = idx + 1;
-            multi.names{idx} = 'frames';
-            multi.onsets{idx} = regs.timestamps';
-            multi.durations{idx} = regs.durations';
-
-            multi.orth{1} = 0; % do not orthogonalise them
-
-            for i = 1:numel(fields)
-                field = fields{i};
-
-                assert(size(regs.(field), 2) == 1);
-                if max(regs.(field)) - min(regs.(field)) < 1e-3
-                    % all values are basically the same (0)
-                    % if we check for strict equality, will get invalid contrasts
-                    continue;
-                end
-
-                multi.pmod(idx).name{i} = field;
-                multi.pmod(idx).param{i} = regs.(field);
-                multi.pmod(idx).poly{i} = 1;
-
-                multi.pmod(idx).param{i}(isnan(multi.pmod(idx).param{i})) = 0; % TODO happens for lik during first few timesteps; ideally, remove altogether
-            end
+            multi = add_frames_with_pmods(struct, subj_id, run, conn, fields)
 
             % GLM 9: nuisance regressors
             multi = add_games_to_multi(multi, subj_id, run, conn);
@@ -1314,32 +1246,7 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
         %
         case 84
 
-            idx = 0;
-
-            % from GLM 30 
-
-            [regs, ~, ~] = get_regressors(subj_id, run, conn, true);
-            fields = {
-                'likelihood', ...
-                }
-
-            idx = idx + 1;
-            multi.names{idx} = 'frames';
-            multi.onsets{idx} = regs.timestamps';
-            multi.durations{idx} = regs.durations';
-
-            multi.orth{1} = 0; % do not orthogonalise them
-
-            for i = 1:numel(fields)
-                field = fields{i};
-
-                multi.pmod(idx).name{i} = field;
-                multi.pmod(idx).param{i} = regs.(field);
-                multi.pmod(idx).poly{i} = 1;
-
-                multi.pmod(idx).param{i}(isnan(multi.pmod(idx).param{i})) = 0; % TODO happens for lik during first few timesteps; ideally, remove altogether
-            end
-
+            multi = add_frames_with_pmods(struct, subj_id, run, conn, {'likelihood'})
 
             % GLM 9: nuisance regressors
             multi = add_games_to_multi(multi, subj_id, run, conn);
@@ -1564,5 +1471,39 @@ function multi = add_onoff_to_multi(multi, subj_id, run, conn)
         multi.names{idx} = fields{i};
         multi.onsets{idx} = onoff.(fields{i});
         multi.durations{idx} = zeros(size(multi.onsets{idx}));
+    end
+end
+
+function multi = add_frames_with_pmods(multi, subj_id, run, conn, fields)
+    % add regressors as parametric modulators to frames
+
+    [regs, ~, ~] = get_regressors(subj_id, run, conn, true);
+
+    if isfield(multi, 'names')
+        idx = length(multi.names) + 1;
+    else
+        idx = 1;
+    end
+    multi.names{idx} = 'frames';
+    multi.onsets{idx} = regs.timestamps';
+    multi.durations{idx} = regs.durations';
+
+    multi.orth{idx} = 0; % do not orthogonalise them
+
+    for i = 1:numel(fields)
+        field = fields{i};
+
+        assert(size(regs.(field), 2) == 1);
+        if strcmp(field, 'spriteKL') && max(regs.(field)) - min(regs.(field)) < 1e-3
+            % all values are basically the same (0)
+            % if we check for strict equality, will get invalid contrasts
+            continue;
+        end
+
+        multi.pmod(idx).name{i} = field;
+        multi.pmod(idx).param{i} = regs.(field);
+        multi.pmod(idx).poly{i} = 1;
+
+        multi.pmod(idx).param{i}(isnan(multi.pmod(idx).param{i})) = 0; % TODO happens for lik during first few timesteps; ideally, remove altogether
     end
 end
