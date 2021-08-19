@@ -195,7 +195,7 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, collec
                 regs.game_ids = [regs.game_ids; ones(size(durations)) * game_name_to_id(game_name)]; 
                 regs.block_ids = [regs.block_ids; ones(size(durations)) * block.block_id]; 
                 regs.instance_ids = [regs.instance_ids; ones(size(durations)) * instance.instance_id];
-                regs.play_ids = [regs.instance_ids; ones(size(durations)) * play.play_id];
+                regs.play_ids = [regs.play_ids; ones(size(durations)) * play.play_id];
                 regs.keystate_timestamps = [regs.keystate_timestamps; t - run.scan_start_ts]; % assuming all have the same ts; notice those are keystate timestamps (slightly off from state timestamps... sorry; see core.py)
 
                 ttt = t;
