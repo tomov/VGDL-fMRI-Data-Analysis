@@ -5,10 +5,10 @@ rsa_idxs = [3]
 
 EXPT = vgdl_expt;
 
-for glmodel = glmodels
+for rsa_idx = rsa_idxs 
     for subj = 1:length(EXPT.subject)
         for run = 1:length(EXPT.subject(subj).functional)
-            rsa = vgdl_create_rsa(rsa_idxs, subj)
+            rsa = vgdl_create_rsa(rsa_idx, subj)
         end
     end
 end

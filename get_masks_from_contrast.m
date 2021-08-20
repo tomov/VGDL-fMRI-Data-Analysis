@@ -1,5 +1,6 @@
-function [masks, region] = get_masks(glmodel, contrast, clusterFWEcorrect, extent, Num, sphere)
+function [masks, region] = get_masks_from_contrast(glmodel, contrast, clusterFWEcorrect, extent, Num, sphere)
 
+    % create spherical masks around peak ROIs from contrast
     % copied from Exploration
 
     if ~exist('sphere', 'var')
@@ -7,7 +8,6 @@ function [masks, region] = get_masks(glmodel, contrast, clusterFWEcorrect, exten
     end
 
     EXPT = vgdl_expt();
-
 
     % it's an actual contrast
     %
@@ -35,4 +35,3 @@ function [masks, region] = get_masks(glmodel, contrast, clusterFWEcorrect, exten
         %cmask = CI == CI(cor(c,1), cor(c,2), cor(c,3));
         ccnl_create_spherical_mask(cor(c,1), cor(c,2), cor(c,3), r, masks{c}, []);
     end
-
