@@ -40,12 +40,8 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
     [allSubjects, subj_dirs, goodRuns, goodSubjs] = vgdl_getSubjectsDirsAndRuns();
 
     SPM_run_id = run_id; % save the SPM run_id (SPM doesn't see bad run_ids)
-  
-    % skip bad run_ids
-    assert(find(subj_id == allSubjects) == subj_id); % not sure if this works if we skip subjects
-    run_ids = find(goodRuns{find(subj_id == allSubjects)});
-    run_id = run_ids(run_id);
-    fprintf('run_id %d \n', run_id);
+    run_id = get_behavioral_run_id(subj_id, SPM_run_id)
+    fprintf('behavioral run_id %d \n', run_id);
 
     filename = sprintf('mat/vgdl_create_multi_glm%d_subj%d_run%d.mat', glmodel, subj_id, run_id)
 

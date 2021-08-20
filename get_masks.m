@@ -16,6 +16,9 @@ function [masks, region] = get_masks(glmodel, contrast, clusterFWEcorrect, exten
     p = 0.001;
     alpha = 0.05;
     Dis = 20;
+    if ~exist('extent', 'var')
+        extent = []; % use default cluster size
+    end
     if ~exist('Num', 'var')
         Num = 1; % # peak voxels per cluster; default in bspmview is 3
     end
