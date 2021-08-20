@@ -406,7 +406,7 @@ function [ker] = load_game_kernel(EXPT, subj_id)
 
     if subj_id <= 11
         game_names = {'vgfmri3_chase','vgfmri3_helper','vgfmri3_bait','vgfmri3_lemmings','vgfmri3_plaqueAttack','vgfmri3_zelda'};
-    else:
+    else
         game_names = {'vgfmri4_chase', 'vgfmri4_helper', 'vgfmri4_bait', 'vgfmri4_lemmings', 'vgfmri4_avoidgeorge', 'vgfmri4_zelda'};
     end
 
@@ -433,7 +433,7 @@ end
 % load HRR kernel
 %
 function [ker] = load_HRR_kernel(subj_id, what)
-    filename = sprintf('mat/HRR_subject_kernel_subj=%d_K=10_N=10_E=0.050_nsamples=1_sigma_w=1.000_norm=1.mat', subj_id);
+    filename = sprintf('mat/HRR_subject_kernel_subj=%d_K=10_N=10_E=0.050_nsamples=100_sigma_w=1.000_norm=1.mat', subj_id);
     load(filename, 'theory_kernel', 'sprite_kernel', 'interaction_kernel', 'termination_kernel');
 
     ker = eval([what, '_kernel']);
