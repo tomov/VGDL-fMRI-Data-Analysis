@@ -20,12 +20,12 @@ function gen_PETHs(glmodel, contrast, Num, sphere)
         % a priori ROIs
         tag = glmodel; % fake "glmodel" = study tag
         glmodel = 9; % for load_BOLD; doesn't really matter
-        mask_filenames = get_masks_from_study(tag, sphere);
-        filename = sprintf('PETHs_tag=%s_sphere=%.1fmm.mat', tag, sphere);
+        [mask_filenames, regions] = get_masks_from_study(tag, sphere);
+        filename = sprintf('mat/PETHs_tag=%s_sphere=%.1fmm.mat', tag, sphere);
     else
         % actual GLM
-        mask_filenames = get_masks_from_contrast(glmodel, contrast, true, [], Num, sphere);
-        filename = sprintf('PETHs_glm=%d_con=%s_Num=%d_sphere=%.1fmm.mat', glmodel, contrast, Num, sphere);
+        [mask_filenames, regions] = get_masks_from_contrast(glmodel, contrast, true, [], Num, sphere);
+        filename = sprintf('mat/PETHs_glm=%d_con=%s_Num=%d_sphere=%.1fmm.mat', glmodel, contrast, Num, sphere);
     end
     disp(filename);
 
@@ -157,3 +157,4 @@ function gen_PETHs(glmodel, contrast, Num, sphere)
 
     save(filename);
 
+    disp('done');

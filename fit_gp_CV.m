@@ -31,9 +31,9 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, fast, debu
 
     [~,maskname,~] = fileparts(mask);
     if fast
-        filename = sprintf('mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=1_fast.mat', subj, use_smooth, glmodel, maskname, model_name, what);
+        filename = sprintf('mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_fast.mat', subj, use_smooth, glmodel, maskname, model_name, what);
     else
-        filename = sprintf('mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=1_notfast.mat', subj, use_smooth, glmodel, maskname, model_name, what);
+        filename = sprintf('mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_notfast.mat', subj, use_smooth, glmodel, maskname, model_name, what);
     end
     filename
 
@@ -70,9 +70,8 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, fast, debu
     Y = R*K*W*Y;
     ker = R*K*W*ker*W'*K'*R';
 
-    % get partitions from RSA 3
-    rsa = vgdl_create_rsa(3, subj);
-    partition_id = rsa.model(1).partitions;
+    % every couple of runs form a partition
+    partition_id = floor(run_id / 2) + 1;
     assert(size(partition_id, 1) == size(Y, 1));
     n_partitions = max(partition_id);
 
@@ -323,7 +322,7 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, fast, debu
                    'sigma_CV', 'logmarglik_CV', 'logpredlik_CV', 'R2_CV', 'adjR2_CV', 'r_CV', 'MSE_CV', 'SMSE_CV', ...
                    'ceil_sigma', 'ceil_logmarglik', 'ceil_logpseudolik', 'ceil_R2', 'ceil_adjR2', 'ceil_r', 'ceil_MSE', 'ceil_SMSE', ...
                    'ceil_sigma_CV', 'ceil_logmarglik_CV', 'ceil_logpseudolik_CV', 'ceil_R2_CV', 'ceil_adjR2_CV', 'ceil_r_CV', 'ceil_MSE_CV', 'ceil_SMSE_CV', ...
-                   'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'sigmas', 'n', ...
+                   'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'sigmas', 'n', 'partition_id', ...
     '-v7.3');
 
     disp('Done');

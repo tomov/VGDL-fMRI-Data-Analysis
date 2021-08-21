@@ -3,8 +3,9 @@
 close all;
 clear all;
 
-load('PETHs.mat');
-%load('PETHs_glm21_rois1-7.mat');
+%load('mat/PETHs_glm=21_con=theory_change_flag_Num=3_sphere=4.0mm.mat')
+%load('mat/PETHs_tag=tomov2018KL_sphere=10.0mm.mat')
+load('mat/PETHs_tag=hayley2021psi_sphere=10.0mm.mat');
 
 figure('pos', [64 421 2282 838]);
 cmap = colormap(jet(length(fields)));
