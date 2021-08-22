@@ -72,9 +72,14 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, fast, debu
     ker = R*K*W*ker*W'*K'*R';
 
     % every couple of runs form a partition
-    partition_id = floor(run_id / 2) + 1;
+    partition_id = partition_id_from_run_id(run_id);
     assert(size(partition_id, 1) == size(Y, 1));
     n_partitions = max(partition_id);
+
+    disp('run_id');
+    disp(run_id);
+    disp('partition_id');
+    disp(partition_id);
 
     % find nearest symmetric positive definite matrix (it's not b/c of numerical issues, floating points, etc.)
     ker = nearestSPD(ker);
@@ -149,6 +154,12 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, fast, debu
         for p = 1:n_partitions % for each partition
             train = partition_id ~= p;
             test = partition_id == p;
+
+            if ~any(test)
+                % empty partition 
+                disp(['kernel skipping empty partition', num2str(p)]);
+                continue;
+            end
 
             [sn2_CV(p,j), ...
              ldB2_CV(p,j), ...
@@ -254,6 +265,12 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, fast, debu
         for p = 1:n_partitions % for each partition
             train = partition_id ~= p;
             test = partition_id == p;
+
+            if ~any(test)
+                % empty partition 
+                disp(['skipping empty partition', num2str(p)]);
+                continue;
+            end
 
             [sigma_CV(p,i), ...
              logmarglik_CV(p,i), ...
