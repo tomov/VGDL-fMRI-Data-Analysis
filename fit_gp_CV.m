@@ -45,7 +45,8 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, fast, debu
 
     fprintf('loading BOLD for subj %d\n', subj);
     tic
-    [Y, K, W, R, run_id] = load_BOLD(EXPT, glmodel, subj, mask, Vmask);
+    [Y, K, W, R, SPM_run_id] = load_BOLD(EXPT, glmodel, subj, mask, Vmask);
+    run_id = get_behavioral_run_id(subj, SPM_run_id)';
     toc
 
     fprintf('Memory usage: %.3f MB\n', monitor_memory_whos);
@@ -55,10 +56,10 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, fast, debu
     switch model_name
         case 'EMPA'
             assert(ismember(what, {'theory', 'sprite', 'interaction', 'termination'}));
-            ker = load_HRR_kernel(subj, what);
+            ker = load_HRR_kernel(subj, unique(run_id), what);
         case 'DQN'
             assert(ismember(what, {'conv1', 'conv2', 'conv3', 'linear1', 'linear2'}));
-            ker = load_DQN_kernel(subj, what)
+            ker = load_DQN_kernel(subj, unique(run_id), what)
         case 'game'
             ker = load_game_kernel(EXPT, subj); % GLM 1 game id features
         otherwise
@@ -431,17 +432,27 @@ end
 
 % load HRR kernel
 %
-function [ker] = load_HRR_kernel(subj_id, what)
+function [ker] = load_HRR_kernel(subj_id, which_run_ids, what)
     filename = sprintf('mat/HRR_subject_kernel_subj=%d_K=10_N=10_E=0.050_nsamples=100_sigma_w=1.000_norm=1.mat', subj_id);
-    load(filename, 'theory_kernel', 'sprite_kernel', 'interaction_kernel', 'termination_kernel');
+    load(filename, 'theory_kernel', 'sprite_kernel', 'interaction_kernel', 'termination_kernel', 'r_id');
 
     ker = eval([what, '_kernel']);
+    assert(length(r_id) == size(ker, 1));
+
+    % subset kernel based on good runs only
+    which_TRs = ismember(r_id, which_run_ids);
+    ker = ker(which_TRs, which_TRs);
 end
 
 
-function [ker] = load_DQN_kernel(subj_id, what)
+function [ker] = load_DQN_kernel(subj_id, which_run_ids, what)
     filename = sprintf('mat/DQN_subject_kernel_subj=%d_sigma_w=1.000_norm=1.mat', subj_id);
-    load(filename, 'layer_conv1_output_kernel', 'layer_conv2_output_kernel', 'layer_conv3_output_kernel', 'layer_linear1_output_kernel', 'layer_linear2_output_kernel');
+    load(filename, 'layer_conv1_output_kernel', 'layer_conv2_output_kernel', 'layer_conv3_output_kernel', 'layer_linear1_output_kernel', 'layer_linear2_output_kernel', 'r_id');
 
     ker = eval(['layer_', what, '_output_kernel']);
+    assert(length(r_id) == size(ker, 1));
+
+    % subset kernel based on good runs only
+    which_TRs = ismember(r_id, which_run_ids);
+    ker = ker(which_TRs, which_TRs);
 end
