@@ -4,7 +4,7 @@
 clear all;
 
 EXPT = vgdl_expt();
-[~,~,goodRuns,goodSubjects] = vgdl_getSubjectsDirsAndRuns();
+[subjects,~,goodRuns,goodSubjects] = vgdl_getSubjectsDirsAndRuns();
 
 % compare keypressGLMs in left M1
 %
@@ -17,22 +17,39 @@ glms = [5 6];
 
 % compare theory_change_flag GLMs
 %
+%{
 masks = {'masks/ClusterMask_spmT_0001_x=48_y=12_z=32_183voxels.nii', 'masks/ROI_x=48_y=12_z=32_62voxels_Sphere6.nii', 'masks/ROI_x=48_y=12_z=32_133voxels_Sphere10.nii', 'masks/ROI_x=48_y=12_z=32_1voxels_Sphere1.nii'}';
 region = {'theory glm3 clust', 'theory glm3 sphere 6', 'theory glm3 sphere 10', 'theory glm3 sphere 1'}';
 glms = [59 60 61 3];
-
+%}
 %glms = [62 63 64 21];
 
-for c = 1:length(masks)
-    mask = masks{c};
+glmodel = 21;
+contrast = 'theory_change_flag';
+Num = 1;
+sphere = 10;
+[mask_filenames, regions] = get_masks_from_contrast(glmodel, contrast, true, [], Num, sphere);
+mask_filenames = mask_filenames';
+% multiplexing
+%glms = [21 86 82 83 97 98 88 68];  % with control regressors
+%glms = [3 85 51 52 95 96 87 53]; % without controls
+%glm_names = {'th', 's', 'i', 't', 's+i', 's+t', 'i+t', 's+i+t'};
+% single signal
+glms = [86 82 83 93 94 75 21]; %with control regressors
+%glms = [85 51 52 91 92 67 3]; % without control
+glm_names = {'s', 'i', 't', 's|i', 's|t', 'i|t', 'th'};
+filename = 'mat/glm_bic_bms_single_controls.mat';
 
-    mask
+for c = 1:length(mask_filenames)
+    mask_filename = mask_filenames{c};
+
+    mask_filename
 
     lmes = [];
     bics{c} = [];
     for i = 1:length(glms)
         glmodel = glms(i);
-        bic = ccnl_bic(EXPT, glmodel, mask, goodSubjects);
+        bic = ccnl_bic(EXPT, glmodel, mask_filename, subjects);
         bics{c} = [bics{c} bic];
     end
 
@@ -45,9 +62,9 @@ for c = 1:length(masks)
 end
 
 glms
-%table(region, pxps)
-table(masks, pxps)
+table(regions, pxps)
+%table(mask_filenames, pxps)
 
 
-save('glm_bic_bms.mat');
+save(filename);
 

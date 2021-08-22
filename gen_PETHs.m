@@ -31,7 +31,7 @@ function gen_PETHs(glmodel, contrast, Num, sphere)
 
     % which events to extract time courses for
     regs_fields = {'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag'};
-    visuals_fields = {'effects', 'avatar_collision_flag', 'new_sprites'};
+    visuals_fields = {'effects', 'avatar_collision_flag', 'new_sprites', 'killed_sprites'};
     onoff_fields = {'play_start', 'play_end'};
     fields = [regs_fields, visuals_fields, onoff_fields];
 

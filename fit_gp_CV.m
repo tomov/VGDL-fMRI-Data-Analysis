@@ -77,9 +77,9 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, fast, debu
     n_partitions = max(partition_id);
 
     disp('run_id');
-    disp(run_id);
+    disp(run_id');
     disp('partition_id');
-    disp(partition_id);
+    disp(partition_id');
 
     % find nearest symmetric positive definite matrix (it's not b/c of numerical issues, floating points, etc.)
     ker = nearestSPD(ker);
