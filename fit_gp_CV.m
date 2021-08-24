@@ -1,4 +1,4 @@
-function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, fast, debug)
+function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, fast, debug)
 
 %{
     subj = 1;
@@ -26,30 +26,20 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, fast, debu
     if ~exist('debug', 'var')
         debug = false;
     end
+    if ~exist('project', 'var')
+        project = false;
+    end
 
 
 
     [~,maskname,~] = fileparts(mask);
-    if fast
-        filename = sprintf('mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_fast.mat', subj, use_smooth, glmodel, maskname, model_name, what);
-    else
-        filename = sprintf('mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_notfast.mat', subj, use_smooth, glmodel, maskname, model_name, what);
-    end
+    filename = sprintf('mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_project=%d_fast=%d.mat', subj, use_smooth, glmodel, maskname, model_name, what, project, fast);
     filename
 
     % load mask
     [mask_format, mask, Vmask] = get_mask_format_helper(mask);
 
     addpath(genpath('/ncf/gershman/Lab/scripts/gpml'));
-
-
-    fprintf('loading BOLD for subj %d\n', subj);
-    tic
-    [Y, K, W, R, SPM_run_id] = load_BOLD(EXPT, glmodel, subj, mask, Vmask);
-    run_id = get_behavioral_run_id(subj, SPM_run_id)';
-    toc
-
-    fprintf('Memory usage: %.3f MB\n', monitor_memory_whos);
 
     fprintf('loading kernel for subj %d\n', subj);
     tic
@@ -62,14 +52,26 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, fast, debu
             ker = load_DQN_kernel(subj, unique(run_id), what)
         case 'game'
             ker = load_game_kernel(EXPT, subj); % GLM 1 game id features
+        case 'nuisance'
+            ker = load_nuisance_kernel(EXPT, subj); % GLM 9 game id features
         otherwise
             assert(false, 'invalid model name')
     end
     toc
 
+    fprintf('loading BOLD for subj %d\n', subj);
+    tic
+    [Y, K, W, R, SPM_run_id] = load_BOLD(EXPT, glmodel, subj, mask, Vmask);
+    run_id = get_behavioral_run_id(subj, SPM_run_id)';
+    toc
+
+    fprintf('Memory usage: %.3f MB\n', monitor_memory_whos);
+
     % whiten, filter & project out nuisance regressors
-    Y = R*K*W*Y;
-    ker = R*K*W*ker*W'*K'*R';
+    if project
+        Y = R*K*W*Y;
+        ker = R*K*W*ker*W'*K'*R';
+    end
 
     % every couple of runs form a partition
     partition_id = partition_id_from_run_id(run_id);
@@ -416,36 +418,18 @@ end
 % load game identity kernel based on GLM 1
 %
 function [ker] = load_game_kernel(EXPT, subj_id)
-    feature_glm = 1;
-
-    modeldir = fullfile(EXPT.modeldir,['model',num2str(feature_glm)],['subj',num2str(subj_id)]);
-    load(fullfile(modeldir,'SPM.mat'));
-
-    if subj_id <= 11
-        game_names = {'vgfmri3_chase','vgfmri3_helper','vgfmri3_bait','vgfmri3_lemmings','vgfmri3_plaqueAttack','vgfmri3_zelda'};
-    else
-        game_names = {'vgfmri4_chase', 'vgfmri4_helper', 'vgfmri4_bait', 'vgfmri4_lemmings', 'vgfmri4_avoidgeorge', 'vgfmri4_zelda'};
-    end
-
-    % use convolved game boxcars from GLM 1
-    % that will take HRF into account and even the slight overlap between games
-    features = [];
-    for g = 1:length(game_names)
-        which = contains(SPM.xX.name, game_names(g));
-        assert(sum(which) == 3);
-        feature = sum(SPM.xX.X(:,which), 2); % merge game boxcars from different runs
-        features(:,g) = feature;
-    end
-
-    % see gen_subject_kernels() in HRR.py
-
-    sigma_w = 1; % TODO fit; matching with sigma_w in HRR.py
-
-    Sigma_w = eye(size(features,2)) * sigma_w; % Sigma_p in Rasmussen, Eq. 2.4
-
-    ker = features * Sigma_w * features'; % K in Rasmussen, Eq. 2.12
+    game_names = get_game_names_ordered(subj_id);
+    ker = load_GLM_kernel(EXPT, 1, subj_id, game_names, false);
 end
 
+% load nuisance regressors from GLM 9 
+%
+function [ker] = load_nuisance_kernel(EXPT, subj_id)
+    regressor_names = get_game_names_ordered(subj_id);
+    % note sprite^ b/c it's contained in other names
+    regressor_names = [regressor_names, {'right',     'up',     'down',     'spacebar',     'left',     'new_sprites',     'killed_sprites',     'sprites^',     'non_walls',     'avatar_moved',     'moved',     'movable',     'collisions',     'effects',     'sprite_groups',     'changed',     'avatar_collision_flag',     'effectsByCol',     'block_start',     'block_end',     'instance_start',     'instance_end',     'play_start',     'play_end'}];
+    ker = load_GLM_kernel(EXPT, 9, subj_id, regressor_names, true);
+end
 
 % load HRR kernel
 %

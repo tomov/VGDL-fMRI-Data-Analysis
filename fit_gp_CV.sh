@@ -9,6 +9,7 @@ model_name="EMPA"
 what="theory"
 glmodel=9
 use_smooth=true
+project=true
 fast=true
 
 echo ---------------- >> jobs.txt
@@ -17,13 +18,13 @@ echo ---------------- >> jobs.txt
 head -n 1 gitlog.txt >> jobs.txt
 
 for subj in ${subjects[*]}; do
-    outfileprefix="output/fit_gp_CV_${subj}_${use_smooth}_${glmodel}_${what}"
+    outfileprefix="output/fit_gp_CV_${subj}_${use_smooth}_${glmodel}_${model_name}_${what}_${project}"
     echo ---------------------------------------------------------------------------------
     echo Subject ${subj}, file prefix = $outfileprefix
 
     # send the job to NCF
     #
-    sbatch_output=`sbatch -p ncf --mem 20001 -t 0-5:20 -o ${outfileprefix}_%j.out -e ${outfileprefix}_%j.err --wrap="matlab -nodisplay -nosplash -nojvm -r $'fit_gp_CV(${subj}, ${use_smooth}, ${glmodel}, \'${mask}\', \'${model_name}\', \'${what}\', ${fast});exit'"`
+    sbatch_output=`sbatch -p ncf --mem 20001 -t 0-5:20 -o ${outfileprefix}_%j.out -e ${outfileprefix}_%j.err --wrap="matlab -nodisplay -nosplash -nojvm -r $'fit_gp_CV(${subj}, ${use_smooth}, ${glmodel}, \'${mask}\', \'${model_name}\', \'${what}\', ${project}, ${fast});exit'"`
     # for local testing
     #sbatch_output=`echo Submitted batch job 88725418`
     echo $sbatch_output

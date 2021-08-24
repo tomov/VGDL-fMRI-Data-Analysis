@@ -10,20 +10,25 @@ else
 end
 
 subjects = 1:length(EXPT.subject);
-%subjects = 1:8; % W T F...
+%subjects = 1:2:32; % odd
 
-what = 'theory';
+what = 'sprite';
 glmodel = 9;
 
 %agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_%s_fast.mat', use_smooth, glmodel, what);
+%agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_model=EMPA_%s_nsamples=100_fast_WTF.mat', use_smooth, glmodel, what);
 agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_model=EMPA_%s_nsamples=100_fast.mat', use_smooth, glmodel, what);
+%agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_%s_nsamples=100_project=0_fast=1.mat', use_smooth, glmodel, what);
 
 for s = 1:length(subjects)
     subj_id = subjects(s);
 
     %filename = sprintf('mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_%s_fast.mat', subj_id, use_smooth, glmodel, what);
-    filename = sprintf('mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=EMPA_%s_nsamples=100_fast.mat', subj_id, use_smooth, glmodel, what);
+    %filename = sprintf('mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=EMPA_%s_nsamples=100_fast.mat', subj_id, use_smooth, glmodel, what);
+    filename = sprintf('/Volumes/fMRI-2/Mac_mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=EMPA_%s_nsamples=100_fast.mat', subj_id, use_smooth, glmodel, what);
+    %filename = sprintf('/Volumes/fMRI-2/Mac_mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=EMPA_%s_nsamples=100_project=0_fast=1_.mat', subj_id, use_smooth, glmodel, what);
     %filename = sprintf('mat/fit_gp_CV_noRKW_HRR_subj=%d_us=%d_glm=21_mask=mask_%s.mat', subj_id, use_smooth, what);
+
     load(filename, 'n', 'logmarglik', 'adjR2', 'R2_CV', 'sigma', 'mask', 'r', 'r_CV', 'mask', 'MSE', 'SMSE', 'MSE_CV', 'SMSE_CV', 'partition_id');
 
     % calc stuff
