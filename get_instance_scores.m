@@ -1,4 +1,4 @@
-function [instance_scores, game_names] = get_instance_scores(subj_id, run_ids, do_cache)
+function [instance_scores, instance_wins, instance_success_rates, game_names] = get_instance_scores(subj_id, run_ids, do_cache)
 
     % get score for each instance (i.e. level) as max across all won plays 
     % this was the same way we determined to pay out for the fMRI study
@@ -8,8 +8,6 @@ function [instance_scores, game_names] = get_instance_scores(subj_id, run_ids, d
     end
    
     filename = sprintf('mat/get_instance_scores_subj%d_runs%s.mat', subj_id, sprintf('%d_', run_ids));
-    filename
-
     if do_cache
         if exist(filename, 'file')
             load(filename);
@@ -18,6 +16,8 @@ function [instance_scores, game_names] = get_instance_scores(subj_id, run_ids, d
     end
 
     instance_scores = [];
+    instance_wins = [];
+    instance_success_rates = [];
     game_names = {};
 
     conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54')
@@ -47,6 +47,7 @@ function [instance_scores, game_names] = get_instance_scores(subj_id, run_ids, d
                 nplays = count(conn, 'plays', 'query', q);
 
                 instance_score = 0;
+                instance_win = 0;
 
                 for p = 1:nplays
                     % fetch plays one by one, b/c o/w OOM
@@ -58,15 +59,18 @@ function [instance_scores, game_names] = get_instance_scores(subj_id, run_ids, d
 
                     if play.win
                         instance_score = max(instance_score, play.score);
+                        instance_win = instance_win + 1;
                     end
                 end
 
                 instance_scores = [instance_scores, instance_score];
+                instance_wins = [instance_wins, instance_win];
+                instance_success_rates = [instance_success_rates, instance_win / nplays];
                 game_names = [game_names, {game_name}];
             end
         end
     end
 
     if do_cache
-        save(filename, 'instance_scores', 'game_names', '-v7.3');
+        save(filename, 'instance_scores', 'game_names', 'instance_wins', 'instance_success_rates', '-v7.3');
     end

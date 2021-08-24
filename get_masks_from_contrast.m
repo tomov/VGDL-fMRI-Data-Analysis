@@ -31,7 +31,7 @@ function [masks, region] = get_masks_from_contrast(glmodel, contrast, clusterFWE
     % create spherical masks around peak voxel of each cluster (intersected with cluster)
     %
     for c = 1:length(region)
-        masks{c} = sprintf('sphere_glm%d_%s_%d_%d_%d_r=%dmm.nii', glmodel, replace(contrast, ' ', '_'), mni(c,1), mni(c,2), mni(c,3), round(r * 1.5));
+        masks{c} = sprintf('sphere_glm%d_%s_%d_%d_%d_r=%.2fmm.nii', glmodel, replace(contrast, ' ', '_'), mni(c,1), mni(c,2), mni(c,3), round(r * 1.5));
         %cmask = CI == CI(cor(c,1), cor(c,2), cor(c,3));
         ccnl_create_spherical_mask(cor(c,1), cor(c,2), cor(c,3), r, masks{c}, []);
     end
