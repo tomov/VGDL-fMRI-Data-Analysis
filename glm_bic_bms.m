@@ -1,3 +1,4 @@
+    title({regions{m}, mask_name{m}}, 'interpreter', 'none');
 % compare GLMs using BMS
 % copied from Exploration
 

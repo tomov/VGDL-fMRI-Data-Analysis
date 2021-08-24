@@ -8,7 +8,8 @@ clear all;
 %load('mat/agg_gp_CV_noHRF_us=1_glm=9_theory_subsample=1.mat');
 %load('mat/agg_gp_CV_noHRF_us=1_glm=9_theory_subsample=0.mat');
 
-load('mat/agg_gp_CV_us=1_glm=9_theory.mat');
+load('mat/agg_gp_CV_us=1_glm=9_model=EMPA_theory_nsamples=100_fast.mat');
+%load('mat/agg_gp_CV_us=1_glm=9_theory.mat');
 %load('mat/agg_gp_CV_us=1_glm=9_sprite.mat');
 %load('mat/agg_gp_CV_us=1_glm=9_interaction.mat');
 %load('mat/agg_gp_CV_us=1_glm=9_termination.mat');
