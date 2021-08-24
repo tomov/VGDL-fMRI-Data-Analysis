@@ -41,6 +41,12 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, f
 
     addpath(genpath('/ncf/gershman/Lab/scripts/gpml'));
 
+    fprintf('loading BOLD for subj %d\n', subj);
+    tic
+    [Y, K, W, R, SPM_run_id] = load_BOLD(EXPT, glmodel, subj, mask, Vmask);
+    run_id = get_behavioral_run_id(subj, SPM_run_id)';
+    toc
+
     fprintf('loading kernel for subj %d\n', subj);
     tic
     switch model_name
@@ -57,12 +63,6 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, f
         otherwise
             assert(false, 'invalid model name')
     end
-    toc
-
-    fprintf('loading BOLD for subj %d\n', subj);
-    tic
-    [Y, K, W, R, SPM_run_id] = load_BOLD(EXPT, glmodel, subj, mask, Vmask);
-    run_id = get_behavioral_run_id(subj, SPM_run_id)';
     toc
 
     fprintf('Memory usage: %.3f MB\n', monitor_memory_whos);
