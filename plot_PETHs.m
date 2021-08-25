@@ -6,12 +6,20 @@ clear all;
 %load('mat/PETHs_glm=21_con=theory_change_flag_Num=3_sphere=4.0mm.mat')
 %load('mat/PETHs_tag=tomov2018KL_sphere=10.0mm.mat')
 %load('mat/PETHs_tag=hayley2021psi_sphere=10.0mm.mat');
-load('mat/PETHs_glm=21_con=theory_change_flag_odd_Num=1_sphere=10.0mm.mat');
+%load('mat/PETHs_glm=21_con=theory_change_flag_odd_Num=1_sphere=10.0mm.mat');
+load('mat/PETHs_glm=21_con=theory_change_flag_odd_Num=1_sphere=6.0mm_.mat');
 
 figure('pos', [64 421 2282 838]);
-cmap = colormap(jet(length(fields)));
 
-subjs = 1:2:32;
+% optionally plot theory change flag only
+fields(find(strcmp(fields, 'theory_change_flag'))) = [];
+%fields(find(strcmp(fields, 'sprite_change_flag'))) = [];
+%fields(find(strcmp(fields, 'interaction_change_flag'))) = [];
+%fields(find(strcmp(fields, 'termination_change_flag'))) = [];
+
+subjs = 2:2:32;
+
+cmap = colormap(jet(length(fields)));
 
 % loop over masks
 for m = 1:length(mask_filenames)

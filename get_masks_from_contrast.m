@@ -9,9 +9,6 @@ function [masks, region] = get_masks_from_contrast(glmodel, contrast, clusterFWE
 
     EXPT = vgdl_expt();
 
-    % it's an actual contrast
-    %
-
     % group-level settings
     p = 0.001;
     alpha = 0.05;

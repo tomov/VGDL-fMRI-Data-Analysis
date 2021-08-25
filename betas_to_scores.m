@@ -3,8 +3,8 @@ function betas_to_scores(glmodel, contrast, Num, sphere, regressor_name)
 
     EXPT = vgdl_expt();
 
-    %subj_ids = [1:32];
-    [subj_ids, subjdirs, goodRuns, goodSubjects] = vgdl_getSubjectsDirsAndRuns();
+    [~, subjdirs, goodRuns, goodSubjects] = vgdl_getSubjectsDirsAndRuns();
+    subj_ids = [1:1:32];
 
     %sphere = 4; % sphere radius in mm
     %Num = 3; % # peaks per ROI
@@ -18,8 +18,8 @@ function betas_to_scores(glmodel, contrast, Num, sphere, regressor_name)
     disp(filename);
 
     % which runs 
-    score_run_ids = [3 4 5 6];
-    beta_run_ids = [1 2 ];
+    score_run_ids = [5 6];
+    beta_run_ids = [1 2 3 4 ];
 
     for m = 1:length(mask_filenames)
         mask_filename = mask_filenames{m};
@@ -43,7 +43,8 @@ function betas_to_scores(glmodel, contrast, Num, sphere, regressor_name)
 
             % get betas from first four runs
             %B = ccnl_get_beta_series(EXPT, glmodel, subj_id, regressor_name, mask_filename);
-            B = rand(sum(goodRuns{subj_id}), 124);
+            B = rand(sum(goodRuns{subj_id}), 124); % for debugging
+
             assert(size(B, 1) == sum(goodRuns{subj_id}));
             SPM_beta_run_ids = get_SPM_run_ids(subj_id, beta_run_ids);
             SPM_beta_run_ids = SPM_beta_run_ids(~isnan(SPM_beta_run_ids));
@@ -56,6 +57,7 @@ function betas_to_scores(glmodel, contrast, Num, sphere, regressor_name)
 
             B = B(SPM_beta_run_ids, :);
             beta = mean(B(:));
+            %beta = max(mean(B, 1));
 
             % append betas and scores
             scores{m} = [scores{m}, score];
