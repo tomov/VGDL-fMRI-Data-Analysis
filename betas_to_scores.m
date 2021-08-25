@@ -18,8 +18,8 @@ function betas_to_scores(glmodel, contrast, Num, sphere, regressor_name)
     disp(filename);
 
     % which runs 
-    score_run_ids = [5 6];
-    beta_run_ids = [1 2 3 4 ];
+    score_run_ids = [1 2 3 4 5 6];
+    beta_run_ids = [1 2 3 4 5 6];
 
     for m = 1:length(mask_filenames)
         mask_filename = mask_filenames{m};
@@ -66,15 +66,15 @@ function betas_to_scores(glmodel, contrast, Num, sphere, regressor_name)
             betas{m} = [betas{m}, beta];
         end
 
-		[r,p] = corr(scores{m}', betas{m}', 'type', 'pearson');
+		[r,p] = corr(scores{m}', betas{m}', 'type', 'spearman');
 		ps(m,1) = p;
 		rs(m,1) = r;
 
-		[r,p] = corr(wins{m}', betas{m}', 'type', 'pearson');
+		[r,p] = corr(wins{m}', betas{m}', 'type', 'spearman');
 		ps(m,2) = p;
 		rs(m,2) = r;
 
-		[r,p] = corr(success_rates{m}', betas{m}', 'type', 'pearson');
+		[r,p] = corr(success_rates{m}', betas{m}', 'type', 'spearman');
 		ps(m,3) = p;
 		rs(m,3) = r;
     end
