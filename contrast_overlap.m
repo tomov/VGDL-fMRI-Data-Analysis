@@ -3,6 +3,7 @@
 clear all;
 
 glmodels = [85 51 52];
+%glmodels = [86 82 83];
 contrasts = {'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag'};
 
 EXPT = vgdl_expt();
@@ -54,4 +55,4 @@ for i = 1:size(cor, 1)
     num_overlap(i,:) = cumulative_mask(cor(i,1), cor(i,2), cor(i,3));
 end
 
-table(region, extent, mni, num_overlap)
+table(region, mni, stat, extent, num_overlap)

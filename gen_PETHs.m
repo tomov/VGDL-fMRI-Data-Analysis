@@ -32,7 +32,7 @@ function gen_PETHs(glmodel, contrast, Num, sphere)
     % which events to extract time courses for
     regs_fields = {'theory_change_flag', 'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag'};
     visuals_fields = {'effects', 'avatar_collision_flag', 'new_sprites', 'killed_sprites'};
-    onoff_fields = {'play_start', 'play_end'};
+    onoff_fields = {'block_start', 'block_end', 'instance_start', 'instance_end', 'play_start', 'play_end'};
     fields = [regs_fields, visuals_fields, onoff_fields];
 
     % where we store the timecourses, for averaging in the end

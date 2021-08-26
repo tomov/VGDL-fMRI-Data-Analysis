@@ -6,8 +6,11 @@ clear all;
 %load('mat/PETHs_glm=21_con=theory_change_flag_Num=3_sphere=4.0mm.mat')
 %load('mat/PETHs_tag=tomov2018KL_sphere=10.0mm.mat')
 %load('mat/PETHs_tag=hayley2021psi_sphere=10.0mm.mat');
-%load('mat/PETHs_glm=21_con=theory_change_flag_odd_Num=1_sphere=10.0mm.mat');
-load('mat/PETHs_glm=21_con=theory_change_flag_odd_Num=1_sphere=6.0mm_.mat');
+
+load('mat/PETHs_glm=21_con=theory_change_flag_odd_Num=1_sphere=10.0mm_.mat');
+%load('mat/PETHs_glm=21_con=theory_change_flag_odd_Num=1_sphere=10.0mm__.mat');
+
+%load('mat/PETHs_glm=21_con=theory_change_flag_odd_Num=1_sphere=6.0mm_.mat');
 
 figure('pos', [64 421 2282 838]);
 
@@ -20,6 +23,7 @@ fields(find(strcmp(fields, 'theory_change_flag'))) = [];
 subjs = 2:2:32;
 
 cmap = colormap(jet(length(fields)));
+t = PETH_dTRs * EXPT.TR; % s
 
 % loop over masks
 for m = 1:length(mask_filenames)
@@ -32,7 +36,6 @@ for m = 1:length(mask_filenames)
         field = fields{i};
         disp(field)
 
-        t = PETH_dTRs * EXPT.TR; % s
         D = activations(m).(field)(subjs,:); % subj x TRs PETH's
         [sem, me] = wse(D);
         %me = nanmean(activations(m).(field), 1);
@@ -55,6 +58,8 @@ for m = 1:length(mask_filenames)
                 end
             end
         end
+
+        plot([0 0], ax.YLim, '--', 'color', [0.5 0.5 0.5]);
     end
 
     if m == 1

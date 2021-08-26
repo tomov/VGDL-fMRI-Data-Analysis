@@ -124,11 +124,11 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask, model_name, what, subsamp
     fprintf('solving ridge for subj %d, %d voxels\n', subj, size(Y,2));
 
     lambda = nan(1, size(Y,2)); % lambdas
-    R2_CV = nan(3, size(Y,2)); % R^2
-    adjR2_CV = nan(3, size(Y,2)); % adjusted R^2
-    r_CV = nan(3, size(Y,2)); % Pearson correlation
-    MSE_CV = nan(3, size(Y,2)); % MSE
-    SMSE_CV = nan(3, size(Y,2)); % SMSE
+    R2_CV = nan(n_partitions, size(Y,2)); % R^2
+    adjR2_CV = nan(n_partitions, size(Y,2)); % adjusted R^2
+    r_CV = nan(n_partitions, size(Y,2)); % Pearson correlation
+    MSE_CV = nan(n_partitions, size(Y,2)); % MSE
+    SMSE_CV = nan(n_partitions, size(Y,2)); % SMSE
 
     batch_size = 10000;
 
@@ -231,7 +231,8 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask, model_name, what, subsamp
     filename
 
     save(filename, 'lambda', 'R2_CV', 'adjR2_CV', 'r_CV', 'MSE_CV', 'SMSE_CV', ...
-                   'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'lambdas', 'X', 'Xx', 'partition_id', 'run_id', 'SPM_run_id', ...
+                   'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'subsample_only', 'project', ...
+                   'lambdas', 'X', 'Xx', 'partition_id', 'run_id', 'SPM_run_id', ...
     '-v7.3');
 
     disp('Done');

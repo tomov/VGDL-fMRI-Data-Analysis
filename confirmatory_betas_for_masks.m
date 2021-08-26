@@ -7,8 +7,12 @@ contrast = 'theory_change_flag';
 Num = 1;
 sphere = 10;
 
-confirmatory_glm = [3 85 51 52];
-confirmatory_regressors = {'theory_change_flag', 'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag'};
+%confirmatory_glm = [3 85 51 52];
+%confirmatory_regressors = {'theory_change_flag', 'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag'};
+
+confirmatory_regressors = {'theory_change_flag', 'up', 'down', 'left', 'right', 'spacebar', 'new_sprites', 'killed_sprites', 'sprites', 'non_walls', 'avatar_moved', 'moved', 'movable', 'collisions', 'effects', 'sprite_groups', 'changed', 'avatar_collision_flag', 'effectsByCol', 'block_start', 'block_end', 'instance_start', 'instance_end', 'play_start', 'play_end'};
+
+confirmatory_glm = repmat(21, [1 length(confirmatory_regressors)]);
 
 EXPT = vgdl_expt();
 

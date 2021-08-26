@@ -4,10 +4,14 @@ close all;
 clear all;
 
 %load('PETHs.mat');
-load('PETHs_glm21_rois1-7.mat');
+%load('PETHs_glm21_rois1-7.mat');
+load('mat/PETHs_glm=21_con=theory_change_flag_odd_Num=1_sphere=10.0mm_.mat');
 
 figure('pos', [64 421 2282 838]);
 cmap = colormap(jet(length(fields)));
+t = PETH_dTRs * EXPT.TR; % s
+
+mask_filenames = mask_filenames(1:2);
 
 % loop over masks
 for m = 1:length(mask_filenames)
@@ -20,7 +24,6 @@ for m = 1:length(mask_filenames)
         field = fields{i};
         disp(field)
 
-        t = PETH_dTRs * EXPT.TR; % s
         [sem, me] = wse(activations(m).(field));
         %me = nanmean(activations(m).(field), 1);
         %sem = nanstd(activations(m).(field), 1) / sqrt(size(activations(m).(field), 1)); 
