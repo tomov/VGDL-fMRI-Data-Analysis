@@ -75,12 +75,10 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask, model_name, what, subsamp
         Xx = R*K*W*Xx;
     end
 
-    X = Xx;
-
     % offset by 3 TRs if not convolving with HRF
     if subsample_only
         Y = Y(4:end,:);
-        X = X(1:end-3,:);
+        Xx = Xx(1:end-3,:);
     end
 
     % every couple of runs form a partition
@@ -233,43 +231,10 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask, model_name, what, subsamp
     filename
 
     save(filename, 'lambda', 'R2_CV', 'adjR2_CV', 'r_CV', 'MSE_CV', 'SMSE_CV', ...
-                   'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'lambdas', 'Xx', ...
+                   'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'lambdas', 'X', 'Xx', 'partition_id', 'run_id', 'SPM_run_id', ...
     '-v7.3');
 
     disp('Done');
 
 end
 
-% load HRR regressor
-%
-function [Xx, ker] = load_HRR_Xx(subj_id, which_run_ids, what, subsample_only)
-    assert(ismember(what, {'theory', 'sprite', 'interaction', 'termination'}));
-
-    load('mat/SPM73.mat');
-
-    load(sprintf('mat/unique_HRR_subject_subj=%d_K=30_N=100_E=0.050_nsamples=1_norm=1.mat', subj_id), 'theory_HRRs', 'sprite_HRRs', 'interaction_HRRs', 'termination_HRRs', 'run_id', 'ts', 'theory_id_seq', 'play_key', 'gameStrings', 'unique_theories_filename');
-    %load(sprintf('/Volumes/fMRI-2/VGDL_rc_mat/unique_HRR_subject_subj=%d_K=30_N=100_E=0.050_nsamples=1_norm=1.mat', subj_id), 'theory_HRRs', 'sprite_HRRs', 'interaction_HRRs', 'termination_HRRs', 'run_id', 'ts', 'theory_id_seq', 'play_key', 'gameStrings', 'unique_theories_filename');
-
-    unique_HRRs = eval([what, '_HRRs']);
-    run_id_frames = run_id';
-    ts = ts';
-    [ker, ~, HRRs, Xx, r_id] = gen_kernel_from_theory_id_seq(unique_HRRs, theory_id_seq, ts, run_id_frames, SPM, subsample_only);
-
-    % subset TRs based on good runs only
-    which_TRs = ismember(r_id, which_run_ids);
-    ker = ker(which_TRs, which_TRs);
-    Xx = Xx(which_TRs, :);
-end
-
-% load DQN regressor
-%
-function [Xx] = load_DQN_Xx(subj_id, which_run_ids, what)
-    assert(ismember(what, {'conv1', 'conv2', 'conv3', 'linear1', 'linear2'}));
-    load(sprintf('mat/DQN_subject_Xx_subj=%d_sigma_w=1.000_norm=1.mat', subj_id), 'layer_conv1_output_Xx', 'layer_conv2_output_Xx', 'layer_conv3_output_Xx', 'layer_linear1_output_Xx', 'layer_linear2_output_Xx', 'r_id');
-
-    Xx = eval(['layer_', what, '_output_Xx']);
-    
-    % subset TRs based on good runs only
-    which_TRs = ismember(r_id, which_run_ids);
-    Xx = Xx(which_TRs, :);
-end
