@@ -1267,6 +1267,7 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             end
 
 
+        % sprite_change_flag + nuisance regressors
         case 86
 
             idx = 0;
@@ -1625,6 +1626,146 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             multi = add_visuals_to_multi(multi, subj_id, run, conn);
             multi = add_onoff_to_multi(multi, subj_id, run, conn);
 
+        % like GLM 9, but with play on/off
+        %
+        case 101
+
+            % from GLM 1: game instance boxcar regressor
+            %
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+
+            % from GLM 5: keyholds nuisance regressors
+            %
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+
+            % GLM 7: frame nuisance regressors
+            %
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+
+            % GLM 8: on/off nuisance regressors
+            %
+            multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
+
+        % like GLM 21, but with play on/off
+        %
+        case 102
+
+            % from GLM 3: theory_change_flag
+            %
+            regs = get_regressors(subj_id, run, conn, true);
+            onsets = regs.theory_change_flag_onsets;
+
+            multi.names{1} = 'theory_change_flag';
+            multi.onsets{1} = onsets;
+            multi.durations{1} = zeros(size(multi.onsets{1}));;
+
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
+
+        % GLM 86, but with play on/off
+        case 103
+
+            idx = 0;
+
+            regs = get_regressors(subj_id, run, conn, true);
+
+            if length(regs.sprite_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'sprite_change_flag';
+                multi.onsets{idx} = regs.sprite_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
+
+
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
+
+        % GLM 82, but with play on/off
+        case 104
+
+            idx = 0;
+
+            regs = get_regressors(subj_id, run, conn, true);
+
+            if length(regs.interaction_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'interaction_change_flag';
+                multi.onsets{idx} = regs.interaction_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
+
+
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
+
+        % GLM 83, but with play on/off
+        case 105
+
+            idx = 0;
+
+            regs = get_regressors(subj_id, run, conn, true);
+
+            if length(regs.termination_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'termination_change_flag';
+                multi.onsets{idx} = regs.termination_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
+
+
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
+
+        % GLM 68, but with play on/off
+        case 106
+
+            idx = 0;
+
+            % from GLM 53: sprite_change_flag, interaction_change_flag, termination_change_flag 
+
+            %
+            regs = get_regressors(subj_id, run, conn, true);
+
+            if length(regs.sprite_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'sprite_change_flag';
+                multi.onsets{idx} = regs.sprite_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
+
+            if length(regs.interaction_change_flag_onsets) > 0
+                idx = idx + 1;
+                multi.names{idx} = 'interaction_change_flag';
+                multi.onsets{idx} = regs.interaction_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
+
+
+            if length(regs.termination_change_flag_onsets) > 0 && (length(regs.termination_change_flag_onsets) ~= length(regs.interaction_change_flag_onsets) || any(regs.interaction_change_flag_onsets ~= regs.termination_change_flag_onsets))
+                idx = idx + 1;
+                multi.names{idx} = 'termination_change_flag';
+                multi.onsets{idx} = regs.termination_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
+
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
+
         otherwise
             assert(false, 'invalid glmodel -- should be one of the above');
 
@@ -1749,7 +1890,7 @@ function multi = add_visuals_to_multi(multi, subj_id, run, conn)
     end
 end
 
-function multi = add_onoff_to_multi(multi, subj_id, run, conn)
+function multi = add_onoff_to_multi(multi, subj_id, run, conn, fields)
     % GLM 8: on/off nuisance regressors
     %
     if isfield(multi, 'names')
@@ -1761,8 +1902,11 @@ function multi = add_onoff_to_multi(multi, subj_id, run, conn)
     end
 
     [onoff] = get_onoff(subj_id, run, conn, true);
-    
-    fields = fieldnames(onoff);
+   
+    if ~exist('fields', 'var')
+        fields = fieldnames(onoff);
+    end
+
     for i = 1:numel(fields)
         idx = idx + 1;
         multi.names{idx} = fields{i};
