@@ -11,6 +11,7 @@ mask="masks/mask.nii"
 glmodel=9
 use_smooth=true
 subsample_only=true
+project=true
 
 echo ---------------- >> jobs.txt
 echo --- $(date): Running fit_ridge_CV for subjects ${subj_arg} in parallel >> jobs.txt
@@ -24,7 +25,7 @@ for subj in ${subjects[*]}; do
 
     # send the job to NCF
     #
-    sbatch_output=`sbatch -p ncf --mem 20001 -t 0-3:20 -o ${outfileprefix}_%j.out -e ${outfileprefix}_%j.err --wrap="matlab -nodisplay -nosplash -nojvm -r $'fit_ridge_CV(${subj}, ${use_smooth}, ${glmodel}, \'${mask}\', \'${model_name}\', \'${what}\', ${subsample_only});exit'"`
+    sbatch_output=`sbatch -p ncf --mem 20001 -t 0-3:20 -o ${outfileprefix}_%j.out -e ${outfileprefix}_%j.err --wrap="matlab -nodisplay -nosplash -nojvm -r $'fit_ridge_CV(${subj}, ${use_smooth}, ${glmodel}, \'${mask}\', \'${model_name}\', \'${what}\', ${subsample_only}, ${project});exit'"`
     # for local testing
     #sbatch_output=`echo Submitted batch job 88725418`
     echo $sbatch_output

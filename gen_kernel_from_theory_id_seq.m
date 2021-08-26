@@ -1,6 +1,6 @@
 % theory id sequence & unique theory HRRs => HRRs => Xx (convolved HRRs) => kernel
 %
-function [theory_kernel, theory_kernel_std, HRRs, Xx] = gen_kernel_from_theory_id_seq(unique_theory_HRRs, theory_id_seq, ts, run_id, SPM, subsample_only)
+function [theory_kernel, theory_kernel_std, HRRs, Xx, r_id] = gen_kernel_from_theory_id_seq(unique_theory_HRRs, theory_id_seq, ts, run_id, SPM, subsample_only)
 
     if ~exist('subsample_only', 'var')
         subsample_only = false;

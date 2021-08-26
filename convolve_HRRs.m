@@ -4,8 +4,9 @@
 function [Xx, r_id] = convolve_HRRs(HRRs, ts, run_id, SPM)
 
 
-    nruns = length(SPM.nscan);
-    assert(nruns == 6);
+    %nruns = length(SPM.nscan);
+    nruns = double(max(run_id));
+    assert(nruns <= 6);
 
     Xx = [];
     r_id = [];

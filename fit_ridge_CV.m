@@ -1,4 +1,4 @@
-function fit_ridge_CV(subj, use_smooth, glmodel, mask, model_name, what, subsample_only)
+function fit_ridge_CV(subj, use_smooth, glmodel, mask, model_name, what, subsample_only, project)
     % copied from fit_gp_CV.m and decode_gp_CV.m
 
 
@@ -26,7 +26,7 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask, model_name, what, subsamp
 
 
     [~,maskname,~] = fileparts(mask);
-    filename = sprintf('mat/fit_ridge_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_subsample=%d.mat', subj, use_smooth, glmodel, maskname, model_name, what, subsample_only);
+    filename = sprintf('mat/fit_ridge_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_subsample=%d_project=%d.mat', subj, use_smooth, glmodel, maskname, model_name, what, subsample_only, project);
     filename
 
 
@@ -34,28 +34,33 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask, model_name, what, subsamp
     [mask_format, mask, Vmask] = get_mask_format_helper(mask);
 
 
+    % load BOLD
+    %
+    fprintf('loading BOLD for subj %d\n', subj);
+    tic
+    [Y, K, W, R, SPM_run_id] = load_BOLD(EXPT, glmodel, subj, mask, Vmask);
+    run_id = get_behavioral_run_id(subj, SPM_run_id)';
+    toc
+
+
     % create kernel and HRR regressors from theory id sequence
     %
-    load('mat/SPM73.mat');
-
     fprintf('loading HRRs/embeddings for subj %d\n', subj);
     tic
 
+
     switch model_name
         case 'EMPA'
-            assert(ismember(what, {'theory', 'sprite', 'interaction', 'termination'}));
-            load(sprintf('mat/unique_HRR_subject_subj=%d_K=10_N=10_E=0.050_nsamples=1_norm=1.mat', subj), 'theory_HRRs', 'sprite_HRRs', 'interaction_HRRs', 'termination_HRRs', 'run_id', 'ts', 'theory_id_seq', 'play_key', 'gameStrings', 'unique_theories_filename');
-
-            unique_HRRs = eval([what, '_HRRs']);
-            run_id_frames = run_id';
-            ts = ts';
-            [ker, ~, HRRs, Xx] = gen_kernel_from_theory_id_seq(unique_HRRs, theory_id_seq, ts, run_id_frames, SPM, subsample_only);
+            [Xx, ker] = load_HRR_Xx(subj, unique(run_id), what, subsample_only);
 
         case 'DQN'
-            assert(ismember(what, {'conv1', 'conv2', 'conv3', 'linear1', 'linear2'}));
-            load(sprintf('mat/DQN_subject_Xx_subj=%d_sigma_w=1.000_norm=1.mat', subj_id), 'layer_conv1_output_Xx', 'layer_conv2_output_Xx', 'layer_conv3_output_Xx', 'layer_linear1_output_Xx', 'layer_linear2_output_Xx');
-        
-            Xx = eval(['layer_', what, '_output_Xx']);
+            [Xx] = load_DQN_Xx(subj, unique(run_id), what);
+
+        case 'game'
+            [ker, Xx] = load_game_kernel(EXPT, subj); % GLM 1 game id features
+
+        case 'nuisance'
+            [ker, Xx] = load_nuisance_kernel(EXPT, subj); % GLM 9 game id features
 
         otherwise
             assert(false, 'invalid model name')
@@ -63,17 +68,12 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask, model_name, what, subsamp
     toc
 
 
-    % load BOLD
-    %
-    fprintf('loading BOLD for subj %d\n', subj);
-    tic
-    [Y, K, W, R, run_id] = load_BOLD(EXPT, glmodel, subj, mask, Vmask);
-    toc
-
     % whiten, filter & project out nuisance regressors
     %
-    Y = R*K*W*Y;
-    Xx = R*K*W*Xx;
+    if project
+        Y = R*K*W*Y;
+        Xx = R*K*W*Xx;
+    end
 
     X = Xx;
 
@@ -83,14 +83,18 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask, model_name, what, subsamp
         X = X(1:end-3,:);
     end
 
-    % get partitions from RSA 3
-    rsa = vgdl_create_rsa(3, subj);
-    partition_id = rsa.model(1).partitions;
+    % every couple of runs form a partition
+    partition_id = partition_id_from_run_id(run_id);
     if subsample_only
         partition_id = partition_id(4:end,:);
     end
     assert(size(partition_id, 1) == size(Y, 1));
     n_partitions = max(partition_id);
+
+    disp('run_id');
+    disp(run_id');
+    disp('partition_id');
+    disp(partition_id');
 
 
     lambdas = logspace(-5,5,20);
@@ -234,4 +238,38 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask, model_name, what, subsamp
 
     disp('Done');
 
-%end
+end
+
+% load HRR regressor
+%
+function [Xx, ker] = load_HRR_Xx(subj_id, which_run_ids, what, subsample_only)
+    assert(ismember(what, {'theory', 'sprite', 'interaction', 'termination'}));
+
+    load('mat/SPM73.mat');
+
+    load(sprintf('mat/unique_HRR_subject_subj=%d_K=30_N=100_E=0.050_nsamples=1_norm=1.mat', subj_id), 'theory_HRRs', 'sprite_HRRs', 'interaction_HRRs', 'termination_HRRs', 'run_id', 'ts', 'theory_id_seq', 'play_key', 'gameStrings', 'unique_theories_filename');
+    %load(sprintf('/Volumes/fMRI-2/VGDL_rc_mat/unique_HRR_subject_subj=%d_K=30_N=100_E=0.050_nsamples=1_norm=1.mat', subj_id), 'theory_HRRs', 'sprite_HRRs', 'interaction_HRRs', 'termination_HRRs', 'run_id', 'ts', 'theory_id_seq', 'play_key', 'gameStrings', 'unique_theories_filename');
+
+    unique_HRRs = eval([what, '_HRRs']);
+    run_id_frames = run_id';
+    ts = ts';
+    [ker, ~, HRRs, Xx, r_id] = gen_kernel_from_theory_id_seq(unique_HRRs, theory_id_seq, ts, run_id_frames, SPM, subsample_only);
+
+    % subset TRs based on good runs only
+    which_TRs = ismember(r_id, which_run_ids);
+    ker = ker(which_TRs, which_TRs);
+    Xx = Xx(which_TRs, :);
+end
+
+% load DQN regressor
+%
+function [Xx] = load_DQN_Xx(subj_id, which_run_ids, what)
+    assert(ismember(what, {'conv1', 'conv2', 'conv3', 'linear1', 'linear2'}));
+    load(sprintf('mat/DQN_subject_Xx_subj=%d_sigma_w=1.000_norm=1.mat', subj_id), 'layer_conv1_output_Xx', 'layer_conv2_output_Xx', 'layer_conv3_output_Xx', 'layer_linear1_output_Xx', 'layer_linear2_output_Xx', 'r_id');
+
+    Xx = eval(['layer_', what, '_output_Xx']);
+    
+    % subset TRs based on good runs only
+    which_TRs = ismember(r_id, which_run_ids);
+    Xx = Xx(which_TRs, :);
+end

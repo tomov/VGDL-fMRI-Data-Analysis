@@ -5,8 +5,8 @@ function [Xx, r_id] = subsample_HRRs(HRRs, ts, run_id, SPM)
 
     TR = 2; % TODO hardcoded
 
-    nruns = length(SPM.nscan);
-    assert(nruns == 6);
+    nruns = double(max(run_id));
+    assert(nruns <= 6);
 
     Xx = [];
     r_id = [];

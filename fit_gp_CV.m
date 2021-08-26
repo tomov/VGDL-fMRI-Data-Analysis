@@ -415,22 +415,6 @@ function [sigma, logmarglik, logpseudolik, y_hat, R2, adjR2, r, MSE, SMSE, hyp] 
 end
 
 
-% load game identity kernel based on GLM 1
-%
-function [ker] = load_game_kernel(EXPT, subj_id)
-    game_names = get_game_names_ordered(subj_id);
-    ker = load_GLM_kernel(EXPT, 1, subj_id, game_names, false);
-end
-
-% load nuisance regressors from GLM 9 
-%
-function [ker] = load_nuisance_kernel(EXPT, subj_id)
-    regressor_names = get_game_names_ordered(subj_id);
-    % note sprite^ b/c it's contained in other names
-    regressor_names = [regressor_names, {'right',     'up',     'down',     'spacebar',     'left',     'new_sprites',     'killed_sprites',     'sprites^',     'non_walls',     'avatar_moved',     'moved',     'movable',     'collisions',     'effects',     'sprite_groups',     'changed',     'avatar_collision_flag',     'effectsByCol',     'block_start',     'block_end',     'instance_start',     'instance_end',     'play_start',     'play_end'}];
-    ker = load_GLM_kernel(EXPT, 9, subj_id, regressor_names, true);
-end
-
 % load HRR kernel
 %
 function [ker] = load_HRR_kernel(subj_id, which_run_ids, what)
