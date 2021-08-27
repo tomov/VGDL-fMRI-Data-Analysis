@@ -12,19 +12,24 @@ else
 end
 
 subjects = 1:length(EXPT.subject);
+model_name = 'EMPA';
 what = 'theory';
 glmodel = 9;
+project = 0;
+subsample = 0;
 
 [mask_format, mask, Vmask] = get_mask_format_helper('masks/mask.nii'); % TODO 
 
 %agg_filename = sprintf('mat/agg_ridge_CV_us=%d_glm=%d_%s.mat', use_smooth, glmodel, what);
-agg_filename = sprintf('mat/agg_ridge_CV_us=%d_glm=%d_subsample=1_%s.mat', use_smooth, glmodel, what);
+agg_filename = sprintf('mat/agg_ridge_CV_us=%d_glm=%d_model=%s_%s_subsample=%d_project=%d.mat', use_smooth, glmodel, model_name, what, subsample, project);
+agg_filename
 
 for s = 1:length(subjects)
     subj_id = subjects(s);
 
     %filename = sprintf('mat/fit_ridge_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_%s.mat', subj_id, use_smooth, glmodel, what);
-    filename = sprintf('mat/fit_ridge_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_subsample=1_%s.mat', subj_id, use_smooth, glmodel, what);
+    %filename = sprintf('mat/fit_ridge_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_subsample=1_%s.mat', subj_id, use_smooth, glmodel, what);
+    filename = sprintf('/Volumes/fMRI-2/Mac_mat/fit_ridge_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_subsample=%d_project=%d.mat', subj_id, use_smooth, glmodel, model_name, what, subsample, project);
     load(filename);
 
     % MSEs

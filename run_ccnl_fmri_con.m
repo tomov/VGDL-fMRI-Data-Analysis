@@ -14,7 +14,7 @@ for i = 1:length(glmodels)
                 {'theory_change_flag'}, ...
                  subjs);
 
-        case {21, 102}
+        case {21}
             ccnl_fmri_con(vgdl_expt(), glmodel, ...
                 {'theory_change_flag', ...
                  'up', 'down', 'left', 'right', 'spacebar', ... % keyholds
@@ -22,12 +22,28 @@ for i = 1:length(glmodels)
                  'block_start', 'block_end', 'instance_start', 'instance_end', 'play_start', 'play_end'}, ... % game start/end
                  subjs);
 
-        case {9, 101}
+        case {102}
+            ccnl_fmri_con(vgdl_expt(), glmodel, ...
+                {'theory_change_flag', ...
+                 'up', 'down', 'left', 'right', 'spacebar', ... % keyholds
+                 'frames', 'new_sprites', 'killed_sprites', 'sprites', 'non_walls', 'avatar_moved', 'moved', 'movable', 'collisions', 'effects', 'sprite_groups', 'changed', ... % frame visuals
+                 'play_start', 'play_end'}, ... % game start/end
+                 subjs);
+
+        case {9}
             ccnl_fmri_con(vgdl_expt(), glmodel, ...
                 { ...
                  'up', 'down', 'left', 'right', 'spacebar', ... % keyholds
                  'frames', 'new_sprites', 'killed_sprites', 'sprites', 'non_walls', 'avatar_moved', 'moved', 'movable', 'collisions', 'effects', 'sprite_groups', 'changed', ... % frame visuals
                  'block_start', 'block_end', 'instance_start', 'instance_end', 'play_start', 'play_end'}, ... % game start/end
+                 subjs);
+
+        case {101}
+            ccnl_fmri_con(vgdl_expt(), glmodel, ...
+                { ...
+                 'up', 'down', 'left', 'right', 'spacebar', ... % keyholds
+                 'frames', 'new_sprites', 'killed_sprites', 'sprites', 'non_walls', 'avatar_moved', 'moved', 'movable', 'collisions', 'effects', 'sprite_groups', 'changed', ... % frame visuals
+                 'play_start', 'play_end'}, ... % game start/end
                  subjs);
 
         case 67

@@ -16,7 +16,7 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask, model_name, what, subsamp
 
     %what = 'theory';
 
-    assert(isequal(what, 'theory'));
+    %assert(isequal(what, 'theory'));
 
     if use_smooth
         EXPT = vgdl_expt();

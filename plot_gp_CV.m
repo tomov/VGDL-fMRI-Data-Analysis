@@ -10,10 +10,6 @@ clear all;
 %load('mat/agg_gp_CV_us=1_glm=9_model=EMPA_sprite_nsamples=100_fast.mat');
 %load('mat/agg_gp_CV_us=1_glm=9_model=EMPA_interaction_nsamples=100_fast.mat');
 
-load('mat/agg_gp_CV_us=1_glm=1_model=game__nsamples=100_project=0_fast=1.mat');
-zs_game = zs;
-
-load('mat/agg_gp_CV_us=1_glm=9_theory_nsamples=100_project=0_fast=1.mat');
 %load('mat/agg_gp_CV_us=1_glm=9_theory_nsamples=100_project=0_fast=1_odd.mat');
 %load('mat/agg_gp_CV_us=1_glm=9_theory_nsamples=100_project=0_fast=1_even.mat');
 %load('mat/agg_gp_CV_us=1_glm=9_sprite_nsamples=100_project=0_fast=1.mat');
@@ -23,8 +19,19 @@ load('mat/agg_gp_CV_us=1_glm=9_theory_nsamples=100_project=0_fast=1.mat');
 %load('mat/agg_gp_CV_us=1_glm=1_theory_nsamples=100_project=1_fast=1.mat');
 %load('mat/agg_gp_CV_us=1_glm=1_model=nuisance__nsamples=100_project=0_fast=1.mat');
 
-% t-test Pearson corr across subjects
-[h,p,ci,stats] = ttest(zs - zs_game);
+%% odd subject only
+%subjs = 1:2:32;
+%[h,p,ci,stats] = ttest(zs(subjs,:));
+%ts = stats.tstat;
+%tmap(mask) = ts;
+
+
+%% t-test Pearson corr across subjects
+%
+load('mat/agg_gp_CV_us=1_glm=1_model=game__nsamples=100_project=0_fast=1.mat');
+zs_game = zs;
+load('mat/agg_gp_CV_us=1_glm=9_theory_nsamples=100_project=0_fast=1.mat');
+[h,p,ci,stats] = ttest(zs, zs_game);
 ts = stats.tstat;
 tmap(mask) = ts;
 

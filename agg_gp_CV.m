@@ -21,6 +21,7 @@ glmodel = 1;
 %agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_model=EMPA_%s_nsamples=100_fast_WTF.mat', use_smooth, glmodel, what);
 %agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_model=EMPA_%s_nsamples=100_fast.mat', use_smooth, glmodel, what);
 agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_model=%s_%s_nsamples=100_project=%d_fast=1.mat', use_smooth, glmodel, model_name, what, project);
+agg_filename
 
 for s = 1:length(subjects)
     subj_id = subjects(s);
