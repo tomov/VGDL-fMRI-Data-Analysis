@@ -2,11 +2,21 @@ close all;
 clear all;
 
 %load('mat/glm_bic_bms_controls.mat');
-load('mat/glm_bic_bms_nocontrols.mat');
-%load('mat/glm_bic_bms_single_controls.mat');
 
+%load('mat/glm_bic_bms_nocontrols.mat');
+%glm_ix = [1 2 3 4 8];
+
+%load('mat/glm_bic_bms_single_controls.mat');
+%load('mat/glm_bic_bms_glm=102_con=theory_change_flag_Num=1_sphere=10.0mm_multiplex.mat');
+load('mat/glm_bic_bms_glm=102_con=theory_change_flag_Num=1_sphere=10.0mm_multiplex_w_controls.mat');
+glm_ix = [1 2 3 4 5];
+%ROI_ix = [1     2     3     5     7    11];
+%mask_filenames = mask_filenames(ROI_ix);
+%regions = regions(ROI_ix);
+%bics = bics(ROI_ix);
+
+%subjs = 2:2:32;
 subjs = 2:2:32;
-glm_ix = [1 2 3 4 8];
 tick_labels = {};
 for j = 1:length(glm_ix)
     tick_labels{j} = sprintf('GLM %d: %s', glms(glm_ix(j)), glm_names{glm_ix(j)});

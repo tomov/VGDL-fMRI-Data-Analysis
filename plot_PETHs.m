@@ -7,10 +7,18 @@ clear all;
 %load('mat/PETHs_tag=tomov2018KL_sphere=10.0mm.mat')
 %load('mat/PETHs_tag=hayley2021psi_sphere=10.0mm.mat');
 
-load('mat/PETHs_glm=21_con=theory_change_flag_odd_Num=1_sphere=10.0mm_.mat');
+%load('mat/PETHs_glm=21_con=theory_change_flag_odd_Num=1_sphere=10.0mm_.mat');
 %load('mat/PETHs_glm=21_con=theory_change_flag_odd_Num=1_sphere=10.0mm__.mat');
 
 %load('mat/PETHs_glm=21_con=theory_change_flag_odd_Num=1_sphere=6.0mm_.mat');
+
+load('mat/PETHs_glm=102_con=theory_change_flag_odd_Num=1_sphere=10.0mm_.mat');
+% subselect ROIs
+ROI_ix = [1     2     3     5     7    11];
+mask_filenames = mask_filenames(ROI_ix);
+mask_name = mask_name(ROI_ix);
+regions = regions(ROI_ix);
+activations = activations(ROI_ix);
 
 figure('pos', [64 421 2282 838]);
 
@@ -19,6 +27,10 @@ fields(find(strcmp(fields, 'theory_change_flag'))) = [];
 %fields(find(strcmp(fields, 'sprite_change_flag'))) = [];
 %fields(find(strcmp(fields, 'interaction_change_flag'))) = [];
 %fields(find(strcmp(fields, 'termination_change_flag'))) = [];
+fields(find(strcmp(fields, 'block_start'))) = [];
+fields(find(strcmp(fields, 'block_end'))) = [];
+fields(find(strcmp(fields, 'instance_start'))) = [];
+fields(find(strcmp(fields, 'instance_end'))) = [];
 
 subjs = 2:2:32;
 
@@ -60,6 +72,7 @@ for m = 1:length(mask_filenames)
         end
 
         plot([0 0], ax.YLim, '--', 'color', [0.5 0.5 0.5]);
+        plot(ax.XLim, [0 0], '--', 'color', [0.5 0.5 0.5]);
     end
 
     if m == 1

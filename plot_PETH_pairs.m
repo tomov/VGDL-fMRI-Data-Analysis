@@ -4,21 +4,26 @@ close all;
 clear all;
 
 %load('mat/PETHs_glm=21_con=theory_change_flag_odd_Num=1_sphere=10.0mm_.mat');
-load('mat/PETHs_glm=21_con=theory_change_flag_odd_Num=1_sphere=10.0mm__.mat');
+%load('mat/PETHs_glm=21_con=theory_change_flag_odd_Num=1_sphere=10.0mm__.mat');
+
+load('mat/PETHs_glm=102_con=theory_change_flag_odd_Num=1_sphere=10.0mm_.mat');
+% subselect ROIs
+ROI_ix = [1     2     3     5     7    11];
+mask_filenames = mask_filenames(ROI_ix);
+mask_name = mask_name(ROI_ix);
+regions = regions(ROI_ix);
+activations = activations(ROI_ix);
 
 figure('pos', [64 421 2282 838]);
 
-% optionally plot theory change flag only
-fields(find(strcmp(fields, 'theory_change_flag'))) = [];
-%fields(find(strcmp(fields, 'sprite_change_flag'))) = [];
-%fields(find(strcmp(fields, 'interaction_change_flag'))) = [];
-%fields(find(strcmp(fields, 'termination_change_flag'))) = [];
-
-reg_field = 'theory_change_flag';
-nuisance_fields = {'effects', 'avatar_collision_flag', 'block_start', 'block_end', 'instance_start', 'instance_end', 'play_start', 'play_end'};
+%reg_field = 'theory_change_flag';
+%reg_field = 'sprite_change_flag';
+%reg_field = 'interaction_change_flag';
+reg_field = 'termination_change_flag';
+nuisance_fields = {'avatar_collision_flag', 'killed_sprites', 'play_start', 'play_end'};
 
 subjs = 2:2:32;
-mask_filenames = mask_filenames(1:2);
+%mask_filenames = mask_filenames(1:2);
 
 cmap = colormap(jet(1 + length(nuisance_fields)));
 t = PETH_dTRs * EXPT.TR; % s
@@ -28,7 +33,8 @@ for m = 1:length(mask_filenames)
     disp(mask_name{m});
 
     for i = 1:length(nuisance_fields)
-        subplot(length(mask_filenames), length(nuisance_fields), (m - 1) * length(nuisance_fields) + i);
+        %subplot(length(mask_filenames), length(nuisance_fields), (m - 1) * length(nuisance_fields) + i);
+        subplot(length(nuisance_fields), length(mask_filenames), (i - 1) * length(mask_filenames) + m);
         hold on;
 
         nuisance_field = nuisance_fields{i};
@@ -78,7 +84,9 @@ for m = 1:length(mask_filenames)
 
         ylabel('\Delta BOLD');
         xlabel('time (s)');
-        title({regions{m}, mask_name{m}, [reg_field, ' vs. ', nuisance_field]}, 'interpreter', 'none');
+        if i == 1
+            title({regions{m}, mask_name{m}, [reg_field, ' vs. ', nuisance_field]}, 'interpreter', 'none');
+        end
     end
 
 end
