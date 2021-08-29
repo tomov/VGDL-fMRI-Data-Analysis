@@ -12,8 +12,8 @@ else
 end
 
 subjects = 1:length(EXPT.subject);
-model_name = 'EMPA';
-what = 'theory';
+model_name = 'nuisance';
+what = '';
 glmodel = 9;
 project = 0;
 subsample = 0;

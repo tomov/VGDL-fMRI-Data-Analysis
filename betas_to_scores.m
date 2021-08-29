@@ -30,6 +30,7 @@ function betas_to_scores(glmodel, contrast, Num, sphere, regressor_name)
         wins{m} = [];
         success_rates{m} = [];
         betas{m} = [];
+        ts{m} = [];
 
         for s = 1:length(subj_ids)
             subj_id = subj_ids(s);
@@ -42,10 +43,10 @@ function betas_to_scores(glmodel, contrast, Num, sphere, regressor_name)
             success_rate = mean(instant_success_rates);
 
             % get betas from first four runs
-            %B = ccnl_get_beta_series(EXPT, glmodel, subj_id, regressor_name, mask_filename);
-            B = rand(sum(goodRuns{subj_id}), 124); % for debugging
-
+            B = ccnl_get_beta_series(EXPT, glmodel, subj_id, regressor_name, mask_filename);
+            %B = rand(sum(goodRuns{subj_id}), 124); % for debugging
             assert(size(B, 1) == sum(goodRuns{subj_id}));
+
             SPM_beta_run_ids = get_SPM_run_ids(subj_id, beta_run_ids);
             SPM_beta_run_ids = SPM_beta_run_ids(~isnan(SPM_beta_run_ids));
 
@@ -56,25 +57,38 @@ function betas_to_scores(glmodel, contrast, Num, sphere, regressor_name)
             end
 
             B = B(SPM_beta_run_ids, :);
+
+            % get betas for all runs
+            %{
+            B = ccnl_get_beta(EXPT, glmodel, regressor_name, mask_filename, subj_id);
+            assert(size(B, 1) == 1);
+            %}
+
             beta = mean(B(:));
             %beta = max(mean(B, 1));
+
+            % get T statistics
+            T = ccnl_get_tmap(EXPT, glmodel, regressor_name, mask_filename, subj_id);
+            assert(size(T, 1) == 1);
+            tstat = mean(T(:));
 
             % append betas and scores
             scores{m} = [scores{m}, score];
             wins{m} = [wins{m}, win];
             success_rates{m} = [success_rates{m}, success_rate];
             betas{m} = [betas{m}, beta];
+            ts{m} = [ts{m}, tstat];
         end
 
-		[r,p] = corr(scores{m}', betas{m}', 'type', 'spearman');
+		[r,p] = corr(scores{m}', ts{m}', 'type', 'spearman');
 		ps(m,1) = p;
 		rs(m,1) = r;
 
-		[r,p] = corr(wins{m}', betas{m}', 'type', 'spearman');
+		[r,p] = corr(wins{m}', ts{m}', 'type', 'spearman');
 		ps(m,2) = p;
 		rs(m,2) = r;
 
-		[r,p] = corr(success_rates{m}', betas{m}', 'type', 'spearman');
+		[r,p] = corr(success_rates{m}', ts{m}', 'type', 'spearman');
 		ps(m,3) = p;
 		rs(m,3) = r;
     end

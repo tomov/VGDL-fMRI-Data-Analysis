@@ -23,6 +23,7 @@ for j = 1:length(glm_ix)
 end
 
 clear pxps;
+clear bors;
 
 figure('position', [97 451 2190 888]);
 
@@ -37,6 +38,7 @@ for m = 1:length(mask_filenames)
     lme = -0.5 * bic;
     [alpha, exp_r, xp, pxp, bor] = bms(lme);
     pxps(m,:) = pxp;
+    bors(m,:) = bor;
 
     [sem, me] = wse(bic);
 
@@ -56,4 +58,4 @@ end
 
 subjs
 glm_names(glm_ix)
-table(regions, pxps)
+table(regions, pxps, bors)
