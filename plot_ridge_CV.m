@@ -4,19 +4,14 @@ clear all;
 %load('mat/agg_ridge_CV_us=1_glm=9_subsample=1_theory.mat');
 %load('mat/agg_ridge_CV_us=1_glm=9_model=EMPA_theory_subsample=0_project=1.mat');
 
-load('mat/agg_ridge_CV_us=1_glm=9_model=game__subsample=0_project=0.mat');
-load('mat/agg_ridge_CV_us=1_glm=9_model=nuisance__subsample=0_project=0.mat');
+%load('mat/agg_ridge_CV_us=1_glm=1_model=EMPA_theory_subsample=0_project=1.mat');
+
+%load('mat/agg_ridge_CV_us=1_glm=9_model=game__subsample=0_project=0.mat');
+%load('mat/agg_ridge_CV_us=1_glm=9_model=nuisance__subsample=0_project=0.mat');
+load('mat/agg_ridge_CV_us=1_glm=101_model=nuisance__subsample=0_project=0.mat');
 zs_null = zs;
 
 load('mat/agg_ridge_CV_us=1_glm=9_model=EMPA_theory_subsample=0_project=0.mat');
-%load('mat/agg_ridge_CV_us=1_glm=1_model=EMPA_theory_subsample=0_project=1.mat');
-
-if use_smooth
-    EXPT = vgdl_expt();
-else
-    EXPT = vgdl_expt_nosmooth();
-end
-
 %% odd subjects only
 subjs = 1:2:32;
 %[h,p,ci,stats] = ttest(zs(subjs, :));
@@ -24,6 +19,12 @@ subjs = 1:2:32;
 ts = stats.tstat;
 tmap(mask) = ts;
 
+
+if use_smooth
+    EXPT = vgdl_expt();
+else
+    EXPT = vgdl_expt_nosmooth();
+end
 
 %bspmview_wrapper(EXPT, SMSE_tmap);
 bspmview_wrapper(EXPT, tmap);

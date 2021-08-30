@@ -1,4 +1,5 @@
-% aggregate results from neurosynth_rsa2.m
+% aggregate results from searchlight_rsa2.m
+
 clear all;
 
 use_smooth = true;
@@ -18,29 +19,25 @@ project = 0;
 use_smooth = true;
 maskname = 'mask';
 neural_distance = 'correlation';
+sphere = 10; % mm
 
 [mask_format, mask, Vmask] = get_mask_format_helper('masks/mask.nii'); % TODO 
 
-agg_filename = sprintf('mat/agg_neurosynth_rsa2_us=%d_glm=%d_model=%s_%s_project=%d.mat', use_smooth, glmodel, model_name, what, project);
+agg_filename = sprintf('mat/agg_searchlight_rsa2_us=%d_glm=%d_model=%s_%s_project=%d_r=%.2fmm.mat', use_smooth, glmodel, model_name, what, project, sphere);
 agg_filename
 
 for s = 1:length(subjects)
     subj_id = subjects(s);
 
-    filename = sprintf('/Volumes/fMRI-2/Mac_mat/neurosynth_rsa2_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_project=%d_dist=%s.mat', subj_id, use_smooth, glmodel, maskname, model_name, what, project, neural_distance);
+    filename = sprintf('/Volumes/fMRI-2/Mac_mat/searchlight_rsa2_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_project=%d_dist=%s_r=%.2fmm.mat', subj_id, use_smooth, glmodel, maskname, model_name, what, project, neural_distance, sphere);
     filename
-    load(filename, 'rho', 'roi_masks');
+    load(filename, 'rho');
 
     if s == 1
         rhos = nan(length(subjects), sum(mask(:)));
     end
 
-    for i = 1:length(roi_masks)
-        roi_mask = roi_masks{i};
-        assert(all(mask(roi_mask)));
-
-        rhos(s, roi_mask(mask)) = rho(i);
-    end
+    rhos(s,:) = rho;
 end
 
 zs = atanh(rhos);

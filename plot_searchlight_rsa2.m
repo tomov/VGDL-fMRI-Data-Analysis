@@ -1,6 +1,6 @@
 clear all;
 
-load('mat/agg_neurosynth_rsa2_us=1_glm=9_model=EMPA_theory_project=0.mat');
+load('mat/agg_searchlight_rsa2_us=1_glm=9_model=EMPA_theory_project=0_r=10.00mm.mat');
 
 if use_smooth
     EXPT = vgdl_expt();

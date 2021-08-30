@@ -40,6 +40,7 @@ function [roi_masks, region] = get_neurosynth_rois(lateralized)
         atlas.id = [atlas.id parcel_idx];
         atlas.label = [atlas.label {num2str(parcel_idx)}];
 
+ 
         i
         fprintf('parcel = %d\n', parcel_idx);
 

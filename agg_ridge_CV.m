@@ -14,7 +14,7 @@ end
 subjects = 1:length(EXPT.subject);
 model_name = 'nuisance';
 what = '';
-glmodel = 9;
+glmodel = 101;
 project = 0;
 subsample = 0;
 
@@ -30,6 +30,7 @@ for s = 1:length(subjects)
     %filename = sprintf('mat/fit_ridge_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_%s.mat', subj_id, use_smooth, glmodel, what);
     %filename = sprintf('mat/fit_ridge_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_subsample=1_%s.mat', subj_id, use_smooth, glmodel, what);
     filename = sprintf('/Volumes/fMRI-2/Mac_mat/fit_ridge_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_subsample=%d_project=%d.mat', subj_id, use_smooth, glmodel, model_name, what, subsample, project);
+    filename
     load(filename);
 
     % MSEs
