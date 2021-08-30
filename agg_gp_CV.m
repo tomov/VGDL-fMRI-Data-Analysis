@@ -69,7 +69,7 @@ for s = 1:length(subjects)
     R2s(s,:) = mean(R2_CV, 1);
 
     adjR2s(s,:) = adjR2;
-e
+
     % CV Pearson r's across subjects
     rs(s,:) = mean(r_CV, 1);
 

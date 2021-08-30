@@ -28,13 +28,15 @@ clear all;
 
 %% t-test Pearson corr across subjects
 %
-load('mat/agg_gp_CV_us=1_glm=1_model=game__nsamples=100_project=0_fast=1.mat');
-zs_game = zs;
-load('mat/agg_gp_CV_us=1_glm=9_theory_nsamples=100_project=0_fast=1.mat');
-[h,p,ci,stats] = ttest(zs, zs_game);
-ts = stats.tstat;
-tmap(mask) = ts;
-
+%load('mat/agg_gp_CV_us=1_glm=1_model=game__nsamples=100_project=0_fast=1.mat');
+%load('mat/agg_gp_CV_us=1_glm=1_model=nuisance__nsamples=100_project=0_fast=1.mat');
+load('mat/agg_gp_CV_us=1_glm=101_model=nuisance__nsamples=100_project=0_fast=1.mat');
+%zs_null = zs;
+%load('mat/agg_gp_CV_us=1_glm=9_theory_nsamples=100_project=0_fast=1.mat');
+%[h,p,ci,stats] = ttest(zs, zs_null);
+%ts = stats.tstat;
+%tmap(mask) = ts;
+%
 
 %load('mat/agg_gp_CV_us=1_glm=9_theory_fast.mat');
 %load('mat/agg_gp_CV_us=1_glm=9_theory_nsamples=1_fast.mat');
