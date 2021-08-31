@@ -1,4 +1,4 @@
-function [instance_scores, instance_wins, instance_success_rates, game_names] = get_instance_scores(subj_id, run_ids, do_cache)
+function [instance_scores, instance_wins, instance_success_rates, game_names, levels] = get_instance_scores(subj_id, run_ids, do_cache)
 
     % get score for each instance (i.e. level) as max across all won plays 
     % this was the same way we determined to pay out for the fMRI study
@@ -19,6 +19,7 @@ function [instance_scores, instance_wins, instance_success_rates, game_names] = 
     instance_wins = [];
     instance_success_rates = [];
     game_names = {};
+    levels = [];
 
     conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54')
     for r = 1:length(run_ids)
@@ -67,10 +68,11 @@ function [instance_scores, instance_wins, instance_success_rates, game_names] = 
                 instance_wins = [instance_wins, instance_win];
                 instance_success_rates = [instance_success_rates, instance_win / nplays];
                 game_names = [game_names, {game_name}];
+                levels = [levels, instance.level_id + 1];
             end
         end
     end
 
     if do_cache
-        save(filename, 'instance_scores', 'game_names', 'instance_wins', 'instance_success_rates', '-v7.3');
+        save(filename, 'instance_scores', 'game_names', 'instance_wins', 'instance_success_rates', 'levels', '-v7.3');
     end
