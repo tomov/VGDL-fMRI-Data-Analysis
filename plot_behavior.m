@@ -1,4 +1,3 @@
-%{
 
 clear all;
 close all;
@@ -16,6 +15,8 @@ levels = 1:9;
 agents(1).name = 'Human';
 agents(2).name = 'Random';
 agents(2).tag = 'attempt_1_states';
+%agents(3).name = 'EMPA';
+%agents(3).tag = 'attempt_1_states';
 
 %plot_what = 'success_rates'
 %plot_what = 'wins'
@@ -32,7 +33,7 @@ switch (plot_what)
         assert(false);
 end
 
-% gather relevant data in a table
+%% gather relevant data in a table
 
 tbl_game_ix = [];
 tbl_level = [];
@@ -63,7 +64,7 @@ for g = 1:length(game_names)
                 [instance_scores, instance_wins, instance_success_rates, instance_game_names, instance_levels] = get_agent_level_scores(conn, agent_name, subj_id, levels, agent_tag, true);
             end
             which_instances = strcmp(instance_game_names, game_name);
-            assert(sum(which_instances) >= 6);
+            %assert(sum(which_instances) >= 6);
             instance_scores = instance_scores(which_instances);
             instance_wins = instance_wins(which_instances);
             instance_success_rates = instance_success_rates(which_instances);
@@ -89,35 +90,18 @@ end
 
 tbl = table(tbl_game_ix, tbl_level, tbl_agent_ix, tbl_subj_id, tbl_scores, tbl_wins, tbl_success_rates, 'VariableNames', {'game', 'level', 'agent', 'subj', 'score', 'win', 'success_rate'})
 
-%}
+%% plot stuff
+%
 
-% per level 
+overall_width = 0.6; % width of violin plots for all agents
+agent_width = 0.6 / length(agents); % width per agent, / 2 because Violin()
+agent_center_offsets = - overall_width / 2 + agent_width * ((1:length(agents)) - 0.5); % center of each violin, for each agent
 
-%{
-% use violinplot
-
-figure('pos', [64 421 2282 838]);
-
-for g = 1:length(game_names)
-    game_name = game_names{g};
-
-    subplot(2, 3, g);
-    hold on;
-
-    x = tbl.level(tbl.game == g & tbl.agent == 1);
-    y = tbl.score(tbl.game == g & tbl.agent == 1);
-    %swarmchart(x, y);
-    xs = cellstr(num2str(x'));
-    violinplot(y, xs);
-    xticks(levels);
-    xlabel('level');
-    ylabel(y_label);
-    title(game_name, 'interpreter', 'none');
-end
-%}
+cmap = colormap(jet(length(agents)));
 
 
-%{
+%% per level 
+
 figure('pos', [64 421 2282 838]);
 
 for g = 1:length(game_names)
@@ -129,52 +113,49 @@ for g = 1:length(game_names)
     for l = 1:length(levels)
         level = levels(l);
 
-        %y = tbl.score(tbl.game == g & tbl.agent == 1 & tbl.level == level);
-        %assert(length(y) == length(subj_ids));
-        y = scores{g, 1}(:,level);
-        Violin(y, level);
+        clear ys;
+        for a = 1:length(agents)
+            s = eval(plot_what);
+            s = s{g, a}(:, level);
+            Violin(s, l + agent_center_offsets(a), 'ShowMean', true, 'Width', 0.1, 'ViolinColor', cmap(a, :));
+            ys{a} = s;
+        end
+
+        % significance ***
+        p = ranksum(ys{1}, ys{2}); % Mann Whitney U test across subjects
+        if isnan(p), p = 1; end
+        y = max([max(ys{1}) max(ys{2})]) + 0.5;
+        plot(l + [agent_center_offsets(1) agent_center_offsets(2)], [y y], 'color', 'black');
+        text(l, y + 0.3 + 0.3 * (p >= 0.05), significance(p), 'HorizontalAlignment', 'center', 'fontsize', 15);
+    end
+
+    % dividers
+    ax = gca;
+    for l = 0:length(levels)
+        plot([l + 0.5, l + 0.5], ax.YLim, '--', 'color', [0.3 0.3 0.3]);
     end
 
     xticks(levels);
     xlabel('level');
     ylabel(y_label);
     title(game_name, 'interpreter', 'none');
-end
-%}
 
-% per game
-
-
-%{
-figure;
-
-x = [];
-y = [];
-
-for g = 1:length(game_names)
-    x = [x g * ones(1, length(subj_ids))];
-    s = eval(plot_what);
-    y = [y nanmean(s{g}, 2)'];  % average across levels for each subject
+    % hacky custom legend
+    h = zeros(length(agents), 1);
+    for a = 1:length(agents)
+        h(a) = plot(NaN, NaN, 'color', cmap(a,:));
+    end
+    legend(h, {agents.name});
 end
 
-xs = cellstr(num2str(x'));
-violinplot(y, xs);
-xticks(1:length(game_names));
-xticklabels(game_names);
-set(gca,'TickLabelInterpreter','none');
-xtickangle(30);
-xlabel('game');
-ylabel(y_label);
-title(sprintf('Subjects %d..%d', min(subj_ids), max(subj_ids)), 'interpreter', 'none');
-%}
+
+
+%% per game
+
 
 figure;
 
-overall_width = 0.6; % width of violin plots for all agents
-agent_width = 0.6 / length(agents); % width per agent, / 2 because Violin()
-agent_center_offsets = - overall_width / 2 + agent_width * ((1:length(agents)) - 0.5); % center of each violin, for each agent
-
-cmap = colormap(jet(length(agents)));
+hold on;
 
 for g = 1:length(game_names)
     % average across levels for each subject
@@ -188,11 +169,10 @@ for g = 1:length(game_names)
 
     % significance ***
     p = ranksum(ys{1}, ys{2}); % Mann Whitney U test across subjects
-    if ~isnan(p)
-        y = max([max(ys{1}) max(ys{2})]) + 0.5;
-        plot(g + [agent_center_offsets(1) agent_center_offsets(2)], [y y], 'color', 'black');
-        text(g, y + 0.5, significance(p), 'HorizontalAlignment', 'center', 'fontsize', 17);
-    end
+    if isnan(p), p = 1; end
+    y = max([max(ys{1}) max(ys{2})]) + 0.5;
+    plot(g + [agent_center_offsets(1) agent_center_offsets(2)], [y y], 'color', 'black');
+    text(g, y + 0.3 + 0.3 * (p >= 0.05), significance(p), 'HorizontalAlignment', 'center', 'fontsize', 15);
 end
 
 % dividers
