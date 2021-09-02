@@ -21,7 +21,7 @@ subsample = 0;
 [mask_format, mask, Vmask] = get_mask_format_helper('masks/mask.nii'); % TODO 
 
 %agg_filename = sprintf('mat/agg_ridge_CV_us=%d_glm=%d_%s.mat', use_smooth, glmodel, what);
-agg_filename = sprintf('mat/agg_ridge_CV_us=%d_glm=%d_model=%s_%s_subsample=%d_project=%d.mat', use_smooth, glmodel, model_name, what, subsample, project);
+agg_filename = sprintf('/Volumes/fMRI-2/Mac_mat/agg_ridge_CV_us=%d_glm=%d_model=%s_%s_subsample=%d_project=%d.mat', use_smooth, glmodel, model_name, what, subsample, project);
 agg_filename
 
 for s = 1:length(subjects)

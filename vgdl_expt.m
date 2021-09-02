@@ -38,7 +38,8 @@ function EXPT = vgdl_expt(local)
     % set main directory
     %
     if local
-        exptdir = '/Users/momchil/Dropbox/Research/VGDL/'; % locally on Momchil's Mac
+        %exptdir = '/Users/momchil/Dropbox/Research/VGDL/'; % locally on Momchil's Mac
+        exptdir = '/Volumes/fMRI-2/VGDL_contrast/'; % locally on Momchil's Mac
     else
         exptdir = '/ncf/gershman/Lab/VGDL_fMRI/'; % on CBS central server
     end

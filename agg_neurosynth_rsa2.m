@@ -21,7 +21,7 @@ neural_distance = 'correlation';
 
 [mask_format, mask, Vmask] = get_mask_format_helper('masks/mask.nii'); % TODO 
 
-agg_filename = sprintf('mat/agg_neurosynth_rsa2_us=%d_glm=%d_model=%s_%s_project=%d.mat', use_smooth, glmodel, model_name, what, project);
+agg_filename = sprintf('/Volumes/fMRI-2/Mac_mat/agg_neurosynth_rsa2_us=%d_glm=%d_model=%s_%s_project=%d.mat', use_smooth, glmodel, model_name, what, project);
 agg_filename
 
 for s = 1:length(subjects)

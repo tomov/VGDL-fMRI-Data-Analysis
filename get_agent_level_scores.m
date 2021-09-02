@@ -1,4 +1,4 @@
-function [level_scores, level_wins, level_success_rates, game_names] = get_agent_level_scores(agent_name, subj_id, levels, do_cache)
+function [level_scores, level_wins, level_success_rates, game_names, actual_levels] = get_agent_level_scores(conn, agent_name, subj_id, levels, tag, do_cache)
     %agent_name = 'DQN';
     %subj_id = 13;
     %levels = [0, 1];
@@ -11,7 +11,7 @@ function [level_scores, level_wins, level_success_rates, game_names] = get_agent
         do_cache = false;
     end
    
-    filename = sprintf('mat/get_agent_level_scores_agent=%s_subj=%d_levels=%s.mat', agent_name, subj_id, sprintf('%d_', levels));
+    filename = sprintf('mat/get_agent_level_scores_agent=%s_subj=%d_levels=%s_tag=%s.mat', agent_name, subj_id, sprintf('%d_', levels), tag);
     if do_cache
         if exist(filename, 'file')
             load(filename);
@@ -23,13 +23,13 @@ function [level_scores, level_wins, level_success_rates, game_names] = get_agent
     level_wins = [];
     level_success_rates = [];
     game_names = {};
+    actual_levels = [];
 
-    conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54')
     for l = 1:length(levels)
         level = levels(l);
 
-        q = sprintf('{"subj_id": "%d", "agent_name": "%s", "results.level": %d}', subj_id, agent_name, level);
-        res = find(conn, 'sim_results', 'query', q);
+        q = sprintf('{"subj_id": "%d", "agent_name": "%s", "results.level": %d, "tag": "%s"}', subj_id, agent_name, level, tag);
+        res = find(conn, 'sim_results', 'query', q, 'projection', '{"game_name": 1, "results.level": 1, "results.score": 1, "results.win": 1, "tag": 1}');
         for r = 1:length(res)
             % multiple levels from the same game
             % only consider the level that we care about
@@ -57,9 +57,10 @@ function [level_scores, level_wins, level_success_rates, game_names] = get_agent
             level_wins = [level_wins, level_win];
             level_success_rates = [level_success_rates, level_win / nplays];
             game_names = [game_names, game_name];
+            actual_levels = [actual_levels, level];
         end
     end
 
     if do_cache
-        save(filename, 'level_scores', 'game_names', 'level_wins', 'level_success_rates', '-v7.3');
+        save(filename, 'level_scores', 'game_names', 'level_wins', 'level_success_rates', 'actual_levels', '-v7.3');
     end

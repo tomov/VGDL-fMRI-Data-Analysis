@@ -1,4 +1,4 @@
-function [instance_scores, instance_wins, instance_success_rates, game_names, levels] = get_instance_scores(subj_id, run_ids, do_cache)
+function [instance_scores, instance_wins, instance_success_rates, game_names, levels] = get_instance_scores(conn, subj_id, run_ids, do_cache)
 
     % get score for each instance (i.e. level) as max across all won plays 
     % this was the same way we determined to pay out for the fMRI study
@@ -21,7 +21,6 @@ function [instance_scores, instance_wins, instance_success_rates, game_names, le
     game_names = {};
     levels = [];
 
-    conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54')
     for r = 1:length(run_ids)
         run_id = run_ids(r);
 
