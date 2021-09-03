@@ -1,20 +1,18 @@
 clear all;
 close all;
 
-[all_game_names, sprite_types_ordered] = get_game_names_ordered(12);
-subj_ids = 12:32;
-%[game_names, sprite_types_ordered] = get_game_names_ordered(11);
-%subj_ids = 1:11;
+%[all_game_names, sprite_types_ordered] = get_game_names_ordered(12);
+%subj_ids = 12:32;
+[all_game_names, sprite_types_ordered] = get_game_names_ordered(11);
+subj_ids = 1:11;
 
 run_ids = 1:6;
 all_levels = 1:9;
 
 agents(1).name = 'Human';
 agents(1).tag = '';
-agents(2).name = 'Human';
-agents(2).tag = '';
-%agents(2).name = 'Random';
-%agents(2).tag = 'attempt_1_states';
+agents(2).name = 'Random';
+agents(2).tag = 'attempt_1_states';
 %agents(3).name = 'EMPA';
 %agents(3).tag = 'attempt_1_states';
 
@@ -37,7 +35,7 @@ for g = 1:length(all_game_names)
             if strcmp(agent_name, 'Human')
                 filename = sprintf('mat/fmri_avatar_interactions_subj=%d.mat', subj_id);
             else
-                filename = sprintf('mat/fmri_agent_avatar_interactions_subj=%d_agent=%s_tag=%s.mat', subj_id, agent_name, tag);
+                filename = sprintf('mat/fmri_agent_avatar_interactions_subj=%d_agent=%s_tag=%s.mat', subj_id, agent_name, agent_tag);
             end
             load(filename, 'levels', 'game_names', 'object_types');
             object_types = cellstr(object_types);
@@ -56,7 +54,9 @@ end
 
 %% plot by game
 
-figure('pos', [64 421 1282 838]);
+figure('pos', [64 221 683 1038]);
+
+all_ms = [];
 
 for g = 1:length(all_game_names)
     game_name = all_game_names{g};
@@ -71,8 +71,10 @@ for g = 1:length(all_game_names)
         for o = 1:length(sprite_types)
             D(:, o) = nanmean(interactions{g, a}{o}, 2); % average across levels, to get subject-level interaction counts
         end
+        %D(:, strcmp(sprite_types, 'wall')) = NaN; % omit walls
         [sems(a, :), ms(a, :)] = wse(D);
     end
+    all_ms = [all_ms, ms];
 
     subplot(length(all_game_names), 1, g);
 
@@ -89,6 +91,13 @@ for g = 1:length(all_game_names)
     sems = sems'; sems = sems(:); 
 
     errorbar(xs, ms, sems, 'o', 'MarkerSize', 1, 'color', 'black');
+
+    % dividers
+    ax = gca;
+    for a = 1:length(agents)-1
+        plot([a + 0.5, a + 0.5], ax.YLim, '--', 'color', [0.3 0.3 0.3]);
+    end
+
     ylabel('# interactions / level');
     xticklabels({agents.name});
     legend(sprite_types);
@@ -96,6 +105,7 @@ for g = 1:length(all_game_names)
 
     hold off;
 end
+
 
 %% plot by level
 
