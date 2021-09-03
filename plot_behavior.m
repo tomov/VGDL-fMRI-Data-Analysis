@@ -1,4 +1,3 @@
-
 clear all;
 close all;
 
@@ -20,18 +19,10 @@ agents(2).tag = 'attempt_1_states';
 
 %plot_what = 'success_rates'
 %plot_what = 'wins'
-plot_what= 'scores'
-assert(ismember(plot_what, {'scores', 'wins', 'success_rates'}));
-switch (plot_what)
-    case 'scores'
-        y_label = 'expected payout';
-    case 'wins'
-        y_label = '# wins / level';
-    case 'success_rates'
-        y_label = 'success rate';
-    otherwise
-        assert(false);
-end
+plot_what = 'scores'
+plot_whats = {'scores', 'wins', 'success_rates'};
+assert(ismember(plot_what, plot_whats));
+y_label = get_plot_what_label(plot_what);
 
 %% gather relevant data in a table
 
@@ -72,7 +63,7 @@ for g = 1:length(game_names)
 
             %assert(length(instance_scores) == length(levels)); -- not true if subject missed runs, e.g. subj 9
             assert(all(ismember(instance_levels, levels)));
-            scores{g, a}(s, instance_levels) = instance_scores;
+            scores{g, a}(s, instance_levels) = instance_scores; % {game, agent}(subject, level) = average score
             wins{g, a}(s, instance_levels) = instance_wins;
             success_rates{g, a}(s, instance_levels) = instance_success_rates;
 
@@ -89,6 +80,7 @@ for g = 1:length(game_names)
 end
 
 tbl = table(tbl_game_ix, tbl_level, tbl_agent_ix, tbl_subj_id, tbl_scores, tbl_wins, tbl_success_rates, 'VariableNames', {'game', 'level', 'agent', 'subj', 'score', 'win', 'success_rate'})
+
 
 %% plot stuff
 %
@@ -146,6 +138,8 @@ for g = 1:length(game_names)
         h(a) = plot(NaN, NaN, 'color', cmap(a,:));
     end
     legend(h, {agents.name});
+
+    hold off;
 end
 
 
@@ -162,7 +156,7 @@ for g = 1:length(game_names)
     clear ys;
     for a = 1:length(agents)
         s = eval(plot_what);
-        s = nanmean(s{g, a}, 2);
+        s = nanmean(s{g, a}, 2); % average across levels
         Violin(s, g + agent_center_offsets(a), 'ShowMean', true, 'Width', 0.1, 'ViolinColor', cmap(a, :));
         ys{a} = s;
     end
@@ -196,3 +190,60 @@ for a = 1:length(agents)
 end
 legend(h, {agents.name});
 
+hold off;
+
+
+%% all games
+
+figure('position', [420 917 1141 422]);
+
+for pw = 1:length(plot_whats)
+    plot_what = plot_whats{pw};
+
+    subplot(1, length(plot_whats), pw);
+
+    clear ys;
+    for a = 1:length(agents)
+        s = eval(plot_what);
+        clear ss;
+        for g = 1:length(game_names)
+            ss(:,g) = nanmean(s{g, a}, 2); % average across levels
+        end
+        s = mean(ss, 2); % and average across games too
+        Violin(s, 0 + agent_center_offsets(a), 'ShowMean', true, 'Width', 0.1, 'ViolinColor', cmap(a, :));
+        ys{a} = s;
+    end
+
+    % significance ***
+    p = ranksum(ys{1}, ys{2}); % Mann Whitney U test across subjects
+    if isnan(p), p = 1; end
+    y = max([max(ys{1}) max(ys{2})]) + 0.5;
+    plot(0 + [agent_center_offsets(1) agent_center_offsets(2)], [y y], 'color', 'black');
+    text(0, y + 0.1 + 0.3 * (p >= 0.05), significance(p), 'HorizontalAlignment', 'center', 'fontsize', 15);
+
+    ylabel(get_plot_what_label(plot_what));
+    set(gca, 'xtick', []);
+
+    % hacky custom legend
+    h = zeros(length(agents), 1);
+    for a = 1:length(agents)
+        h(a) = plot(NaN, NaN, 'color', cmap(a,:));
+    end
+    legend(h, {agents.name});
+
+    title(sprintf('Subjects %d..%d', min(subj_ids), max(subj_ids)), 'interpreter', 'none');
+end
+
+
+function y_label = get_plot_what_label(plot_what)
+    switch (plot_what)
+        case 'scores'
+            y_label = 'expected payout';
+        case 'wins'
+            y_label = '# wins / level';
+        case 'success_rates'
+            y_label = 'success rate';
+        otherwise
+            assert(false);
+    end
+end
