@@ -6,8 +6,11 @@ close all;
 [all_game_names, sprite_types_ordered] = get_game_names_ordered(11);
 subj_ids = 1:11;
 
+count_walls = true;
+
 run_ids = 1:6;
 all_levels = 1:9;
+
 
 agents(1).name = 'Human';
 agents(1).tag = '';
@@ -33,9 +36,11 @@ for g = 1:length(all_game_names)
             subj_id = subj_ids(s);
 
             if strcmp(agent_name, 'Human')
-                filename = sprintf('mat/fmri_avatar_interactions_subj=%d.mat', subj_id);
+                %filename = sprintf('mat/fmri_avatar_interactions_subj=%d.mat', subj_id);  % <-- interactions according to the rules
+                filename = sprintf('mat/fmri_avatar_collisions_subj=%d.mat', subj_id); % <-- all collisions
             else
-                filename = sprintf('mat/fmri_agent_avatar_interactions_subj=%d_agent=%s_tag=%s.mat', subj_id, agent_name, agent_tag);
+                %filename = sprintf('mat/fmri_agent_avatar_interactions_subj=%d_agent=%s_tag=%s.mat', subj_id, agent_name, agent_tag);
+                filename = sprintf('mat/fmri_agent_avatar_collisions_subj=%d_agent=%s_tag=%s.mat', subj_id, agent_name, agent_tag);
             end
             load(filename, 'levels', 'game_names', 'object_types');
             object_types = cellstr(object_types);
@@ -71,7 +76,9 @@ for g = 1:length(all_game_names)
         for o = 1:length(sprite_types)
             D(:, o) = nanmean(interactions{g, a}{o}, 2); % average across levels, to get subject-level interaction counts
         end
-        %D(:, strcmp(sprite_types, 'wall')) = NaN; % omit walls
+        if ~count_walls
+            D(:, strcmp(sprite_types, 'wall')) = NaN; % omit walls
+        end
         [sems(a, :), ms(a, :)] = wse(D);
     end
     all_ms = [all_ms, ms];
@@ -109,46 +116,52 @@ end
 
 %% plot by level
 
-figure('pos', [64 421 2282 838]);
+for a = 1:length(agents)
 
-a = 1; % fix agent
-agent_name = agents(a).name;
+    figure('pos', [64 421 2282 838]);
 
-for g = 1:length(all_game_names)
-    game_name = all_game_names{g};
-    sprite_types = sprite_types_ordered{g};
-    
-    clear sems
-    clear ms;
-    for level = all_levels
-        D = []; % subj x object_types
-        for o = 1:length(sprite_types)
-            D(:, o) = interactions{g, a}{o}(:, level);
+    agent_name = agents(a).name;
+
+    for g = 1:length(all_game_names)
+        game_name = all_game_names{g};
+        sprite_types = sprite_types_ordered{g};
+        
+        clear sems
+        clear ms;
+        for level = all_levels
+            D = []; % subj x object_types
+            for o = 1:length(sprite_types)
+                D(:, o) = interactions{g, a}{o}(:, level);
+            end
+            if ~count_walls
+                D(:, strcmp(sprite_types, 'wall')) = NaN; % omit walls
+            end
+            [sems(level, :), ms(level, :)] = wse(D);
         end
-        [sems(level, :), ms(level, :)] = wse(D);
+
+        subplot(length(all_game_names), 1, g);
+
+        h = bar(ms);
+        hold on;
+
+        % do some shenanigans to get the x ticks of the bars
+        xs = [];
+        for i = 1:length(h)
+            xs = [xs, h(i).XData + h(i).XOffset];
+        end
+        xs = sort(xs);
+        ms = ms'; ms = ms(:);
+        sems = sems'; sems = sems(:); 
+
+        errorbar(xs, ms, sems, 'o', 'MarkerSize', 1, 'color', 'black');
+        ylabel('# interactions / level');
+        xticks(all_levels);
+        xlabel('level');
+        legend(sprite_types);
+        title(game_name, 'interpreter', 'none');
+
+        hold off;
     end
 
-    subplot(length(all_game_names), 1, g);
-
-    h = bar(ms);
-    hold on;
-
-    % do some shenanigans to get the x ticks of the bars
-    xs = [];
-    for i = 1:length(h)
-        xs = [xs, h(i).XData + h(i).XOffset];
-    end
-    xs = sort(xs);
-    ms = ms'; ms = ms(:);
-    sems = sems'; sems = sems(:); 
-
-    errorbar(xs, ms, sems, 'o', 'MarkerSize', 1, 'color', 'black');
-    ylabel('# interactions / level');
-    xticks(all_levels);
-    xlabel('level');
-    legend(sprite_types);
-    title(game_name, 'interpreter', 'none');
-
-    hold off;
 end
 

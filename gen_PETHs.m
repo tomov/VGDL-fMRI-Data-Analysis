@@ -89,7 +89,7 @@ function gen_PETHs(glmodel, contrast, Num, sphere)
 
             % initialize commutative timecourses and counts
             % we divide them in the end to get the PETH for a given subject
-            % notice that we maintain a separate account for each TR/bin
+            % notice that we maintain a separate count for each TR/bin
             % this accounts for "TRs" outside of the run
             for i = 1:length(fields)
                 field = fields{i};
