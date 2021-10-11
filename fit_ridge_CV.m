@@ -26,7 +26,8 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask, model_name, what, subsamp
 
 
     [~,maskname,~] = fileparts(mask);
-    filename = sprintf('mat/fit_ridge_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_subsample=%d_project=%d.mat', subj, use_smooth, glmodel, maskname, model_name, what, subsample_only, project);
+    filename = sprintf('fit_ridge_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_subsample=%d_project=%d.mat', subj, use_smooth, glmodel, maskname, model_name, what, subsample_only, project);
+    filename = fullfile(get_mat_dir(), filename);
     filename
 
 

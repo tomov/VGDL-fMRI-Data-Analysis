@@ -30,12 +30,18 @@ clear all;
 %
 %load('mat/agg_gp_CV_us=1_glm=1_model=game__nsamples=100_project=0_fast=1.mat');
 %load('mat/agg_gp_CV_us=1_glm=1_model=nuisance__nsamples=100_project=0_fast=1.mat');
+
+% paired t-test
+%{
 load('mat/agg_gp_CV_us=1_glm=101_model=nuisance__nsamples=100_project=0_fast=1.mat');
 zs_null = zs;
 load('mat/agg_gp_CV_us=1_glm=9_theory_nsamples=100_project=0_fast=1.mat');
 [h,p,ci,stats] = ttest(zs, zs_null);
 ts = stats.tstat;
 tmap(mask) = ts;
+%}
+
+load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=9_model=DQN_conv1_nsamples=100_project=0_fast=1.mat'));
 
 
 %load('mat/agg_gp_CV_us=1_glm=9_theory_fast.mat');

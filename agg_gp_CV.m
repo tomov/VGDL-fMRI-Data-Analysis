@@ -12,15 +12,16 @@ end
 subjects = 1:length(EXPT.subject);
 %subjects = 1:2:32; % odd
 
-model_name = 'nuisance';
-what = '';
+model_name = 'DQN';
+what = 'conv1';
 project = 0;
-glmodel = 1;
+glmodel = 9;
 
 %agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_%s_fast.mat', use_smooth, glmodel, what);
 %agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_model=EMPA_%s_nsamples=100_fast_WTF.mat', use_smooth, glmodel, what);
 %agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_model=EMPA_%s_nsamples=100_fast.mat', use_smooth, glmodel, what);
-agg_filename = sprintf('/Volumes/fMRI-2/Mac_mat/agg_gp_CV_us=%d_glm=%d_model=%s_%s_nsamples=100_project=%d_fast=1.mat', use_smooth, glmodel, model_name, what, project);
+%agg_filename = sprintf('/Volumes/fMRI-2/Mac_mat/agg_gp_CV_us=%d_glm=%d_model=%s_%s_nsamples=100_project=%d_fast=1.mat', use_smooth, glmodel, model_name, what, project);
+agg_filename = fullfile(get_mat_dir(), sprintf('agg_gp_CV_us=%d_glm=%d_model=%s_%s_nsamples=100_project=%d_fast=1.mat', use_smooth, glmodel, model_name, what, project));
 agg_filename
 
 for s = 1:length(subjects)
@@ -30,7 +31,8 @@ for s = 1:length(subjects)
     %filename = sprintf('mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=EMPA_%s_nsamples=100_fast.mat', subj_id, use_smooth, glmodel, what);
     %filename = sprintf('/Volumes/fMRI-2/Mac_mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=EMPA_%s_nsamples=100_fast.mat', subj_id, use_smooth, glmodel, what);
     %filename = sprintf('/Volumes/fMRI-2/Mac_mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=EMPA_%s_nsamples=100_project=%d_fast=1_.mat', subj_id, use_smooth, glmodel, what, project);
-    filename = sprintf('/Volumes/fMRI-2/Mac_mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_fast=1.mat', subj_id, use_smooth, glmodel, model_name, what, project);
+    %filename = sprintf('/Volumes/fMRI-2/Mac_mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_fast=1.mat', subj_id, use_smooth, glmodel, model_name, what, project);
+    filename = fullfile(get_mat_dir(), sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_fast=1.mat', subj_id, use_smooth, glmodel, model_name, what, project));
     filename
     %filename = sprintf('mat/fit_gp_CV_noRKW_HRR_subj=%d_us=%d_glm=21_mask=mask_%s.mat', subj_id, use_smooth, what);
 
