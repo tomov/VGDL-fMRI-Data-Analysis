@@ -1,15 +1,15 @@
 mkdir output
 
 #subjects=( 1 2 3 4 5 6 7 8 )  #  e.g. subjects=( 1 2 5 6 7 10 )
-subjects=( 1 2 3 4 5 6 7 8 )  #  e.g. subjects=( 1 2 5 6 7 10 )
+subjects=( 1  )  #  e.g. subjects=( 1 2 5 6 7 10 )
 subj_arg="${subjects[@]}" # stringify it
 
 mask="masks/mask.nii"
-model_name="EMPA"
-what="theory"
+model_name="DQN"
+what="conv1"
 glmodel=9
 use_smooth=true
-project=true
+project=false
 fast=true
 
 echo ---------------- >> jobs.txt
@@ -24,7 +24,7 @@ for subj in ${subjects[*]}; do
 
     # send the job to NCF
     #
-    sbatch_output=`sbatch -p ncf --mem 20001 -t 0-5:20 -o ${outfileprefix}_%j.out -e ${outfileprefix}_%j.err --wrap="matlab -nodisplay -nosplash -nojvm -r $'fit_gp_CV(${subj}, ${use_smooth}, ${glmodel}, \'${mask}\', \'${model_name}\', \'${what}\', ${project}, ${fast});exit'"`
+    sbatch_output=`sbatch -p fasse --mem 20001 -t 0-5:20 -o ${outfileprefix}_%j.out -e ${outfileprefix}_%j.err --wrap="matlab -nodisplay -nosplash -nojvm -r $'fit_gp_CV(${subj}, ${use_smooth}, ${glmodel}, \'${mask}\', \'${model_name}\', \'${what}\', ${project}, ${fast});exit'"`
     # for local testing
     #sbatch_output=`echo Submitted batch job 88725418`
     echo $sbatch_output

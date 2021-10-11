@@ -1,12 +1,10 @@
-function EXPT = vgdl_expt(local)
+function EXPT = vgdl_expt()
 
     % creates EXPT structure for CCNL fMRI processing pipeline
     % copied from exploration_expt.m from https://github.com/tomov/Exploration-Data-Analysis
     %
     % USAGE: EXPT = vgdl_expt()
     %
-    % INPUTS:
-    %   local (optional) - true if file path is on local computer, false if on NCF
     %
     % OUTPUTS:
     %   EXPT - experiment structure with fields
@@ -19,30 +17,20 @@ function EXPT = vgdl_expt(local)
     %
     % Momchil Tomov, Mar 2020
     
-    % set default parameters
-    %
-    if nargin < 1
-        [~, name] = system('hostname');
-        if ~isempty(strfind(name, 'omchil')) || ~isempty(strfind(name, 'dhcp-'))
-            % err on the side of falsely thinking it's NCF. Because locally
-            % you will catch that mistake immediatley. On NCF, you will
-            % catch it after you're already sent 100 jobs and they all
-            % fail 2 days later...
-            %
-            local = true;
-        else
-            local = false;
-        end
-    end
-    
     % set main directory
     %
-    if local
-        %exptdir = '/Users/momchil/Dropbox/Research/VGDL/'; % locally on Momchil's Mac
+    [~, name] = system('hostname');
+    if ~isempty(strfind(name, 'omchil')) || ~isempty(strfind(name, 'dhcp-'))
+        % local
         exptdir = '/Volumes/fMRI-2/VGDL_contrast/'; % locally on Momchil's Mac
+    elseif  ~isempty( strfind(name,'fasse')) || ~isempty( strfind(name,'holy'))
+        % fasse
+        exptdir = fullfile(getenv('MY_NCF_LAB'), 'Lab', 'VGDL_fMRI/');
     else
+        % ncf
         exptdir = '/ncf/gershman/Lab/VGDL_fMRI/'; % on CBS central server
     end
+    
     
    % % Load data from file with all subjects
    % %

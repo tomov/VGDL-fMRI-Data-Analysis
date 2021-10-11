@@ -23,7 +23,14 @@ function [Y, K, W, R, run_id] = load_BOLD(EXPT, glmodel, subj_id, mask, Vmask)
 
     % extract data and design matrix from confound GLM
     %
-
+    % optionally adjust file paths
+    [~, name] = system('hostname');
+    if  ~isempty( strfind(name,'fasse')) || ~isempty( strfind(name,'holy'))
+        % fasse
+        for i = 1:length(SPM.xY.VY)
+            SPM.xY.VY(i).private.dat.fname = fullfile(getenv('MY_NCF_LAB'), SPM.xY.VY(i).private.dat.fname(15:end));
+        end
+    end
     Y = spm_data_read(SPM.xY.VY, find(mask)); % BOLD data
 
     X = SPM.xX.X; % original design matrix

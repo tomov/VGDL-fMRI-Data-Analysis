@@ -1698,3 +1698,19 @@ ccnl_fmri_glm.sh for GLM 55, subjects : output/ccnl_fmri_glm_55_goodSubjects_.ou
 ccnl_fmri_glm.sh for GLM 56, subjects : output/ccnl_fmri_glm_56_goodSubjects_.out --
 ccnl_fmri_glm.sh for GLM 51, subjects : output/ccnl_fmri_glm_51_goodSubjects_.out --
 ccnl_fmri_glm.sh for GLM 52, subjects : output/ccnl_fmri_glm_52_goodSubjects_.out --
+----------------
+--- Sun Oct 10 18:27:04 EDT 2021: Running fit_gp_CV for subjects 1 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_9_DQN_conv1_false_3412.out -- Submitted batch job 3412
+----------------
+--- Sun Oct 10 18:29:52 EDT 2021: Running fit_gp_CV for subjects 1 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_9_DQN_conv1_false_3413.out -- Submitted batch job 3413
+----------------
+--- Sun Oct 10 19:48:27 EDT 2021: Running fit_gp_CV for subjects 1 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_9_DQN_conv1_false_3414.out -- Submitted batch job 3414
+----------------
+--- Sun Oct 10 19:51:03 EDT 2021: Running fit_gp_CV for subjects 1 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_9_DQN_conv1_false_3415.out -- Submitted batch job 3415
