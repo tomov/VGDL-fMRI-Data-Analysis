@@ -1,6 +1,6 @@
 % load BOLD for subject, project out GLM
 %
-function [Y, K, W, R, run_id] = load_BOLD(EXPT, glmodel, subj_id, mask, Vmask)
+function [Y, K, W, R, run_id, R_] = load_BOLD(EXPT, glmodel, subj_id, mask, Vmask)
     % load subject data
     % Y = raw BOLD
     % K = filter matrix
@@ -57,5 +57,11 @@ function [Y, K, W, R, run_id] = load_BOLD(EXPT, glmodel, subj_id, mask, Vmask)
     for r = 1:length(SPM.Sess)
         run_id(SPM.Sess(r).row,:) = r;
     end
+
+    % residual forming matrix without filtering and whitening
+    % first create the space structure; see spm_spm.m
+    xXs = spm_sp('Set',SPM.xX.X);
+    xXs.X = full(xXs.X);
+    R_ = spm_sp('r', xXs); % residual forming matrix R = I - X * pinv(X), without whitening and filtering
 end
 

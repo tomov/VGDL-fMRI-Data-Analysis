@@ -33,7 +33,7 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, f
 
 
     [~,maskname,~] = fileparts(mask);
-    filename = sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_project=%d_fast=%d.mat', subj, use_smooth, glmodel, maskname, model_name, what, project, fast);
+    filename = sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_project=%d_fast=%d_nowhiten_nofilter.mat', subj, use_smooth, glmodel, maskname, model_name, what, project, fast);
     filename = fullfile(get_mat_dir(), filename);
     filename
 
@@ -44,7 +44,7 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, f
 
     fprintf('loading BOLD for subj %d\n', subj);
     tic
-    [Y, K, W, R, SPM_run_id] = load_BOLD(EXPT, glmodel, subj, mask, Vmask);
+    [Y, K, W, R, SPM_run_id, R_] = load_BOLD(EXPT, glmodel, subj, mask, Vmask);
     run_id = get_behavioral_run_id(subj, SPM_run_id)';
     toc
 
@@ -70,8 +70,10 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, f
 
     % whiten, filter & project out nuisance regressors
     if project
-        Y = R*K*W*Y;
-        ker = R*K*W*ker*W'*K'*R';
+        Y = R_*Y;
+        ker = R_*ker*R_';
+        %Y = R*K*W*Y;
+        %ker = R*K*W*ker*W'*K'*R';
     end
 
     % every couple of runs form a partition

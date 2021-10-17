@@ -1,4 +1,4 @@
-% plot results from agg_gp_CV.m
+.% plot results from agg_gp_CV.m
 
 close all;
 clear all;
@@ -41,8 +41,8 @@ ts = stats.tstat;
 tmap(mask) = ts;
 %}
 
-load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=9_model=DQN_conv1_nsamples=100_project=0_fast=1.mat'));
-
+%load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=DQN_conv2_nsamples=100_project=1_fast=1.mat'));
+load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=EMPA_interaction_nsamples=100_project=1_fast=1_nowhiten_nofilter.mat'));
 
 %load('mat/agg_gp_CV_us=1_glm=9_theory_fast.mat');
 %load('mat/agg_gp_CV_us=1_glm=9_theory_nsamples=1_fast.mat');
