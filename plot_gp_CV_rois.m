@@ -9,6 +9,9 @@ filename
 
 load(filename);
 
+%% fraction significant voxel z
+%
+
 figure;
 
 mean_fs = mean(fs, 3);
@@ -19,6 +22,7 @@ for i = 1:nregressors
     xs = [xs, h(i).XData' + h(i).XOffset'];
 end
 
+% error bars
 hold on;
 for m = 1:nROIs
     for reg = 1:nregressors
@@ -30,7 +34,27 @@ for m = 1:nROIs
     end
 end
 
-ylim([0 0.02])
+for m = 1:nROIs
+    maxy = max(mean_fs(m,:));
+    for r1 = 1:4 %1:nregressors
+        for r2 = 5:9 %r1+1:nregressors
+            y1 = squeeze(fs(m,r1,:));
+            y2 = squeeze(fs(m,r2,:));
+            x1 = xs(m,r1);
+            x2 = xs(m,r2);
+            [h,p,ci,stats] = ttest(y1,y2);
+            p = ranksum(y1, y2);
+            if p <= 0.05
+                plot([x1 x2], [maxy maxy] + 0.001, '-', 'color', [0 0 0]);
+                text(mean([x1 x2]), maxy + 0.002, significance(p), 'HorizontalAlignment', 'center');
+                maxy = maxy + 0.003;
+            end
+
+        end
+    end
+end
+
+ylim([0 0.06])
 title('Fraction significant voxels');
 
 
@@ -51,6 +75,7 @@ for m = 1:nROIs
         %Violin(squeeze(fs(m,reg,:)), xs(m,reg), 'Width', 0.1, 'ViolinColor', h(reg).FaceColor, 'ViolinAlpha', 0.3);
     end
 end
+
 
 %ylim([0 0.02])
 title('Pearson correlation');

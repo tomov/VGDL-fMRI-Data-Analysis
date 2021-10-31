@@ -1,4 +1,4 @@
-function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, fast, debug)
+function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, normalize, fast, debug)
 
 %{
     subj = 1;
@@ -29,12 +29,15 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, f
     if ~exist('project', 'var')
         project = false;
     end
+    if ~exist('normalize', 'var')
+        normalize = 1;
+    end
 
 
 
     [~,maskname,~] = fileparts(mask);
     %filename = sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_project=%d_fast=%d_nowhiten_nofilter.mat', subj, use_smooth, glmodel, maskname, model_name, what, project, fast);
-    filename = sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_project=%d_fast=%d.mat', subj, use_smooth, glmodel, maskname, model_name, what, project, fast);
+    filename = sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_project=%d_norm=%d_fast=%d.mat', subj, use_smooth, glmodel, maskname, model_name, what, project, normalize, fast);
     filename = fullfile(get_mat_dir(), filename);
     filename
 
@@ -54,10 +57,12 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, f
     switch model_name
         case 'EMPA'
             assert(ismember(what, {'theory', 'sprite', 'interaction', 'termination'}));
-            ker = load_HRR_kernel(subj, unique(run_id), what);
+            ker = load_HRR_kernel(subj, unique(run_id), what, normalize);
         case 'DQN'
             assert(ismember(what, {'conv1', 'conv2', 'conv3', 'linear1', 'linear2', 'all'}));
-            ker = load_DQN_kernel(subj, unique(run_id), what);
+            ker = load_DQN_kernel(subj, unique(run_id), what, normalize);
+        case 'PCA'
+            ker = load_PCA_kernel(subj, unique(run_id), normalize);
         case 'game'
             ker = load_game_kernel(EXPT, subj); % GLM 1 game id features
         case 'nuisance'
