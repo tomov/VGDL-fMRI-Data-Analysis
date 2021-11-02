@@ -7,8 +7,8 @@ subj_arg="${subjects[@]}" # stringify it
 
 mask="masks/mask.nii"
 #model_name="EMPA"
-#model_name="DQN"
-model_name="PCA"
+model_name="DQN"
+#model_name="PCA"
 #what="conv3"
 #what="linear2"
 what="all"
@@ -18,7 +18,7 @@ what="all"
 #what="termination"
 glmodel=1
 use_smooth=true
-project=true
+project=false
 normalize=1
 fast=true
 
