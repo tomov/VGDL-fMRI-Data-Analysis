@@ -12,7 +12,8 @@ end
 subjects = 1:length(EXPT.subject);
 %subjects = 1:2:32; % odd
 
-model_name = 'DQN';
+model_name = 'PCA';
+%model_name = 'DQN';
 %model_name = 'EMPA';
 %what = 'conv3';
 %%%what = 'linear2';
