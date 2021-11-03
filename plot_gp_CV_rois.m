@@ -12,13 +12,15 @@ load(filename);
 %% fraction significant voxel z
 %
 
-figure('position', [1143 840 982 469]);
+figure('position', [673 90 1519 849]);
 ix = ismember(regressor_names, {'theory', 'DQN', 'PCA'});
-plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', regressor_names(ix), roi_names);
+plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names);
+%ylim([0 0.1]);
 title('Fraction significant voxels in ROIs');
 ylabel('Fraction significant voxels');
 
 
+%{
 figure;
 plot_gp_CV_rois_helper(fs, 'ranksum', regressor_names, roi_names);
 title('Fraction significant voxels in ROIs');
@@ -38,17 +40,22 @@ title('Pearson correlation');
 figure;
 plot_gp_CV_rois_helper(rs, 'ttest', regressor_names, roi_names);
 title('Pearson correlation');
+%}
 
 
-
-function plot_gp_CV_rois_helper(fs, test_type, regressor_names, roi_names)
+function plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, roi_names)
     sem = @(x) std(x) / sqrt(length(x));
 
     nROIs = size(fs, 1);
     nregressors = size(fs, 2);
     nsubjects = size(fs, 3);
 
-    mean_fs = mean(fs, 3);
+    switch statistic
+    case 'mean'
+        mean_fs = mean(fs, 3);
+    case 'median'
+        mean_fs = median(fs, 3);
+    end
     sem_fs = std(fs, 0, 3) / sqrt(nsubjects);
     h = bar(mean_fs);
 
@@ -63,15 +70,16 @@ function plot_gp_CV_rois_helper(fs, test_type, regressor_names, roi_names)
         for reg = 1:nregressors
             y = squeeze(fs(m,reg,:));
             x = repmat(xs(m,reg), 1, nsubjects);
-            %swarmchart(x, y, 10, h(reg).FaceColor, 'filled','MarkerFaceAlpha',0.5,'MarkerEdgeAlpha',0.5, 'XJitterWidth', 0.05);
-            errorbar(xs(m,reg), mean(y), sem(y), '.', 'MarkerSize', 1, 'MarkerFaceColor', h(reg).FaceColor, 'LineWidth', 1, 'Color', h(reg).FaceColor, 'AlignVertexCenters', 'off');
+            %swarmchart(x, y, 10, h(reg).FaceColor, 'filled','MarkerFaceAlpha',0.5,'MarkerEdgeAlpha',0.5, 'XJitterWidth', 0.15);
+            %errorbar(xs(m,reg), mean(y), sem(y), '.', 'MarkerSize', 1, 'MarkerFaceColor', h(reg).FaceColor, 'LineWidth', 1, 'Color', h(reg).FaceColor, 'AlignVertexCenters', 'off');
             %Violin(squeeze(fs(m,reg,:)), xs(m,reg), 'Width', 0.1, 'ViolinColor', h(reg).FaceColor, 'ViolinAlpha', 0.3);
         end
     end
 
     % significance labels
     for m = 1:nROIs
-        maxy = max(mean_fs(m,:) + sem_fs(m,:));
+        %maxy = max(mean_fs(m,:) + sem_fs(m,:));
+        maxy = max(mean_fs(m,:));
         for r1 = 1:nregressors
             for r2 = r1+1:nregressors
                 y1 = squeeze(fs(m,r1,:));
