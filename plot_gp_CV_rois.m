@@ -12,15 +12,17 @@ load(filename);
 %% fraction significant voxel z
 %
 
-figure;
+figure('position', [1143 840 982 469]);
 ix = ismember(regressor_names, {'theory', 'DQN', 'PCA'});
 plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', regressor_names(ix), roi_names);
-title('Fraction significant voxels');
+title('Fraction significant voxels in ROIs');
+ylabel('Fraction significant voxels');
 
 
 figure;
 plot_gp_CV_rois_helper(fs, 'ranksum', regressor_names, roi_names);
-title('Fraction significant voxels');
+title('Fraction significant voxels in ROIs');
+ylabel('Fraction significant voxels');
 
 
 %% Pearson correlations
@@ -95,6 +97,7 @@ function plot_gp_CV_rois_helper(fs, test_type, regressor_names, roi_names)
     legend(regressor_names);
     xticklabels(roi_names);
     xtickangle(30);
+    set(gca,'TickLength',[0 0]);
     set(gca,'TickLabelInterpreter','none');
 
 end

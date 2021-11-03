@@ -3044,3 +3044,7 @@ fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_DQN_all_false_1_7243.out
 --- Sun Oct 31 19:18:16 EDT 2021: Running fit_gp_CV for subjects 1 in parallel
 ----------------
 fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_DQN_all_false_1_7244.out -- Submitted batch job 7244
+----------------
+--- Wed Nov 3 11:07:33 EDT 2021: Running fit_gp_CV for subjects 1 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_EMPA_theory_true_1_7284.out -- Submitted batch job 7284

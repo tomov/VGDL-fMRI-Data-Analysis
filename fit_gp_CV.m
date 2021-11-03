@@ -1,4 +1,4 @@
-function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, normalize, fast, debug)
+function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, normalize, fast, save_Y_hat, debug)
 
 %{
     subj = 1;
@@ -23,6 +23,9 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
     if ~exist('fast', 'var')
         fast = true; % no ceiling, sigma = 1 only, no logpredlik
     end
+    if ~exist('save_Y_hat', 'var')
+        save_Y_hat = false;
+    end
     if ~exist('debug', 'var')
         debug = false;
     end
@@ -37,7 +40,7 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
 
     [~,maskname,~] = fileparts(mask);
     %filename = sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_project=%d_fast=%d_nowhiten_nofilter.mat', subj, use_smooth, glmodel, maskname, model_name, what, project, fast);
-    filename = sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_project=%d_norm=%d_fast=%d.mat', subj, use_smooth, glmodel, maskname, model_name, what, project, normalize, fast);
+    filename = sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_project=%d_norm=%d_fast=%d_saveYhat=%d.mat', subj, use_smooth, glmodel, maskname, model_name, what, project, normalize, fast, save_Y_hat);
     filename = fullfile(get_mat_dir(), filename);
     filename
 
@@ -137,6 +140,10 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
         sigmas = 1;
     else
         sigmas = logspace(-3, 3, 20);
+    end
+
+    if save_Y_hat
+        Y_hat = nan(size(Y));
     end
 
     % precompute (K + sigma^2 I) ^ (-1) for every sigma
@@ -310,6 +317,9 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
 
         end
 
+        if save_Y_hat
+            Y_hat(:,i) = y_hat;
+        end
         %figure;
         %hold on;
         %plot(y);
@@ -348,12 +358,21 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
     clear post
     clear Y
     %}
-    save(filename, 'sigma', 'logmarglik', 'logpredlik', 'R2', 'adjR2', 'r', 'MSE', 'SMSE', ... 
-                   'sigma_CV', 'logmarglik_CV', 'logpredlik_CV', 'R2_CV', 'adjR2_CV', 'r_CV', 'MSE_CV', 'SMSE_CV', ...
-                   'ceil_sigma', 'ceil_logmarglik', 'ceil_logpseudolik', 'ceil_R2', 'ceil_adjR2', 'ceil_r', 'ceil_MSE', 'ceil_SMSE', ...
-                   'ceil_sigma_CV', 'ceil_logmarglik_CV', 'ceil_logpseudolik_CV', 'ceil_R2_CV', 'ceil_adjR2_CV', 'ceil_r_CV', 'ceil_MSE_CV', 'ceil_SMSE_CV', ...
-                   'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'sigmas', 'n', 'partition_id', ...
-    '-v7.3');
+    if save_Y_hat
+        save(filename, 'sigma', 'logmarglik', 'logpredlik', 'R2', 'adjR2', 'r', 'MSE', 'SMSE', ... 
+                       'sigma_CV', 'logmarglik_CV', 'logpredlik_CV', 'R2_CV', 'adjR2_CV', 'r_CV', 'MSE_CV', 'SMSE_CV', ...
+                       'ceil_sigma', 'ceil_logmarglik', 'ceil_logpseudolik', 'ceil_R2', 'ceil_adjR2', 'ceil_r', 'ceil_MSE', 'ceil_SMSE', ...
+                       'ceil_sigma_CV', 'ceil_logmarglik_CV', 'ceil_logpseudolik_CV', 'ceil_R2_CV', 'ceil_adjR2_CV', 'ceil_r_CV', 'ceil_MSE_CV', 'ceil_SMSE_CV', ...
+                       'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'sigmas', 'n', 'partition_id', 'Y', 'Y_hat', ...
+        '-v7.3');
+    else
+        save(filename, 'sigma', 'logmarglik', 'logpredlik', 'R2', 'adjR2', 'r', 'MSE', 'SMSE', ... 
+                       'sigma_CV', 'logmarglik_CV', 'logpredlik_CV', 'R2_CV', 'adjR2_CV', 'r_CV', 'MSE_CV', 'SMSE_CV', ...
+                       'ceil_sigma', 'ceil_logmarglik', 'ceil_logpseudolik', 'ceil_R2', 'ceil_adjR2', 'ceil_r', 'ceil_MSE', 'ceil_SMSE', ...
+                       'ceil_sigma_CV', 'ceil_logmarglik_CV', 'ceil_logpseudolik_CV', 'ceil_R2_CV', 'ceil_adjR2_CV', 'ceil_r_CV', 'ceil_MSE_CV', 'ceil_SMSE_CV', ...
+                       'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'sigmas', 'n', 'partition_id', ...
+        '-v7.3');
+    end
 
     disp('Done');
 

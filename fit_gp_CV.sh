@@ -6,21 +6,22 @@ subjects=( 1  )  #  e.g. subjects=( 1 2 5 6 7 10 )
 subj_arg="${subjects[@]}" # stringify it
 
 mask="masks/mask.nii"
-#model_name="EMPA"
-model_name="DQN"
+model_name="EMPA"
+#model_name="DQN"
 #model_name="PCA"
 #what="conv3"
 #what="linear2"
-what="all"
-#what="theory"
+#what="all"
+what="theory"
 #what="sprite"
 #what="interaction"
 #what="termination"
 glmodel=1
 use_smooth=true
-project=false
+project=true
 normalize=1
 fast=true
+save_Y_hat=true
 
 echo ---------------- >> jobs.txt
 echo --- $(date): Running fit_gp_CV for subjects ${subj_arg} in parallel >> jobs.txt
