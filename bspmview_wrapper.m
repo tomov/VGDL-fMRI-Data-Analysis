@@ -18,5 +18,6 @@ struc = fullfile(EXPT.modeldir,'mean.nii');
 if exist(struc,'file')
     bspmview(V.fname, struc);
 else
+    disp('Using default base image');
     bspmview(V.fname);
 end

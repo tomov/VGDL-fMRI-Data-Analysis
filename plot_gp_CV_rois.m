@@ -17,7 +17,6 @@ ix = ismember(regressor_names, {'theory', 'DQN', 'PCA'});
 plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', regressor_names(ix), roi_names);
 title('Fraction significant voxels');
 
-blah blah
 
 figure;
 plot_gp_CV_rois_helper(fs, 'ranksum', regressor_names, roi_names);
@@ -27,11 +26,15 @@ title('Fraction significant voxels');
 %% Pearson correlations
 %
 
-figure;
-
 rs = atanh(rs);
+
+figure;
+ix = ismember(regressor_names, {'theory', 'DQN', 'PCA'});
+plot_gp_CV_rois_helper(rs(:,ix,:), 'ttest', regressor_names(ix), roi_names);
+title('Pearson correlation');
+
+figure;
 plot_gp_CV_rois_helper(rs, 'ttest', regressor_names, roi_names);
-%ylim([0 0.02])
 title('Pearson correlation');
 
 
@@ -91,6 +94,7 @@ function plot_gp_CV_rois_helper(fs, test_type, regressor_names, roi_names)
 
     legend(regressor_names);
     xticklabels(roi_names);
+    xtickangle(30);
     set(gca,'TickLabelInterpreter','none');
 
 end
