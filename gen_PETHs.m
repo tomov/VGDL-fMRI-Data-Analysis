@@ -21,11 +21,11 @@ function gen_PETHs(glmodel, contrast, Num, sphere)
         tag = glmodel; % fake "glmodel" = study tag
         glmodel = 9; % for load_BOLD; doesn't really matter
         [mask_filenames, regions] = get_masks_from_study(tag, sphere);
-        filename = sprintf('mat/PETHs_tag=%s_sphere=%.1fmm.mat', tag, sphere);
+        filename = fullfile(get_mat_dir(false), sprintf('PETHs_tag=%s_sphere=%.1fmm.mat', tag, sphere));
     else
         % actual GLM
         [mask_filenames, regions] = get_masks_from_contrast(glmodel, contrast, true, [], Num, sphere);
-        filename = sprintf('mat/PETHs_glm=%d_con=%s_odd_Num=%d_sphere=%.1fmm_.mat', glmodel, contrast, Num, sphere);
+        filename = fullfile(get_mat_dir(false), sprintf('PETHs_glm=%d_con=%s_odd_Num=%d_sphere=%.1fmm.mat', glmodel, contrast, Num, sphere));
     end
     disp(filename);
 
@@ -58,9 +58,9 @@ function gen_PETHs(glmodel, contrast, Num, sphere)
 
             % in lieu of get_regressors, get_visuals, get_onoffs, etc.
             % because there's no mongo on NCF
-            load(sprintf('mat/get_regressors_subj%d_run%d.mat', subj_id, run_id), 'regs');
-            load(sprintf('mat/get_visuals_subj%d_run%d.mat', subj_id, run_id), 'visuals');
-            load(sprintf('mat/get_onoff_subj%d_run%d.mat', subj_id, run_id), 'onoff');
+            load(fullfile(get_mat_dir(true), sprintf('get_regressors_subj%d_run%d.mat', subj_id, run_id)), 'regs');
+            load(fullfile(get_mat_dir(true), sprintf('get_visuals_subj%d_run%d.mat', subj_id, run_id)), 'visuals');
+            load(fullfile(get_mat_dir(true), sprintf('get_onoff_subj%d_run%d.mat', subj_id, run_id)), 'onoff');
 
             % extract event onsets
             for i = 1:length(regs_fields)
@@ -112,12 +112,12 @@ function gen_PETHs(glmodel, contrast, Num, sphere)
             %            ones(EXPT.nTRs, 1) * 6];
             tic
 
-            % get BOLD time course given run
-            Y_run = nanmean(Y(Y_run_id == SPM_run_id, :), 2);
-            assert(all(size(Y_run) == [EXPT.nTRs, 1]));
-
             % loop over runs
             for SPM_run_id = 1:length(EXPT.subject(subj_id).functional)
+
+                % get BOLD time course given run
+                Y_run = nanmean(Y(Y_run_id == SPM_run_id, :), 2);
+                assert(all(size(Y_run) == [EXPT.nTRs, 1]));
 
                 run_id = get_behavioral_run_id(subj_id, SPM_run_id);
 

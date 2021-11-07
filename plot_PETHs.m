@@ -12,7 +12,8 @@ clear all;
 
 %load('mat/PETHs_glm=21_con=theory_change_flag_odd_Num=1_sphere=6.0mm_.mat');
 
-load('mat/PETHs_glm=102_con=theory_change_flag_odd_Num=1_sphere=10.0mm_.mat');
+load(fullfile(get_mat_dir(false), 'PETHs_glm=102_con=theory_change_flag_odd_Num=1_sphere=10.0mm.mat'));
+%load(fullfile(get_mat_dir(true), 'PETHs_glm=102_con=theory_change_flag_odd_Num=1_sphere=10.0mm_.mat'));
 % subselect ROIs
 ROI_ix = [1     2     3     5     7    11];
 mask_filenames = mask_filenames(ROI_ix);
@@ -23,10 +24,10 @@ activations = activations(ROI_ix);
 figure('pos', [64 421 2282 838]);
 
 % optionally plot theory change flag only
-fields(find(strcmp(fields, 'theory_change_flag'))) = [];
-%fields(find(strcmp(fields, 'sprite_change_flag'))) = [];
-%fields(find(strcmp(fields, 'interaction_change_flag'))) = [];
-%fields(find(strcmp(fields, 'termination_change_flag'))) = [];
+%fields(find(strcmp(fields, 'theory_change_flag'))) = [];
+fields(find(strcmp(fields, 'sprite_change_flag'))) = [];
+fields(find(strcmp(fields, 'interaction_change_flag'))) = [];
+fields(find(strcmp(fields, 'termination_change_flag'))) = [];
 fields(find(strcmp(fields, 'block_start'))) = [];
 fields(find(strcmp(fields, 'block_end'))) = [];
 fields(find(strcmp(fields, 'instance_start'))) = [];
