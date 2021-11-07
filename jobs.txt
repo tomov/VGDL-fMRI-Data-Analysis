@@ -3090,3 +3090,143 @@ fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_EMPA_theory_true_1_true_
 --- Sun Nov 7 12:01:49 EST 2021: Running fit_gp_CV for subjects 32 in parallel
 ----------------
 fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_PCA_all_true_1_false_7336.out -- Submitted batch job 7336
+----------------
+--- Sun Nov 7 15:35:30 EST 2021: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_PCA_all_false_1_false_7402.out -- Submitted batch job 7402
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_1_PCA_all_false_1_false_7403.out -- Submitted batch job 7403
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_1_PCA_all_false_1_false_7404.out -- Submitted batch job 7404
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_1_PCA_all_false_1_false_7405.out -- Submitted batch job 7405
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_1_PCA_all_false_1_false_7406.out -- Submitted batch job 7406
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_1_PCA_all_false_1_false_7407.out -- Submitted batch job 7407
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_1_PCA_all_false_1_false_7408.out -- Submitted batch job 7408
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_1_PCA_all_false_1_false_7409.out -- Submitted batch job 7409
+fit_gp_CV.sh for subject 9: output/fit_gp_CV_9_true_1_PCA_all_false_1_false_7410.out -- Submitted batch job 7410
+fit_gp_CV.sh for subject 10: output/fit_gp_CV_10_true_1_PCA_all_false_1_false_7411.out -- Submitted batch job 7411
+fit_gp_CV.sh for subject 11: output/fit_gp_CV_11_true_1_PCA_all_false_1_false_7412.out -- Submitted batch job 7412
+fit_gp_CV.sh for subject 12: output/fit_gp_CV_12_true_1_PCA_all_false_1_false_7413.out -- Submitted batch job 7413
+fit_gp_CV.sh for subject 13: output/fit_gp_CV_13_true_1_PCA_all_false_1_false_7414.out -- Submitted batch job 7414
+fit_gp_CV.sh for subject 14: output/fit_gp_CV_14_true_1_PCA_all_false_1_false_7415.out -- Submitted batch job 7415
+fit_gp_CV.sh for subject 15: output/fit_gp_CV_15_true_1_PCA_all_false_1_false_7416.out -- Submitted batch job 7416
+fit_gp_CV.sh for subject 16: output/fit_gp_CV_16_true_1_PCA_all_false_1_false_7417.out -- Submitted batch job 7417
+fit_gp_CV.sh for subject 17: output/fit_gp_CV_17_true_1_PCA_all_false_1_false_7418.out -- Submitted batch job 7418
+fit_gp_CV.sh for subject 18: output/fit_gp_CV_18_true_1_PCA_all_false_1_false_7419.out -- Submitted batch job 7419
+fit_gp_CV.sh for subject 19: output/fit_gp_CV_19_true_1_PCA_all_false_1_false_7420.out -- Submitted batch job 7420
+fit_gp_CV.sh for subject 20: output/fit_gp_CV_20_true_1_PCA_all_false_1_false_7421.out -- Submitted batch job 7421
+fit_gp_CV.sh for subject 21: output/fit_gp_CV_21_true_1_PCA_all_false_1_false_7422.out -- Submitted batch job 7422
+fit_gp_CV.sh for subject 22: output/fit_gp_CV_22_true_1_PCA_all_false_1_false_7423.out -- Submitted batch job 7423
+fit_gp_CV.sh for subject 23: output/fit_gp_CV_23_true_1_PCA_all_false_1_false_7424.out -- Submitted batch job 7424
+fit_gp_CV.sh for subject 24: output/fit_gp_CV_24_true_1_PCA_all_false_1_false_7425.out -- Submitted batch job 7425
+fit_gp_CV.sh for subject 25: output/fit_gp_CV_25_true_1_PCA_all_false_1_false_7426.out -- Submitted batch job 7426
+fit_gp_CV.sh for subject 26: output/fit_gp_CV_26_true_1_PCA_all_false_1_false_7427.out -- Submitted batch job 7427
+fit_gp_CV.sh for subject 27: output/fit_gp_CV_27_true_1_PCA_all_false_1_false_7428.out -- Submitted batch job 7428
+fit_gp_CV.sh for subject 28: output/fit_gp_CV_28_true_1_PCA_all_false_1_false_7429.out -- Submitted batch job 7429
+fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_PCA_all_false_1_false_7430.out -- Submitted batch job 7430
+fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_PCA_all_false_1_false_7431.out -- Submitted batch job 7431
+fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_PCA_all_false_1_false_7432.out -- Submitted batch job 7432
+fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_PCA_all_false_1_false_7433.out -- Submitted batch job 7433
+----------------
+--- Sun Nov 7 15:36:26 EST 2021: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_DQN_all_false_1_false_7434.out -- Submitted batch job 7434
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_1_DQN_all_false_1_false_7435.out -- Submitted batch job 7435
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_1_DQN_all_false_1_false_7436.out -- Submitted batch job 7436
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_1_DQN_all_false_1_false_7437.out -- Submitted batch job 7437
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_1_DQN_all_false_1_false_7438.out -- Submitted batch job 7438
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_1_DQN_all_false_1_false_7439.out -- Submitted batch job 7439
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_1_DQN_all_false_1_false_7440.out -- Submitted batch job 7440
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_1_DQN_all_false_1_false_7441.out -- Submitted batch job 7441
+fit_gp_CV.sh for subject 9: output/fit_gp_CV_9_true_1_DQN_all_false_1_false_7442.out -- Submitted batch job 7442
+fit_gp_CV.sh for subject 10: output/fit_gp_CV_10_true_1_DQN_all_false_1_false_7443.out -- Submitted batch job 7443
+fit_gp_CV.sh for subject 11: output/fit_gp_CV_11_true_1_DQN_all_false_1_false_7444.out -- Submitted batch job 7444
+fit_gp_CV.sh for subject 12: output/fit_gp_CV_12_true_1_DQN_all_false_1_false_7445.out -- Submitted batch job 7445
+fit_gp_CV.sh for subject 13: output/fit_gp_CV_13_true_1_DQN_all_false_1_false_7446.out -- Submitted batch job 7446
+fit_gp_CV.sh for subject 14: output/fit_gp_CV_14_true_1_DQN_all_false_1_false_7447.out -- Submitted batch job 7447
+fit_gp_CV.sh for subject 15: output/fit_gp_CV_15_true_1_DQN_all_false_1_false_7448.out -- Submitted batch job 7448
+fit_gp_CV.sh for subject 16: output/fit_gp_CV_16_true_1_DQN_all_false_1_false_7449.out -- Submitted batch job 7449
+fit_gp_CV.sh for subject 17: output/fit_gp_CV_17_true_1_DQN_all_false_1_false_7450.out -- Submitted batch job 7450
+fit_gp_CV.sh for subject 18: output/fit_gp_CV_18_true_1_DQN_all_false_1_false_7451.out -- Submitted batch job 7451
+fit_gp_CV.sh for subject 19: output/fit_gp_CV_19_true_1_DQN_all_false_1_false_7452.out -- Submitted batch job 7452
+fit_gp_CV.sh for subject 20: output/fit_gp_CV_20_true_1_DQN_all_false_1_false_7453.out -- Submitted batch job 7453
+fit_gp_CV.sh for subject 21: output/fit_gp_CV_21_true_1_DQN_all_false_1_false_7454.out -- Submitted batch job 7454
+fit_gp_CV.sh for subject 22: output/fit_gp_CV_22_true_1_DQN_all_false_1_false_7455.out -- Submitted batch job 7455
+fit_gp_CV.sh for subject 23: output/fit_gp_CV_23_true_1_DQN_all_false_1_false_7456.out -- Submitted batch job 7456
+fit_gp_CV.sh for subject 24: output/fit_gp_CV_24_true_1_DQN_all_false_1_false_7457.out -- Submitted batch job 7457
+fit_gp_CV.sh for subject 25: output/fit_gp_CV_25_true_1_DQN_all_false_1_false_7458.out -- Submitted batch job 7458
+fit_gp_CV.sh for subject 26: output/fit_gp_CV_26_true_1_DQN_all_false_1_false_7459.out -- Submitted batch job 7459
+fit_gp_CV.sh for subject 27: output/fit_gp_CV_27_true_1_DQN_all_false_1_false_7460.out -- Submitted batch job 7460
+fit_gp_CV.sh for subject 28: output/fit_gp_CV_28_true_1_DQN_all_false_1_false_7461.out -- Submitted batch job 7461
+fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_DQN_all_false_1_false_7462.out -- Submitted batch job 7462
+fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_DQN_all_false_1_false_7463.out -- Submitted batch job 7463
+fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_DQN_all_false_1_false_7464.out -- Submitted batch job 7464
+fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_DQN_all_false_1_false_7465.out -- Submitted batch job 7465
+----------------
+--- Sun Nov 7 15:37:29 EST 2021: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_EMPA_theory_false_1_false_7466.out -- Submitted batch job 7466
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_1_EMPA_theory_false_1_false_7467.out -- Submitted batch job 7467
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_1_EMPA_theory_false_1_false_7468.out -- Submitted batch job 7468
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_1_EMPA_theory_false_1_false_7469.out -- Submitted batch job 7469
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_1_EMPA_theory_false_1_false_7470.out -- Submitted batch job 7470
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_1_EMPA_theory_false_1_false_7471.out -- Submitted batch job 7471
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_1_EMPA_theory_false_1_false_7472.out -- Submitted batch job 7472
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_1_EMPA_theory_false_1_false_7473.out -- Submitted batch job 7473
+fit_gp_CV.sh for subject 9: output/fit_gp_CV_9_true_1_EMPA_theory_false_1_false_7474.out -- Submitted batch job 7474
+fit_gp_CV.sh for subject 10: output/fit_gp_CV_10_true_1_EMPA_theory_false_1_false_7475.out -- Submitted batch job 7475
+fit_gp_CV.sh for subject 11: output/fit_gp_CV_11_true_1_EMPA_theory_false_1_false_7476.out -- Submitted batch job 7476
+fit_gp_CV.sh for subject 12: output/fit_gp_CV_12_true_1_EMPA_theory_false_1_false_7477.out -- Submitted batch job 7477
+fit_gp_CV.sh for subject 13: output/fit_gp_CV_13_true_1_EMPA_theory_false_1_false_7478.out -- Submitted batch job 7478
+fit_gp_CV.sh for subject 14: output/fit_gp_CV_14_true_1_EMPA_theory_false_1_false_7479.out -- Submitted batch job 7479
+fit_gp_CV.sh for subject 15: output/fit_gp_CV_15_true_1_EMPA_theory_false_1_false_7480.out -- Submitted batch job 7480
+fit_gp_CV.sh for subject 16: output/fit_gp_CV_16_true_1_EMPA_theory_false_1_false_7481.out -- Submitted batch job 7481
+fit_gp_CV.sh for subject 17: output/fit_gp_CV_17_true_1_EMPA_theory_false_1_false_7482.out -- Submitted batch job 7482
+fit_gp_CV.sh for subject 18: output/fit_gp_CV_18_true_1_EMPA_theory_false_1_false_7483.out -- Submitted batch job 7483
+fit_gp_CV.sh for subject 19: output/fit_gp_CV_19_true_1_EMPA_theory_false_1_false_7484.out -- Submitted batch job 7484
+fit_gp_CV.sh for subject 20: output/fit_gp_CV_20_true_1_EMPA_theory_false_1_false_7485.out -- Submitted batch job 7485
+fit_gp_CV.sh for subject 21: output/fit_gp_CV_21_true_1_EMPA_theory_false_1_false_7486.out -- Submitted batch job 7486
+fit_gp_CV.sh for subject 22: output/fit_gp_CV_22_true_1_EMPA_theory_false_1_false_7487.out -- Submitted batch job 7487
+fit_gp_CV.sh for subject 23: output/fit_gp_CV_23_true_1_EMPA_theory_false_1_false_7488.out -- Submitted batch job 7488
+fit_gp_CV.sh for subject 24: output/fit_gp_CV_24_true_1_EMPA_theory_false_1_false_7489.out -- Submitted batch job 7489
+fit_gp_CV.sh for subject 25: output/fit_gp_CV_25_true_1_EMPA_theory_false_1_false_7490.out -- Submitted batch job 7490
+fit_gp_CV.sh for subject 26: output/fit_gp_CV_26_true_1_EMPA_theory_false_1_false_7491.out -- Submitted batch job 7491
+fit_gp_CV.sh for subject 27: output/fit_gp_CV_27_true_1_EMPA_theory_false_1_false_7492.out -- Submitted batch job 7492
+fit_gp_CV.sh for subject 28: output/fit_gp_CV_28_true_1_EMPA_theory_false_1_false_7493.out -- Submitted batch job 7493
+fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_EMPA_theory_false_1_false_7494.out -- Submitted batch job 7494
+fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_EMPA_theory_false_1_false_7495.out -- Submitted batch job 7495
+fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_EMPA_theory_false_1_false_7496.out -- Submitted batch job 7496
+fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_EMPA_theory_false_1_false_7497.out -- Submitted batch job 7497
+----------------
+--- Sun Nov 7 15:38:58 EST 2021: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_game_all_false_1_false_7498.out -- Submitted batch job 7498
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_1_game_all_false_1_false_7499.out -- Submitted batch job 7499
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_1_game_all_false_1_false_7500.out -- Submitted batch job 7500
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_1_game_all_false_1_false_7501.out -- Submitted batch job 7501
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_1_game_all_false_1_false_7502.out -- Submitted batch job 7502
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_1_game_all_false_1_false_7503.out -- Submitted batch job 7503
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_1_game_all_false_1_false_7504.out -- Submitted batch job 7504
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_1_game_all_false_1_false_7505.out -- Submitted batch job 7505
+fit_gp_CV.sh for subject 9: output/fit_gp_CV_9_true_1_game_all_false_1_false_7506.out -- Submitted batch job 7506
+fit_gp_CV.sh for subject 10: output/fit_gp_CV_10_true_1_game_all_false_1_false_7507.out -- Submitted batch job 7507
+fit_gp_CV.sh for subject 11: output/fit_gp_CV_11_true_1_game_all_false_1_false_7508.out -- Submitted batch job 7508
+fit_gp_CV.sh for subject 12: output/fit_gp_CV_12_true_1_game_all_false_1_false_7509.out -- Submitted batch job 7509
+fit_gp_CV.sh for subject 13: output/fit_gp_CV_13_true_1_game_all_false_1_false_7510.out -- Submitted batch job 7510
+fit_gp_CV.sh for subject 14: output/fit_gp_CV_14_true_1_game_all_false_1_false_7511.out -- Submitted batch job 7511
+fit_gp_CV.sh for subject 15: output/fit_gp_CV_15_true_1_game_all_false_1_false_7512.out -- Submitted batch job 7512
+fit_gp_CV.sh for subject 16: output/fit_gp_CV_16_true_1_game_all_false_1_false_7513.out -- Submitted batch job 7513
+fit_gp_CV.sh for subject 17: output/fit_gp_CV_17_true_1_game_all_false_1_false_7514.out -- Submitted batch job 7514
+fit_gp_CV.sh for subject 18: output/fit_gp_CV_18_true_1_game_all_false_1_false_7515.out -- Submitted batch job 7515
+fit_gp_CV.sh for subject 19: output/fit_gp_CV_19_true_1_game_all_false_1_false_7516.out -- Submitted batch job 7516
+fit_gp_CV.sh for subject 20: output/fit_gp_CV_20_true_1_game_all_false_1_false_7517.out -- Submitted batch job 7517
+fit_gp_CV.sh for subject 21: output/fit_gp_CV_21_true_1_game_all_false_1_false_7518.out -- Submitted batch job 7518
+fit_gp_CV.sh for subject 22: output/fit_gp_CV_22_true_1_game_all_false_1_false_7519.out -- Submitted batch job 7519
+fit_gp_CV.sh for subject 23: output/fit_gp_CV_23_true_1_game_all_false_1_false_7520.out -- Submitted batch job 7520
+fit_gp_CV.sh for subject 24: output/fit_gp_CV_24_true_1_game_all_false_1_false_7521.out -- Submitted batch job 7521
+fit_gp_CV.sh for subject 25: output/fit_gp_CV_25_true_1_game_all_false_1_false_7522.out -- Submitted batch job 7522
+fit_gp_CV.sh for subject 26: output/fit_gp_CV_26_true_1_game_all_false_1_false_7523.out -- Submitted batch job 7523
+fit_gp_CV.sh for subject 27: output/fit_gp_CV_27_true_1_game_all_false_1_false_7524.out -- Submitted batch job 7524
+fit_gp_CV.sh for subject 28: output/fit_gp_CV_28_true_1_game_all_false_1_false_7525.out -- Submitted batch job 7525
+fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_game_all_false_1_false_7526.out -- Submitted batch job 7526
+fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_game_all_false_1_false_7527.out -- Submitted batch job 7527
+fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_game_all_false_1_false_7528.out -- Submitted batch job 7528
+fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_game_all_false_1_false_7529.out -- Submitted batch job 7529
