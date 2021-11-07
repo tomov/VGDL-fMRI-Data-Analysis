@@ -59,9 +59,9 @@ tmap(mask) = ts;
 %load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=EMPA_theory_nsamples=100_project=1_fast=1__even.mat')); % t
 %load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=9_model=EMPA_theory_nsamples=100_project=1_fast=1_nowhiten_nofilter.mat'));
 
-%load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=EMPA_theory_nsamples=100_project=1_fast=1.mat')); % this is it !!!!!!!!!!!!!!!!!!!!ontroller five
+load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=EMPA_theory_nsamples=100_project=1_fast=1.mat')); % this is it !!!!!!!!!!!!!!!!!!!!ontroller five
 %load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=EMPA_sprite_nsamples=100_project=1_fast=1.mat')); % this is it
-load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=EMPA_interaction_nsamples=100_project=1_fast=1.mat')); % this is it
+%load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=EMPA_interaction_nsamples=100_project=1_fast=1.mat')); % this is it
 %load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=EMPA_termination_nsamples=100_project=1_fast=1.mat')); % this is it
 
 %load('mat/agg_gp_CV_us=1_glm=9_theory_fast.mat');

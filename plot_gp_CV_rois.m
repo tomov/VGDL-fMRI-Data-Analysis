@@ -3,7 +3,9 @@ close all;
 
 
 fasse_ncf = false;
-agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=HarvardOxford-maxprob-thr0.mat');
+%agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=HarvardOxford-maxprob-thr0.mat');
+%agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL3v1.mat');
+agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2.mat');
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010.mat');
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.001.mat');
 agg_filename
@@ -16,7 +18,7 @@ zs = atanh(rs);
 
 figure('position', [673 90 1519 849]);
 ix = ismember(regressor_names, {'theory', 'DQN', 'PCA'});
-plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names);
+h = plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names);
 %plot_gp_CV_rois_helper(fs(:,ix,:), 'ttest', 'mean', regressor_names(ix), roi_names);
 %ylim([0 0.1]);
 title('Fraction significant voxels in ROIs');
@@ -24,26 +26,20 @@ ylabel('Fraction significant voxels');
 
 
 figure('position', [73 90 1519 849]);
-ix = ismember(regressor_names, {'sprite', 'interaction', 'termination'});
-h = plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names);
+ix = ismember(regressor_names, {'theory', 'sprite', 'interaction', 'termination'});
+cmap = [1 0.8 0.6 0.4]' * h(1).FaceColor;
+plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names, cmap); %colormap(winter(3)));
 %ylim([0 0.1]);
 title('Fraction significant voxels in ROIs');
 ylabel('Fraction significant voxels');
-cmap = colormap(winter(3));
-for i = 1:length(h)
-    h(i).FaceColor = cmap(i,:);
-end
 
 figure('position', [73 90 1519 849]);
-ix = ismember(regressor_names, {'conv1', 'conv2', 'conv3', 'linear1', 'linear2'});
-h = plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names);
+ix = ismember(regressor_names, {'DQN', 'conv1', 'conv2', 'conv3', 'linear1', 'linear2'});
+cmap = [1 0.9 0.8 0.7 0.6 0.5]' * h(2).FaceColor;
+h = plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names, cmap); %colormap(autumn(5)));
 %ylim([0 0.1]);
 title('Fraction significant voxels in ROIs');
 ylabel('Fraction significant voxels');
-cmap = colormap(autumn(5));
-for i = 1:length(h)
-    h(i).FaceColor = cmap(i,:);
-end
 
 %{
 figure;
@@ -86,13 +82,14 @@ end
 
 
 
-function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, roi_names)
+function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, roi_names, cmap)
     sem = @(x) std(x) / sqrt(length(x));
 
     nROIs = size(fs, 1);
     nregressors = size(fs, 2);
     nsubjects = size(fs, 3);
 
+    % bars
     switch statistic
         case 'mean'
             m_fs = mean(fs, 3);
@@ -101,6 +98,13 @@ function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, r
     end
     sem_fs = std(fs, 0, 3) / sqrt(nsubjects);
     h = bar(m_fs);
+
+    % color the bars
+    if exist('cmap', 'var')
+        for i = 1:length(h)
+            h(i).FaceColor = cmap(i,:);
+        end
+    end
 
     xs = [];
     for i = 1:nregressors
