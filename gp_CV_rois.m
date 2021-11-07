@@ -5,12 +5,12 @@ EXPT = vgdl_expt();
 
 alpha = 0.01; % significance threshold for individual voxels
 
-%atlas = 'AAL2';
-atlas = 'HarvardOxford-maxprob-thr0';
+atlas = 'AAL2';
+%atlas = 'HarvardOxford-maxprob-thr0';
 
 fasse_ncf = false;
-filename = fullfile(get_mat_dir(fasse_ncf), sprintf('gp_CV_rois_alpha=%.3f_atlas=%s.mat', alpha, atlas));
-filename
+agg_filename = fullfile(get_mat_dir(fasse_ncf), sprintf('gp_CV_rois_alpha=%.3f_atlas=%s.mat', alpha, atlas));
+agg_filename
 
 [whole_brain_mask, Vwhole_brain_mask] = ccnl_load_mask('masks/mask.nii');
 
@@ -159,7 +159,6 @@ for reg = 1:nregressors
         filename = sprintf(filename_templates{reg}, subj_id);
         filename
         load(filename, 'r_CV');
-        disp('loaded')
         r = mean(r_CV, 1); % Pearson r's for all voxels
 
         n = EXPT.nTRs * 2; % number of data points per partition (two runs)
@@ -167,15 +166,13 @@ for reg = 1:nregressors
         p = 2 * (1 - tcdf(t, n - 2)); % p value for each voxel 
         significant = p < alpha; % which boxes are significant
 
-        disp('roi')
         for m = 1:nROIs
             rs(m,reg,s) = mean(r(roi_masks_flattened{m}));
             fs(m,reg,s) = mean(significant(roi_masks_flattened{m}));
         end
-        disp('roi')
     end
 end
 
-filename
+agg_filename
 
-save(filename);
+save(agg_filename);

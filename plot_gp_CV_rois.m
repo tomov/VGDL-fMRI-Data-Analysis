@@ -3,11 +3,13 @@ close all;
 
 
 fasse_ncf = false;
-filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010.mat');
-%filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.001.mat');
-filename
+agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=HarvardOxford-maxprob-thr0.mat');
+%agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010.mat');
+%agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.001.mat');
+agg_filename
 
-load(filename);
+load(agg_filename);
+zs = atanh(rs);
 
 %% fraction significant voxel z
 %
@@ -15,35 +17,76 @@ load(filename);
 figure('position', [673 90 1519 849]);
 ix = ismember(regressor_names, {'theory', 'DQN', 'PCA'});
 plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names);
+%plot_gp_CV_rois_helper(fs(:,ix,:), 'ttest', 'mean', regressor_names(ix), roi_names);
 %ylim([0 0.1]);
 title('Fraction significant voxels in ROIs');
 ylabel('Fraction significant voxels');
 
+
+figure('position', [73 90 1519 849]);
+ix = ismember(regressor_names, {'sprite', 'interaction', 'termination'});
+h = plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names);
+%ylim([0 0.1]);
+title('Fraction significant voxels in ROIs');
+ylabel('Fraction significant voxels');
+cmap = colormap(winter(3));
+for i = 1:length(h)
+    h(i).FaceColor = cmap(i,:);
+end
+
+figure('position', [73 90 1519 849]);
+ix = ismember(regressor_names, {'conv1', 'conv2', 'conv3', 'linear1', 'linear2'});
+h = plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names);
+%ylim([0 0.1]);
+title('Fraction significant voxels in ROIs');
+ylabel('Fraction significant voxels');
+cmap = colormap(autumn(5));
+for i = 1:length(h)
+    h(i).FaceColor = cmap(i,:);
+end
 
 %{
 figure;
 plot_gp_CV_rois_helper(fs, 'ranksum', regressor_names, roi_names);
 title('Fraction significant voxels in ROIs');
 ylabel('Fraction significant voxels');
-
+%}
 
 %% Pearson correlations
 %
 
-rs = atanh(rs);
 
+%{
 figure;
+figure('position', [73 90 1519 849]);
 ix = ismember(regressor_names, {'theory', 'DQN', 'PCA'});
-plot_gp_CV_rois_helper(rs(:,ix,:), 'ttest', regressor_names(ix), roi_names);
-title('Pearson correlation');
+plot_gp_CV_rois_helper(zs(:,ix,:), 'ttest', 'mean', regressor_names(ix), roi_names);
+title('Fisher z-transformed Pearson correlation between predicted and actual BOLD');
+ylabel('Fisher z-transformed Pearson correlation coefficient');
+%}
 
+%{
 figure;
-plot_gp_CV_rois_helper(rs, 'ttest', regressor_names, roi_names);
+plot_gp_CV_rois_helper(zs, 'ttest', regressor_names, roi_names);
 title('Pearson correlation');
 %}
 
+%{
+figure('position', [73 90 1519 849]);
+ix = ismember(regressor_names, {'sprite', 'interaction', 'termination'});
+h = plot_gp_CV_rois_helper(zs(:,ix,:), 'ttest', 'mean', regressor_names(ix), roi_names);
+%ylim([0 0.1]);
+title('Fisher z-transformed Pearson correlation between predicted and actual BOLD');
+ylabel('Fisher z-transformed Pearson correlation coefficient');
+cmap = colormap(winter(3));
+for i = 1:length(h)
+    h(i).FaceColor = cmap(i,:);
+end
+%}
 
-function plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, roi_names)
+
+
+function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, roi_names)
     sem = @(x) std(x) / sqrt(length(x));
 
     nROIs = size(fs, 1);
@@ -51,13 +94,13 @@ function plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, roi_n
     nsubjects = size(fs, 3);
 
     switch statistic
-    case 'mean'
-        mean_fs = mean(fs, 3);
-    case 'median'
-        mean_fs = median(fs, 3);
+        case 'mean'
+            m_fs = mean(fs, 3);
+        case 'median'
+            m_fs = median(fs, 3);
     end
     sem_fs = std(fs, 0, 3) / sqrt(nsubjects);
-    h = bar(mean_fs);
+    h = bar(m_fs);
 
     xs = [];
     for i = 1:nregressors
@@ -70,16 +113,27 @@ function plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, roi_n
         for reg = 1:nregressors
             y = squeeze(fs(m,reg,:));
             x = repmat(xs(m,reg), 1, nsubjects);
+            u_fs(m,reg) = mean(y); % default upper confidence bound
             %swarmchart(x, y, 10, h(reg).FaceColor, 'filled','MarkerFaceAlpha',0.5,'MarkerEdgeAlpha',0.5, 'XJitterWidth', 0.15);
-            %errorbar(xs(m,reg), mean(y), sem(y), '.', 'MarkerSize', 1, 'MarkerFaceColor', h(reg).FaceColor, 'LineWidth', 1, 'Color', h(reg).FaceColor, 'AlignVertexCenters', 'off');
+            switch statistic
+                case 'mean'
+                    errorbar(xs(m,reg), mean(y), sem(y), '.', 'MarkerSize', 1, 'MarkerFaceColor', h(reg).FaceColor, 'LineWidth', 1, 'Color', h(reg).FaceColor, 'AlignVertexCenters', 'off');
+                    u_fs(m,reg) = mean(y) + sem(y); % upper confidence bound
+                case 'median'
+                    q = quantile(y, [0.25 0.75]);
+                    neg = m_fs(m,reg) - q(1);
+                    pos = q(2) - m_fs(m,reg);
+                    errorbar(xs(m,reg), m_fs(m,reg), neg, pos, '.', 'MarkerSize', 1, 'MarkerFaceColor', h(reg).FaceColor, 'LineWidth', 1, 'Color', h(reg).FaceColor, 'AlignVertexCenters', 'off');
+                    u_fs(m,reg) = q(2); % upper confidence bound
+            end
             %Violin(squeeze(fs(m,reg,:)), xs(m,reg), 'Width', 0.1, 'ViolinColor', h(reg).FaceColor, 'ViolinAlpha', 0.3);
         end
     end
 
     % significance labels
     for m = 1:nROIs
-        %maxy = max(mean_fs(m,:) + sem_fs(m,:));
-        maxy = max(mean_fs(m,:));
+        %maxy = max(m_fs(m,:) + sem_fs(m,:));
+        maxy = max(u_fs(m,:));
         for r1 = 1:nregressors
             for r2 = r1+1:nregressors
                 y1 = squeeze(fs(m,r1,:));
@@ -87,10 +141,10 @@ function plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, roi_n
                 x1 = xs(m,r1);
                 x2 = xs(m,r2);
                 switch test_type
-                case 'ttest'
-                    [h,p,ci,stats] = ttest(y1,y2);
-                case 'ranksum'
-                    p = ranksum(y1, y2);
+                    case 'ttest'
+                        [~,p,ci,stats] = ttest(y1,y2);
+                    case 'ranksum'
+                        p = ranksum(y1, y2);
                 end
                 if p <= 0.05
                     plot([x1 x2], [maxy maxy] + 0.001, '-', 'color', [0 0 0]);
@@ -103,6 +157,7 @@ function plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, roi_n
     end
 
     legend(regressor_names);
+    xticks(1:nROIs);
     xticklabels(roi_names);
     xtickangle(30);
     set(gca,'TickLength',[0 0]);
