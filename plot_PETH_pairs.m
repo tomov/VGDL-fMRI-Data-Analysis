@@ -6,7 +6,8 @@ clear all;
 %load('mat/PETHs_glm=21_con=theory_change_flag_odd_Num=1_sphere=10.0mm_.mat');
 %load('mat/PETHs_glm=21_con=theory_change_flag_odd_Num=1_sphere=10.0mm__.mat');
 
-load('mat/PETHs_glm=102_con=theory_change_flag_odd_Num=1_sphere=10.0mm_.mat');
+%load('mat/PETHs_glm=102_con=theory_change_flag_odd_Num=1_sphere=10.0mm_.mat');
+load(fullfile(get_mat_dir(false), 'PETHs_glm=102_con=theory_change_flag_odd_Num=1_sphere=10.0mm.mat'));
 % subselect ROIs
 ROI_ix = [1     2     3     5     7    11];
 mask_filenames = mask_filenames(ROI_ix);
@@ -17,10 +18,11 @@ activations = activations(ROI_ix);
 figure('pos', [64 421 2282 838]);
 
 %reg_field = 'theory_change_flag';
+nuisance_fields = {'effects', 'avatar_collision_flag', 'new_sprites', 'killed_sprites', 'play_start', 'play_end'};
 %reg_field = 'sprite_change_flag';
 %reg_field = 'interaction_change_flag';
 reg_field = 'termination_change_flag';
-nuisance_fields = {'avatar_collision_flag', 'killed_sprites', 'play_start', 'play_end'};
+%nuisance_fields = {'avatar_collision_flag', 'killed_sprites', 'play_start', 'play_end'};
 
 subjs = 2:2:32;
 %mask_filenames = mask_filenames(1:2);
@@ -72,7 +74,7 @@ for m = 1:length(mask_filenames)
                 else
                     color = cmap(i+1,:);
                 end
-                text(t(j), ax.YLim(2) - 0.02, significance(p(j)), 'color', color, 'fontsize', 17, 'HorizontalAlignment', 'center');
+                text(t(j), ax.YLim(2) - 0.02, significance(p(j)), 'color', color, 'fontsize', 7, 'HorizontalAlignment', 'center');
             end
         end
 
@@ -85,7 +87,8 @@ for m = 1:length(mask_filenames)
         ylabel('\Delta BOLD');
         xlabel('time (s)');
         if i == 1
-            title({regions{m}, mask_name{m}, [reg_field, ' vs. ', nuisance_field]}, 'interpreter', 'none');
+            %title({regions{m}, mask_name{m}, [reg_field, ' vs. ', nuisance_field]}, 'interpreter', 'none');
+            title({regions{m}, mask_name{m}, reg_field}, 'interpreter', 'none');
         end
     end
 

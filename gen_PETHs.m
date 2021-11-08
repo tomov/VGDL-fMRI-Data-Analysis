@@ -1,4 +1,4 @@
-function gen_PETHs(glmodel, contrast, Num, sphere)
+function gen_PETHs(glmodel, contrast, Num, sphere, what)
     % get activations around given event(s)
 
     EXPT = vgdl_expt();
@@ -11,6 +11,8 @@ function gen_PETHs(glmodel, contrast, Num, sphere)
     %glmodel = 21;
     %contrast = 'theory_change_flag';
 
+    [~, whole_brain_mask, ~] = get_mask_format_helper('masks/mask.nii');
+
     PETH_dTRs = -2:10; % TRs relative to the event onset to use for the PETH's
     baseline_dTRs = -2:0; % TRs relative to the event onset to use for the baseline
 
@@ -21,11 +23,11 @@ function gen_PETHs(glmodel, contrast, Num, sphere)
         tag = glmodel; % fake "glmodel" = study tag
         glmodel = 9; % for load_BOLD; doesn't really matter
         [mask_filenames, regions] = get_masks_from_study(tag, sphere);
-        filename = fullfile(get_mat_dir(false), sprintf('PETHs_tag=%s_sphere=%.1fmm.mat', tag, sphere));
+        filename = fullfile(get_mat_dir(false), sprintf('PETHs_tag=%s_sphere=%.1fmm_%s.mat', tag, sphere, what));
     else
         % actual GLM
         [mask_filenames, regions] = get_masks_from_contrast(glmodel, contrast, true, [], Num, sphere);
-        filename = fullfile(get_mat_dir(false), sprintf('PETHs_glm=%d_con=%s_odd_Num=%d_sphere=%.1fmm.mat', glmodel, contrast, Num, sphere));
+        filename = fullfile(get_mat_dir(false), sprintf('PETHs_glm=%d_con=%s_odd_Num=%d_sphere=%.1fmm_%s.mat', glmodel, contrast, Num, sphere, what));
     end
     disp(filename);
 
@@ -79,6 +81,11 @@ function gen_PETHs(glmodel, contrast, Num, sphere)
 
         toc
 
+        if strcmp(what, 'GP')
+            disp('extracting predicted BOLD time course from GP results');
+            load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat');
+        end
+
         disp('extracting BOLD time courses');
 
         % loop over masks
@@ -115,9 +122,25 @@ function gen_PETHs(glmodel, contrast, Num, sphere)
             % loop over runs
             for SPM_run_id = 1:length(EXPT.subject(subj_id).functional)
 
-                % get BOLD time course given run
-                Y_run = nanmean(Y(Y_run_id == SPM_run_id, :), 2);
-                assert(all(size(Y_run) == [EXPT.nTRs, 1]));
+                % get whatever we will be plotting on the histograms
+                switch what
+                    case 'BOLD'
+                        % get BOLD time course given run
+                        Y_run = nanmean(Y(Y_run_id == SPM_run_id, :), 2);
+                        assert(all(size(Y_run) == [EXPT.nTRs, 1]));
+                    case 'GP'
+                        % get predicted BOLD and BOLD, do not average across voxels
+                        Y_run = Y(Y_run_id == SPM_run_id, :);
+                        Y_hat_run = Y_hat(Y_run_id == SPM_run_id, mask(whole_brain_mask));
+                        % get correlation across voxels at each time point
+                        r_run = nan(EXPT.nTRs, 1);
+                        for t = 1:EXPT.nTRs
+                            r_run(t) = corr(Y_run(t, :)', Y_hat_run(t, :)');
+                        end
+                        z_run = atanh(r_run);
+                    otherwise
+                        assert(false);
+                end
 
                 run_id = get_behavioral_run_id(subj_id, SPM_run_id);
 
@@ -135,10 +158,20 @@ function gen_PETHs(glmodel, contrast, Num, sphere)
                         valid_TRs = TRs >= 1 & TRs <= EXPT.nTRs;
 
                         % baseline
-                        Y_baseline = nanmean(Y_run(event_TR + baseline_dTRs));
+                        switch what
+                            case 'BOLD'
+                                Y_baseline = nanmean(Y_run(event_TR + baseline_dTRs));
+                            case 'GP'
+                                z_baseline = nanmean(z_run(event_TR + baseline_dTRs));
+                        end
 
                         % accumulate peri-event timecourses; we average at the end (per subject)
-                        activations(m).(field)(s,valid_TRs) = activations(m).(field)(s,valid_TRs) + (Y_run(TRs(valid_TRs))' - Y_baseline);
+                        switch what
+                            case 'BOLD'
+                                activations(m).(field)(s,valid_TRs) = activations(m).(field)(s,valid_TRs) + (Y_run(TRs(valid_TRs))' - Y_baseline);
+                            case 'GP'
+                                activations(m).(field)(s,valid_TRs) = activations(m).(field)(s,valid_TRs) + (z_run(TRs(valid_TRs))' - z_baseline);
+                        end
                         counts(m).(field)(s,:) = counts(m).(field)(s,:) + valid_TRs;
                     end
                 end
