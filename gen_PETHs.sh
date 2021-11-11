@@ -21,8 +21,8 @@ declare -a fn_calls=(
                      )
 
 declare -a fn_calls=(
-                     "gen_PETHs(\'AAL3\', \'\', 0, 0, \'BOLD\')"
-                     "gen_PETHs(\'AAL3\', \'\', 0, 0, \'GP\')"
+                     "gen_PETHs(\'AAL3v1\', \'\', 0, 0, \'BOLD\')"
+                     "gen_PETHs(\'AAL3v1\', \'\', 0, 0, \'GP\')"
                      )
 
 

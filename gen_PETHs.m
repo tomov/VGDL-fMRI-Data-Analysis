@@ -19,7 +19,7 @@ function gen_PETHs(glmodel, contrast, Num, sphere, what)
     % spherical mask around top ROI from contrast
 
     if ischar(glmodel)
-        if ismember(glmodel, {'AAL2', 'AAL3', 'HarvardOxford'})
+        if ismember(glmodel, {'AAL2', 'AAL3v1', 'HarvardOxford'})
             % anatomical ROI
             atlas_name = glmodel;
             [mask_filenames, regions] = get_anatomical_masks(atlas_name);

@@ -3251,3 +3251,8 @@ gen_PETHs.sh gen_PETHs(\'hayley2021psi\', 0, 0, 10): output/gen_PETHs_7621.out -
 ----------------
 gen_PETHs.sh gen_PETHs(\'AAL3\', \'\', 0, 0, \'BOLD\'): output/gen_PETHs_7622.out -- Submitted batch job 7622
 gen_PETHs.sh gen_PETHs(\'AAL3\', \'\', 0, 0, \'GP\'): output/gen_PETHs_7623.out -- Submitted batch job 7623
+----------------
+--- Wed Nov 10 19:35:45 EST 2021 Running gen_PETHs
+----------------
+gen_PETHs.sh gen_PETHs(\'AAL3v1\', \'\', 0, 0, \'BOLD\'): output/gen_PETHs_7624.out -- Submitted batch job 7624
+gen_PETHs.sh gen_PETHs(\'AAL3v1\', \'\', 0, 0, \'GP\'): output/gen_PETHs_7625.out -- Submitted batch job 7625

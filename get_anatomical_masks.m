@@ -125,7 +125,7 @@ switch atlas_name
     case 'AAL2'
         roi_labels = roi_labels_AAL2;
         roi_names = roi_names_AAL2;
-    case 'AAL3'
+    case 'AAL3v1'
         roi_labels = roi_labels_AAL3;
         roi_names = roi_names_AAL3;
     case 'HarvardOxford'
