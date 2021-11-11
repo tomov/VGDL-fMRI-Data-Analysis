@@ -11,11 +11,22 @@ agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AA
 agg_filename
 
 load(agg_filename);
-zs = atanh(rs);
 
+%
+%% BICs
+%
+
+figure('position', [673 90 1519 849]);
+ix = ismember(regressor_names, {'theory', 'DQN', 'PCA'});
+h = plot_gp_CV_rois_helper(bics(:,ix,:) - bics(:,end,:), 'ttest', 'mean', regressor_names(ix), roi_names);
+title('BICs in ROIs');
+ylabel('\Delta BIC');
+
+%
 %% fraction significant voxel z
 %
 
+%{
 figure('position', [673 90 1519 849]);
 ix = ismember(regressor_names, {'theory', 'DQN', 'PCA'});
 h = plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names, alpha);
@@ -29,7 +40,6 @@ figure('position', [73 90 1519 849]);
 ix = ismember(regressor_names, {'theory', 'sprite', 'interaction', 'termination'});
 cmap = [1 0.8 0.6 0.4]' * h(1).FaceColor;
 plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names, alpha); %colormap(winter(3)));
-%ylim([0 0.1]);
 title('Fraction significant voxels in ROIs');
 ylabel('Fraction significant voxels');
 
@@ -37,9 +47,10 @@ figure('position', [73 90 1519 849]);
 ix = ismember(regressor_names, {'DQN', 'conv1', 'conv2', 'conv3', 'linear1', 'linear2'});
 cmap = [1 0.9 0.8 0.7 0.6 0.5]' * h(2).FaceColor;
 h = plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names, alpha); %colormap(autumn(5)));
-%ylim([0 0.1]);
 title('Fraction significant voxels in ROIs');
 ylabel('Fraction significant voxels');
+%}
+
 
 %{
 figure;
@@ -52,14 +63,12 @@ ylabel('Fraction significant voxels');
 %
 
 
-%{
 figure;
 figure('position', [73 90 1519 849]);
 ix = ismember(regressor_names, {'theory', 'DQN', 'PCA'});
-plot_gp_CV_rois_helper(zs(:,ix,:), 'ttest', 'mean', regressor_names(ix), roi_names);
+plot_gp_CV_rois_helper(zs(:,ix,:), 'ttest', 'mean', regressor_names(ix), roi_names, 0);
 title('Fisher z-transformed Pearson correlation between predicted and actual BOLD');
 ylabel('Fisher z-transformed Pearson correlation coefficient');
-%}
 
 %{
 figure;
@@ -138,18 +147,20 @@ function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, r
     for m = 1:nROIs
 
         % single
-        for r1 = 1:nregressors
-            y1 = squeeze(fs(m,r1,:));
-            x1 = xs(m,r1);
-            switch test_type
-                case 'ttest'
-                    [~,p,ci,stats] = ttest(y1, null_value);
-                case 'ranksum'
-                    [p,~,stats] = signtest(y1, null_value, 'Tail','right');
-            end
-            if p <= 0.05
-                text(x1, u_fs(m,r1) + 0.002, significance(p), 'HorizontalAlignment', 'center');
-        %        maxy = maxy + 0.003;
+        if exist('null_value') && ~isempty(null_value)
+            for r1 = 1:nregressors
+                y1 = squeeze(fs(m,r1,:));
+                x1 = xs(m,r1);
+                switch test_type
+                    case 'ttest'
+                        [~,p,ci,stats] = ttest(y1, null_value);
+                    case 'ranksum'
+                        [p,~,stats] = signtest(y1, null_value, 'Tail','right');
+                end
+                if p <= 0.05
+                    text(x1, u_fs(m,r1) + 0.002, significance(p), 'HorizontalAlignment', 'center');
+            %        maxy = maxy + 0.003;
+                end
             end
         end
 
