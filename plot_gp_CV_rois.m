@@ -5,7 +5,8 @@ close all;
 fasse_ncf = false;
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=HarvardOxford-maxprob-thr0.mat');
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL3v1.mat');
-agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2.mat');
+%agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2.mat'); % !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_grouped.mat');
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010.mat');
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.001.mat');
 agg_filename
@@ -16,17 +17,18 @@ load(agg_filename);
 %% BICs
 %
 
+%{
 figure('position', [673 90 1519 849]);
 ix = ismember(regressor_names, {'theory', 'DQN', 'PCA'});
 h = plot_gp_CV_rois_helper(bics(:,ix,:) - bics(:,end,:), 'ttest', 'mean', regressor_names(ix), roi_names);
 title('BICs in ROIs');
 ylabel('\Delta BIC');
+%}
 
 %
 %% fraction significant voxel z
 %
 
-%{
 figure('position', [673 90 1519 849]);
 ix = ismember(regressor_names, {'theory', 'DQN', 'PCA'});
 h = plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names, alpha);
@@ -36,6 +38,7 @@ title('Fraction significant voxels in ROIs');
 ylabel('Fraction significant voxels');
 
 
+%{
 figure('position', [73 90 1519 849]);
 ix = ismember(regressor_names, {'theory', 'sprite', 'interaction', 'termination'});
 cmap = [1 0.8 0.6 0.4]' * h(1).FaceColor;
@@ -63,12 +66,14 @@ ylabel('Fraction significant voxels');
 %
 
 
-figure;
+%{
 figure('position', [73 90 1519 849]);
 ix = ismember(regressor_names, {'theory', 'DQN', 'PCA'});
 plot_gp_CV_rois_helper(zs(:,ix,:), 'ttest', 'mean', regressor_names(ix), roi_names, 0);
 title('Fisher z-transformed Pearson correlation between predicted and actual BOLD');
 ylabel('Fisher z-transformed Pearson correlation coefficient');
+%}
+
 
 %{
 figure;

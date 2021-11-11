@@ -5,7 +5,7 @@ EXPT = vgdl_expt();
 
 alpha = 0.01; % significance threshold for individual voxels
 
-atlas = 'AAL2';
+atlas = 'AAL2_grouped';
 %atlas = 'AAL3v1';
 %atlas = 'HarvardOxford-maxprob-thr0';
 

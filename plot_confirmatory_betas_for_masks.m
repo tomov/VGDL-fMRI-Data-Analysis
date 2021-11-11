@@ -15,7 +15,8 @@ clear all;
 % subselect ROIs
 %ROI_ix = [1     2     3     5     7    11];
 
-load(fullfile(get_mat_dir(false), 'confirmatory_betas_for_masks_atlas=AAL3v1_cglm=102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-.mat'));
+%load(fullfile(get_mat_dir(false), 'confirmatory_betas_for_masks_atlas=AAL3v1_cglm=102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-.mat'));
+load(fullfile(get_mat_dir(false), 'confirmatory_betas_for_masks_atlas=AAL2_cglm=102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-.mat'));
 ROI_ix = 1:length(mask_filenames);
 
 mask_filenames = mask_filenames(ROI_ix);
