@@ -3278,3 +3278,37 @@ gen_PETHs.sh gen_PETHs(\'AAL3v1\', \'\', 0, 0, \'GP\'): output/gen_PETHs_7633.ou
 ----------------
 gen_PETHs.sh gen_PETHs(\'AAL3v1\', \'\', 0, 0, \'BOLD\'): output/gen_PETHs_7635.out -- Submitted batch job 7635
 gen_PETHs.sh gen_PETHs(\'AAL3v1\', \'\', 0, 0, \'GP\'): output/gen_PETHs_7636.out -- Submitted batch job 7636
+----------------
+--- Thu Nov 11 17:28:27 EST 2021 Running confirmatory_betas_for_masks
+----------------
+confirmatory_betas_for_masks.sh confirmatory_betas_for_masks(\'AAL2_ungrouped\', \'\', 0, 0): output/confirmatory_betas_for_masks_7671.out -- Submitted batch job 7671
+confirmatory_betas_for_masks.sh confirmatory_betas_for_masks(\'AAL2_grouped3\', \'\', 0, 0): output/confirmatory_betas_for_masks_7672.out -- Submitted batch job 7672
+----------------
+--- Thu Nov 11 17:45:58 EST 2021 Running confirmatory_betas_for_masks
+----------------
+confirmatory_betas_for_masks.sh confirmatory_betas_for_masks(\'AAL2_ungrouped2\', \'\', 0, 0): output/confirmatory_betas_for_masks_7673.out -- Submitted batch job 7673
+----------------
+--- Thu Nov 11 17:47:26 EST 2021 Running confirmatory_betas_for_masks
+----------------
+confirmatory_betas_for_masks.sh confirmatory_betas_for_masks(\'AAL2_ungrouped2\', \'\', 0, 0): output/confirmatory_betas_for_masks_7674.out -- Submitted batch job 7674
+----------------
+--- Thu Nov 11 17:54:36 EST 2021 Running confirmatory_betas_for_masks
+----------------
+confirmatory_betas_for_masks.sh confirmatory_betas_for_masks(\'AAL2_grouped4\', \'\', 0, 0): output/confirmatory_betas_for_masks_7675.out -- Submitted batch job 7675
+confirmatory_betas_for_masks.sh confirmatory_betas_for_masks(\'AAL2_ungrouped2\', \'\', 0, 0): output/confirmatory_betas_for_masks_7676.out -- Submitted batch job 7676
+----------------
+--- Thu Nov 11 17:57:22 EST 2021 Running gen_PETHs
+----------------
+gen_PETHs.sh gen_PETHs(\'AAL2_grouped3\', \'\', 0, 0, \'BOLD\'): output/gen_PETHs_7677.out -- Submitted batch job 7677
+gen_PETHs.sh gen_PETHs(\'AAL2_grouped3\', \'\', 0, 0, \'GP\'): output/gen_PETHs_7678.out -- Submitted batch job 7678
+gen_PETHs.sh gen_PETHs(\'AAL2_ungrouped\', \'\', 0, 0, \'BOLD\'): output/gen_PETHs_7679.out -- Submitted batch job 7679
+gen_PETHs.sh gen_PETHs(\'AAL2_ungrouped\', \'\', 0, 0, \'GP\'): output/gen_PETHs_7680.out -- Submitted batch job 7680
+gen_PETHs.sh gen_PETHs(\'AAL2_grouped4\', \'\', 0, 0, \'BOLD\'): output/gen_PETHs_7681.out -- Submitted batch job 7681
+gen_PETHs.sh gen_PETHs(\'AAL2_grouped4\', \'\', 0, 0, \'GP\'): output/gen_PETHs_7682.out -- Submitted batch job 7682
+gen_PETHs.sh gen_PETHs(\'AAL2_ungrouped2\', \'\', 0, 0, \'BOLD\'): output/gen_PETHs_7683.out -- Submitted batch job 7683
+gen_PETHs.sh gen_PETHs(\'AAL2_ungrouped2\', \'\', 0, 0, \'GP\'): output/gen_PETHs_7684.out -- Submitted batch job 7684
+----------------
+--- Thu Nov 11 17:58:32 EST 2021 Running confirmatory_betas_for_masks
+----------------
+confirmatory_betas_for_masks.sh confirmatory_betas_for_masks(\'AAL2_grouped4\', \'\', 0, 0): output/confirmatory_betas_for_masks_7685.out -- Submitted batch job 7685
+confirmatory_betas_for_masks.sh confirmatory_betas_for_masks(\'AAL2_ungrouped2\', \'\', 0, 0): output/confirmatory_betas_for_masks_7686.out -- Submitted batch job 7686
