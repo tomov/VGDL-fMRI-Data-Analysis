@@ -38,6 +38,8 @@ normalize = 1;
 agg_filename = fullfile(get_mat_dir(), sprintf('agg_gp_CV_us=%d_glm=%d_model=%s_%s_nsamples=100_project=%d_norm=%d_fast=1%s.mat', use_smooth, glmodel, model_name, what, project, normalize, suffix));
 agg_filename
 
+lme = [];
+
 for s = 1:1:length(subjects)
     subj_id = subjects(s);
 

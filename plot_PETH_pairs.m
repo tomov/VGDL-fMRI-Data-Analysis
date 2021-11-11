@@ -22,11 +22,11 @@ activations = activations(ROI_ix);
 
 figure('pos', [64 421 2282 838]);
 
-reg_field = 'theory_change_flag';
+%reg_field = 'theory_change_flag';
 nuisance_fields = {'effects', 'avatar_collision_flag', 'new_sprites', 'killed_sprites', 'play_start', 'play_end'};
 %reg_field = 'sprite_change_flag';
 %reg_field = 'interaction_change_flag';
-%reg_field = 'termination_change_flag';
+reg_field = 'termination_change_flag';
 %nuisance_fields = {'avatar_collision_flag', 'killed_sprites', 'play_start', 'play_end'};
 
 subjs = 1:1:32;

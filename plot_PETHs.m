@@ -19,7 +19,7 @@ clear all;
 %ROI_ix = [1     2     3     5     7    11];
 
 %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_sphere=0.0mm_BOLD.mat'));
-load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL3v1_BOLD.mat'));
+load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL3v1_GP.mat'));
 ROI_ix = 1:length(mask_filenames);
 
 mask_filenames = mask_filenames(ROI_ix);
