@@ -6,8 +6,10 @@ EXPT = vgdl_expt();
 alpha = 0.01; % significance threshold for individual voxels
 
 %atlas = 'AAL2_grouped';
+atlas = 'AAL2_grouped3';
+%atlas = 'AAL2_ungrouped';
 %atlas = 'AAL2_grouped2';
-atlas = 'Brodmann';
+%atlas = 'Brodmann';
 %atlas = 'AAL3v1';
 %atlas = 'HarvardOxford-maxprob-thr0';
 

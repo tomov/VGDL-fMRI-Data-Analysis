@@ -9,7 +9,8 @@ fasse_ncf = false;
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2.mat'); % !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_grouped.mat');
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_grouped2.mat');
-agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=Brodmann.mat');
+agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_ungrouped.mat');
+%agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=Brodmann.mat');
 
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010.mat');
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.001.mat');
@@ -21,17 +22,20 @@ load(agg_filename);
 %% BICs
 %
 
+%{
 figure('position', [673 90 1519 849]);
 ix = ismember(regressor_names, {'theory', 'DQN', 'PCA'});
 h = plot_gp_CV_rois_helper(bics(:,ix,:) - bics(:,end,:), 'ttest', 'mean', regressor_names(ix), roi_names);
 title('BICs in ROIs');
 ylabel('\Delta BIC');
+%}
+
 
 %
 %% fraction significant voxels
 %
 
-figure('position', [673 90 1519 849]);
+figure('position', [1147 521 1045 418]);
 ix = ismember(regressor_names, {'theory', 'DQN', 'PCA'});
 h = plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names);
 %h = plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, alpha);
@@ -40,7 +44,18 @@ h = plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix)
 title('Fraction significant voxels in ROIs');
 ylabel('Fraction significant voxels');
 
+% Prettify it
+text(3.5, 0.075, 'Frontal/Motor', 'fontsize', 12, 'HorizontalAlignment', 'center');
+plot([6.5 6.5], [0 0.08], '--', 'color', [0.5 0.5 0.5]);
+text(8.5, 0.075, 'Dorsal/Parietal', 'fontsize', 12, 'HorizontalAlignment', 'center');
+plot([10.5 10.5], [0 0.08], '--', 'color', [0.5 0.5 0.5]);
+text(12, 0.075, 'Ventral/Temporal', 'fontsize', 12, 'HorizontalAlignment', 'center');
+plot([13.5 13.5], [0 0.08], '--', 'color', [0.5 0.5 0.5]);
+text(14.5, 0.075, 'Early visual', 'fontsize', 12, 'HorizontalAlignment', 'center');
+legend({'EMPA', 'DDQN', 'PCA'});
 
+
+%{
 figure('position', [73 90 1519 849]);
 ix = ismember(regressor_names, {'theory', 'sprite', 'interaction', 'termination'});
 cmap = [1 0.8 0.6 0.4]' * h(1).FaceColor;
@@ -54,6 +69,7 @@ cmap = [1 0.9 0.8 0.7 0.6 0.5]' * h(2).FaceColor;
 h = plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], cmap); %colormap(autumn(5)));
 title('Fraction significant voxels in ROIs');
 ylabel('Fraction significant voxels');
+%}
 
 
 %{
@@ -207,6 +223,7 @@ function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, r
                     plot([x1 x2], [maxy maxy] + 0.001, '-', 'color', [0 0 0]);
                     text(mean([x1 x2]), maxy + 0.002, significance(p), 'HorizontalAlignment', 'center');
                     maxy = maxy + 0.003;
+                    fprintf('ROI %s: %s vs. %s -- p = %.5f\n', roi_names{m}, regressor_names{r1}, regressor_names{r2}, p);
                 end
 
             end
