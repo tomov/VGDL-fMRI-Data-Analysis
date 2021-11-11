@@ -6,8 +6,10 @@ fasse_ncf = false;
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=HarvardOxford-maxprob-thr0.mat');
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL3v1.mat');
 
-agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2.mat'); % !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+%agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2.mat'); % !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_grouped.mat');
+%agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_grouped2.mat');
+agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=Brodmann.mat');
 
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010.mat');
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.001.mat');
@@ -19,16 +21,14 @@ load(agg_filename);
 %% BICs
 %
 
-%{
 figure('position', [673 90 1519 849]);
 ix = ismember(regressor_names, {'theory', 'DQN', 'PCA'});
 h = plot_gp_CV_rois_helper(bics(:,ix,:) - bics(:,end,:), 'ttest', 'mean', regressor_names(ix), roi_names);
 title('BICs in ROIs');
 ylabel('\Delta BIC');
-%}
 
 %
-%% fraction significant voxel z
+%% fraction significant voxels
 %
 
 figure('position', [673 90 1519 849]);
@@ -41,21 +41,19 @@ title('Fraction significant voxels in ROIs');
 ylabel('Fraction significant voxels');
 
 
-%{
 figure('position', [73 90 1519 849]);
 ix = ismember(regressor_names, {'theory', 'sprite', 'interaction', 'termination'});
 cmap = [1 0.8 0.6 0.4]' * h(1).FaceColor;
-plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, alpha); %colormap(winter(3)));
+plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], cmap); %colormap(winter(3)));
 title('Fraction significant voxels in ROIs');
 ylabel('Fraction significant voxels');
 
 figure('position', [73 90 1519 849]);
 ix = ismember(regressor_names, {'DQN', 'conv1', 'conv2', 'conv3', 'linear1', 'linear2'});
 cmap = [1 0.9 0.8 0.7 0.6 0.5]' * h(2).FaceColor;
-h = plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, alpha); %colormap(autumn(5)));
+h = plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], cmap); %colormap(autumn(5)));
 title('Fraction significant voxels in ROIs');
 ylabel('Fraction significant voxels');
-%}
 
 
 %{
@@ -68,11 +66,26 @@ ylabel('Fraction significant voxels');
 %% Pearson correlations
 %
 
-
 %{
 figure('position', [73 90 1519 849]);
 ix = ismember(regressor_names, {'theory', 'DQN', 'PCA'});
-plot_gp_CV_rois_helper(zs(:,ix,:), 'ttest', 'mean', regressor_names(ix), roi_names, 0);
+h = plot_gp_CV_rois_helper(zs(:,ix,:), 'ttest', 'mean', regressor_names(ix), roi_names, 0);
+ylim([0 0.04])
+title('Fisher z-transformed Pearson correlation between predicted and actual BOLD');
+ylabel('Fisher z-transformed Pearson correlation coefficient');
+
+
+figure('position', [73 90 1519 849]);
+ix = ismember(regressor_names, {'theory', 'sprite', 'interaction', 'termination'});
+cmap = [1 0.8 0.6 0.4]' * h(1).FaceColor;
+plot_gp_CV_rois_helper(fs(:,ix,:), 'ttest', 'mean', regressor_names(ix), roi_names, [], cmap); %colormap(winter(3)));
+title('Fisher z-transformed Pearson correlation between predicted and actual BOLD');
+ylabel('Fisher z-transformed Pearson correlation coefficient');
+
+figure('position', [73 90 1519 849]);
+ix = ismember(regressor_names, {'DQN', 'conv1', 'conv2', 'conv3', 'linear1', 'linear2'});
+cmap = [1 0.9 0.8 0.7 0.6 0.5]' * h(2).FaceColor;
+h = plot_gp_CV_rois_helper(fs(:,ix,:), 'ttest', 'mean', regressor_names(ix), roi_names, [], cmap); %colormap(autumn(5)));
 title('Fisher z-transformed Pearson correlation between predicted and actual BOLD');
 ylabel('Fisher z-transformed Pearson correlation coefficient');
 %}
