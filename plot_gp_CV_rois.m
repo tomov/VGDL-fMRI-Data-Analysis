@@ -36,8 +36,7 @@ ylabel('\Delta BIC');
 %% fraction significant voxels
 %
 
-%figure('position', [1147 521 1045 418]);
-figure('position', [1147 522 537 417]);
+figure('position', [1147 521 1045 418]);
 ix = ismember(regressor_names, {'theory', 'DQN', 'PCA'});
 h = plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names);
 %h = plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, alpha);
@@ -62,7 +61,6 @@ legend({'EMPA', 'DDQN', 'PCA'});
 
 
 
-%{
 figure('position', [73 90 1519 849]);
 ix = ismember(regressor_names, {'theory', 'sprite', 'interaction', 'termination'});
 cmap = [1 0.8 0.6 0.4]' * h(1).FaceColor;
@@ -70,13 +68,12 @@ plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), ro
 title('Fraction significant voxels in ROIs');
 ylabel('Fraction significant voxels');
 
-figure('position', [73 90 1519 849]);
+figure('position', [173 390 1519 849]);
 ix = ismember(regressor_names, {'DQN', 'conv1', 'conv2', 'conv3', 'linear1', 'linear2'});
 cmap = [1 0.9 0.8 0.7 0.6 0.5]' * h(2).FaceColor;
-h = plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], cmap); %colormap(autumn(5)));
+plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], cmap); %colormap(autumn(5)));
 title('Fraction significant voxels in ROIs');
 ylabel('Fraction significant voxels');
-%}
 
 
 %{
