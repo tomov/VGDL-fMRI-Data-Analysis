@@ -69,5 +69,5 @@ switch figure_name
         title('DDQN layers');
         ylabel('Fraction significant voxels');
         xticklabels({'Frontal/Motor', 'Dorsal/Parietal', 'Ventral/Temporal', 'Early visual'});
-        legend({'theory', 'objects', 'relations', 'goals'});
+        legend({'all layers', 'conv1', 'conv2', 'conv3', 'linear1', 'linear2'});
 end
