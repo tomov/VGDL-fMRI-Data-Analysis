@@ -18,7 +18,7 @@ zs = atanh(rs);
 
 figure('position', [673 90 1519 849]);
 ix = ismember(regressor_names, {'theory', 'DQN', 'PCA'});
-h = plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names);
+h = plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names, alpha);
 %plot_gp_CV_rois_helper(fs(:,ix,:), 'ttest', 'mean', regressor_names(ix), roi_names);
 %ylim([0 0.1]);
 title('Fraction significant voxels in ROIs');
@@ -28,7 +28,7 @@ ylabel('Fraction significant voxels');
 figure('position', [73 90 1519 849]);
 ix = ismember(regressor_names, {'theory', 'sprite', 'interaction', 'termination'});
 cmap = [1 0.8 0.6 0.4]' * h(1).FaceColor;
-plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names, cmap); %colormap(winter(3)));
+plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names, alpha); %colormap(winter(3)));
 %ylim([0 0.1]);
 title('Fraction significant voxels in ROIs');
 ylabel('Fraction significant voxels');
@@ -36,7 +36,7 @@ ylabel('Fraction significant voxels');
 figure('position', [73 90 1519 849]);
 ix = ismember(regressor_names, {'DQN', 'conv1', 'conv2', 'conv3', 'linear1', 'linear2'});
 cmap = [1 0.9 0.8 0.7 0.6 0.5]' * h(2).FaceColor;
-h = plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names, cmap); %colormap(autumn(5)));
+h = plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names, alpha); %colormap(autumn(5)));
 %ylim([0 0.1]);
 title('Fraction significant voxels in ROIs');
 ylabel('Fraction significant voxels');
@@ -82,7 +82,7 @@ end
 
 
 
-function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, roi_names, cmap)
+function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, roi_names, null_value, cmap)
     sem = @(x) std(x) / sqrt(length(x));
 
     nROIs = size(fs, 1);
@@ -100,7 +100,7 @@ function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, r
     h = bar(m_fs);
 
     % color the bars
-    if exist('cmap', 'var')
+    if exist('cmap', 'var') && ~isempty(cmap)
         for i = 1:length(h)
             h(i).FaceColor = cmap(i,:);
         end
@@ -136,8 +136,26 @@ function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, r
 
     % significance labels
     for m = 1:nROIs
+
+        % single
+        for r1 = 1:nregressors
+            y1 = squeeze(fs(m,r1,:));
+            x1 = xs(m,r1);
+            switch test_type
+                case 'ttest'
+                    [~,p,ci,stats] = ttest(y1, null_value);
+                case 'ranksum'
+                    [p,~,stats] = signtest(y1, null_value, 'Tail','right');
+            end
+            if p <= 0.05
+                text(x1, u_fs(m,r1) + 0.002, significance(p), 'HorizontalAlignment', 'center');
+        %        maxy = maxy + 0.003;
+            end
+        end
+
+        % paired
         %maxy = max(m_fs(m,:) + sem_fs(m,:));
-        maxy = max(u_fs(m,:));
+        maxy = max(u_fs(m,:))+ 0.003;
         for r1 = 1:nregressors
             for r2 = r1+1:nregressors
                 y1 = squeeze(fs(m,r1,:));
@@ -148,7 +166,7 @@ function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, r
                     case 'ttest'
                         [~,p,ci,stats] = ttest(y1,y2);
                     case 'ranksum'
-                        p = ranksum(y1, y2);
+                        [p,~,stats] = ranksum(y1, y2);
                 end
                 if p <= 0.05
                     plot([x1 x2], [maxy maxy] + 0.001, '-', 'color', [0 0 0]);

@@ -19,11 +19,15 @@ declare -a fn_calls=(
                      "confirmatory_betas_for_masks(21, \'theory_change_flag\', 3, 10)"
                      )
 
+declare -a fn_calls=(
+                     "confirmatory_betas_for_masks(\'AAL3v1\', \'\', 0, 0)"
+                    )
+
 
 for fn_call in "${fn_calls[@]}"
 do
     echo $fn_call
-    sbatch_output=`sbatch -p ncf --mem 10001 -t 1-1:20 -o ${outfileprefix}_%j.out -e ${outfileprefix}_%j.err --wrap="matlab -nodisplay -nosplash -nojvm -r $'${fn_call};exit'"`
+    sbatch_output=`sbatch -p fasse --mem 10001 -t 0-15:20 -o ${outfileprefix}_%j.out -e ${outfileprefix}_%j.err --wrap="matlab -nodisplay -nosplash -nojvm -r $'${fn_call};exit'"`
     sbatch_output_split=($sbatch_output)
     job_id=${sbatch_output_split[3]}
     echo $sbatch_output
