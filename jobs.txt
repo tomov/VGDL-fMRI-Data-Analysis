@@ -3260,3 +3260,11 @@ gen_PETHs.sh gen_PETHs(\'AAL3v1\', \'\', 0, 0, \'GP\'): output/gen_PETHs_7625.ou
 --- Wed Nov 10 20:00:00 EST 2021 Running confirmatory_betas_for_masks
 ----------------
 confirmatory_betas_for_masks.sh confirmatory_betas_for_masks(\'AAL3v1\', \'\', 0, 0): output/confirmatory_betas_for_masks_7627.out -- Submitted batch job 7627
+----------------
+--- Thu Nov 11 10:18:48 EST 2021 Running confirmatory_betas_for_masks
+----------------
+confirmatory_betas_for_masks.sh confirmatory_betas_for_masks(\'AAL2\', \'\', 0, 0): output/confirmatory_betas_for_masks_7629.out -- Submitted batch job 7629
+----------------
+--- Thu Nov 11 10:27:56 EST 2021 Running confirmatory_betas_for_masks
+----------------
+confirmatory_betas_for_masks.sh confirmatory_betas_for_masks(\'AAL2\', \'\', 0, 0): output/confirmatory_betas_for_masks_7630.out -- Submitted batch job 7630

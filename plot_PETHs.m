@@ -18,9 +18,10 @@ clear all;
 % subselect ROIs
 %ROI_ix = [1     2     3     5     7    11];
 
-load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_sphere=0.0mm_BOLD.mat'));
-
+%load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_sphere=0.0mm_BOLD.mat'));
+load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL3v1_BOLD.mat'));
 ROI_ix = 1:length(mask_filenames);
+
 mask_filenames = mask_filenames(ROI_ix);
 mask_name = mask_name(ROI_ix);
 regions = regions(ROI_ix);
@@ -29,10 +30,10 @@ activations = activations(ROI_ix);
 figure('pos', [64 421 2282 838]);
 
 % optionally plot theory change flag only
-%fields(find(strcmp(fields, 'theory_change_flag'))) = [];
-fields(find(strcmp(fields, 'sprite_change_flag'))) = [];
-fields(find(strcmp(fields, 'interaction_change_flag'))) = [];
-fields(find(strcmp(fields, 'termination_change_flag'))) = [];
+fields(find(strcmp(fields, 'theory_change_flag'))) = [];
+%fields(find(strcmp(fields, 'sprite_change_flag'))) = [];
+%fields(find(strcmp(fields, 'interaction_change_flag'))) = [];
+%fields(find(strcmp(fields, 'termination_change_flag'))) = [];
 fields(find(strcmp(fields, 'block_start'))) = [];
 fields(find(strcmp(fields, 'block_end'))) = [];
 fields(find(strcmp(fields, 'instance_start'))) = [];
@@ -47,7 +48,7 @@ t = PETH_dTRs * EXPT.TR; % s
 for m = 1:length(mask_filenames)
     disp(mask_name{m});
 
-    subplot(3, 5, m);
+    subplot(5, 6, m);
     hold on;
 
     for i = 1:length(fields)

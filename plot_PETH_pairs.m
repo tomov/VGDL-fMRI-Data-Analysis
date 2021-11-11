@@ -7,9 +7,14 @@ clear all;
 %load('mat/PETHs_glm=21_con=theory_change_flag_odd_Num=1_sphere=10.0mm__.mat');
 
 %load('mat/PETHs_glm=102_con=theory_change_flag_odd_Num=1_sphere=10.0mm_.mat');
-load(fullfile(get_mat_dir(false), 'PETHs_glm=102_con=theory_change_flag_odd_Num=1_sphere=10.0mm.mat'));
+%load(fullfile(get_mat_dir(false), 'PETHs_glm=102_con=theory_change_flag_odd_Num=1_sphere=10.0mm.mat'));
 % subselect ROIs
-ROI_ix = [1     2     3     5     7    11];
+%ROI_ix = [1     2     3     5     7    11];
+
+load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL3v1_BOLD.mat'));
+%ROI_ix = 1:length(mask_filenames);
+ROI_ix = [11 12 13 14 18 21 22 23 24];
+
 mask_filenames = mask_filenames(ROI_ix);
 mask_name = mask_name(ROI_ix);
 regions = regions(ROI_ix);
@@ -17,14 +22,14 @@ activations = activations(ROI_ix);
 
 figure('pos', [64 421 2282 838]);
 
-%reg_field = 'theory_change_flag';
+reg_field = 'theory_change_flag';
 nuisance_fields = {'effects', 'avatar_collision_flag', 'new_sprites', 'killed_sprites', 'play_start', 'play_end'};
 %reg_field = 'sprite_change_flag';
 %reg_field = 'interaction_change_flag';
-reg_field = 'termination_change_flag';
+%reg_field = 'termination_change_flag';
 %nuisance_fields = {'avatar_collision_flag', 'killed_sprites', 'play_start', 'play_end'};
 
-subjs = 2:2:32;
+subjs = 1:1:32;
 %mask_filenames = mask_filenames(1:2);
 
 cmap = colormap(jet(1 + length(nuisance_fields)));
