@@ -19,11 +19,18 @@ function gen_PETHs(glmodel, contrast, Num, sphere, what)
     % spherical mask around top ROI from contrast
 
     if ischar(glmodel)
-        % a priori ROIs
-        tag = glmodel; % fake "glmodel" = study tag
+        if ismember(glmodel, {'AAL2', 'AAL3', 'HarvardOxford'})
+            % anatomical ROI
+            atlas_name = glmodel;
+            [mask_filenames, regions] = get_anatomical_masks(atlas_name);
+            filename = fullfile(get_mat_dir(false), sprintf('PETHs_atlas=%s_%s.mat', atlas_name, what));
+        else
+            % a priori ROIs
+            tag = glmodel; % fake "glmodel" = study tag
+            [mask_filenames, regions] = get_masks_from_study(tag, sphere);
+            filename = fullfile(get_mat_dir(false), sprintf('PETHs_tag=%s_sphere=%.1fmm_%s.mat', tag, sphere, what));
+        end
         glmodel = 9; % for load_BOLD; doesn't really matter
-        [mask_filenames, regions] = get_masks_from_study(tag, sphere);
-        filename = fullfile(get_mat_dir(false), sprintf('PETHs_tag=%s_sphere=%.1fmm_%s.mat', tag, sphere, what));
     else
         % actual GLM
         [mask_filenames, regions] = get_masks_from_contrast(glmodel, contrast, true, [], Num, sphere);
