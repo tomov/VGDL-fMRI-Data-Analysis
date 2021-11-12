@@ -49,22 +49,36 @@
             f{m} = [f{m}, fs(m,reg,s)];
         end
 
+        %{
 		[r,p] = corr(scores{m}', f{m}', 'type', 'spearman');
 		ps(m,1) = p;
-		rs(m,1) = r;
+		rr(m,1) = r;
 
 		[r,p] = corr(wins{m}', f{m}', 'type', 'spearman');
 		ps(m,2) = p;
-		rs(m,2) = r;
+		rr(m,2) = r;
 
 		[r,p] = corr(success_rates{m}', f{m}', 'type', 'spearman');
 		ps(m,3) = p;
-		rs(m,3) = r;
+		rr(m,3) = r;
+        %}
+
+		[r,p] = corr(scores{m}', z{m}', 'type', 'pearson');
+		ps(m,1) = p;
+		rr(m,1) = r;
+
+		[r,p] = corr(wins{m}', z{m}', 'type', 'pearson');
+		ps(m,2) = p;
+		rr(m,2) = r;
+
+		[r,p] = corr(success_rates{m}', z{m}', 'type', 'pearson');
+		ps(m,3) = p;
+		rr(m,3) = r;
     end
 
     p_uncorr = ps;
     p_corr = 1 - (1 - ps) .^ size(ps, 1);
-    r = rs;
+    r = rr;
 
     out_filename
     save(out_filename);
