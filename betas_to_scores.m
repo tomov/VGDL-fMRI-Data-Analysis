@@ -37,7 +37,7 @@ function betas_to_scores(glmodel, contrast, Num, sphere, regressor_name)
             fprintf('Subject %d\n', subj_id);
 
             % get subject score from last two runs
-            [instance_scores, instance_wins, instant_success_rates, game_names] = get_instance_scores(subj_id, score_run_ids, true);
+            [instance_scores, instance_wins, instant_success_rates, game_names] = get_instance_scores([], subj_id, score_run_ids, true);
             score = mean(instance_scores);
             win = mean(instance_wins);
             success_rate = mean(instant_success_rates);
