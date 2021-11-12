@@ -6,6 +6,7 @@ clear all;
 
 %load('mat/confirmatory_betas_for_masks_glm=21_con=theory_change_flag_Num=1_sphere=10.0mm_cglm=3-85-51-52-.mat');
 %load('mat/confirmatory_betas_for_masks_glm=21_con=theory_change_flag_Num=1_sphere=6.0mm_cglm=3-85-51-52-.mat');
+
 %load('mat/confirmatory_betas_for_masks_glm=21_con=theory_change_flag_Num=1_sphere=10.0mm_cglm=21-86-82-83-.mat');
 
 %load('mat/confirmatory_betas_for_masks_glm=102_con=theory_change_flag_Num=1_sphere=10.0mm_cglm=102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-.mat');

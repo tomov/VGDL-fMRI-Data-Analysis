@@ -19,8 +19,11 @@ clear all;
 %ROI_ix = [1     2     3     5     7    11];
 
 %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_sphere=0.0mm_BOLD.mat'));
-load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL3v1_GP.mat'));
-ROI_ix = 1:length(mask_filenames);
+%load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL3v1_GP.mat'));
+
+load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_ungrouped2_BOLD.mat')); % !!!!!!!!!!!!
+%ROI_ix = 1:length(mask_filenames);
+ROI_ix = [      1      2      7     10     11     12     13     14     15]; 
 
 mask_filenames = mask_filenames(ROI_ix);
 mask_name = mask_name(ROI_ix);
@@ -48,7 +51,7 @@ t = PETH_dTRs * EXPT.TR; % s
 for m = 1:length(mask_filenames)
     disp(mask_name{m});
 
-    subplot(5, 6, m);
+    subplot(3, 3, m);
     hold on;
 
     for i = 1:length(fields)
