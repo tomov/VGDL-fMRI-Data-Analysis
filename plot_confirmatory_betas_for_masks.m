@@ -16,8 +16,11 @@ clear all;
 %ROI_ix = [1     2     3     5     7    11];
 
 %load(fullfile(get_mat_dir(false), 'confirmatory_betas_for_masks_atlas=AAL3v1_cglm=102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-.mat'));
-load(fullfile(get_mat_dir(false), 'confirmatory_betas_for_masks_atlas=AAL2_ungrouped2_cglm=102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-.mat'));
-ROI_ix = 1:length(mask_filenames);
+%load(fullfile(get_mat_dir(false), 'confirmatory_betas_for_masks_atlas=AAL2_ungrouped2_cglm=102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-.mat')); % !!!!!!!!!!!!!!!!!!!!!
+%ROI_ix = 1:length(mask_filenames);
+
+load(fullfile(get_mat_dir(false), 'confirmatory_betas_for_masks_atlas=AAL2_ungrouped2_cglm=103-104-105-.mat')); % !!!!!!!!!
+ROI_ix = [      1      2      7     10     11     12     13     14     15]; 
 
 mask_filenames = mask_filenames(ROI_ix);
 mask_name = mask_name(ROI_ix);
@@ -40,7 +43,7 @@ for m = 1:length(mask_filenames)
     [sem, me] = wse(beta);
     [h,p,ci,stats] = ttest(beta);
 
-    subplot(5,6,m);
+    subplot(3,5,m);
     %subplot(1,2,m);
     hold on;
     bar(me);
@@ -49,14 +52,14 @@ for m = 1:length(mask_filenames)
     ax = gca;
     for j = 1:size(beta, 2)
         if p(j) <= 0.05
-            text(j, ax.YLim(2) - 0.1, significance(p(j)), 'fontsize', 7, 'HorizontalAlignment', 'center'); 
+            text(j, ax.YLim(2) - 0.1, significance(p(j)), 'fontsize', 10, 'HorizontalAlignment', 'center'); 
         end
     end
 
     ylabel('beta coefficient');
     ax.TickLabelInterpreter = 'none';
     xticklabels(confirmatory_regressors);
-    set(gca,'XTickLabel',get(gca,'XTickLabel'),'fontsize',7)
+    set(gca,'XTickLabel',get(gca,'XTickLabel'),'fontsize',8)
     xtickangle(30);
     xticks(1:length(confirmatory_regressors));
     title({regions{m}, mask_name{m}}, 'interpreter', 'none');

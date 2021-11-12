@@ -49,7 +49,6 @@
             f{m} = [f{m}, fs(m,reg,s)];
         end
 
-        %{
 		[r,p] = corr(scores{m}', f{m}', 'type', 'spearman');
 		ps(m,1) = p;
 		rr(m,1) = r;
@@ -61,8 +60,8 @@
 		[r,p] = corr(success_rates{m}', f{m}', 'type', 'spearman');
 		ps(m,3) = p;
 		rr(m,3) = r;
-        %}
 
+        %{
 		[r,p] = corr(scores{m}', z{m}', 'type', 'pearson');
 		ps(m,1) = p;
 		rr(m,1) = r;
@@ -74,6 +73,7 @@
 		[r,p] = corr(success_rates{m}', z{m}', 'type', 'pearson');
 		ps(m,3) = p;
 		rr(m,3) = r;
+        %}
     end
 
     p_uncorr = ps;
