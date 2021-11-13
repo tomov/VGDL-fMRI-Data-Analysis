@@ -1,4 +1,4 @@
-function [fields, visuals] = get_visuals(subj_id, run, conn, do_cache)
+function [legacy_fields, visuals, fields] = get_visuals(subj_id, run, conn, do_cache)
 
     % helper function to get visual regressors for each frame in vgdl_create_multi
     % copied & modified from get_keypresses
@@ -10,7 +10,7 @@ function [fields, visuals] = get_visuals(subj_id, run, conn, do_cache)
     end
 
     % optionally cache
-    filename = sprintf('mat/get_visuals_subj%d_run%d.mat', subj_id, run.run_id);
+    filename = sprintf('mat/get_visuals_new_subj%d_run%d.mat', subj_id, run.run_id);
     if do_cache
         if exist(filename, 'file')
             load(filename);
@@ -19,7 +19,9 @@ function [fields, visuals] = get_visuals(subj_id, run, conn, do_cache)
     end
 
     % TODO tight coupling with vgdl_create_multi, case 10-20
-    fields = {'timestamps', 'new_sprites', 'killed_sprites', 'sprites', 'non_walls', 'avatar_moved', 'moved', 'movable', 'collisions', 'effects', 'sprite_groups', 'changed', 'avatar_collision_flag', 'effectsByCol'};
+    legacy_fields = {'timestamps', 'new_sprites', 'killed_sprites', 'sprites', 'non_walls', 'avatar_moved', 'moved', 'movable', 'collisions', 'effects', 'sprite_groups', 'changed', 'avatar_collision_flag', 'effectsByCol'};
+    fields = [legacy_fields, {'win', 'score', 'ended'}];
+
     visuals = struct;
     for i = 1:numel(fields)
         visuals.(fields{i}) = [];
@@ -67,5 +69,5 @@ function [fields, visuals] = get_visuals(subj_id, run, conn, do_cache)
 
 
     if do_cache
-        save(filename, 'visuals', 'fields', '-v7.3');
+        save(filename, 'visuals', 'legacy_fields', 'fields', '-v7.3');
     end
