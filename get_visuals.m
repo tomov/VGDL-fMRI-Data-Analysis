@@ -1,5 +1,14 @@
 function [legacy_fields, visuals, fields] = get_visuals(subj_id, run, conn, do_cache)
 
+%clear all;
+%conn = mongo('holy7c22103.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'reader', 'Password', 'parolatamadafaqa')
+%subj_id = 11;
+%run_id = 1;
+%query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id) % in python we index runs from 0 (but not subjects) 
+%run = find(conn, 'runs', 'query', query)
+%assert(length(run) == 1);
+%do_cache = false;
+
     % helper function to get visual regressors for each frame in vgdl_create_multi
     % copied & modified from get_keypresses
     % note run is a struct
@@ -21,13 +30,13 @@ function [legacy_fields, visuals, fields] = get_visuals(subj_id, run, conn, do_c
 
     % TODO tight coupling with vgdl_create_multi, case 10-20
     legacy_fields = {'timestamps', 'new_sprites', 'killed_sprites', 'sprites', 'non_walls', 'avatar_moved', 'moved', 'movable', 'collisions', 'effects', 'sprite_groups', 'changed', 'avatar_collision_flag', 'effectsByCol'};
-    fields = [legacy_fields, {'win', 'score', 'ended'}];
+    manual_fields = {'dscore', 'win', 'timeout', 'loss', 'durations', 'ended'};
+    fields = [legacy_fields, manual_fields, {'score'}];
 
     visuals = struct;
     for i = 1:numel(fields)
         visuals.(fields{i}) = [];
     end
-    visuals.durations = [];
 
     blocks = run.blocks;
     for b = 1:length(blocks)
@@ -54,13 +63,51 @@ function [legacy_fields, visuals, fields] = get_visuals(subj_id, run, conn, do_c
                 play_post = plays_post(1);
 
                 for i = 1:numel(fields)
-                    visuals.(fields{i}) = [visuals.(fields{i}); play_post.(fields{i})(2:end-1,:)]; % skip first and last frame to align with output of get_regressors, b/c EMPA does too
+                    if ~ismember(fields{i}, manual_fields)
+                        visuals.(fields{i}) = [visuals.(fields{i}); play_post.(fields{i})(2:end-1,:)]; % skip first and last frame to align with output of get_regressors, b/c EMPA does too
+                    end
                 end
 
+                % Manual fields
                 %durations = play_post.timestamps(2:end) - play_post.timestamps(1:end-1);
                 %durations = [durations; mean(durations)]; % guesstimate duration of last frame
                 durations = play_post.timestamps(3:end) - play_post.timestamps(2:end-1); % skip first and last frame
                 visuals.durations = [visuals.durations; durations];
+
+                dscore = play_post.score(3:end) - play_post.score(2:end-1); % skip first and last frame
+                visuals.dscore = [visuals.dscore; dscore];
+
+                win = logical(zeros(size(play_post.win(2:end-1,:))));
+                loss = logical(zeros(size(play_post.win(2:end-1,:))));
+                timeout = logical(zeros(size(play_post.win(2:end-1,:))));
+                ended = logical(zeros(size(play_post.win(2:end-1,:))));
+                % Notice that here we actually take the last timestamp instead of the second to last one
+                if ~iscell(play_post.win) 
+                    win_final = play_post.win(end);
+                else
+                    win_final = play_post.win{end};
+                end
+                switch win_final
+                    case 1
+                        win(end) = 1;
+                        loss(end) = 0;
+                        timeout(end) = 0;
+                    case 0
+                        win(end) = 0;
+                        loss(end) = 1;
+                        timeout(end) = 0;
+                    case -1
+                        win(end) = 0;
+                        loss(end) = 0;
+                        timeout(end) = 1;
+                    otherwise
+                        assert(false, 'Invalid value for win_final');
+                end
+                ended(end) = 1;
+                visuals.win = [visuals.win; win];
+                visuals.loss = [visuals.loss; loss];
+                visuals.timeout = [visuals.timeout; timeout];
+                visuals.ended = [visuals.ended; ended];
             end
         end
 
