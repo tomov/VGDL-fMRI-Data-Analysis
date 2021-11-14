@@ -275,12 +275,12 @@ switch figure_name
          0         0    1.0000; ...
          0    0.3333    1.0000; ...
          0    0.6667    1.0000];
-        cmap = [cmap; 1-mean(cmap, 1)];
+        cmap = [cmap; 0.7294    0.3333    0.8275];
         glm_names = {'theory updates', 'object updates', 'relation updates', 'goal updates', 'object, relation, goal updates'};
         ix = [2,3,4,5];
         h = plot_gp_CV_rois_helper(bs(:,ix,:), 'ttest', 'mean', glm_names(ix), regions, 0, cmap, 500000, []);
-        ylabel('\Delta BIC');
-        title('GLM model comparison relative to theory updates');
+        ylabel('\Delta BIC relative to theory updates');
+        title('GLM model comparison');
 
         % Prettyfy it 
         % specifically for agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_ungrouped.mat');
