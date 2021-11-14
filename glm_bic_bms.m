@@ -24,12 +24,18 @@ glms = [59 60 61 3];
 %}
 %glms = [62 63 64 21];
 
+%{
 glmodel = 102;
 contrast = 'theory_change_flag';
 Num = 1;
 sphere = 10;
 [mask_filenames, regions] = get_masks_from_contrast(glmodel, contrast, true, [], Num, sphere);
 mask_filenames = mask_filenames';
+%}
+atlas_name = 'AAL2_ungrouped2';
+[mask_filenames, regions] = get_anatomical_masks(atlas_name);
+ROI_ix = [      1      2      7     10     11     12     13     14     15]; 
+mask_filenames = mask_filenames(ROI_ix)';
 
 % multiplexing
 %glms = [21 86 82 83 97 98 88 68];  % with control regressors
@@ -46,7 +52,9 @@ mask_filenames = mask_filenames';
 %glms = [102 103 104 105 106]; % with controls
 glms = [3 85 51 52 53]; % w/o controls
 glm_names = {'th', 's', 'i', 't', 's+i+t'};
-filename = sprintf('mat/glm_bic_bms_glm=%d_con=%s_Num=%d_sphere=%.1fmm_multiplex.mat', glmodel, contrast, Num, sphere);;
+%filename = sprintf('mat/glm_bic_bms_glm=%d_con=%s_Num=%d_sphere=%.1fmm_multiplex.mat', glmodel, contrast, Num, sphere);;
+filename = fullfile(get_mat_dir(false), sprintf('glm_bic_bms_atlas=%s_multiplex.mat', atlas_name));
+filename
 
 for c = 1:length(mask_filenames)
     mask_filename = mask_filenames{c};
