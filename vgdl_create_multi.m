@@ -1779,6 +1779,28 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             fields = {'non_walls', 'avatar_moved', 'moved', 'movable', 'changed', 'avatar_collision_flag'};
             multi = add_visuals_to_multi(multi, subj_id, run, conn);
 
+        % Beta series GLM for theory_change_flag
+        case 109
+
+            minimum_onset_separation = 10; % s
+
+            % from GLM 3: theory_change_flag
+            %
+            regs = get_regressors(subj_id, run, conn, true);
+            onsets = regs.theory_change_flag_onsets;
+
+            idx = 0;
+            last_onset = -1000;
+            for i = 1:length(onsets)
+                if onsets(i) - last_onset >= minimum_onset_separation
+                    idx = idx + 1;
+                    multi.names{idx} = sprintf('theory_change_flag_%d', i);
+                    multi.onsets{idx} = onsets(i);
+                    multi.durations{idx} = zeros(size(multi.onsets{idx}));
+                    last_onset = onsets(i);
+                end
+            end
+
         otherwise
             assert(false, 'invalid glmodel -- should be one of the above');
 
