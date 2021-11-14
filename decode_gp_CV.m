@@ -22,7 +22,7 @@ filename
 %
 
 try
-    conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54')
+    conn = mongo('holy7c22103.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'reader', 'Password', 'parolatamadafaqa')
 catch
     disp('NCF....................');
 end

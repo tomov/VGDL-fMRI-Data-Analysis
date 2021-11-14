@@ -35,12 +35,14 @@ function [rsa, game_names_ordered] = vgdl_create_rsa(rsa_idx, subj_id, seed)
     [allSubjects, subjdirs, goodRuns, goodSubjs] = vgdl_getSubjectsDirsAndRuns();
     goodRun_ids = find(goodRuns{subj_id});
   
-    filename = sprintf('mat/vgdl_create_rsa_%d_subj%d.mat', rsa_idx, subj_id);
+    filename = fullfile(get_mat_dir(false), sprintf('vgdl_create_rsa_%d_subj%d.mat', rsa_idx, subj_id));
+    filename
 
     % hack to make it work on the cluster until they install MongoDB toolbox
     % just pre-generate the multi's locally, then load them on the cluster
     try
-        conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54');
+        %conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54');
+        conn = mongo('holy7c22103.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'reader', 'Password', 'parolatamadafaqa')
     catch e
         %e
         %fprintf('loading from %s\n', filename);
