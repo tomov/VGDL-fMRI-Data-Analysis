@@ -1767,6 +1767,18 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             multi = add_visuals_to_multi(multi, subj_id, run, conn);
             multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
 
+        % .State features
+        case 107
+
+            fields = {'sprites', 'new_sprites', 'killed_sprites', 'collisions', 'effects', 'sprite_groups', 'effectsByCol', 'win', 'loss', 'ended', 'score', 'dscore'};
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+
+        % .irrelevant features
+        case 108
+
+            fields = {'non_walls', 'avatar_moved', 'moved', 'movable', 'changed', 'avatar_collision_flag'};
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+
         otherwise
             assert(false, 'invalid glmodel -- should be one of the above');
 
@@ -1853,7 +1865,7 @@ function multi = add_keyholds_to_multi(multi, subj_id, run, conn)
     end
 end
 
-function multi = add_visuals_to_multi(multi, subj_id, run, conn)
+function multi = add_visuals_to_multi(multi, subj_id, run, conn, fields)
     % GLM 7: frame nuisance regressors
     %
     if isfield(multi, 'names')
@@ -1864,7 +1876,13 @@ function multi = add_visuals_to_multi(multi, subj_id, run, conn)
         idx = 0;
     end
 
+    % Notice that we use legacy_fields for backwards compatibility / reproducibility with all the analyses
     [fields, visuals] = get_visuals(subj_id, run, conn, true);
+
+    if ~exist('fields', 'var')
+        fields = fieldnames(onoff);
+    end
+
     idx = idx + 1;
     multi.names{idx} = 'frames';
     multi.onsets{idx} = visuals.timestamps';
