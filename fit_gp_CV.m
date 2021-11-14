@@ -41,7 +41,7 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
     [~,maskname,~] = fileparts(mask);
     %filename = sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_project=%d_fast=%d_nowhiten_nofilter.mat', subj, use_smooth, glmodel, maskname, model_name, what, project, fast);
     filename = sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_project=%d_norm=%d_fast=%d_saveYhat=%d.mat', subj, use_smooth, glmodel, maskname, model_name, what, project, normalize, fast, save_Y_hat);
-    filename = fullfile(get_mat_dir(), filename);
+    filename = fullfile(get_mat_dir(false), filename);
     filename
 
     % load mask
@@ -69,7 +69,11 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
         case 'game'
             ker = load_game_kernel(EXPT, subj); % GLM 1 game id features
         case 'nuisance'
-            ker = load_nuisance_kernel(EXPT, subj); % GLM 9 game id features
+            ker = load_nuisance_kernel(EXPT, subj);
+        case 'state'
+            ker = load_state_kernel(EXPT, subj); 
+        case 'irrelevant'
+            ker = load_irrelevant_kernel(EXPT, subj); 
         otherwise
             assert(false, 'invalid model name')
     end
