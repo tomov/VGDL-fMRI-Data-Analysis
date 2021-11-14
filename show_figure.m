@@ -225,6 +225,73 @@ switch figure_name
         text(8.5, 0.75, 'Early visual', 'fontsize', 12, 'HorizontalAlignment', 'center');
         legend(fields(ix), 'interpreter', 'none');
 
+
+    case 'plot_glm_bic_bms_ungrouped2_with_controls'
+        % plot_glm_bic_bms.m
+
+        load(fullfile(get_mat_dir(false), 'glm_bic_bms_atlas=AAL2_ungrouped2_multiplex_with_controls.mat'));
+        glm_ix = [1 2 3 4 5];
+        ROI_ix = [      1      2      7     10     11     12    ]; 
+        mask_filenames = mask_filenames(ROI_ix);
+        regions = regions(ROI_ix);
+        bics = bics(ROI_ix);
+
+        subjs = 1:1:32;
+
+        nROIs = length(mask_filenames);
+        nGLMs = length(glms);
+        nsubjects = length(subjs);
+
+        bs = nan(nROIs,nGLMs,nsubjects);
+
+        clear pxps;
+        clear bors;
+
+        for m = 1:length(mask_filenames)
+            %bic = bics{m}(subjs, [2 3 4 8]);
+            %bic = bics{m}(subjs, [1 2 3 4 8]);
+            [~, mask_name{m}, ~] = fileparts(mask_filenames{m});
+            bic = bics{m}(subjs, glm_ix);
+            bs(m,glm_ix,subjs) = bic';
+
+            lme = -0.5 * bic;
+            [alpha, exp_r, xp, pxp, bor] = bms(lme);
+            pxps(m,:) = pxp;
+            bors(m,:) = bor;
+        end
+
+        % Show table
+        subjs
+        glm_names(glm_ix)
+        table(regions, pxps, bors)
+
+        bs = bs - bs(:,1,:); % subtract first model
+
+        % Piggyback off of plot_gp_CV_rois.m
+        figure('pos', [49 568 1252 371]);
+
+        %cmap = [1 0.8 0.6 0.4 0.2]' * [0    0.4470    0.7410];
+        cmap = [ ...
+         0         0    1.0000; ...
+         0    0.3333    1.0000; ...
+         0    0.6667    1.0000];
+        cmap = [cmap; 1-mean(cmap, 1)];
+        glm_names = {'theory updates', 'object updates', 'relation updates', 'goal updates', 'object, relation, goal updates'};
+        ix = [2,3,4,5];
+        h = plot_gp_CV_rois_helper(bs(:,ix,:), 'ttest', 'mean', glm_names(ix), regions, 0, cmap, 500000, []);
+        ylabel('\Delta BIC');
+        title('GLM model comparison relative to theory updates');
+
+        % Prettyfy it 
+        % specifically for agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_ungrouped.mat');
+        text(1.5, 0.75 * 50000, 'Frontal/Motor', 'fontsize', 12, 'HorizontalAlignment', 'center');
+        plot([2.5 2.5], [0 0.8 * 50000], '--', 'color', [0.5 0.5 0.5]);
+        text(3.5, 0.75 * 50000, 'Dorsal/Parietal', 'fontsize', 12, 'HorizontalAlignment', 'center');
+        plot([4.5 4.5], [0 0.8 * 50000], '--', 'color', [0.5 0.5 0.5]);
+        text(5.5, 0.75 * 50000, 'Ventral/Temporal', 'fontsize', 12, 'HorizontalAlignment', 'center');
+        legend(glm_names(ix),  'interpreter', 'none');
+ 
+
     otherwise
         assert(false, 'Invalid figure name');
 end

@@ -34,9 +34,9 @@ mask_filenames = mask_filenames';
 %}
 atlas_name = 'AAL2_ungrouped2';
 [mask_filenames, regions] = get_anatomical_masks(atlas_name);
-ROI_ix = [      1      2      7     10     11     12     13     14     15]; 
-mask_filenames = mask_filenames(ROI_ix)';
-regions = regions(ROI_ix);
+%ROI_ix = [      1      2      7     10     11     12     13     14     15]; 
+%mask_filenames = mask_filenames(ROI_ix)';
+%regions = regions(ROI_ix);
 
 % multiplexing
 %glms = [21 86 82 83 97 98 88 68];  % with control regressors

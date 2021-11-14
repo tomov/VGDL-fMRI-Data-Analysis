@@ -8,15 +8,17 @@ clear all;
 
 %load('mat/glm_bic_bms_single_controls.mat');
 %load('mat/glm_bic_bms_glm=102_con=theory_change_flag_Num=1_sphere=10.0mm_multiplex.mat');
-load('mat/glm_bic_bms_glm=102_con=theory_change_flag_Num=1_sphere=10.0mm_multiplex_w_controls.mat');
+%load('mat/glm_bic_bms_glm=102_con=theory_change_flag_Num=1_sphere=10.0mm_multiplex_w_controls.mat');
+load(fullfile(get_mat_dir(false), 'glm_bic_bms_atlas=AAL2_ungrouped2_multiplex_with_controls.mat'));
 glm_ix = [1 2 3 4 5];
-%ROI_ix = [1     2     3     5     7    11];
-%mask_filenames = mask_filenames(ROI_ix);
-%regions = regions(ROI_ix);
-%bics = bics(ROI_ix);
+ROI_ix = [      1      2      7     10     11     12     13     14     15]; 
+%ROI_ix = 1:length(mask_filenames);
+mask_filenames = mask_filenames(ROI_ix);
+regions = regions(ROI_ix);
+bics = bics(ROI_ix);
 
 %subjs = 2:2:32;
-subjs = 2:2:32;
+subjs = 1:1:32;
 tick_labels = {};
 for j = 1:length(glm_ix)
     tick_labels{j} = sprintf('GLM %d: %s', glms(glm_ix(j)), glm_names{glm_ix(j)});
@@ -53,7 +55,8 @@ for m = 1:length(mask_filenames)
     xticklabels(tick_labels);
     xtickangle(30);
     xticks(1:length(glm_ix));
-    title({regions{m}, mask_name{m}}, 'interpreter', 'none');
+    %title({regions{m}, mask_name{m}}, 'interpreter', 'none');
+    title(regions{m}, 'interpreter', 'none');
 end
 
 subjs

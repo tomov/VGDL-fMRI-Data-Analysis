@@ -8,7 +8,7 @@ function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, r
     if ~exist('significant_scale', 'var') || isempty(significant_scale)
         significant_scale = 1;
     end
-    if ~exist('regressors_to_compare', 'var') || isempty(regressors_to_compare)
+    if ~exist('regressors_to_compare', 'var') %|| isempty(regressors_to_compare)
         regressors_to_compare = 1:nregressors;
     end
 
