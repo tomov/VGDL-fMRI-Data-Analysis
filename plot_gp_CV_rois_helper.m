@@ -1,9 +1,16 @@
-function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, roi_names, null_value, cmap)
+function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, roi_names, null_value, cmap, significant_scale, regressors_to_compare)
     sem = @(x) std(x) / sqrt(length(x));
 
     nROIs = size(fs, 1);
     nregressors = size(fs, 2);
     nsubjects = size(fs, 3);
+
+    if ~exist('significant_scale', 'var') || isempty(significant_scale)
+        significant_scale = 1;
+    end
+    if ~exist('regressors_to_compare', 'var') || isempty(regressors_to_compare)
+        regressors_to_compare = 1:nregressors;
+    end
 
     % bars
     switch statistic
@@ -65,7 +72,7 @@ function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, r
                         [p,~,stats] = signrank(y1, null_value, 'Tail','right');
                 end
                 if p <= 0.05
-                    text(x1, u_fs(m,r1) + 0.002, significance(p), 'HorizontalAlignment', 'center');
+                    text(x1, u_fs(m,r1) + 0.002 * significant_scale, significance(p), 'HorizontalAlignment', 'center');
             %        maxy = maxy + 0.003;
                 end
             end
@@ -75,9 +82,9 @@ function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, r
         %maxy = max(m_fs(m,:) + sem_fs(m,:));
         maxy = max(u_fs(m,:));
         if exist('null_value') && ~isempty(null_value)
-            maxy = maxy + 0.003; % account for single tests
+            maxy = maxy + 0.003 * significant_scale; % account for single tests
         end
-        for r1 = 1:nregressors
+        for r1 = regressors_to_compare
             for r2 = r1+1:nregressors
                 y1 = squeeze(fs(m,r1,:));
                 y2 = squeeze(fs(m,r2,:));
@@ -90,9 +97,9 @@ function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, r
                         [p,~,stats] = signrank(y1, y2);
                 end
                 if p <= 0.05
-                    plot([x1 x2], [maxy maxy] + 0.001, '-', 'color', [0 0 0]);
-                    text(mean([x1 x2]), maxy + 0.002, significance(p), 'HorizontalAlignment', 'center');
-                    maxy = maxy + 0.003;
+                    plot([x1 x2], [maxy maxy] + 0.001 * significant_scale, '-', 'color', [0 0 0]);
+                    text(mean([x1 x2]), maxy + 0.002 * significant_scale, significance(p), 'HorizontalAlignment', 'center');
+                    maxy = maxy + 0.003 * significant_scale;
                     fprintf('ROI %s: %s vs. %s -- p = %.5f\n', roi_names{m}, regressor_names{r1}, regressor_names{r2}, p);
                 end
 
@@ -100,7 +107,7 @@ function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, r
         end
     end
 
-    legend(regressor_names);
+    legend(regressor_names, 'interpreter', 'none');
     xticks(1:nROIs);
     xticklabels(roi_names);
     xtickangle(30);

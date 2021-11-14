@@ -30,8 +30,6 @@ mask_name = mask_name(ROI_ix);
 regions = regions(ROI_ix);
 activations = activations(ROI_ix);
 
-figure('pos', [64 421 2282 838]);
-
 % optionally plot theory change flag only
 fields(find(strcmp(fields, 'theory_change_flag'))) = [];
 %fields(find(strcmp(fields, 'sprite_change_flag'))) = [];
@@ -57,9 +55,6 @@ t = PETH_dTRs * EXPT.TR; % s
 for m = 1:nROIs
     disp(mask_name{m});
 
-    subplot(3, 3, m);
-    hold on;
-
     for i = 1:nregressors
         field = fields{i};
         disp(field)
@@ -70,9 +65,10 @@ for m = 1:nROIs
 end
 
 % Piggyback off of plot_gp_CV_rois.m
-figure('position', [1147 521 1045 418]);
+figure('pos', [49 329 2143 610]);
+
 ix = 1:nregressors;
-h = plot_gp_CV_rois_helper(as(:,ix,:), 'ttest', 'mean', fields(ix), regions, 0, cmap);
+h = plot_gp_CV_rois_helper(as(:,ix,:), 'ttest', 'mean', fields(ix), regions, 0, cmap, 5, 1:3);
 if exist('what', 'var') && strcmp(what, 'GP')
     title('Average Fisher z-transformed Pearson correlation change in ROIs');
     ylabel('\Delta z');
@@ -80,3 +76,14 @@ else
     title('Average BOLD change in ROIs');
     ylabel('\Delta BOLD');
 end
+
+% Prettyfy it 
+% specifically for agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_ungrouped.mat');
+text(1.5, 0.75, 'Frontal/Motor', 'fontsize', 12, 'HorizontalAlignment', 'center');
+plot([2.5 2.5], [0 0.8], '--', 'color', [0.5 0.5 0.5]);
+text(3.5, 0.75, 'Dorsal/Parietal', 'fontsize', 12, 'HorizontalAlignment', 'center');
+plot([4.5 4.5], [0 0.8], '--', 'color', [0.5 0.5 0.5]);
+text(6, 0.75, 'Ventral/Temporal', 'fontsize', 12, 'HorizontalAlignment', 'center');
+plot([7.5 7.5], [0 0.8], '--', 'color', [0.5 0.5 0.5]);
+text(8.5, 0.75, 'Early visual', 'fontsize', 12, 'HorizontalAlignment', 'center');
+legend(fields(ix), 'interpreter', 'none');
