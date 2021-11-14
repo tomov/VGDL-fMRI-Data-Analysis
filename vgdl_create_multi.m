@@ -43,13 +43,14 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
     run_id = get_behavioral_run_id(subj_id, SPM_run_id)
     fprintf('behavioral run_id %d \n', run_id);
 
-    filename = sprintf('mat/vgdl_create_multi_glm%d_subj%d_run%d.mat', glmodel, subj_id, run_id)
+    filename = fullfile(get_mat_dir(false), sprintf('vgdl_create_multi_glm%d_subj%d_run%d.mat', glmodel, subj_id, run_id));
+    filename
 
     % hack to make it work on the cluster until they install MongoDB toolbox
     % just pre-generate the multi's locally, then load them on the cluster
     if ~ismember(glmodel, 23)
         try
-            conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54')
+            conn = mongo('holy7c22103.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54')
         catch e
             e
             fprintf('loading from %s\n', filename);

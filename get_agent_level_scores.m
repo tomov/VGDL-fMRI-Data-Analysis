@@ -11,7 +11,8 @@ function [level_scores, level_wins, level_success_rates, game_names, actual_leve
         do_cache = false;
     end
    
-    filename = sprintf('mat/get_agent_level_scores_agent=%s_subj=%d_levels=%s_tag=%s.mat', agent_name, subj_id, sprintf('%d_', levels), tag);
+    filename = fullfile(get_mat_dir(false), sprintf('get_agent_level_scores_agent=%s_subj=%d_levels=%s_tag=%s.mat', agent_name, subj_id, sprintf('%d_', levels), tag));
+    filename
     if do_cache
         if exist(filename, 'file')
             load(filename);

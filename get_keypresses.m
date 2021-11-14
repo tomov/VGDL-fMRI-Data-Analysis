@@ -10,7 +10,8 @@ function [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_i
     end
 
     % optionally cache
-    filename = sprintf('mat/get_keypresses_subj%d_run%d.mat', subj_id, run.run_id);
+    filename = fullfile(get_mat_dir(false), sprintf('get_keypresses_subj%d_run%d.mat', subj_id, run.run_id));
+    filename
     if do_cache
         if exist(filename, 'file')
             load(filename);

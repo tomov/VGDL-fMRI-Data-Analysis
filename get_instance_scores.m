@@ -7,7 +7,7 @@ function [instance_scores, instance_wins, instance_success_rates, game_names, le
         do_cache = false;
     end
  
-    filename = fullfile(get_mat_dir(true), sprintf('get_instance_scores_subj%d_runs%s.mat', subj_id, sprintf('%d_', run_ids)));
+    filename = fullfile(get_mat_dir(false), sprintf('get_instance_scores_subj%d_runs%s.mat', subj_id, sprintf('%d_', run_ids)));
     filename
     if do_cache
         if exist(filename, 'file')

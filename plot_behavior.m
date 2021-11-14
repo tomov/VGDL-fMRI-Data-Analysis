@@ -1,7 +1,9 @@
 clear all;
 close all;
 
-conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54')
+conn = mongo('holy7c22103.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'reader', 'Password', 'parolatamadafaqa')
+%conn = mongo('holy7c22103.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'root', 'Password', 'parolatabe')
+%conn = mongo('holy7c22103.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'root', 'Password', 'parolatabe', 'AuthMechanism', 'SCRAM_SHA_256')
 
 %game_names = get_game_names_ordered(12);
 %subj_ids = 12:32;

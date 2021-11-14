@@ -10,7 +10,8 @@ function [legacy_fields, visuals, fields] = get_visuals(subj_id, run, conn, do_c
     end
 
     % optionally cache
-    filename = sprintf('mat/get_visuals_new_subj%d_run%d.mat', subj_id, run.run_id);
+    filename = fullfile(get_mat_dir(false), sprintf('get_visuals_new_subj%d_run%d.mat', subj_id, run.run_id));
+    filename
     if do_cache
         if exist(filename, 'file')
             load(filename);

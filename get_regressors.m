@@ -16,9 +16,9 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, collec
 
     if ~exist('collection', 'var')
         collection = 'regressors';
-        filename = sprintf('mat/get_regressors_subj%d_run%d.mat', subj_id, run.run_id);
+        filename = fullfile(get_mat_dir(false), sprintf('get_regressors_subj%d_run%d.mat', subj_id, run.run_id));
     else
-        filename = sprintf('mat/get_regressors_subj%d_run%d_c=%s.mat', subj_id, run.run_id, collection);
+        filename = fullfile(get_mat_dir(false), sprintf('get_regressors_subj%d_run%d_c=%s.mat', subj_id, run.run_id, collection));
     end
 
     % optionally cache
