@@ -3332,3 +3332,9 @@ ccnl_fmri_glm.sh for GLM 108, subjects 28 9 7 8 16 1 10 18 5 3 25 23 19 29 20 32
 ----------------
 ccnl_fmri_glm.sh for GLM 107, subjects 1 2 18 32 5 28 19 29 23 3 22 4 30 9 7 27 31 25 16 26 15 14 24 11 12 20 13 17 21 10 6 8: output/ccnl_fmri_glm_107_goodSubjects_7792.out -- Submitted batch job 7792
 ccnl_fmri_glm.sh for GLM 108, subjects 25 3 4 30 32 6 31 20 14 16 2 13 17 7 24 1 28 9 18 15 11 5 10 26 12 23 29 19 21 22 27 8: output/ccnl_fmri_glm_108_goodSubjects_7793.out -- Submitted batch job 7793
+----------------
+--- Sun Nov 14 19:41:51 EST 2021: Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32
+----------------
+ccnl_fmri_glm.sh for GLM 107, subjects 3 15 30 23 21 22 8 17 25 19 13 28 9 12 10 27 29 5 2 11 18 1 7 26 4 14 6 16 20 32 24 31: output/ccnl_fmri_glm_107_goodSubjects_7803.out -- Submitted batch job 7803
+ccnl_fmri_glm.sh for GLM 108, subjects 31 12 1 4 14 28 8 18 20 27 11 25 6 10 13 17 5 19 16 15 26 32 3 23 21 7 22 29 24 2 9 30: output/ccnl_fmri_glm_108_goodSubjects_7804.out -- Submitted batch job 7804
+ccnl_fmri_glm.sh for GLM 109, subjects 22 3 15 28 10 18 21 30 4 6 16 20 11 24 23 17 1 12 5 25 14 27 13 29 2 26 32 8 19 7 9 31: output/ccnl_fmri_glm_109_goodSubjects_7805.out -- Submitted batch job 7805
