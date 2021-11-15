@@ -21,9 +21,10 @@ clear all;
 %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_sphere=0.0mm_BOLD.mat'));
 %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL3v1_GP.mat'));
 
-load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_ungrouped2_BOLD.mat')); % !!!!!!!!!!!!
-%ROI_ix = 1:length(mask_filenames);
-ROI_ix = [      1      2      7     10     11     12     13     14     15]; 
+%load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_ungrouped2_BOLD.mat')); % !!!!!!!!!!!!
+%ROI_ix = [      1      2      7     10     11     12     13     14     15]; 
+load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_ungrouped3_GP.mat')); % !!!!!!!!!!!!
+ROI_ix = 1:length(mask_filenames);
 
 mask_filenames = mask_filenames(ROI_ix);
 mask_name = mask_name(ROI_ix);
