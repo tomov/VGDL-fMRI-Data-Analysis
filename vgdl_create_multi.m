@@ -1771,13 +1771,13 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
         case 107
 
             fields = {'sprites', 'new_sprites', 'killed_sprites', 'collisions', 'effects', 'sprite_groups', 'effectsByCol', 'win', 'loss', 'ended', 'score', 'dscore'};
-            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn, fields);
 
         % .irrelevant features
         case 108
 
             fields = {'non_walls', 'avatar_moved', 'moved', 'movable', 'changed', 'avatar_collision_flag'};
-            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn, fields);
 
         % Beta series GLM for theory_change_flag
         case 109
@@ -1899,10 +1899,10 @@ function multi = add_visuals_to_multi(multi, subj_id, run, conn, fields)
     end
 
     % Notice that we use legacy_fields for backwards compatibility / reproducibility with all the analyses
-    [fields, visuals] = get_visuals(subj_id, run, conn, true);
+    [legacy_fields, visuals] = get_visuals(subj_id, run, conn, true);
 
     if ~exist('fields', 'var')
-        fields = fieldnames(onoff);
+        fields = legacy_fields;
     end
 
     idx = idx + 1;
