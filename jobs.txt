@@ -3338,3 +3338,18 @@ ccnl_fmri_glm.sh for GLM 108, subjects 25 3 4 30 32 6 31 20 14 16 2 13 17 7 24 1
 ccnl_fmri_glm.sh for GLM 107, subjects 3 15 30 23 21 22 8 17 25 19 13 28 9 12 10 27 29 5 2 11 18 1 7 26 4 14 6 16 20 32 24 31: output/ccnl_fmri_glm_107_goodSubjects_7803.out -- Submitted batch job 7803
 ccnl_fmri_glm.sh for GLM 108, subjects 31 12 1 4 14 28 8 18 20 27 11 25 6 10 13 17 5 19 16 15 26 32 3 23 21 7 22 29 24 2 9 30: output/ccnl_fmri_glm_108_goodSubjects_7804.out -- Submitted batch job 7804
 ccnl_fmri_glm.sh for GLM 109, subjects 22 3 15 28 10 18 21 30 4 6 16 20 11 24 23 17 1 12 5 25 14 27 13 29 2 26 32 8 19 7 9 31: output/ccnl_fmri_glm_109_goodSubjects_7805.out -- Submitted batch job 7805
+----------------
+--- Mon Nov 15 18:28:35 EST 2021 Running gen_PETHs
+----------------
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_grouped\', \'\', 0, 0, \'BOLD\'): output/gen_PETHs_7863.out -- Submitted batch job 7863
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_grouped\', \'\', 0, 0, \'GP\'): output/gen_PETHs_7864.out -- Submitted batch job 7864
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA\', \'\', 0, 0, \'BOLD\'): output/gen_PETHs_7865.out -- Submitted batch job 7865
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA\', \'\', 0, 0, \'GP\'): output/gen_PETHs_7866.out -- Submitted batch job 7866
+gen_PETHs.sh gen_PETHs(\'AAL2_GLM_102_grouped\', \'\', 0, 0, \'BOLD\'): output/gen_PETHs_7867.out -- Submitted batch job 7867
+gen_PETHs.sh gen_PETHs(\'AAL2_GLM_102_grouped\', \'\', 0, 0, \'GP\'): output/gen_PETHs_7868.out -- Submitted batch job 7868
+gen_PETHs.sh gen_PETHs(\'AAL2_GLM_102\', \'\', 0, 0, \'BOLD\'): output/gen_PETHs_7869.out -- Submitted batch job 7869
+gen_PETHs.sh gen_PETHs(\'AAL2_GLM_102\', \'\', 0, 0, \'GP\'): output/gen_PETHs_7870.out -- Submitted batch job 7870
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'BOLD\'): output/gen_PETHs_7871.out -- Submitted batch job 7871
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP\'): output/gen_PETHs_7872.out -- Submitted batch job 7872
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'BOLD\'): output/gen_PETHs_7873.out -- Submitted batch job 7873
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP\'): output/gen_PETHs_7874.out -- Submitted batch job 7874
