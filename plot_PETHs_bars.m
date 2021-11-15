@@ -21,9 +21,9 @@ clear all;
 %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_sphere=0.0mm_BOLD.mat'));
 %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL3v1_GP.mat'));
 
-%load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_ungrouped2_BOLD.mat')); % !!!!!!!!!!!!
+%load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GLM_102_BOLD.mat')); % !!!!!!!!!!!!
 %ROI_ix = [      1      2      7     10     11     12     13     14     15]; 
-load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_ungrouped3_GP.mat')); % !!!!!!!!!!!!
+load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP.mat')); % !!!!!!!!!!!!
 ROI_ix = 1:length(mask_filenames);
 
 mask_filenames = mask_filenames(ROI_ix);
@@ -79,7 +79,7 @@ else
 end
 
 % Prettyfy it 
-% specifically for agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_ungrouped.mat');
+% specifically for agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA.mat');
 text(1.5, 0.75, 'Frontal/Motor', 'fontsize', 12, 'HorizontalAlignment', 'center');
 plot([2.5 2.5], [0 0.8], '--', 'color', [0.5 0.5 0.5]);
 text(3.5, 0.75, 'Dorsal/Parietal', 'fontsize', 12, 'HorizontalAlignment', 'center');

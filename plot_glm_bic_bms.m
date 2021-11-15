@@ -9,7 +9,7 @@ clear all;
 %load('mat/glm_bic_bms_single_controls.mat');
 %load('mat/glm_bic_bms_glm=102_con=theory_change_flag_Num=1_sphere=10.0mm_multiplex.mat');
 %load('mat/glm_bic_bms_glm=102_con=theory_change_flag_Num=1_sphere=10.0mm_multiplex_w_controls.mat');
-load(fullfile(get_mat_dir(false), 'glm_bic_bms_atlas=AAL2_ungrouped2_multiplex_with_controls.mat'));
+load(fullfile(get_mat_dir(false), 'glm_bic_bms_atlas=AAL2_GLM_102_multiplex_with_controls.mat'));
 glm_ix = [1 2 3 4 5];
 ROI_ix = [      1      2      7     10     11     12     13     14     15]; 
 %ROI_ix = 1:length(mask_filenames);

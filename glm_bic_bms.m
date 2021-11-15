@@ -32,7 +32,7 @@ sphere = 10;
 [mask_filenames, regions] = get_masks_from_contrast(glmodel, contrast, true, [], Num, sphere);
 mask_filenames = mask_filenames';
 %}
-atlas_name = 'AAL2_ungrouped2';
+atlas_name = 'AAL2_GLM_102';
 [mask_filenames, regions] = get_anatomical_masks(atlas_name);
 %ROI_ix = [      1      2      7     10     11     12     13     14     15]; 
 %mask_filenames = mask_filenames(ROI_ix)';

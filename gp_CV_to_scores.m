@@ -12,7 +12,7 @@
     out_filename = fullfile(get_mat_dir(false), sprintf('gp_CV_to_scores.mat'));
     out_filename
 
-    agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.010_atlas=AAL2_ungrouped.mat');
+    agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA.mat');
     agg_filename
     load(agg_filename);
 

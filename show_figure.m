@@ -6,7 +6,7 @@ switch figure_name
     case 'plot_gp_CV_rois_fraction_ungrouped'
         % plot_gp_CV_rois.m
 
-        agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.010_atlas=AAL2_ungrouped.mat');
+        agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA.mat');
         agg_filename
         load(agg_filename);
 
@@ -30,7 +30,7 @@ switch figure_name
     case 'plot_gp_CV_rois_fraction_grouped3'
         % plot_gp_CV_rois.m
 
-        agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.010_atlas=AAL2_grouped3.mat');
+        agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_grouped.mat');
         agg_filename
         load(agg_filename);
 
@@ -45,7 +45,7 @@ switch figure_name
     case 'plot_gp_CV_rois_fraction_grouped3_EMPA'
         % plot_gp_CV_rois.m
 
-        agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.010_atlas=AAL2_grouped3.mat');
+        agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_grouped.mat');
         agg_filename
         load(agg_filename);
 
@@ -62,7 +62,7 @@ switch figure_name
     case 'plot_gp_CV_rois_fraction_grouped3_DDQN'
         % plot_gp_CV_rois.m
 
-        agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.010_atlas=AAL2_grouped3.mat');
+        agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_grouped.mat');
         agg_filename
         load(agg_filename);
 
@@ -79,7 +79,7 @@ switch figure_name
     case 'plot_PETH_components_ungrouped2_BOLD'
         % plot_PETHs.m
 
-        load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_ungrouped2_BOLD.mat')); % !!!!!!!!!!!!
+        load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GLM_102_BOLD.mat')); % !!!!!!!!!!!!
         %ROI_ix = 1:length(mask_filenames);
         ROI_ix = [      1      2      7     10     11     12     13     14     15]; 
 
@@ -158,7 +158,7 @@ switch figure_name
     case 'plot_PETHs_bars_components_ungrouped2_BOLD'
         % plot_PETHs_bars.m
 
-        load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_ungrouped2_BOLD.mat')); % !!!!!!!!!!!!
+        load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GLM_102_BOLD.mat')); % !!!!!!!!!!!!
         %ROI_ix = 1:length(mask_filenames);
         ROI_ix = [      1      2      7     10     11     12     13     14     15]; 
 
@@ -215,7 +215,7 @@ switch figure_name
         end
 
         % Prettyfy it 
-        % specifically for agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_ungrouped.mat');
+        % specifically for agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA.mat');
         text(1.5, 0.75, 'Frontal/Motor', 'fontsize', 12, 'HorizontalAlignment', 'center');
         plot([2.5 2.5], [0 0.8], '--', 'color', [0.5 0.5 0.5]);
         text(3.5, 0.75, 'Dorsal/Parietal', 'fontsize', 12, 'HorizontalAlignment', 'center');
@@ -229,7 +229,7 @@ switch figure_name
     case 'plot_glm_bic_bms_ungrouped2_with_controls'
         % plot_glm_bic_bms.m
 
-        load(fullfile(get_mat_dir(false), 'glm_bic_bms_atlas=AAL2_ungrouped2_multiplex_with_controls.mat'));
+        load(fullfile(get_mat_dir(false), 'glm_bic_bms_atlas=AAL2_GLM_102_multiplex_with_controls.mat'));
         glm_ix = [1 2 3 4 5];
         ROI_ix = [      1      2      7     10     11     12    ]; 
         mask_filenames = mask_filenames(ROI_ix);
@@ -283,7 +283,7 @@ switch figure_name
         title('GLM model comparison');
 
         % Prettyfy it 
-        % specifically for agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_ungrouped.mat');
+        % specifically for agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA.mat');
         text(1.5, 0.75 * 50000, 'Frontal/Motor', 'fontsize', 12, 'HorizontalAlignment', 'center');
         plot([2.5 2.5], [0 0.8 * 50000], '--', 'color', [0.5 0.5 0.5]);
         text(3.5, 0.75 * 50000, 'Dorsal/Parietal', 'fontsize', 12, 'HorizontalAlignment', 'center');

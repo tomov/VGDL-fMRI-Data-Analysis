@@ -23,7 +23,7 @@ EXPT = vgdl_expt();
 
 % spherical mask around top ROI from contrast
 if ischar(glmodel)
-    if ismember(glmodel, {'AAL2', 'AAL3v1', 'HarvardOxford', 'AAL2_grouped3', 'AAL2_ungrouped', 'AAL2_grouped4', 'AAL2_ungrouped2'})
+    if ismember(glmodel, {'AAL2', 'AAL3v1', 'HarvardOxford', 'AAL2_GP_EMPA_grouped', 'AAL2_GP_EMPA', 'AAL2_GLM_102_grouped', 'AAL2_GLM_102'})
         % anatomical ROI
         atlas_name = glmodel;
         [mask_filenames, regions] = get_anatomical_masks(atlas_name);

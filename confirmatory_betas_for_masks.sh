@@ -20,13 +20,13 @@ declare -a fn_calls=(
                      )
 
 declare -a fn_calls=(
-                     "confirmatory_betas_for_masks(\'AAL2_grouped3\', \'\', 0, 0)"
-                     "confirmatory_betas_for_masks(\'AAL2_ungrouped\', \'\', 0, 0)"
+                     "confirmatory_betas_for_masks(\'AAL2_GP_EMPA_grouped\', \'\', 0, 0)"
+                     "confirmatory_betas_for_masks(\'AAL2_GP_EMPA\', \'\', 0, 0)"
                     )
 
 declare -a fn_calls=(
-                     "confirmatory_betas_for_masks(\'AAL2_grouped4\', \'\', 0, 0)"
-                     "confirmatory_betas_for_masks(\'AAL2_ungrouped2\', \'\', 0, 0)"
+                     "confirmatory_betas_for_masks(\'AAL2_GLM_102_grouped\', \'\', 0, 0)"
+                     "confirmatory_betas_for_masks(\'AAL2_GLM_102\', \'\', 0, 0)"
                     )
 
 
