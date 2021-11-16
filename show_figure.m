@@ -388,7 +388,7 @@ switch figure_name
 
         load(fullfile(get_mat_dir(false), 'glm_bic_bms_atlas=AAL2_GLM_102_multiplex_with_controls.mat'));
         glm_ix = [1 2 3 4 5];
-        ROI_ix = [      1      2      7     10     11     12    ]; 
+        ROI_ix = [      1      2      8     11     12     13    ]; 
         mask_filenames = mask_filenames(ROI_ix);
         regions = regions(ROI_ix);
         bics = bics(ROI_ix);
@@ -443,9 +443,9 @@ switch figure_name
         % specifically for agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA.mat');
         text(1.5, 0.75 * 50000, 'Frontal/Motor', 'fontsize', 12, 'HorizontalAlignment', 'center');
         plot([2.5 2.5], [0 0.8 * 50000], '--', 'color', [0.5 0.5 0.5]);
-        text(3.5, 0.75 * 50000, 'Dorsal/Parietal', 'fontsize', 12, 'HorizontalAlignment', 'center');
-        plot([4.5 4.5], [0 0.8 * 50000], '--', 'color', [0.5 0.5 0.5]);
-        text(5.5, 0.75 * 50000, 'Ventral/Temporal', 'fontsize', 12, 'HorizontalAlignment', 'center');
+        text(3, 0.75 * 50000, 'Dorsal/Parietal', 'fontsize', 12, 'HorizontalAlignment', 'center');
+        plot([3.5 3.5], [0 0.8 * 50000], '--', 'color', [0.5 0.5 0.5]);
+        text(5, 0.75 * 50000, 'Ventral/Temporal', 'fontsize', 12, 'HorizontalAlignment', 'center');
         legend(glm_names(ix),  'interpreter', 'none');
 
 
@@ -692,13 +692,8 @@ switch figure_name
 
         ix = 1:nregressors;
         h = plot_gp_CV_rois_helper(as(:,ix,:), 'ttest', 'mean', fields(ix), regions, 0, cmap, 5, 1);
-        if exist('what', 'var') && strcmp(what, 'GP')
-            title('Average Fisher z-transformed Pearson correlation change in ROIs');
-            ylabel('\Delta z');
-        else
-            title('Average BOLD change in ROIs');
-            ylabel('\Delta BOLD');
-        end
+        title('Average Fisher z-transformed Pearson correlation change in ROIs');
+        ylabel('\Delta z');
 
         % Prettyfy it 
         % specifically for agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA.mat');
@@ -710,6 +705,63 @@ switch figure_name
         legend(fields(ix), 'interpreter', 'none');
          
 
+    case 'plot_PETH_bars_AAL2_GP_EMPA_GLM_102_GP_components'
+        % plot_PETHs_bars.m
+
+        load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP.mat')); % !!!!!!!!!!!!
+        ROI_ix = 1:length(mask_filenames);
+
+        mask_filenames = mask_filenames(ROI_ix);
+        mask_name = mask_name(ROI_ix);
+        regions = regions(ROI_ix);
+        activations = activations(ROI_ix);
+
+        % optionally plot theory change flag only
+        fields = {'theory_change_flag', 'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag'};
+
+        subjs = 1:1:32;
+
+        nROIs = length(mask_filenames);
+        nregressors = length(fields);
+        nsubjects = length(subjs);
+
+        as = nan(nROIs,nregressors,nsubjects);
+
+        cmap = [1 0.8 0.6 0.4]' * [0    0.4470    0.7410];
+        t = PETH_dTRs * EXPT.TR; % s
+
+        % loop over masks
+        for m = 1:nROIs
+            disp(mask_name{m});
+
+            for i = 1:nregressors
+                field = fields{i};
+                disp(field)
+
+                D = activations(m).(field)(subjs,:); % subj x TRs PETH's
+                as(m,i,:) = mean(D(:, PETH_dTRs > 0), 2); % average across time, ignoring baseline
+            end
+        end
+
+        % Piggyback off of plot_gp_CV_rois.m
+        figure('pos', [49 329 2143 610]);
+
+        ix = 1:nregressors;
+        h = plot_gp_CV_rois_helper(as(:,ix,:), 'ttest', 'mean', fields(ix), regions, 0, cmap, 5, 1);
+        title('Average Fisher z-transformed Pearson correlation change in ROIs');
+        ylabel('\Delta z');
+
+        % Prettyfy it 
+        % specifically for agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA.mat');
+        text(1.5, 0.25, 'Frontal/Motor', 'fontsize', 12, 'HorizontalAlignment', 'center');
+        plot([2.5 2.5], [0 0.3], '--', 'color', [0.5 0.5 0.5]);
+        text(3.5, 0.25, 'Dorsal/Parietal', 'fontsize', 12, 'HorizontalAlignment', 'center');
+        plot([4.5 4.5], [0 0.3], '--', 'color', [0.5 0.5 0.5]);
+        text(6, 0.25, 'Ventral/Temporal', 'fontsize', 12, 'HorizontalAlignment', 'center');
+        legend(fields(ix), 'interpreter', 'none');
+
+
+         
     otherwise
         assert(false, 'Invalid figure name');
 end

@@ -41,6 +41,8 @@ fields(find(strcmp(fields, 'block_end'))) = [];
 fields(find(strcmp(fields, 'instance_start'))) = [];
 fields(find(strcmp(fields, 'instance_end'))) = [];
 
+fields = {'theory_change_flag', 'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag'};
+
 subjs = 1:1:32;
 
 nROIs = length(mask_filenames);
