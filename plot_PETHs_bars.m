@@ -32,10 +32,10 @@ regions = regions(ROI_ix);
 activations = activations(ROI_ix);
 
 % optionally plot theory change flag only
-fields(find(strcmp(fields, 'theory_change_flag'))) = [];
-%fields(find(strcmp(fields, 'sprite_change_flag'))) = [];
-%fields(find(strcmp(fields, 'interaction_change_flag'))) = [];
-%fields(find(strcmp(fields, 'termination_change_flag'))) = [];
+%fields(find(strcmp(fields, 'theory_change_flag'))) = [];
+fields(find(strcmp(fields, 'sprite_change_flag'))) = [];
+fields(find(strcmp(fields, 'interaction_change_flag'))) = [];
+fields(find(strcmp(fields, 'termination_change_flag'))) = [];
 fields(find(strcmp(fields, 'block_start'))) = [];
 fields(find(strcmp(fields, 'block_end'))) = [];
 fields(find(strcmp(fields, 'instance_start'))) = [];
