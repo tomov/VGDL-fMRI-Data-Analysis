@@ -8,14 +8,14 @@ function confirmatory_betas_for_masks(glmodel, contrast, Num, sphere)
 %Num = 1;
 %sphere = 10;
 
-confirmatory_regressors = {'theory_change_flag', 'up', 'down', 'left', 'right', 'spacebar', 'new_sprites', 'killed_sprites', 'sprites', 'non_walls', 'avatar_moved', 'moved', 'movable', 'collisions', 'effects', 'sprite_groups', 'changed', 'avatar_collision_flag', 'effectsByCol', 'play_start', 'play_end'};
-confirmatory_glm = repmat(102, [1 length(confirmatory_regressors)]);
+%confirmatory_regressors = {'theory_change_flag', 'up', 'down', 'left', 'right', 'spacebar', 'new_sprites', 'killed_sprites', 'sprites', 'non_walls', 'avatar_moved', 'moved', 'movable', 'collisions', 'effects', 'sprite_groups', 'changed', 'avatar_collision_flag', 'effectsByCol', 'play_start', 'play_end'};
+%confirmatory_glm = repmat(102, [1 length(confirmatory_regressors)]);
 %
 %confirmatory_regressors = [confirmatory_regressors, {'theory_change_flag', 'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag'}];
 %confirmatory_glm = [confirmatory_glm 3 85 51 52];
 
-%confirmatory_regressors =  {'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag'};
-%confirmatory_glm = [103 104 105];
+confirmatory_regressors =  {'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag'};
+confirmatory_glm = [103 104 105];
 
 EXPT = vgdl_expt();
 

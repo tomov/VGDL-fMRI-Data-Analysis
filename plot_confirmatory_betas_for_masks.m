@@ -17,8 +17,8 @@ clear all;
 %ROI_ix = [1     2     3     5     7    11];
 
 %load(fullfile(get_mat_dir(false), 'confirmatory_betas_for_masks_atlas=AAL3v1_cglm=102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-.mat'));
-load(fullfile(get_mat_dir(false), 'confirmatory_betas_for_masks_atlas=AAL2_GLM_102_cglm=102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-.mat')); % !!!!!!!!!!!!!!!!!!!!!
-ROI_ix = 1:length(mask_filenames);
+%load(fullfile(get_mat_dir(false), 'confirmatory_betas_for_masks_atlas=AAL2_GLM_102_cglm=102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-.mat')); % !!!!!!!!!!!!!!!!!!!!!
+%ROI_ix = 1:length(mask_filenames);
 
 %load(fullfile(get_mat_dir(false), 'confirmatory_betas_for_masks_atlas=AAL2_GLM_102_cglm=103-104-105-.mat')); % !!!!!!!!!
 %ROI_ix = [      1      2      7     10     11     12     13     14     15]; 
