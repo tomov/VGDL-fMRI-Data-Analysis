@@ -20,8 +20,8 @@ clear all;
 %load(fullfile(get_mat_dir(false), 'confirmatory_betas_for_masks_atlas=AAL2_GLM_102_cglm=102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-102-.mat')); % !!!!!!!!!!!!!!!!!!!!!
 %ROI_ix = 1:length(mask_filenames);
 
-%load(fullfile(get_mat_dir(false), 'confirmatory_betas_for_masks_atlas=AAL2_GLM_102_cglm=103-104-105-.mat')); % !!!!!!!!!
-%ROI_ix = [      1      2      7     10     11     12     13     14     15]; 
+load(fullfile(get_mat_dir(false), 'confirmatory_betas_for_masks_atlas=AAL2_GLM_102_cglm=103-104-105-.mat')); % !!!!!!!!!
+ROI_ix = [      1      2      8         11     12     13     14     15  16]; 
 
 mask_filenames = mask_filenames(ROI_ix);
 mask_name = mask_name(ROI_ix);

@@ -231,6 +231,67 @@ switch figure_name
         ROI_ix = find(ps_corr <= 0.05)
 
 
+    case 'plot_confirmatory_betas_for_masks_AAL2_GLM_102_components'
+        % plot_confirmatory_betas_for_masks.m
+
+        load(fullfile(get_mat_dir(false), 'confirmatory_betas_for_masks_atlas=AAL2_GLM_102_cglm=103-104-105-.mat')); % !!!!!!!!!
+        ROI_ix = [      1      2      8         11     12     13     14     15  16]; 
+
+        mask_filenames = mask_filenames(ROI_ix);
+        mask_name = mask_name(ROI_ix);
+        regions = regions(ROI_ix);
+        betas = betas(ROI_ix);
+
+        subjs = 1:1:32;
+
+        figure('position', [97 451 2190 888]);
+
+        %confirmatory_regressors = confirmatory_regressors(end-2:end);
+        ps = [];
+
+        for m = 1:length(mask_filenames)
+        %for m = 1:2
+            beta = betas{m}(subjs, :);
+            %beta = beta(:,end-2:end);
+            beta
+
+            [sem, me] = wse(beta);
+            [h,p,ci,stats] = ttest(beta);
+
+            subplot(4,4,m);
+            %subplot(1,2,m);
+            hold on;
+            bar(me);
+            errorbar(me, sem, 'o', 'MarkerSize', 1);
+
+            ax = gca;
+            for j = 1:size(beta, 2)
+                if p(j) <= 0.05
+                    text(j, ax.YLim(2) - 0.1, significance(p(j)), 'fontsize', 10, 'HorizontalAlignment', 'center'); 
+                end
+            end
+
+            ylabel('beta coefficient');
+            ax.TickLabelInterpreter = 'none';
+            xticklabels(confirmatory_regressors);
+            set(gca,'XTickLabel',get(gca,'XTickLabel'),'fontsize',8)
+            xtickangle(30);
+            xticks(1:length(confirmatory_regressors));
+            title(regions{m}, 'interpreter', 'none');
+
+            %p_corr = 1 - (1 - p(1)) ^ length(mask_filenames);
+            %text(10, mean([0 ax.YLim(2)]), sprintf('p_{corr.} = %.2e', p_corr), 'fontsize', 17);
+            ps(m) = p(1);
+        end
+
+        ps_corr = bonferroni(ps)';
+        table(regions, mask_name', ps', ps_corr)
+
+        regions(ps_corr < 0.05)
+
+        ROI_ix = find(ps_corr <= 0.05)
+
+
     case 'plot_PETH_components_AAL2_GLM_102_BOLD'
         % plot_PETHs.m
 
