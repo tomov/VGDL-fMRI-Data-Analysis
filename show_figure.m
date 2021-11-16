@@ -314,6 +314,49 @@ switch figure_name
         plot([4.5 4.5], [0 0.8 * 50000], '--', 'color', [0.5 0.5 0.5]);
         text(5.5, 0.75 * 50000, 'Ventral/Temporal', 'fontsize', 12, 'HorizontalAlignment', 'center');
         legend(glm_names(ix),  'interpreter', 'none');
+
+
+    case 'contrast_overlap_GP_EMPA_GLM_102'
+        % contrast_overlap.m
+
+        load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=EMPA_theory_nsamples=100_project=1_fast=1.mat'));
+        tmap_filename = bspmview_save_map(EXPT, tmap);
+
+        EXPTs = {vgdl_expt(), tmap_filename}; % Take advantage of hack that allows us to plot any custom nmap
+        glmodels = [102 , -1];
+        contrasts = {'theory_change_flag', ''};
+
+        % group-level settings
+        p = 0.001;
+        alpha = 0.05;
+        Dis = 20;
+        if ~exist('extent', 'var')
+            extent = []; % use default cluster size
+        end
+        if ~exist('Num', 'var')
+            Num = 1; % # peak voxels per cluster; default in bspmview is 3
+        end
+        direct = '+';
+        df = 31;
+        clusterFWEcorrect = true;
+
+        for i = 1:length(glmodels)
+            EXPT = EXPTs{i};
+            glmodel = glmodels(i);
+            contrast = contrasts{i};
+            extent = [];
+
+            [V, Y, C, CI, region, extent, stat, mni, cor, results_table] = ccnl_extract_clusters(EXPT, glmodel, contrast, p, direct, alpha, Dis, Num, clusterFWEcorrect, extent, df);
+
+            if ~exist('cumulative_mask', 'var')
+                cumulative_mask = C > 0;
+            else
+                cumulative_mask = cumulative_mask + (C>0);
+            end
+        end
+
+        bspmview_wrapper(vgdl_expt(), cumulative_mask);
+
  
 
     otherwise
