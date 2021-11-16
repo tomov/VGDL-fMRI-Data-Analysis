@@ -3,7 +3,31 @@ function show_figure(figure_name)
 
 switch figure_name
 
-    case 'plot_gp_CV_rois_fraction_ungrouped'
+    case 'plot_gp_CV_EMPA'
+        % plot_gp_CV.m
+
+        load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=EMPA_theory_nsamples=100_project=1_fast=1.mat')); % this is it !!!!!!!!!!!!!!!!!!!!ontroller five
+        assert(use_smooth);
+        EXPT = vgdl_expt();
+        bspmview_wrapper(EXPT, tmap);
+
+    case 'plot_gp_CV_DDQN'
+        % plot_gp_CV.m
+
+        load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=DQN_all_nsamples=100_project=1_norm=1_fast=1.mat')); % !!!
+        assert(use_smooth);
+        EXPT = vgdl_expt();
+        bspmview_wrapper(EXPT, tmap);
+
+    case 'plot_gp_CV_PCA'
+        % plot_gp_CV.m
+
+        load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=PCA_all_nsamples=100_project=1_norm=1_fast=1.mat')); % !!!
+        assert(use_smooth);
+        EXPT = vgdl_expt();
+        bspmview_wrapper(EXPT, tmap);
+
+    case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA'
         % plot_gp_CV_rois.m
 
         agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA.mat');
@@ -23,11 +47,11 @@ switch figure_name
         plot([10.5 10.5], [0 0.08], '--', 'color', [0.5 0.5 0.5]);
         text(12, 0.075, 'Ventral/Temporal', 'fontsize', 12, 'HorizontalAlignment', 'center');
         plot([13.5 13.5], [0 0.08], '--', 'color', [0.5 0.5 0.5]);
-        text(14.5, 0.075, 'Early visual', 'fontsize', 12, 'HorizontalAlignment', 'center');
+        text(15, 0.075, 'Early visual', 'fontsize', 12, 'HorizontalAlignment', 'center');
         legend({'EMPA', 'DDQN', 'PCA'});
 
 
-    case 'plot_gp_CV_rois_fraction_grouped3'
+    case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped'
         % plot_gp_CV_rois.m
 
         agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_grouped.mat');
@@ -42,7 +66,7 @@ switch figure_name
         xticklabels({'Frontal/Motor', 'Dorsal/Parietal', 'Ventral/Temporal', 'Early visual'});
         legend({'EMPA', 'DDQN', 'PCA'});
 
-    case 'plot_gp_CV_rois_fraction_grouped3_EMPA'
+    case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped_EMPA_components'
         % plot_gp_CV_rois.m
 
         agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_grouped.mat');
@@ -59,7 +83,7 @@ switch figure_name
         legend({'theory', 'objects', 'relations', 'goals'});
 
 
-    case 'plot_gp_CV_rois_fraction_grouped3_DDQN'
+    case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped_DDQN_layers'
         % plot_gp_CV_rois.m
 
         agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_grouped.mat');
@@ -76,7 +100,7 @@ switch figure_name
         legend({'all layers', 'conv1', 'conv2', 'conv3', 'linear1', 'linear2'});
 
 
-    case 'plot_PETH_components_ungrouped2_BOLD'
+    case 'plot_PETH_components_AAL2_GLM_102_BOLD'
         % plot_PETHs.m
 
         load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GLM_102_BOLD.mat')); % !!!!!!!!!!!!
@@ -155,7 +179,7 @@ switch figure_name
             title(regions{m}, 'interpreter', 'none');
         end
 
-    case 'plot_PETHs_bars_components_ungrouped2_BOLD'
+    case 'plot_PETHs_bars_components_AAL2_GLM_102_BOLD'
         % plot_PETHs_bars.m
 
         load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GLM_102_BOLD.mat')); % !!!!!!!!!!!!
@@ -226,7 +250,7 @@ switch figure_name
         legend(fields(ix), 'interpreter', 'none');
 
 
-    case 'plot_glm_bic_bms_ungrouped2_with_controls'
+    case 'plot_glm_bic_bms_AAL2_GLM_102_multiplex_with_controls'
         % plot_glm_bic_bms.m
 
         load(fullfile(get_mat_dir(false), 'glm_bic_bms_atlas=AAL2_GLM_102_multiplex_with_controls.mat'));
