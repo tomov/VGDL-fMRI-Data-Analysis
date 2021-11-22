@@ -1801,6 +1801,107 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
                 end
             end
 
+        % replan_flag + keypresses
+        %
+        case 110
+
+            regs = get_regressors(subj_id, run, conn, true);
+            onsets = regs.replan_flag_onsets;
+
+            multi.names{1} = 'replan_flag';
+            multi.onsets{1} = onsets;
+            multi.durations{1} = zeros(size(multi.onsets{1}));;
+
+            % nuisance regressors
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+
+        % replan_flag + keypresses + on/off
+        %
+        case 111
+
+            regs = get_regressors(subj_id, run, conn, true);
+            onsets = regs.replan_flag_onsets;
+
+            multi.names{1} = 'replan_flag';
+            multi.onsets{1} = onsets;
+            multi.durations{1} = zeros(size(multi.onsets{1}));;
+
+            % nuisance regressors
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
+
+        % number of exploratory goals
+        case 112
+
+            [regs, ~, ~] = get_regressors(subj_id, run, conn, true);
+            exploratory_goals = regs.Igen_len + regs.Tnov_len;
+
+            multi.names{1} = 'frames';
+            multi.onsets{1} = regs.timestamps';
+            multi.durations{1} = regs.durations';
+
+            multi.orth{1} = 0; % do not orthogonalise them
+
+            multi.pmod(1).name{1} = 'exploratory_goals';
+            multi.pmod(1).param{1} = exploratory_goals;
+            multi.pmod(1).poly{1} = 1;
+
+        % number of exploitative goals
+        case 113
+
+            [regs, ~, ~] = get_regressors(subj_id, run, conn, true);
+            exploitative_goals = regs.T_len;
+
+            multi.names{1} = 'frames';
+            multi.onsets{1} = regs.timestamps';
+            multi.durations{1} = regs.durations';
+
+            multi.orth{1} = 0; % do not orthogonalise them
+
+            multi.pmod(1).name{1} = 'exploitative_goals';
+            multi.pmod(1).param{1} = exploitative_goals;
+            multi.pmod(1).poly{1} = 1;
+
+        % number of exploratory goals + keypresses + on/off
+        case 114
+
+            [regs, ~, ~] = get_regressors(subj_id, run, conn, true);
+            exploratory_goals = regs.Igen_len + regs.Tnov_len;
+
+            multi.names{1} = 'frames';
+            multi.onsets{1} = regs.timestamps';
+            multi.durations{1} = regs.durations';
+
+            multi.orth{1} = 0; % do not orthogonalise them
+
+            multi.pmod(1).name{1} = 'exploratory_goals';
+            multi.pmod(1).param{1} = exploratory_goals;
+            multi.pmod(1).poly{1} = 1;
+
+            %  nuisance regressors
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
+
+        % number of exploitative goals + keypresses + on/off
+        case 115
+
+            [regs, ~, ~] = get_regressors(subj_id, run, conn, true);
+            exploitative_goals = regs.T_len;
+
+            multi.names{1} = 'frames';
+            multi.onsets{1} = regs.timestamps';
+            multi.durations{1} = regs.durations';
+
+            multi.orth{1} = 0; % do not orthogonalise them
+
+            multi.pmod(1).name{1} = 'exploitative_goals';
+            multi.pmod(1).param{1} = exploitative_goals;
+            multi.pmod(1).poly{1} = 1;
+
+            %  nuisance regressors
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
+
         otherwise
             assert(false, 'invalid glmodel -- should be one of the above');
 

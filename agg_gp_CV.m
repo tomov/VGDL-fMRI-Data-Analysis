@@ -12,12 +12,15 @@ end
 subjects = 1:length(EXPT.subject);
 %subjects = 1:2:32; % odd
 
-model_name = 'PCA';
+%model_name = 'PCA';
+%model_name = 'state';
+model_name = 'irrelevant';
 %model_name = 'DQN';
 %model_name = 'EMPA';
 %what = 'conv3';
 %%%what = 'linear2';
-what = 'all';
+%what = 'all';
+what = '';
 %what = 'termination';
 %what = 'sprite';
 project = 1;
@@ -49,7 +52,7 @@ for s = 1:1:length(subjects)
     %filename = sprintf('/Volumes/fMRI-2/Mac_mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=EMPA_%s_nsamples=100_project=%d_fast=1_.mat', subj_id, use_smooth, glmodel, what, project);
     %filename = sprintf('/Volumes/fMRI-2/Mac_mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_fast=1.mat', subj_id, use_smooth, glmodel, model_name, what, project);
     %filename = fullfile(get_mat_dir(), sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_fast=1.mat', subj_id, use_smooth, glmodel, model_name, what, project));
-    filename = fullfile(get_mat_dir(fasse_ncf), sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_norm=%d_fast=1%s.mat', subj_id, use_smooth, glmodel, model_name, what, project, normalize, suffix));
+    filename = fullfile(get_mat_dir(fasse_ncf), sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_norm=%d_fast=1%s_saveYhat=0.mat', subj_id, use_smooth, glmodel, model_name, what, project, normalize, suffix));
     filename
     %filename = sprintf('mat/fit_gp_CV_noRKW_HRR_subj=%d_us=%d_glm=21_mask=mask_%s.mat', subj_id, use_smooth, what);
 

@@ -808,7 +808,7 @@ switch figure_name
         figure('pos', [49 329 2143 610]);
 
         ix = 1:nregressors;
-        h = plot_gp_CV_rois_helper(as(:,ix,:), 'ttest', 'mean', fields(ix), regions, 0, cmap, 5, 1);
+        h = plot_gp_CV_rois_helper(as(:,ix,:), 'ttest', 'mean', fields(ix), regions, 0, cmap, 5);
         title('Average Fisher z-transformed Pearson correlation change in ROIs');
         ylabel('\Delta z');
 

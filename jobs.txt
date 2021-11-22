@@ -3366,3 +3366,150 @@ fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_irrelevant__true_1_false
 ----------------
 ccnl_fmri_glm.sh for GLM 107, subjects 9 5 12 28 22 4 6 32 25 2 29 10 8 14 17 1 26 15 20 27 11 16 31 13 23 18 7 3 24 19 21 30: output/ccnl_fmri_glm_107_goodSubjects_7877.out -- Submitted batch job 7877
 ccnl_fmri_glm.sh for GLM 108, subjects 4 8 9 12 6 19 5 31 7 14 21 17 20 1 29 23 3 28 2 26 16 10 25 18 15 22 24 11 32 27 30 13: output/ccnl_fmri_glm_108_goodSubjects_7878.out -- Submitted batch job 7878
+----------------
+--- Tue Nov 16 18:31:28 EST 2021: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_state__true_1_false_7906.out -- Submitted batch job 7906
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_1_state__true_1_false_7907.out -- Submitted batch job 7907
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_1_state__true_1_false_7908.out -- Submitted batch job 7908
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_1_state__true_1_false_7909.out -- Submitted batch job 7909
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_1_state__true_1_false_7910.out -- Submitted batch job 7910
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_1_state__true_1_false_7911.out -- Submitted batch job 7911
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_1_state__true_1_false_7912.out -- Submitted batch job 7912
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_1_state__true_1_false_7913.out -- Submitted batch job 7913
+fit_gp_CV.sh for subject 9: output/fit_gp_CV_9_true_1_state__true_1_false_7914.out -- Submitted batch job 7914
+fit_gp_CV.sh for subject 10: output/fit_gp_CV_10_true_1_state__true_1_false_7915.out -- Submitted batch job 7915
+fit_gp_CV.sh for subject 11: output/fit_gp_CV_11_true_1_state__true_1_false_7916.out -- Submitted batch job 7916
+fit_gp_CV.sh for subject 12: output/fit_gp_CV_12_true_1_state__true_1_false_7917.out -- Submitted batch job 7917
+fit_gp_CV.sh for subject 13: output/fit_gp_CV_13_true_1_state__true_1_false_7918.out -- Submitted batch job 7918
+fit_gp_CV.sh for subject 14: output/fit_gp_CV_14_true_1_state__true_1_false_7919.out -- Submitted batch job 7919
+fit_gp_CV.sh for subject 15: output/fit_gp_CV_15_true_1_state__true_1_false_7920.out -- Submitted batch job 7920
+fit_gp_CV.sh for subject 16: output/fit_gp_CV_16_true_1_state__true_1_false_7921.out -- Submitted batch job 7921
+fit_gp_CV.sh for subject 17: output/fit_gp_CV_17_true_1_state__true_1_false_7922.out -- Submitted batch job 7922
+fit_gp_CV.sh for subject 18: output/fit_gp_CV_18_true_1_state__true_1_false_7923.out -- Submitted batch job 7923
+fit_gp_CV.sh for subject 19: output/fit_gp_CV_19_true_1_state__true_1_false_7924.out -- Submitted batch job 7924
+fit_gp_CV.sh for subject 20: output/fit_gp_CV_20_true_1_state__true_1_false_7925.out -- Submitted batch job 7925
+fit_gp_CV.sh for subject 21: output/fit_gp_CV_21_true_1_state__true_1_false_7926.out -- Submitted batch job 7926
+fit_gp_CV.sh for subject 22: output/fit_gp_CV_22_true_1_state__true_1_false_7927.out -- Submitted batch job 7927
+fit_gp_CV.sh for subject 23: output/fit_gp_CV_23_true_1_state__true_1_false_7928.out -- Submitted batch job 7928
+fit_gp_CV.sh for subject 24: output/fit_gp_CV_24_true_1_state__true_1_false_7929.out -- Submitted batch job 7929
+fit_gp_CV.sh for subject 25: output/fit_gp_CV_25_true_1_state__true_1_false_7930.out -- Submitted batch job 7930
+fit_gp_CV.sh for subject 26: output/fit_gp_CV_26_true_1_state__true_1_false_7931.out -- Submitted batch job 7931
+fit_gp_CV.sh for subject 27: output/fit_gp_CV_27_true_1_state__true_1_false_7932.out -- Submitted batch job 7932
+fit_gp_CV.sh for subject 28: output/fit_gp_CV_28_true_1_state__true_1_false_7933.out -- Submitted batch job 7933
+fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_state__true_1_false_7934.out -- Submitted batch job 7934
+fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_state__true_1_false_7935.out -- Submitted batch job 7935
+fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_state__true_1_false_7936.out -- Submitted batch job 7936
+fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_state__true_1_false_7937.out -- Submitted batch job 7937
+----------------
+--- Tue Nov 16 18:32:16 EST 2021: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_irrelevant__true_1_false_7938.out -- Submitted batch job 7938
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_1_irrelevant__true_1_false_7939.out -- Submitted batch job 7939
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_1_irrelevant__true_1_false_7940.out -- Submitted batch job 7940
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_1_irrelevant__true_1_false_7941.out -- Submitted batch job 7941
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_1_irrelevant__true_1_false_7942.out -- Submitted batch job 7942
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_1_irrelevant__true_1_false_7943.out -- Submitted batch job 7943
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_1_irrelevant__true_1_false_7944.out -- Submitted batch job 7944
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_1_irrelevant__true_1_false_7945.out -- Submitted batch job 7945
+fit_gp_CV.sh for subject 9: output/fit_gp_CV_9_true_1_irrelevant__true_1_false_7946.out -- Submitted batch job 7946
+fit_gp_CV.sh for subject 10: output/fit_gp_CV_10_true_1_irrelevant__true_1_false_7947.out -- Submitted batch job 7947
+fit_gp_CV.sh for subject 11: output/fit_gp_CV_11_true_1_irrelevant__true_1_false_7948.out -- Submitted batch job 7948
+fit_gp_CV.sh for subject 12: output/fit_gp_CV_12_true_1_irrelevant__true_1_false_7949.out -- Submitted batch job 7949
+fit_gp_CV.sh for subject 13: output/fit_gp_CV_13_true_1_irrelevant__true_1_false_7950.out -- Submitted batch job 7950
+fit_gp_CV.sh for subject 14: output/fit_gp_CV_14_true_1_irrelevant__true_1_false_7951.out -- Submitted batch job 7951
+fit_gp_CV.sh for subject 15: output/fit_gp_CV_15_true_1_irrelevant__true_1_false_7952.out -- Submitted batch job 7952
+fit_gp_CV.sh for subject 16: output/fit_gp_CV_16_true_1_irrelevant__true_1_false_7953.out -- Submitted batch job 7953
+fit_gp_CV.sh for subject 17: output/fit_gp_CV_17_true_1_irrelevant__true_1_false_7954.out -- Submitted batch job 7954
+fit_gp_CV.sh for subject 18: output/fit_gp_CV_18_true_1_irrelevant__true_1_false_7955.out -- Submitted batch job 7955
+fit_gp_CV.sh for subject 19: output/fit_gp_CV_19_true_1_irrelevant__true_1_false_7956.out -- Submitted batch job 7956
+fit_gp_CV.sh for subject 20: output/fit_gp_CV_20_true_1_irrelevant__true_1_false_7957.out -- Submitted batch job 7957
+fit_gp_CV.sh for subject 21: output/fit_gp_CV_21_true_1_irrelevant__true_1_false_7958.out -- Submitted batch job 7958
+fit_gp_CV.sh for subject 22: output/fit_gp_CV_22_true_1_irrelevant__true_1_false_7959.out -- Submitted batch job 7959
+fit_gp_CV.sh for subject 23: output/fit_gp_CV_23_true_1_irrelevant__true_1_false_7960.out -- Submitted batch job 7960
+fit_gp_CV.sh for subject 24: output/fit_gp_CV_24_true_1_irrelevant__true_1_false_7961.out -- Submitted batch job 7961
+fit_gp_CV.sh for subject 25: output/fit_gp_CV_25_true_1_irrelevant__true_1_false_7962.out -- Submitted batch job 7962
+fit_gp_CV.sh for subject 26: output/fit_gp_CV_26_true_1_irrelevant__true_1_false_7963.out -- Submitted batch job 7963
+fit_gp_CV.sh for subject 27: output/fit_gp_CV_27_true_1_irrelevant__true_1_false_7964.out -- Submitted batch job 7964
+fit_gp_CV.sh for subject 28: output/fit_gp_CV_28_true_1_irrelevant__true_1_false_7965.out -- Submitted batch job 7965
+fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_irrelevant__true_1_false_7966.out -- Submitted batch job 7966
+fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_irrelevant__true_1_false_7967.out -- Submitted batch job 7967
+fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_irrelevant__true_1_false_7968.out -- Submitted batch job 7968
+fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_irrelevant__true_1_false_7969.out -- Submitted batch job 7969
+----------------
+--- Tue Nov 16 19:34:07 EST 2021: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_state__false_1_false_7970.out -- Submitted batch job 7970
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_1_state__false_1_false_7971.out -- Submitted batch job 7971
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_1_state__false_1_false_7972.out -- Submitted batch job 7972
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_1_state__false_1_false_7973.out -- Submitted batch job 7973
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_1_state__false_1_false_7974.out -- Submitted batch job 7974
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_1_state__false_1_false_7975.out -- Submitted batch job 7975
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_1_state__false_1_false_7976.out -- Submitted batch job 7976
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_1_state__false_1_false_7977.out -- Submitted batch job 7977
+fit_gp_CV.sh for subject 9: output/fit_gp_CV_9_true_1_state__false_1_false_7978.out -- Submitted batch job 7978
+fit_gp_CV.sh for subject 10: output/fit_gp_CV_10_true_1_state__false_1_false_7979.out -- Submitted batch job 7979
+fit_gp_CV.sh for subject 11: output/fit_gp_CV_11_true_1_state__false_1_false_7980.out -- Submitted batch job 7980
+fit_gp_CV.sh for subject 12: output/fit_gp_CV_12_true_1_state__false_1_false_7981.out -- Submitted batch job 7981
+fit_gp_CV.sh for subject 13: output/fit_gp_CV_13_true_1_state__false_1_false_7982.out -- Submitted batch job 7982
+fit_gp_CV.sh for subject 14: output/fit_gp_CV_14_true_1_state__false_1_false_7983.out -- Submitted batch job 7983
+fit_gp_CV.sh for subject 15: output/fit_gp_CV_15_true_1_state__false_1_false_7984.out -- Submitted batch job 7984
+fit_gp_CV.sh for subject 16: output/fit_gp_CV_16_true_1_state__false_1_false_7985.out -- Submitted batch job 7985
+fit_gp_CV.sh for subject 17: output/fit_gp_CV_17_true_1_state__false_1_false_7986.out -- Submitted batch job 7986
+fit_gp_CV.sh for subject 18: output/fit_gp_CV_18_true_1_state__false_1_false_7987.out -- Submitted batch job 7987
+fit_gp_CV.sh for subject 19: output/fit_gp_CV_19_true_1_state__false_1_false_7988.out -- Submitted batch job 7988
+fit_gp_CV.sh for subject 20: output/fit_gp_CV_20_true_1_state__false_1_false_7989.out -- Submitted batch job 7989
+fit_gp_CV.sh for subject 21: output/fit_gp_CV_21_true_1_state__false_1_false_7990.out -- Submitted batch job 7990
+fit_gp_CV.sh for subject 22: output/fit_gp_CV_22_true_1_state__false_1_false_7991.out -- Submitted batch job 7991
+fit_gp_CV.sh for subject 23: output/fit_gp_CV_23_true_1_state__false_1_false_7992.out -- Submitted batch job 7992
+fit_gp_CV.sh for subject 24: output/fit_gp_CV_24_true_1_state__false_1_false_7993.out -- Submitted batch job 7993
+fit_gp_CV.sh for subject 25: output/fit_gp_CV_25_true_1_state__false_1_false_7994.out -- Submitted batch job 7994
+fit_gp_CV.sh for subject 26: output/fit_gp_CV_26_true_1_state__false_1_false_7995.out -- Submitted batch job 7995
+fit_gp_CV.sh for subject 27: output/fit_gp_CV_27_true_1_state__false_1_false_7996.out -- Submitted batch job 7996
+fit_gp_CV.sh for subject 28: output/fit_gp_CV_28_true_1_state__false_1_false_7997.out -- Submitted batch job 7997
+fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_state__false_1_false_7998.out -- Submitted batch job 7998
+fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_state__false_1_false_7999.out -- Submitted batch job 7999
+fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_state__false_1_false_8000.out -- Submitted batch job 8000
+fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_state__false_1_false_8001.out -- Submitted batch job 8001
+----------------
+--- Tue Nov 16 19:34:55 EST 2021: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_irrelevant__false_1_false_8002.out -- Submitted batch job 8002
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_1_irrelevant__false_1_false_8003.out -- Submitted batch job 8003
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_1_irrelevant__false_1_false_8004.out -- Submitted batch job 8004
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_1_irrelevant__false_1_false_8005.out -- Submitted batch job 8005
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_1_irrelevant__false_1_false_8006.out -- Submitted batch job 8006
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_1_irrelevant__false_1_false_8007.out -- Submitted batch job 8007
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_1_irrelevant__false_1_false_8008.out -- Submitted batch job 8008
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_1_irrelevant__false_1_false_8009.out -- Submitted batch job 8009
+fit_gp_CV.sh for subject 9: output/fit_gp_CV_9_true_1_irrelevant__false_1_false_8010.out -- Submitted batch job 8010
+fit_gp_CV.sh for subject 10: output/fit_gp_CV_10_true_1_irrelevant__false_1_false_8011.out -- Submitted batch job 8011
+fit_gp_CV.sh for subject 11: output/fit_gp_CV_11_true_1_irrelevant__false_1_false_8012.out -- Submitted batch job 8012
+fit_gp_CV.sh for subject 12: output/fit_gp_CV_12_true_1_irrelevant__false_1_false_8013.out -- Submitted batch job 8013
+fit_gp_CV.sh for subject 13: output/fit_gp_CV_13_true_1_irrelevant__false_1_false_8014.out -- Submitted batch job 8014
+fit_gp_CV.sh for subject 14: output/fit_gp_CV_14_true_1_irrelevant__false_1_false_8015.out -- Submitted batch job 8015
+fit_gp_CV.sh for subject 15: output/fit_gp_CV_15_true_1_irrelevant__false_1_false_8016.out -- Submitted batch job 8016
+fit_gp_CV.sh for subject 16: output/fit_gp_CV_16_true_1_irrelevant__false_1_false_8017.out -- Submitted batch job 8017
+fit_gp_CV.sh for subject 17: output/fit_gp_CV_17_true_1_irrelevant__false_1_false_8018.out -- Submitted batch job 8018
+fit_gp_CV.sh for subject 18: output/fit_gp_CV_18_true_1_irrelevant__false_1_false_8019.out -- Submitted batch job 8019
+fit_gp_CV.sh for subject 19: output/fit_gp_CV_19_true_1_irrelevant__false_1_false_8020.out -- Submitted batch job 8020
+fit_gp_CV.sh for subject 20: output/fit_gp_CV_20_true_1_irrelevant__false_1_false_8021.out -- Submitted batch job 8021
+fit_gp_CV.sh for subject 21: output/fit_gp_CV_21_true_1_irrelevant__false_1_false_8022.out -- Submitted batch job 8022
+fit_gp_CV.sh for subject 22: output/fit_gp_CV_22_true_1_irrelevant__false_1_false_8023.out -- Submitted batch job 8023
+fit_gp_CV.sh for subject 23: output/fit_gp_CV_23_true_1_irrelevant__false_1_false_8024.out -- Submitted batch job 8024
+fit_gp_CV.sh for subject 24: output/fit_gp_CV_24_true_1_irrelevant__false_1_false_8025.out -- Submitted batch job 8025
+fit_gp_CV.sh for subject 25: output/fit_gp_CV_25_true_1_irrelevant__false_1_false_8026.out -- Submitted batch job 8026
+fit_gp_CV.sh for subject 26: output/fit_gp_CV_26_true_1_irrelevant__false_1_false_8027.out -- Submitted batch job 8027
+fit_gp_CV.sh for subject 27: output/fit_gp_CV_27_true_1_irrelevant__false_1_false_8028.out -- Submitted batch job 8028
+fit_gp_CV.sh for subject 28: output/fit_gp_CV_28_true_1_irrelevant__false_1_false_8029.out -- Submitted batch job 8029
+fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_irrelevant__false_1_false_8030.out -- Submitted batch job 8030
+fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_irrelevant__false_1_false_8031.out -- Submitted batch job 8031
+fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_irrelevant__false_1_false_8032.out -- Submitted batch job 8032
+fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_irrelevant__false_1_false_8033.out -- Submitted batch job 8033
+----------------
+--- Tue Nov 16 20:14:01 EST 2021: Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32
+----------------
+ccnl_fmri_glm.sh for GLM 112, subjects 15 30 29 11 17 14 12 16 24 31 5 10 32 22 26 20 4 25 27 19 1 9 23 21 7 2 28 8 13 18 3 6: output/ccnl_fmri_glm_112_goodSubjects_8034.out -- Submitted batch job 8034
+ccnl_fmri_glm.sh for GLM 113, subjects 3 5 27 26 9 4 11 23 2 12 6 15 31 16 13 18 20 29 32 21 17 8 7 30 25 22 28 1 14 19 10 24: output/ccnl_fmri_glm_113_goodSubjects_8035.out -- Submitted batch job 8035
+ccnl_fmri_glm.sh for GLM 114, subjects 25 6 17 13 27 10 19 16 31 5 22 14 20 21 29 32 1 2 26 18 8 12 9 15 7 3 4 28 30 11 23 24: output/ccnl_fmri_glm_114_goodSubjects_8036.out -- Submitted batch job 8036
+ccnl_fmri_glm.sh for GLM 115, subjects 11 27 17 18 30 32 4 21 25 7 26 16 9 22 12 14 2 24 10 23 19 6 20 15 5 31 29 1 28 13 8 3: output/ccnl_fmri_glm_115_goodSubjects_8037.out -- Submitted batch job 8037
