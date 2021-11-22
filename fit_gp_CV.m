@@ -147,7 +147,7 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
     end
 
     if save_Y_hat
-        Y_hat = nan(size(Y));
+        Y_hat_CV = nan(size(Y));
     end
 
     % precompute (K + sigma^2 I) ^ (-1) for every sigma
@@ -322,7 +322,7 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
         end
 
         if save_Y_hat
-            Y_hat(:,i) = y_hat;
+            Y_hat_CV(:,i) = y_hat_CV;
         end
         %figure;
         %hold on;
@@ -367,7 +367,7 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
                        'sigma_CV', 'logmarglik_CV', 'logpredlik_CV', 'R2_CV', 'adjR2_CV', 'r_CV', 'MSE_CV', 'SMSE_CV', ...
                        'ceil_sigma', 'ceil_logmarglik', 'ceil_logpseudolik', 'ceil_R2', 'ceil_adjR2', 'ceil_r', 'ceil_MSE', 'ceil_SMSE', ...
                        'ceil_sigma_CV', 'ceil_logmarglik_CV', 'ceil_logpseudolik_CV', 'ceil_R2_CV', 'ceil_adjR2_CV', 'ceil_r_CV', 'ceil_MSE_CV', 'ceil_SMSE_CV', ...
-                       'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'sigmas', 'n', 'partition_id', 'Y', 'Y_hat', ...
+                       'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'sigmas', 'n', 'partition_id', 'Y', 'Y_hat_CV', ...
         '-v7.3');
     else
         save(filename, 'sigma', 'logmarglik', 'logpredlik', 'R2', 'adjR2', 'r', 'MSE', 'SMSE', ... 
