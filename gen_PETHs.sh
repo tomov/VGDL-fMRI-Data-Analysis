@@ -40,6 +40,15 @@ declare -a fn_calls=(
                      "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP\')"
                      )
 
+declare -a fn_calls=(
+                     "gen_PETHs(\'AAL2_GP_EMPA_grouped\', \'\', 0, 0, \'GP\')"
+                     "gen_PETHs(\'AAL2_GP_EMPA\', \'\', 0, 0, \'GP\')"
+                     "gen_PETHs(\'AAL2_GLM_102_grouped\', \'\', 0, 0, \'GP\')"
+                     "gen_PETHs(\'AAL2_GLM_102\', \'\', 0, 0, \'GP\')"
+                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP\')"
+                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP\')"
+                     )
+
 for fn_call in "${fn_calls[@]}"
 do
     echo $fn_call
