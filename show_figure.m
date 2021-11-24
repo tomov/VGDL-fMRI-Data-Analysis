@@ -815,9 +815,9 @@ switch figure_name
         % Prettyfy it 
         % specifically for agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA.mat');
         text(1.5, 0.25, 'Frontal/Motor', 'fontsize', 12, 'HorizontalAlignment', 'center');
-        plot([2.5 2.5], [0 0.3], '--', 'color', [0.5 0.5 0.5]);
+        plot([2.5 2.5], [0 0.35], '--', 'color', [0.5 0.5 0.5]);
         text(3.5, 0.25, 'Dorsal/Parietal', 'fontsize', 12, 'HorizontalAlignment', 'center');
-        plot([4.5 4.5], [0 0.3], '--', 'color', [0.5 0.5 0.5]);
+        plot([4.5 4.5], [0 0.35], '--', 'color', [0.5 0.5 0.5]);
         text(6, 0.25, 'Ventral/Temporal', 'fontsize', 12, 'HorizontalAlignment', 'center');
         legend(fields(ix), 'interpreter', 'none');
 
