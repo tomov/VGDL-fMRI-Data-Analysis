@@ -1,18 +1,17 @@
-function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, normalize, fast, save_Y_hat, debug)
+%function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, normalize, fast, save_Y_hat, debug)
 
-%{
     subj = 1;
     use_smooth = true;
-    glmodel = 21;
+    glmodel = 1;
     %mask = 'masks/ROI_x=48_y=12_z=32_62voxels_Sphere6.nii';
     mask = 'masks/ROI_x=48_y=12_z=32_1voxels_Sphere1.nii';
     %mask = 'masks/mask_batchsize=1000_batch=2.nii';
     %mask = 'masks/mask.nii';
-    model
-    what = 'theory';
+    model_name = 'state'
+    what = '';
     fast = true;
+    project = true;
     debug = false;
-    %}
 
     if use_smooth
         EXPT = vgdl_expt();
@@ -89,6 +88,8 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
         Y = R*K*W*Y;
         ker = R*K*W*ker*W'*K'*R';
     end
+
+    snahteu
 
     % every couple of runs form a partition
     partition_id = partition_id_from_run_id(run_id);

@@ -14,6 +14,7 @@ fasse_ncf = false;
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA.mat'); % !!!!!!!!!!!!!!!!!!!!!!!!!
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_state.mat');
 agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_no_project.mat');
+%agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_one-sided.mat');
 
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=Brodmann.mat');
 
@@ -41,8 +42,10 @@ ylabel('\Delta BIC');
 %
 
 figure('position', [1147 521 1045 418]);
-ix = ismember(regressor_names, {'theory', 'DQN', 'PCA', 'state', 'irrelevant'});
-h = plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], [], 10);
+%ix = ismember(regressor_names, {'theory', 'DQN', 'PCA'});
+ix = ismember(regressor_names, {'theory', 'state', 'irrelevant', 'PCA'});
+jx = ismember(roi_names, {'LING', 'CAL', 'CUN'});
+h = plot_gp_CV_rois_helper(fs(jx,ix,:), 'signrank', 'median', regressor_names(ix), roi_names(jx), [], [], 10);
 %h = plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, alpha);
 %plot_gp_CV_rois_helper(fs(:,ix,:), 'ttest', 'mean', regressor_names(ix), roi_names);
 %ylim([0 0.1]);
@@ -60,7 +63,8 @@ text(12, 0.075, 'Ventral/Temporal', 'fontsize', 12, 'HorizontalAlignment', 'cent
 plot([13.5 13.5], [0 0.08], '--', 'color', [0.5 0.5 0.5]);
 text(14.5, 0.075, 'Early visual', 'fontsize', 12, 'HorizontalAlignment', 'center');
 %}
-legend({'EMPA', 'DDQN', 'PCA', 'state', 'irrelevant'});
+%legend({'EMPA', 'DDQN', 'PCA'});
+legend({'EMPA', 'PCA', 'state', 'irrelevant'});
 
 
 snathoe

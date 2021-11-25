@@ -3,7 +3,11 @@ function show_figure(figure_name)
 
 switch figure_name
 
-    %% Figure 3 
+    %
+    %
+    %% Figure 3: EMPA theory vs. DDQN layer representations
+    %
+    %
 
     case 'plot_gp_CV_EMPA'
         % plot_gp_CV.m
@@ -102,7 +106,11 @@ switch figure_name
         legend({'all layers', 'conv1', 'conv2', 'conv3', 'linear1', 'linear2'});
 
 
-    %% Figure 4
+    %
+    %
+    %% Figure 4: EMPA theory updating
+    %
+    %
 
 
     case 'GLM_102'
@@ -510,6 +518,13 @@ switch figure_name
         legend(glm_names(ix),  'interpreter', 'none');
 
 
+    %
+    %
+    %% Figure 5
+    %
+    %
+
+
     case 'contrast_overlap_GP_EMPA_GLM_102'
         % contrast_overlap.m
 
@@ -821,7 +836,47 @@ switch figure_name
         text(6, 0.25, 'Ventral/Temporal', 'fontsize', 12, 'HorizontalAlignment', 'center');
         legend(fields(ix), 'interpreter', 'none');
 
+    
+    %
+    %
+    %% Figure 7: state representations
+    %
+    %
 
+    case 'plot_gp_CV_state'
+        % plot_gp_CV.m
+
+        load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=state__nsamples=100_project=0_norm=1_fast=1.mat'));  % !!!
+        assert(use_smooth);
+        EXPT = vgdl_expt();
+        bspmview_wrapper(EXPT, tmap);
+
+    case 'plot_gp_CV_irrelevant'
+        % plot_gp_CV.m
+
+        load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=irrelevant__nsamples=100_project=0_norm=1_fast=1.mat'));  % !!!
+        assert(use_smooth);
+        EXPT = vgdl_expt();
+        bspmview_wrapper(EXPT, tmap);
+
+
+    case 'plot_gp_CV_rois_state_fraction_AAL2_GP_EMPA'
+        % plot_gp_CV_rois.m
+        
+        agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_no_project.mat');
+        agg_filename
+        load(agg_filename);
+
+        figure('position', [1147 519 725 420]);
+        ix = ismember(regressor_names, {'theory', 'state', 'irrelevant', 'PCA'});
+        jx = ismember(roi_names, {'LING', 'CAL', 'CUN'});
+        h = plot_gp_CV_rois_helper(fs(jx,ix,:), 'signrank', 'median', regressor_names(ix), roi_names(jx), [], [], 10);
+        title('Model comparison by ROI');
+        ylabel('Fraction significant voxels');
+
+        % Prettifyit
+        text(2, 0.75, 'Early visual', 'fontsize', 12, 'HorizontalAlignment', 'center');
+        legend({'EMPA', 'PCA', 'state', 'irrelevant'});
          
     otherwise
         assert(false, 'Invalid figure name');

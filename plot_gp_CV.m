@@ -65,9 +65,9 @@ tmap(mask) = ts;
 %load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=EMPA_termination_nsamples=100_project=1_fast=1.mat')); % this is it
 
 %load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=state__nsamples=100_project=1_norm=1_fast=1.mat'));
-%load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=state__nsamples=100_project=0_norm=1_fast=1.mat'));
+load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=state__nsamples=100_project=0_norm=1_fast=1.mat'));  % !!!
 %load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=irrelevant__nsamples=100_project=1_norm=1_fast=1.mat'));
-load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=irrelevant__nsamples=100_project=0_norm=1_fast=1.mat'));
+%load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=irrelevant__nsamples=100_project=0_norm=1_fast=1.mat'));
 
 %load('mat/agg_gp_CV_us=1_glm=9_theory_fast.mat');
 %load('mat/agg_gp_CV_us=1_glm=9_theory_nsamples=1_fast.mat');
