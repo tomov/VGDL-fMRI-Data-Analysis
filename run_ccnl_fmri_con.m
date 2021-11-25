@@ -371,6 +371,16 @@ for i = 1:length(glmodels)
                 {'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag', 'interaction_change_flag + termination_change_flag', 'sprite_change_flag + interaction_change_flag + termination_change_flag', 'interaction_change_flag - termination_change_flag', 'termination_change_flag - interaction_change_flag', 'interaction_change_flag - sprite_change_flag', 'termination_change_flag - sprite_change_flag'}, ...
                 subjs);
             
+        case {112, 114}
+            ccnl_fmri_con(vgdl_expt(), glmodel, ...
+                {'exploratory_goals'}, ...
+                subjs);
+
+        case {113, 115}
+            ccnl_fmri_con(vgdl_expt(), glmodel, ...
+                {'exploitative_goals'}, ...
+                subjs);
+
 
         otherwise
             assert(false, 'invalid glmodel -- should be one of the above');
