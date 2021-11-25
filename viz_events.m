@@ -2,7 +2,7 @@
 
 % https://www.mathworks.com/help/database/ug/mongo.html#d117e86584
 %conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54')
-conn = mongo('holy7c22103.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'reader', 'Password', 'parolatamadafaqa')
+conn = mongo('holy7c22101.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'reader', 'Password', 'parolatamadafaqa')
 
 subj_id = 24;
 run_id = 1;
