@@ -20,7 +20,7 @@ function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, r
             m_fs = median(fs, 3);
     end
     sem_fs = std(fs, 0, 3) / sqrt(nsubjects);
-    h = bar(m_fs);
+    h = bar(1:nROIs, m_fs);
 
     % color the bars
     if exist('cmap', 'var') && ~isempty(cmap)

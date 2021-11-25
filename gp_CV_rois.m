@@ -6,15 +6,15 @@ EXPT = vgdl_expt();
 alpha = 0.01; % significance threshold for individual voxels
 
 %atlas = 'AAL2_grouped';
-%atlas = 'AAL2_GP_EMPA_grouped';
-atlas = 'AAL2_GP_EMPA';
+atlas = 'AAL2_GP_EMPA_grouped';
+%atlas = 'AAL2_GP_EMPA';
 %atlas = 'AAL2_grouped2';
 %atlas = 'Brodmann';
 %atlas = 'AAL3v1';
 %atlas = 'HarvardOxford-maxprob-thr0';
 
 fasse_ncf = false;
-agg_filename = fullfile(get_mat_dir(fasse_ncf), sprintf('gp_CV_rois_alpha=%.3f_atlas=%s_one-sided.mat', alpha, atlas));
+agg_filename = fullfile(get_mat_dir(fasse_ncf), sprintf('gp_CV_rois_alpha=%.3f_atlas=%s_.mat', alpha, atlas));
 agg_filename
 
 %% get masks
@@ -107,8 +107,8 @@ for reg = 1:nregressors
 
         n = EXPT.nTRs * 2; % number of data points per partition (two runs)
         t = r .* sqrt(n - 2) ./ sqrt(1 - r.^2); % T statistic for each voxel https://www.statology.org/p-value-correlation-excel/
-        %p = 2 * (1 - tcdf(t, n - 2)); % two-sided p value for each voxel 
-        p = 1 - tcdf(t, n - 2); % one-sided p value for each voxel 
+        p = 2 * (1 - tcdf(t, n - 2)); % two-sided p value for each voxel 
+        %p = 1 - tcdf(t, n - 2); % one-sided p value for each voxel 
         significant = p < alpha; % which voxels are significant
 
         for m = 1:nROIs

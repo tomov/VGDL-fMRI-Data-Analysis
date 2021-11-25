@@ -89,8 +89,11 @@ function gen_PETHs(glmodel, contrast, Num, sphere, what)
         toc
 
         if strcmp(what, 'GP')
-            disp('extracting predicted BOLD time course from GP results');
+            disp('extracting predicted BOLD time course from EMPA GP results');
             load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat');
+        elseif strcmp(what, 'GP_DQN')
+            disp('extracting predicted BOLD time course from DQN GP results');
+            load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=DQN_all_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat');
         end
 
         disp('extracting BOLD time courses');
@@ -135,7 +138,7 @@ function gen_PETHs(glmodel, contrast, Num, sphere, what)
                         % get BOLD time course given run
                         Y_run = nanmean(Y(Y_run_id == SPM_run_id, :), 2);
                         assert(all(size(Y_run) == [EXPT.nTRs, 1]));
-                    case 'GP'
+                    case {'GP', 'GP_DQN'}
                         % get predicted BOLD and BOLD, do not average across voxels
                         Y_run = Y(Y_run_id == SPM_run_id, :);
                         Y_hat_run = Y_hat(Y_run_id == SPM_run_id, mask(whole_brain_mask));
@@ -168,16 +171,20 @@ function gen_PETHs(glmodel, contrast, Num, sphere, what)
                         switch what
                             case 'BOLD'
                                 Y_baseline = nanmean(Y_run(event_TR + baseline_dTRs));
-                            case 'GP'
+                            case {'GP', 'GP_DQN'}
                                 z_baseline = nanmean(z_run(event_TR + baseline_dTRs));
+                            otherwise
+                                assert(false);
                         end
 
                         % accumulate peri-event timecourses; we average at the end (per subject)
                         switch what
                             case 'BOLD'
                                 activations(m).(field)(s,valid_TRs) = activations(m).(field)(s,valid_TRs) + (Y_run(TRs(valid_TRs))' - Y_baseline);
-                            case 'GP'
+                            case {'GP', 'GP_DQN'}
                                 activations(m).(field)(s,valid_TRs) = activations(m).(field)(s,valid_TRs) + (z_run(TRs(valid_TRs))' - z_baseline);
+                            otherwise
+                                assert(false);
                         end
                         counts(m).(field)(s,:) = counts(m).(field)(s,:) + valid_TRs;
                     end

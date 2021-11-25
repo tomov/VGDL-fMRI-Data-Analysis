@@ -875,9 +875,28 @@ switch figure_name
         ylabel('Fraction significant voxels');
 
         % Prettifyit
-        text(2, 0.75, 'Early visual', 'fontsize', 12, 'HorizontalAlignment', 'center');
+        text(1, 0.75, 'Ventral/Temporal', 'fontsize', 12, 'HorizontalAlignment', 'center');
+        plot([1.5 1.5], [0 0.8], '--', 'color', [0.5 0.5 0.5]);
+        text(2.5, 0.75, 'Early visual', 'fontsize', 12, 'HorizontalAlignment', 'center');
         legend({'EMPA', 'PCA', 'state', 'irrelevant'});
-         
+        
+
+    case 'plot_gp_CV_rois_state_fraction_AAL2_GP_EMPA_grouped'
+        % plot_gp_CV_rois.m
+        
+        agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_grouped_no_project.mat');
+        agg_filename
+        load(agg_filename);
+
+        figure('position', [1147 519 725 420]);
+        ix = ismember(regressor_names, {'theory', 'state', 'irrelevant', 'PCA'});
+        jx = ismember(roi_names, {'Early visual'});
+        h = plot_gp_CV_rois_helper(fs(jx,ix,:), 'signrank', 'median', regressor_names(ix), roi_names(jx), [], [], 10);
+        title('Model comparison by ROI group');
+        ylabel('Fraction significant voxels');
+        xticklabels({'Early visual'});
+        legend({'EMPA', 'PCA', 'state', 'irrelevant'});
+
     otherwise
         assert(false, 'Invalid figure name');
 end
