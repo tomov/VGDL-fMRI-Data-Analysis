@@ -570,7 +570,8 @@ switch figure_name
     case 'plot_PETH_AAL2_GP_EMPA_GLM_102_GP'
         % plot_PETHs.m
 
-        load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP.mat')); % !!!!!!!!!!!!
+        %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP.mat')); % !!!!!!!!!!!!
+        load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP_CV_no_baseline.mat')); 
         ROI_ix = 1:length(mask_filenames);
 
         mask_filenames = mask_filenames(ROI_ix);
@@ -636,7 +637,8 @@ switch figure_name
             if m == 1
                 legend(hh, fields, 'interpreter', 'none');
             end
-            ylabel('\Delta z');
+            ylabel('z');
+            %ylabel('\Delta z');
             xlabel('time (s)');
             title(regions{m}, 'interpreter', 'none');
         end

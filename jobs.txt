@@ -3683,3 +3683,16 @@ gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP\'): output/gen
 --- Fri Nov 26 14:04:39 EST 2021: Running ccnl_fmri_con for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32
 ----------------
 ccnl_fmri_con.sh for GLMs 112 113 114 115, subjects 11 23 6 31 1 25 24 4 12 2 17 22 30 5 26 14 9 16 20 7 3 8 32 13 18 10 27 19 28 15 21 29: output/ccnl_fmri_con_112_113_114_115_goodSubjects_8465.out -- Submitted batch job 8465
+----------------
+--- Fri Nov 26 16:53:30 EST 2021 Running gen_PETHs
+----------------
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_grouped\', \'\', 0, 0, \'BOLD\', false, true): output/gen_PETHs_8466.out -- Submitted batch job 8466
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA\', \'\', 0, 0, \'BOLD\', false, true): output/gen_PETHs_8467.out -- Submitted batch job 8467
+gen_PETHs.sh gen_PETHs(\'AAL2_GLM_102_grouped\', \'\', 0, 0, \'BOLD\', false, true): output/gen_PETHs_8468.out -- Submitted batch job 8468
+gen_PETHs.sh gen_PETHs(\'AAL2_GLM_102\', \'\', 0, 0, \'BOLD\', false, true): output/gen_PETHs_8469.out -- Submitted batch job 8469
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'BOLD\', false, true): output/gen_PETHs_8470.out -- Submitted batch job 8470
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'BOLD\', false, true): output/gen_PETHs_8471.out -- Submitted batch job 8471
+----------------
+--- Fri Nov 26 16:54:11 EST 2021: Running fit_ridge_CV for subjects 1 in parallel
+----------------
+fit_ridge_CV.sh for subject 1: output/fit_ridge_CV_1_true_1_8472.out -- Submitted batch job 8472

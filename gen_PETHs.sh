@@ -59,6 +59,17 @@ declare -a fn_calls=(
 #                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_DQN\')"
 #                     )
 
+# Figure 4 without baseline
+#
+declare -a fn_calls=(
+                     "gen_PETHs(\'AAL2_GP_EMPA_grouped\', \'\', 0, 0, \'BOLD\', false, true)"
+                     "gen_PETHs(\'AAL2_GP_EMPA\', \'\', 0, 0, \'BOLD\\', false, true)"
+                     "gen_PETHs(\'AAL2_GLM_102_grouped\', \'\', 0, 0, \'BOLD\\', false, true)"
+                     "gen_PETHs(\'AAL2_GLM_102\', \'\', 0, 0, \'BOLD\\', false, true)"
+                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'BOLD\\', false, true)"
+                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'BOLD\\', false, true)"
+                     )
+
 
 for fn_call in "${fn_calls[@]}"
 do
