@@ -1,4 +1,4 @@
-function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, collection)
+function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, regressors_collection)
 
     %{
     subj_id = 1; 
@@ -6,7 +6,7 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, collec
     conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54');
     query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id); 
     run = find(conn, 'runs', 'query', query);
-    collection = 'regressors';
+    regressors_collection = 'regressors';
     do_cache = false;
     %}
 
@@ -14,11 +14,11 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, collec
         do_cache = false;
     end
 
-    if ~exist('collection', 'var')
-        collection = 'regressors';
+    if ~exist('regressors_collection', 'var')
+        regressors_collection = 'regressors';
         filename = fullfile(get_mat_dir(false), sprintf('get_regressors_subj%d_run%d.mat', subj_id, run.run_id));
     else
-        filename = fullfile(get_mat_dir(false), sprintf('get_regressors_subj%d_run%d_c=%s.mat', subj_id, run.run_id, collection));
+        filename = fullfile(get_mat_dir(false), sprintf('get_regressors_subj%d_run%d_c=%s.mat', subj_id, run.run_id, regressors_collection));
     end
 
     % optionally cache
@@ -36,7 +36,18 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, collec
 
     assert(isequal(run.subj_id, num2str(subj_id)));
 
-    switch collection
+    plays_post_collection = 'plays_post'; % by default, unless specified otherwise
+    switch regressors_collection
+        case {'empa_regressors'}
+            % 818de8d483c140e54eee1c57fae0c0fc1c457725
+            plays_post_collection = 'empa_plays_post'; % separate collection
+
+            % TODO termination_change_flag & interaction_change_flag differ between regressors and plays_post; latter seem more correct
+            binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'newEffects_flag', 'newTimeStep_flag', 'replan_flag'}; % binary db.regressors => onsets only, durations irrelevant; have the option of having them as onsets only
+            reg_fields = [binreg_fields, {'spriteKL', 'sum_lik', 'n_ts', 'num_effects', 'R_GG', 'R_GGs', 'R_SG', 'R_SGs'}]; % db.regressors 
+            binpost_fields = {'interaction_change_flag', 'termination_change_flag'}; % binary db.plays_post, copied & fixed from db.regressors
+            post_fields = [binpost_fields {'likelihood', 'surprise', 'sum_lik_play', 'S_len','I_len','T_len','Igen_len','Tnov_len','Ip_len','dS_len','dI_len','dT_len','dIgen_len','dTnov_len','dIp_len', 'subgoal_flag1', 'subgoal_flag2'}]; % db.plays_post 
+
         case {'regressors', 'regressors_DELETEME'}
             % current one -- regressors_and_playspost_2020_05_31_finalTS_block
 
@@ -138,12 +149,12 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, collec
                 assert(length(plays) == 1);
                 play = plays(1);
 
-                if isequal('collection', 'regressors')
-                    regressors = find(conn, collection, 'query', q);
+                if ismember(regressors_collection, {'regressors', 'empa_regressors'})
+                    regressors = find(conn, regressors_collection, 'query', q);
                     assert(length(regressors) == 1);
                 else
                     % we didn't have our shit together back in the day
-                    regressors = find(conn, collection, 'query', q, 'sort', '{"dt": -1.0}'); % momchil: assume latest one is the correct one 
+                    regressors = find(conn, regressors_collection, 'query', q, 'sort', '{"dt": -1.0}'); % momchil: assume latest one is the correct one 
                     if isempty(regressors)
                         disp('EMPTY w t f........');
                         continue
@@ -196,7 +207,7 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, collec
 
                 ttt = t;
 
-                plays_post = find(conn, 'plays_post', 'query', q);
+                plays_post = find(conn, plays_post_collection, 'query', q);
                 if length(plays_post) ~= 1
                     disp('bbb')
                     keyboard
@@ -235,6 +246,9 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, collec
                     else
                         r = play_post.(post_fields{i})(:,1);
                     end
+                    if ismember(post_fields{i}, {'subgoal_flag1', 'subgoal_flag2'})
+                        r = r(2:end-1); % these have extra state, just like in get_visuals()
+                    end
                     regs.(post_fields{i}) = [regs.(post_fields{i}); r];
                 end
 
@@ -258,7 +272,7 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, collec
 
     end
 
-    if isequal(collection, 'regressors')
+    if ismember(regressors_collection, {'regressors', 'empa_regressors'})
         % to make sure the "visual" regressors from states (logged in core.py, in plays.states) line up with "EMPA" regressors (logged in EMPA.py, in regressors).
         % this is a challenge b/c we log ones in state timestamps and the others in keystate timestamps (logged separately in core.py), and b/c they have different lengths (b/c EMPA skips initial and last state)
         % so we have to manually adjust for that; in the end, we treat the keystates timestamps as ground truth

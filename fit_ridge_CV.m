@@ -1,6 +1,25 @@
-function fit_ridge_CV(subj, use_smooth, glmodel, mask, model_name, what, subsample_only, project)
+function fit_ridge_CV(subj, use_smooth, glmodel, mask, model_name, what, subsample_only, project, save_Y_hat)
     % copied from fit_gp_CV.m and decode_gp_CV.m
 
+    %{
+    clear all;
+    subj = 1;
+    use_smooth = true;
+    glmodel = 1;
+    %mask = 'masks/ROI_x=48_y=12_z=32_62voxels_Sphere6.nii';
+    %mask = 'masks/ROI_x=48_y=12_z=32_1voxels_Sphere1.nii';
+    %mask = 'masks/ROI_x=16_y=-94_z=22_1voxels_Sphere1.nii';
+    mask = 'masks/N_Acc.nii';
+    %mask = 'masks/mask_batchsize=1000_batch=2.nii';
+    %mask = 'masks/mask.nii';
+    model_name = 'EMPA'
+    what = 'theory';
+    fast = true;
+    project = true;
+    debug = false;
+    save_Y_hat = true;
+    subsample_only = false;
+    %}
 
     %{
     clear all;
@@ -24,9 +43,12 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask, model_name, what, subsamp
         EXPT = vgdl_expt_nosmooth();
     end
 
+    if ~exist('save_Y_hat', 'var')
+        save_Y_hat = false;
+    end
 
     [~,maskname,~] = fileparts(mask);
-    filename = sprintf('fit_ridge_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_subsample=%d_project=%d.mat', subj, use_smooth, glmodel, maskname, model_name, what, subsample_only, project);
+    filename = sprintf('fit_ridge_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_subsample=%d_project=%d_saveYhat=%d.mat', subj, use_smooth, glmodel, maskname, model_name, what, subsample_only, project, save_Y_hat);
     filename = fullfile(get_mat_dir(), filename);
     filename
 
@@ -62,6 +84,15 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask, model_name, what, subsamp
 
         case 'nuisance'
             [ker, Xx] = load_nuisance_kernel(EXPT, subj); % GLM 9 game id features
+
+        case 'nuisance'
+            [ker, features] = load_nuisance_kernel(EXPT, subj);
+
+        case 'state'
+            [ker, features] = load_state_kernel(EXPT, subj); 
+
+        case 'irrelevant'
+            [ker, features] = load_irrelevant_kernel(EXPT, subj); 
 
         otherwise
             assert(false, 'invalid model name')
@@ -118,6 +149,9 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask, model_name, what, subsamp
         pX{j} = pinv(X' * X + l * eye(size(X,2))) * X';
     end
 
+    if save_Y_hat
+        Y_hat_CV = nan(size(Y));
+    end
 
     % fit ridge regression
     %
@@ -198,7 +232,12 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask, model_name, what, subsamp
                 MSE_CV(k,s+j-1) = immse(y(test,j), y_hat(test,:));
                 SMSE_CV(k,s+j-1) = MSE_CV(k,s+j-1) / var(y(test,j));
             end
+
+            if save_Y_hat
+                Y_hat_CV(:, j + s - 1) = y_hat;
+            end
         end
+
         %{
         % totally overfit
         %
@@ -231,10 +270,17 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask, model_name, what, subsamp
 
     filename
 
-    save(filename, 'lambda', 'R2_CV', 'adjR2_CV', 'r_CV', 'MSE_CV', 'SMSE_CV', ...
-                   'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'subsample_only', 'project', ...
-                   'lambdas', 'X', 'Xx', 'partition_id', 'run_id', 'SPM_run_id', ...
-    '-v7.3');
+    if save_Y_hat
+        save(filename, 'lambda', 'R2_CV', 'adjR2_CV', 'r_CV', 'MSE_CV', 'SMSE_CV', ...
+                       'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'subsample_only', 'project', ...
+                       'lambdas', 'X', 'Xx', 'partition_id', 'run_id', 'SPM_run_id', 'Y', 'Y_hat_CV', ...
+        '-v7.3');
+    else
+        save(filename, 'lambda', 'R2_CV', 'adjR2_CV', 'r_CV', 'MSE_CV', 'SMSE_CV', ...
+                       'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'subsample_only', 'project', ...
+                       'lambdas', 'X', 'Xx', 'partition_id', 'run_id', 'SPM_run_id', ...
+        '-v7.3');
+    end
 
     disp('Done');
 

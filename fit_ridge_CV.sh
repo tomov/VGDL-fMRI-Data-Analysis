@@ -5,13 +5,16 @@ subjects=( 1  )  #  e.g. subjects=( 1 2 5 6 7 10 )
 #subjects=( 2 3 4 5 6 7 8 )  #  e.g. subjects=( 1 2 5 6 7 10 )
 subj_arg="${subjects[@]}" # stringify it
 
-model_name="DQN"
-what="conv1"
+#model_name="DQN"
+model_name="EMPA"
+#what="conv1"
+what="theory"
 mask="masks/mask.nii"
-glmodel=9
+glmodel=1
 use_smooth=true
 subsample_only=false
-project=false
+project=true
+save_Y_hat=false
 
 echo ---------------- >> jobs.txt
 echo --- $(date): Running fit_ridge_CV for subjects ${subj_arg} in parallel >> jobs.txt
@@ -25,7 +28,7 @@ for subj in ${subjects[*]}; do
 
     # send the job to NCF
     #
-    sbatch_output=`sbatch -p  fasse --mem 20001 -t 0-15:20 -o ${outfileprefix}_%j.out -e ${outfileprefix}_%j.err --wrap="matlab -nodisplay -nosplash -nojvm -r $'fit_ridge_CV(${subj}, ${use_smooth}, ${glmodel}, \'${mask}\', \'${model_name}\', \'${what}\', ${subsample_only}, ${project});exit'"`
+    sbatch_output=`sbatch -p  fasse --mem 20001 -t 0-15:20 -o ${outfileprefix}_%j.out -e ${outfileprefix}_%j.err --wrap="matlab -nodisplay -nosplash -nojvm -r $'fit_ridge_CV(${subj}, ${use_smooth}, ${glmodel}, \'${mask}\', \'${model_name}\', \'${what}\', ${subsample_only}, ${project}, ${save_Y_hat});exit'"`
     # for local testing
     #sbatch_output=`echo Submitted batch job 88725418`
     echo $sbatch_output

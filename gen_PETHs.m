@@ -1,5 +1,12 @@
-function gen_PETHs(glmodel, contrast, Num, sphere, what)
+function gen_PETHs(glmodel, contrast, Num, sphere, what, use_CV, no_baseline)
     % get activations around given event(s)
+
+    if ~exist('use_CV', 'var')
+        use_CV = false;
+    end
+    if ~exist('no_baseline', 'var')
+        no_baseline = false;
+    end
 
     EXPT = vgdl_expt();
 
@@ -23,7 +30,15 @@ function gen_PETHs(glmodel, contrast, Num, sphere, what)
             % anatomical ROI
             atlas_name = glmodel;
             [mask_filenames, regions] = get_anatomical_masks(atlas_name);
-            filename = fullfile(get_mat_dir(false), sprintf('PETHs_atlas=%s_%s.mat', atlas_name, what));
+            CV_suffix = '';
+            baseline_suffix = '';
+            if use_CV
+                CV_suffix = '_CV';
+            end
+            if no_baseline
+                baseline_suffix = '_no_baseline';
+            end
+            filename = fullfile(get_mat_dir(false), sprintf('PETHs_atlas=%s_%s%s%s_.mat', atlas_name, what, CV_suffix, baseline_suffix));
         else
             % a priori ROIs
             tag = glmodel; % fake "glmodel" = study tag
@@ -90,10 +105,18 @@ function gen_PETHs(glmodel, contrast, Num, sphere, what)
 
         if strcmp(what, 'GP')
             disp('extracting predicted BOLD time course from EMPA GP results');
-            load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat');
+            if use_CV
+                load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat_CV');
+            else
+                load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat');
+            end
         elseif strcmp(what, 'GP_DQN')
             disp('extracting predicted BOLD time course from DQN GP results');
-            load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=DQN_all_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat');
+            if use_CV
+                load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=DQN_all_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat_CV');
+            else
+                load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=DQN_all_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat');
+            end
         end
 
         disp('extracting BOLD time courses');
@@ -141,7 +164,11 @@ function gen_PETHs(glmodel, contrast, Num, sphere, what)
                     case {'GP', 'GP_DQN'}
                         % get predicted BOLD and BOLD, do not average across voxels
                         Y_run = Y(Y_run_id == SPM_run_id, :);
-                        Y_hat_run = Y_hat(Y_run_id == SPM_run_id, mask(whole_brain_mask));
+                        if use_CV
+                            Y_hat_run = Y_hat_CV(Y_run_id == SPM_run_id, mask(whole_brain_mask));
+                        else
+                            Y_hat_run = Y_hat(Y_run_id == SPM_run_id, mask(whole_brain_mask));
+                        end
                         % get correlation across voxels at each time point
                         r_run = nan(EXPT.nTRs, 1);
                         for t = 1:EXPT.nTRs
@@ -175,6 +202,11 @@ function gen_PETHs(glmodel, contrast, Num, sphere, what)
                                 z_baseline = nanmean(z_run(event_TR + baseline_dTRs));
                             otherwise
                                 assert(false);
+                        end
+
+                        if no_baseline
+                            Y_baseline = 0;
+                            z_baseline = 0;
                         end
 
                         % accumulate peri-event timecourses; we average at the end (per subject)

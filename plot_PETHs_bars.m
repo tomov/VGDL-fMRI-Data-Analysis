@@ -23,7 +23,14 @@ clear all;
 
 %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GLM_102_BOLD.mat')); % !!!!!!!!!!!!
 %ROI_ix = [      1      2      7     10     11     12     13     14     15]; 
-load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP.mat')); % !!!!!!!!!!!!
+%load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP.mat')); % !!!!!!!!!!!!
+%load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_grouped_GP_CV.mat'));
+load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_grouped_GP_CV_no_baseline.mat')); % !!!!!!!!!!!!!!!!
+%load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_grouped_GP_CV_no_baseline_.mat')); % sanity check
+%load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GLM_102_GP_CV_no_baseline.mat'));
+%load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_grouped_GP_CV_no_baseline.mat'));
+%load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP_CV_no_baseline.mat'));
+%load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP_CV.mat'));
 %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP_DQN.mat')); 
 ROI_ix = 1:length(mask_filenames);
 
@@ -64,7 +71,8 @@ for m = 1:nROIs
         disp(field)
 
         D = activations(m).(field)(subjs,:); % subj x TRs PETH's
-        as(m,i,:) = mean(D(:, PETH_dTRs > 0), 2); % average across time, ignoring baseline
+        as(m,i,:) = mean(D(:, PETH_dTRs > 5), 2); % average across time, ignoring baseline
+        %as(m,i,:) = mean(D(:, PETH_dTRs > 0), 2); % average across time, ignoring baseline
     end
 end
 
@@ -72,10 +80,12 @@ end
 figure('pos', [49 329 2143 610]);
 
 ix = 1:nregressors;
-h = plot_gp_CV_rois_helper(as(:,ix,:), 'ttest', 'mean', fields(ix), regions, 0, cmap, 5, 1:3);
+h = plot_gp_CV_rois_helper(as(:,ix,:), 'ttest', 'mean', fields(ix), regions, 0, cmap, 5, 1:1);
 if exist('what', 'var') && strcmp(what, 'GP')
-    title('Average Fisher z-transformed Pearson correlation change in ROIs');
-    ylabel('\Delta z');
+    %title('Average Fisher z-transformed Pearson correlation change in ROIs');
+    %ylabel('\Delta z');
+    title('Average Fisher z-transformed Pearson correlation in ROIs');
+    ylabel('z');
 else
     title('Average BOLD change in ROIs');
     ylabel('\Delta BOLD');
@@ -83,11 +93,11 @@ end
 
 % Prettyfy it 
 % specifically for agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA.mat');
-text(1.5, 0.75, 'Frontal/Motor', 'fontsize', 12, 'HorizontalAlignment', 'center');
-plot([2.5 2.5], [0 0.8], '--', 'color', [0.5 0.5 0.5]);
-text(3.5, 0.75, 'Dorsal/Parietal', 'fontsize', 12, 'HorizontalAlignment', 'center');
-plot([4.5 4.5], [0 0.8], '--', 'color', [0.5 0.5 0.5]);
-text(6, 0.75, 'Ventral/Temporal', 'fontsize', 12, 'HorizontalAlignment', 'center');
-plot([7.5 7.5], [0 0.8], '--', 'color', [0.5 0.5 0.5]);
-text(8.5, 0.75, 'Early visual', 'fontsize', 12, 'HorizontalAlignment', 'center');
+%text(1.5, 0.75, 'Frontal/Motor', 'fontsize', 12, 'HorizontalAlignment', 'center');
+%plot([2.5 2.5], [0 0.2], '--', 'color', [0.5 0.5 0.5]);
+%text(3.5, 0.75, 'Dorsal/Parietal', 'fontsize', 12, 'HorizontalAlignment', 'center');
+%plot([4.5 4.5], [0 0.2], '--', 'color', [0.5 0.5 0.5]);
+%text(6, 0.75, 'Ventral/Temporal', 'fontsize', 12, 'HorizontalAlignment', 'center');
+%plot([7.5 7.5], [0 0.2], '--', 'color', [0.5 0.5 0.5]);
+%text(8.5, 0.75, 'Early visual', 'fontsize', 12, 'HorizontalAlignment', 'center');
 legend(fields(ix), 'interpreter', 'none');
