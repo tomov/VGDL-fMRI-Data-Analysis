@@ -648,7 +648,8 @@ switch figure_name
     case 'plot_PETH_components_AAL2_GP_EMPA_GLM_102_GP'
         % plot_PETHs.m
 
-        load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP.mat')); % !!!!!!!!!!!!
+        %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP.mat')); % !!!!!!!!!!!!
+        load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP_CV_no_baseline.mat')); 
         ROI_ix = 1:length(mask_filenames);
 
         mask_filenames = mask_filenames(ROI_ix);
@@ -714,7 +715,8 @@ switch figure_name
             if m == 1
                 legend(hh, fields, 'interpreter', 'none');
             end
-            ylabel('\Delta z');
+            %ylabel('\Delta z');
+            ylabel('z');
             xlabel('time (s)');
             title(regions{m}, 'interpreter', 'none');
         end
@@ -723,7 +725,8 @@ switch figure_name
     case 'plot_PETH_bars_AAL2_GP_EMPA_GLM_102_GP'
         % plot_PETHs_bars.m
 
-        load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP.mat')); % !!!!!!!!!!!!
+        %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP.mat')); % !!!!!!!!!!!!
+        load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP_CV_no_baseline.mat')); 
         ROI_ix = 1:length(mask_filenames);
 
         mask_filenames = mask_filenames(ROI_ix);
@@ -761,7 +764,7 @@ switch figure_name
                 disp(field)
 
                 D = activations(m).(field)(subjs,:); % subj x TRs PETH's
-                as(m,i,:) = mean(D(:, PETH_dTRs > 0), 2); % average across time, ignoring baseline
+                as(m,i,:) = mean(D(:, PETH_dTRs > 5), 2); % average across time, ignoring baseline
             end
         end
 
@@ -770,8 +773,10 @@ switch figure_name
 
         ix = 1:nregressors;
         h = plot_gp_CV_rois_helper(as(:,ix,:), 'ttest', 'mean', fields(ix), regions, 0, cmap, 5, 1);
-        title('Average Fisher z-transformed Pearson correlation change in ROIs');
-        ylabel('\Delta z');
+        %title('Average Fisher z-transformed Pearson correlation change in ROIs');
+        %ylabel('\Delta z');
+        title('Average Fisher z-transformed Pearson correlation in ROIs');
+        ylabel('z');
 
         % Prettyfy it 
         % specifically for agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA.mat');
@@ -781,12 +786,81 @@ switch figure_name
         plot([4.5 4.5], [0 0.3], '--', 'color', [0.5 0.5 0.5]);
         text(6, 0.25, 'Ventral/Temporal', 'fontsize', 12, 'HorizontalAlignment', 'center');
         legend(fields(ix), 'interpreter', 'none');
+
+
+    case 'plot_PETH_bars_AAL2_GP_EMPA_GLM_102_grouped_GP'
+        % plot_PETHs_bars.m
+
+        load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_grouped_GP_CV_no_baseline.mat')); 
+        ROI_ix = 1:length(mask_filenames);
+
+        mask_filenames = mask_filenames(ROI_ix);
+        mask_name = mask_name(ROI_ix);
+        regions = regions(ROI_ix);
+        activations = activations(ROI_ix);
+
+        % optionally plot theory change flag only
+        %fields(find(strcmp(fields, 'theory_change_flag'))) = [];
+        fields(find(strcmp(fields, 'sprite_change_flag'))) = [];
+        fields(find(strcmp(fields, 'interaction_change_flag'))) = [];
+        fields(find(strcmp(fields, 'termination_change_flag'))) = [];
+        fields(find(strcmp(fields, 'block_start'))) = [];
+        fields(find(strcmp(fields, 'block_end'))) = [];
+        fields(find(strcmp(fields, 'instance_start'))) = [];
+        fields(find(strcmp(fields, 'instance_end'))) = [];
+
+        subjs = 1:1:32;
+
+        nROIs = length(mask_filenames);
+        nregressors = length(fields);
+        nsubjects = length(subjs);
+
+        as = nan(nROIs,nregressors,nsubjects);
+
+        cmap = colormap(jet(length(fields)));
+        t = PETH_dTRs * EXPT.TR; % s
+
+        % loop over masks
+        for m = 1:nROIs
+            disp(mask_name{m});
+
+            for i = 1:nregressors
+                field = fields{i};
+                disp(field)
+
+                D = activations(m).(field)(subjs,:); % subj x TRs PETH's
+                as(m,i,:) = mean(D(:, PETH_dTRs > 5), 2); % average across time, ignoring baseline
+            end
+        end
+
+        % Piggyback off of plot_gp_CV_rois.m
+        figure('pos', [49 272 936 667]);
+
+        ix = 1:nregressors;
+        h = plot_gp_CV_rois_helper(as(:,ix,:), 'ttest', 'mean', fields(ix), regions, 0, cmap, 5, 1);
+        %title('Average Fisher z-transformed Pearson correlation change in ROIs');
+        %ylabel('\Delta z');
+        title('Average Fisher z-transformed Pearson correlation in ROIs');
+        ylabel('z');
+
+        % Prettyfy it 
+        % specifically for agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA.mat');
+        %text(1.5, 0.25, 'Frontal/Motor', 'fontsize', 12, 'HorizontalAlignment', 'center');
+        %plot([2.5 2.5], [0 0.3], '--', 'color', [0.5 0.5 0.5]);
+        %text(3.5, 0.25, 'Dorsal/Parietal', 'fontsize', 12, 'HorizontalAlignment', 'center');
+        %plot([4.5 4.5], [0 0.3], '--', 'color', [0.5 0.5 0.5]);
+        %text(6, 0.25, 'Ventral/Temporal', 'fontsize', 12, 'HorizontalAlignment', 'center');
+        legend(fields(ix), 'interpreter', 'none');
+        xticklabels({'Frontal/Motor (IFG)', 'Dorsal/Parietal', 'Ventral/Temporal'});
+         
+
          
 
     case 'plot_PETH_bars_AAL2_GP_EMPA_GLM_102_GP_components'
         % plot_PETHs_bars.m
 
-        load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP.mat')); % !!!!!!!!!!!!
+        %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP.mat')); % !!!!!!!!!!!!
+        load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP_CV_no_baseline.mat')); 
         ROI_ix = 1:length(mask_filenames);
 
         mask_filenames = mask_filenames(ROI_ix);
@@ -817,7 +891,7 @@ switch figure_name
                 disp(field)
 
                 D = activations(m).(field)(subjs,:); % subj x TRs PETH's
-                as(m,i,:) = mean(D(:, PETH_dTRs > 0), 2); % average across time, ignoring baseline
+                as(m,i,:) = mean(D(:, PETH_dTRs > 5), 2); % average across time, ignoring baseline
             end
         end
 
@@ -826,8 +900,10 @@ switch figure_name
 
         ix = 1:nregressors;
         h = plot_gp_CV_rois_helper(as(:,ix,:), 'ttest', 'mean', fields(ix), regions, 0, cmap, 5);
-        title('Average Fisher z-transformed Pearson correlation change in ROIs');
-        ylabel('\Delta z');
+        %title('Average Fisher z-transformed Pearson correlation change in ROIs');
+        %ylabel('\Delta z');
+        title('Average Fisher z-transformed Pearson correlation in ROIs');
+        ylabel('z');
 
         % Prettyfy it 
         % specifically for agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA.mat');
