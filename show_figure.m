@@ -912,6 +912,62 @@ switch figure_name
         text(6, 0.25, 'Ventral/Temporal', 'fontsize', 12, 'HorizontalAlignment', 'center');
         legend(fields(ix), 'interpreter', 'none');
 
+
+
+    case 'plot_PETH_bars_AAL2_GP_EMPA_GLM_102_grouped_GP_components'
+        % plot_PETHs_bars.m
+
+        load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_grouped_GP.mat')); 
+        ROI_ix = 1:length(mask_filenames);
+
+        mask_filenames = mask_filenames(ROI_ix);
+        mask_name = mask_name(ROI_ix);
+        regions = regions(ROI_ix);
+        activations = activations(ROI_ix);
+
+        % optionally plot theory change flag only
+        fields = {'theory_change_flag', 'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag'};
+
+        subjs = 1:1:32;
+
+        nROIs = length(mask_filenames);
+        nregressors = length(fields);
+        nsubjects = length(subjs);
+
+        as = nan(nROIs,nregressors,nsubjects);
+
+        cmap = [1 0.8 0.6 0.4]' * [0    0.4470    0.7410];
+        t = PETH_dTRs * EXPT.TR; % s
+
+        % loop over masks
+        for m = 1:nROIs
+            disp(mask_name{m});
+
+            for i = 1:nregressors
+                field = fields{i};
+                disp(field)
+
+                D = activations(m).(field)(subjs,:); % subj x TRs PETH's
+                as(m,i,:) = mean(D(:, PETH_dTRs > 0), 2); % average across time, ignoring baseline
+                %as(m,i,:) = mean(D(:, PETH_dTRs > 5), 2); % average across time, ignoring baseline
+            end
+        end
+
+        % Piggyback off of plot_gp_CV_rois.m
+        figure('pos', [49 329 2143 610]);
+
+        ix = 1:nregressors;
+        h = plot_gp_CV_rois_helper(as(:,ix,:), 'ttest', 'mean', fields(ix), regions, 0, cmap, 5);
+        title('Average Fisher z-transformed Pearson correlation change in ROIs');
+        ylabel('\Delta z');
+        %title('Average Fisher z-transformed Pearson correlation in ROIs');
+        %ylabel('z');
+
+        % Prettyfy it 
+        % specifically for agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA.mat');
+        legend(fields(ix), 'interpreter', 'none');
+        xticklabels({'Frontal/Motor (IFG)', 'Dorsal/Parietal', 'Ventral/Temporal'});
+
     
     %
     %
