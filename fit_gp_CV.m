@@ -1,10 +1,13 @@
-%function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, normalize, fast, save_Y_hat, debug)
+function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, normalize, fast, save_Y_hat, debug)
 
+    %{
+    clear all;
     subj = 1;
     use_smooth = true;
     glmodel = 1;
     %mask = 'masks/ROI_x=48_y=12_z=32_62voxels_Sphere6.nii';
-    mask = 'masks/ROI_x=48_y=12_z=32_1voxels_Sphere1.nii';
+    %mask = 'masks/ROI_x=48_y=12_z=32_1voxels_Sphere1.nii';
+    mask = 'masks/ROI_x=16_y=-94_z=22_1voxels_Sphere1.nii';
     %mask = 'masks/mask_batchsize=1000_batch=2.nii';
     %mask = 'masks/mask.nii';
     model_name = 'state'
@@ -12,6 +15,8 @@
     fast = true;
     project = true;
     debug = false;
+    save_Y_hat = true;
+    %}
 
     if use_smooth
         EXPT = vgdl_expt();
@@ -88,8 +93,6 @@
         Y = R*K*W*Y;
         ker = R*K*W*ker*W'*K'*R';
     end
-
-    snahteu
 
     % every couple of runs form a partition
     partition_id = partition_id_from_run_id(run_id);
@@ -327,11 +330,13 @@
             Y_hat(:,i) = y_hat;
             Y_hat_CV(:,i) = y_hat_CV;
         end
+
         %figure;
         %hold on;
         %plot(y);
         %plot(y_hat);
-        %legend({'y', 'y_hat'}, 'interpreter', 'none');
+        %plot(y_hat_CV);
+        %legend({'y', 'y_hat', 'y_hat_CV'}, 'interpreter', 'none');
 
         %figure;
         %hold on;
@@ -339,6 +344,7 @@
         %plot(ceil_y_hat_CV);
         %legend({'y', 'ceil_y_hat', 'ceil_y_hat_CV'}, 'interpreter', 'none');
 
+        %break
     end
 
     toc

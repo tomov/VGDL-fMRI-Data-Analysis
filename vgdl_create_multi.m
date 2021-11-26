@@ -1858,9 +1858,12 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
 
             multi.orth{1} = 0; % do not orthogonalise them
 
-            multi.pmod(1).name{1} = 'exploitative_goals';
-            multi.pmod(1).param{1} = exploitative_goals;
-            multi.pmod(1).poly{1} = 1;
+            if std(exploitative_goals) > 1e-6
+                % make sure they're not constant e.g. subj 24 run 3
+                multi.pmod(1).name{1} = 'exploitative_goals';
+                multi.pmod(1).param{1} = exploitative_goals;
+                multi.pmod(1).poly{1} = 1;
+            end
 
         % number of exploratory goals + keypresses + on/off
         case 114
@@ -1894,9 +1897,11 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
 
             multi.orth{1} = 0; % do not orthogonalise them
 
-            multi.pmod(1).name{1} = 'exploitative_goals';
-            multi.pmod(1).param{1} = exploitative_goals;
-            multi.pmod(1).poly{1} = 1;
+            if std(exploitative_goals) > 1e-6
+                multi.pmod(1).name{1} = 'exploitative_goals';
+                multi.pmod(1).param{1} = exploitative_goals;
+                multi.pmod(1).poly{1} = 1;
+            end
 
             %  nuisance regressors
             multi = add_keyholds_to_multi(multi, subj_id, run, conn);

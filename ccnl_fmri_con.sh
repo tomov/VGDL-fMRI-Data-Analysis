@@ -7,7 +7,7 @@ goodSubjects=( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
 subj_arg="${goodSubjects[@]}" # stringify it
 
 #models=( 27 28 29 76 82 83 81 80 86 87 88 68 30 34 31 35 36 37 42 43 46 47 48 49 57 )
-models=( 102 )
+models=( 112 113 114 115 )
 models_arg="${models[@]}" # stringify it with spaces
 models_str=`echo $models_arg | sed 's/ /_/g'` # stringify with underscores
 

@@ -7,7 +7,8 @@ EXPT = vgdl_expt;
 for glmodel = glmodels
     for subj = 1:length(EXPT.subject)
         for run = 1:length(EXPT.subject(subj).functional)
-            multi = vgdl_create_multi(glmodel, subj, run)
+            %multi = vgdl_create_multi(glmodel, subj, run)
+            ccnl_check_multi(EXPT, glmodel, subj, run)
         end
     end
 end
