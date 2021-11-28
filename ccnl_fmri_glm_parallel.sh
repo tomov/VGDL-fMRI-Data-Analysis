@@ -4,8 +4,11 @@
 
 mkdir output
 
-goodSubjects=( 3   )
+#goodSubjects=( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 )  # same as getGoodSubjects(), e.g. goodSubjects = ( 1 2 3 5 7 10 )
 
+#models=( 120 121 122  )
+goodSubjects=( 1 )
+models=( 58  )
 
 subj_arg="${goodSubjects[@]}" # stringify it
 
@@ -14,7 +17,7 @@ echo --- Running ccnl_fmri_glm_parallel for subjects ${subj_arg} >> jobs.txt
 echo ---------------- >> jobs.txt
 
 
-for model in {1..1}
+for model in "${models[@]}"
 do
     shuffledSubjects=( $(printf '%s\n' "${goodSubjects[@]}" | shuf ) )   # shuffle subjects so parallel GLM's don't use the same hard disk
     subj_arg="${shuffledSubjects[@]}" # stringify it
@@ -25,7 +28,7 @@ do
 
         # send the job to NCF
         #
-        sbatch_output=`sbatch -p ncf --mem 10000 -t 1-10:20 -o ${outfileprefix}_%j.out -e ${outfileprefix}_%j.err --wrap="matlab -nodisplay -nosplash -nojvm -r $'ccnl_fmri_glm(vgdl_expt(), $model, [$subj]);exit'"`
+        sbatch_output=`sbatch -p fasse --mem 10000 -t 0-10:20 -o ${outfileprefix}_%j.out -e ${outfileprefix}_%j.err --wrap="matlab -nodisplay -nosplash -nojvm -r $'ccnl_fmri_glm(vgdl_expt(), $model, [$subj]);exit'"`
         # for local testing
         #sbatch_output=`echo Submitted batch job 88725418`
         echo $sbatch_output

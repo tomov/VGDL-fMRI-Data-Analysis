@@ -1780,9 +1780,23 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             multi = add_visuals_to_multi(multi, subj_id, run, conn, fields);
 
         % Beta series GLM for theory_change_flag
-        case 109
+        case {109, 120, 121, 122}
 
             minimum_onset_separation = 10; % s
+
+            % optionally offset from the theory_change_flag time
+            switch glmodel
+                case 109
+                    lag = 0;
+                case 120
+                    lag = 2; % 2 s = 1 TR
+                case 121
+                    lag = 4; % 4 s = 2 TRs
+                case 122
+                    lag = 6; % 6 s = 3 TRs
+                otherwise
+                    assert(false);
+            end
 
             % from GLM 3: theory_change_flag
             %
@@ -1795,7 +1809,7 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
                 if onsets(i) - last_onset >= minimum_onset_separation
                     idx = idx + 1;
                     multi.names{idx} = sprintf('theory_change_flag_%d', i);
-                    multi.onsets{idx} = onsets(i);
+                    multi.onsets{idx} = onsets(i) + lag;
                     multi.durations{idx} = zeros(size(multi.onsets{idx}));
                     last_onset = onsets(i);
                 end
