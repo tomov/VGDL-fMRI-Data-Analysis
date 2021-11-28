@@ -2,19 +2,21 @@ mkdir output
 
 #subjects=( 1 2 3 4 5 6 7 8 )  #  e.g. subjects=( 1 2 5 6 7 10 )
 #subjects=( 1  )  #  e.g. subjects=( 1 2 5 6 7 10 )
-subjects=( 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31  32  )  #  e.g. subjects=( 1 2 5 6 7 10 )
+subjects=( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31  32  )  #  e.g. subjects=( 1 2 5 6 7 10 )
 #subjects=( 2 3 4 5 6 7 8 )  #  e.g. subjects=( 1 2 5 6 7 10 )
 subj_arg="${subjects[@]}" # stringify it
 
 #model_name="DQN"
-model_name="EMPA"
+#model_name="EMPA"
+model_name="state"
 #what="conv1"
-what="theory"
+#what="theory"
+what=""
 mask="masks/mask.nii"
 glmodel=1
 use_smooth=true
 subsample_only=false
-project=true
+project=false
 save_Y_hat=false
 
 echo ---------------- >> jobs.txt

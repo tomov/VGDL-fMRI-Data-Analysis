@@ -1,4 +1,4 @@
-function [legacy_fields, visuals, fields] = get_visuals(subj_id, run, conn, do_cache)
+function [legacy_fields, visuals, fields] = get_visuals(subj_id, run, conn, do_cache, plays_post_collection)
 
 %clear all;
 %conn = mongo('holy7c22101.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'reader', 'Password', 'parolatamadafaqa')
@@ -19,8 +19,14 @@ function [legacy_fields, visuals, fields] = get_visuals(subj_id, run, conn, do_c
     end
 
     % optionally cache
-    filename = fullfile(get_mat_dir(false), sprintf('get_visuals_new_subj%d_run%d.mat', subj_id, run.run_id));
+    if ~exist('plays_post_collection', 'var')
+        plays_post_collection = 'plays_post';
+        filename = fullfile(get_mat_dir(false), sprintf('get_visuals_new_subj%d_run%d.mat', subj_id, run.run_id));
+    else
+        filename = fullfile(get_mat_dir(false), sprintf('get_visuals_new_subj%d_run%d_c=%s.mat', subj_id, run.run_id, plays_post_collection));
+    end
     filename
+
     if do_cache
         if exist(filename, 'file')
             load(filename);
@@ -30,7 +36,7 @@ function [legacy_fields, visuals, fields] = get_visuals(subj_id, run, conn, do_c
 
     % TODO tight coupling with vgdl_create_multi, case 10-20
     legacy_fields = {'timestamps', 'new_sprites', 'killed_sprites', 'sprites', 'non_walls', 'avatar_moved', 'moved', 'movable', 'collisions', 'effects', 'sprite_groups', 'changed', 'avatar_collision_flag', 'effectsByCol'};
-    manual_fields = {'dscore', 'win', 'timeout', 'loss', 'durations', 'ended'};
+    manual_fields = {'dscore', 'win', 'timeout', 'loss', 'durations', 'ended', 'play_start', 'play_end'};
     fields = [legacy_fields, manual_fields, {'score'}];
 
     visuals = struct;
@@ -58,7 +64,7 @@ function [legacy_fields, visuals, fields] = get_visuals(subj_id, run, conn, do_c
                 assert(length(plays) == 1);
                 play = plays(1);
 
-                plays_post = find(conn, 'plays_post', 'query', q);
+                plays_post = find(conn, plays_post_collection, 'query', q);
                 assert(length(plays_post) == 1);
                 play_post = plays_post(1);
 
@@ -81,6 +87,8 @@ function [legacy_fields, visuals, fields] = get_visuals(subj_id, run, conn, do_c
                 loss = logical(zeros(size(play_post.win(2:end-1,:))));
                 timeout = logical(zeros(size(play_post.win(2:end-1,:))));
                 ended = logical(zeros(size(play_post.win(2:end-1,:))));
+                play_start = logical(zeros(size(play_post.win(2:end-1,:))));
+                play_end = logical(zeros(size(play_post.win(2:end-1,:))));
                 % Notice that here we actually take the last timestamp instead of the second to last one
                 if length(win) > 0
                     if ~iscell(play_post.win) 
@@ -110,10 +118,14 @@ function [legacy_fields, visuals, fields] = get_visuals(subj_id, run, conn, do_c
                             disp('Invalid value for win_final');
                     end
                     ended(end) = 1;
+                    play_start(1) = 1;
+                    play_end(end) = 1;
                     visuals.win = [visuals.win; win];
                     visuals.loss = [visuals.loss; loss];
                     visuals.timeout = [visuals.timeout; timeout];
                     visuals.ended = [visuals.ended; ended];
+                    visuals.play_start = [visuals.play_start; play_start];
+                    visuals.play_end = [visuals.play_end; play_end];
                 end
             end
         end

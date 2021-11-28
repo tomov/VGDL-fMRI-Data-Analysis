@@ -1907,6 +1907,107 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             multi = add_keyholds_to_multi(multi, subj_id, run, conn);
             multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
 
+        % exploration versus exploitation, boxcars
+        case {116, 117, 118, 119}
+
+            [regs, ~, ~] = get_regressors(subj_id, run, conn, true, 'empa_regressors');
+            tcf = logical(regs.theory_change_flag);
+            sgf1 = logical(regs.subgoal_flag1);
+            sgf2 = logical(regs.subgoal_flag2);
+
+            [~, visuals, ~] = get_visuals(subj_id, run, conn, true, 'empa_plays_post');
+            acf = logical(visuals.avatar_collision_flag);
+            ks = logical(visuals.killed_sprites);
+            ps = logical(visuals.play_start);
+            pe = logical(visuals.play_end);
+            win = logical(visuals.win);
+
+            which = ismember(visuals.timestamps, regs.state_timestamps); % cross-reference them; annoying stuff
+            if ~all(which)
+                keyboard
+            end
+            acf = acf(which);
+            ks = ks(which);
+            ps = ps(which);
+            pe = pe(which);
+            win = win(which);
+
+            %acf_broad = acf | [0; acf(1:end-1)];  % account for off-by-one
+            %acf = acf_broad;
+
+            % exploration = subgoals that bring us closer to satisfying termination conditions
+            % exploration = subgoals that lead to theory updating
+            exploit = (sgf1 & acf) | (sgf2 & acf & ks) | (win & acf);
+            explore = (tcf & acf);
+
+            % initiation point for action sequences, both exploration and exploitation
+            switch glmodel
+                case {116, 118}
+                    starts = exploit | explore | ps;
+                case {117, 119}
+                    starts = exploit | explore | ps | acf;
+                otherwise
+                    assert(false);
+            end
+
+            % convert to timestamps
+            exploit_ts = regs.timestamps(exploit);
+            explore_ts = regs.timestamps(explore);
+            starts_ts = regs.timestamps(starts);
+
+            idx = 0
+
+            % add exploitation boxcars
+            if any(exploit_ts)
+                idx = idx + 1;
+                multi.names{idx} = 'exploit';
+                multi.onsets{idx} = nan(size(exploit_ts));
+                multi.durations{idx} = nan(size(multi.onsets{idx}));
+
+                % match exploitation subgoal with closest proceeding action initiation
+                for i = 1:length(exploit_ts)
+                    en = exploit_ts(i);
+                    ix = find(starts_ts < en);
+                    st = starts_ts(ix(end));
+                    multi.onsets{idx}(i) = st;
+                    multi.durations{idx}(i) = en - st;
+                end
+            end
+
+            % add exploration boxcars
+            if any(explore_ts)
+                idx = idx + 1;
+                multi.names{idx} = 'explore';
+                multi.onsets{idx} = nan(size(explore_ts));
+                multi.durations{idx} = nan(size(multi.onsets{idx}));
+
+                % match exploration subgoal with closest proceeding action initiation
+                for i = 1:length(explore_ts)
+                    en = explore_ts(i);
+                    ix = find(starts_ts < en);
+                    st = starts_ts(ix(end));
+                    multi.onsets{idx}(i) = st;
+                    multi.durations{idx}(i) = en - st;
+                end
+            end
+
+            % optional control regressors
+            switch glmodel
+                case {116, 117}
+                    disp('no control');
+
+                case {118, 119}
+                    if any(regs.theory_change_flag_onsets)
+                        idx = idx + 1;
+                        multi.names{idx} = 'theory_change_flag';
+                        multi.onsets{idx} = regs.theory_change_flag_onsets;
+                        multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+                    end
+
+                otherwise
+                    assert(false);
+            end
+
         otherwise
             assert(false, 'invalid glmodel -- should be one of the above');
 
