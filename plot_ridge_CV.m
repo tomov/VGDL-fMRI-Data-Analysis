@@ -22,6 +22,8 @@ ts = stats.tstat;
 tmap(mask) = ts;
 %}
 
+
+%load(fullfile(get_mat_dir(), 'agg_ridge_CV_us=1_glm=1_model=EMPA_theory_subsample=0_project=1.mat')); % !!!!!!!!!!!!!!!!!!!!!!!!!!
 load(fullfile(get_mat_dir(), 'agg_ridge_CV_us=1_glm=1_model=EMPA_theory_subsample=0_project=1.mat'));
 
 

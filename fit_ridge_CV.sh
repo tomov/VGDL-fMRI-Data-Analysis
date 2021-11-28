@@ -16,7 +16,7 @@ mask="masks/mask.nii"
 glmodel=1
 use_smooth=true
 subsample_only=false
-project=false
+project=true
 save_Y_hat=false
 
 echo ---------------- >> jobs.txt

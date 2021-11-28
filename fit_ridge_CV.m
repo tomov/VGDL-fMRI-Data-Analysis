@@ -86,13 +86,13 @@ function fit_ridge_CV(subj, use_smooth, glmodel, mask, model_name, what, subsamp
             [ker, Xx] = load_nuisance_kernel(EXPT, subj); % GLM 9 game id features
 
         case 'nuisance'
-            [ker, features] = load_nuisance_kernel(EXPT, subj);
+            [ker, Xx] = load_nuisance_kernel(EXPT, subj);
 
         case 'state'
-            [ker, features] = load_state_kernel(EXPT, subj); 
+            [ker, Xx] = load_state_kernel(EXPT, subj); 
 
         case 'irrelevant'
-            [ker, features] = load_irrelevant_kernel(EXPT, subj); 
+            [ker, Xx] = load_irrelevant_kernel(EXPT, subj); 
 
         otherwise
             assert(false, 'invalid model name')

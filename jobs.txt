@@ -3926,3 +3926,73 @@ ccnl_fmri_glm_parallel.sh for GLM 122, subject 4: output/ccnl_fmri_glm_parallel_
 ccnl_fmri_glm_parallel.sh for GLM 122, subject 17: output/ccnl_fmri_glm_parallel_122_subj_17_8718.out -- Submitted batch job 8718
 ccnl_fmri_glm_parallel.sh for GLM 122, subject 30: output/ccnl_fmri_glm_parallel_122_subj_30_8719.out -- Submitted batch job 8719
 ccnl_fmri_glm_parallel.sh for GLM 122, subject 11: output/ccnl_fmri_glm_parallel_122_subj_11_8720.out -- Submitted batch job 8720
+----------------
+--- Sun Nov 28 18:20:04 EST 2021: Running fit_ridge_CV for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 in parallel
+----------------
+fit_ridge_CV.sh for subject 1: output/fit_ridge_CV_1_true_1_8721.out -- Submitted batch job 8721
+fit_ridge_CV.sh for subject 2: output/fit_ridge_CV_2_true_1_8722.out -- Submitted batch job 8722
+fit_ridge_CV.sh for subject 3: output/fit_ridge_CV_3_true_1_8723.out -- Submitted batch job 8723
+fit_ridge_CV.sh for subject 4: output/fit_ridge_CV_4_true_1_8724.out -- Submitted batch job 8724
+fit_ridge_CV.sh for subject 5: output/fit_ridge_CV_5_true_1_8725.out -- Submitted batch job 8725
+fit_ridge_CV.sh for subject 6: output/fit_ridge_CV_6_true_1_8726.out -- Submitted batch job 8726
+fit_ridge_CV.sh for subject 7: output/fit_ridge_CV_7_true_1_8727.out -- Submitted batch job 8727
+fit_ridge_CV.sh for subject 8: output/fit_ridge_CV_8_true_1_8728.out -- Submitted batch job 8728
+fit_ridge_CV.sh for subject 9: output/fit_ridge_CV_9_true_1_8729.out -- Submitted batch job 8729
+fit_ridge_CV.sh for subject 10: output/fit_ridge_CV_10_true_1_8730.out -- Submitted batch job 8730
+fit_ridge_CV.sh for subject 11: output/fit_ridge_CV_11_true_1_8731.out -- Submitted batch job 8731
+fit_ridge_CV.sh for subject 12: output/fit_ridge_CV_12_true_1_8732.out -- Submitted batch job 8732
+fit_ridge_CV.sh for subject 13: output/fit_ridge_CV_13_true_1_8733.out -- Submitted batch job 8733
+fit_ridge_CV.sh for subject 14: output/fit_ridge_CV_14_true_1_8734.out -- Submitted batch job 8734
+fit_ridge_CV.sh for subject 15: output/fit_ridge_CV_15_true_1_8735.out -- Submitted batch job 8735
+fit_ridge_CV.sh for subject 16: output/fit_ridge_CV_16_true_1_8736.out -- Submitted batch job 8736
+fit_ridge_CV.sh for subject 17: output/fit_ridge_CV_17_true_1_8737.out -- Submitted batch job 8737
+fit_ridge_CV.sh for subject 18: output/fit_ridge_CV_18_true_1_8738.out -- Submitted batch job 8738
+fit_ridge_CV.sh for subject 19: output/fit_ridge_CV_19_true_1_8739.out -- Submitted batch job 8739
+fit_ridge_CV.sh for subject 20: output/fit_ridge_CV_20_true_1_8740.out -- Submitted batch job 8740
+fit_ridge_CV.sh for subject 21: output/fit_ridge_CV_21_true_1_8741.out -- Submitted batch job 8741
+fit_ridge_CV.sh for subject 22: output/fit_ridge_CV_22_true_1_8742.out -- Submitted batch job 8742
+fit_ridge_CV.sh for subject 23: output/fit_ridge_CV_23_true_1_8743.out -- Submitted batch job 8743
+fit_ridge_CV.sh for subject 24: output/fit_ridge_CV_24_true_1_8744.out -- Submitted batch job 8744
+fit_ridge_CV.sh for subject 25: output/fit_ridge_CV_25_true_1_8745.out -- Submitted batch job 8745
+fit_ridge_CV.sh for subject 26: output/fit_ridge_CV_26_true_1_8746.out -- Submitted batch job 8746
+fit_ridge_CV.sh for subject 27: output/fit_ridge_CV_27_true_1_8747.out -- Submitted batch job 8747
+fit_ridge_CV.sh for subject 28: output/fit_ridge_CV_28_true_1_8748.out -- Submitted batch job 8748
+fit_ridge_CV.sh for subject 29: output/fit_ridge_CV_29_true_1_8749.out -- Submitted batch job 8749
+fit_ridge_CV.sh for subject 30: output/fit_ridge_CV_30_true_1_8750.out -- Submitted batch job 8750
+fit_ridge_CV.sh for subject 31: output/fit_ridge_CV_31_true_1_8751.out -- Submitted batch job 8751
+fit_ridge_CV.sh for subject 32: output/fit_ridge_CV_32_true_1_8752.out -- Submitted batch job 8752
+----------------
+--- Sun Nov 28 18:20:53 EST 2021: Running fit_ridge_CV for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 in parallel
+----------------
+fit_ridge_CV.sh for subject 1: output/fit_ridge_CV_1_true_1_8753.out -- Submitted batch job 8753
+fit_ridge_CV.sh for subject 2: output/fit_ridge_CV_2_true_1_8754.out -- Submitted batch job 8754
+fit_ridge_CV.sh for subject 3: output/fit_ridge_CV_3_true_1_8755.out -- Submitted batch job 8755
+fit_ridge_CV.sh for subject 4: output/fit_ridge_CV_4_true_1_8756.out -- Submitted batch job 8756
+fit_ridge_CV.sh for subject 5: output/fit_ridge_CV_5_true_1_8757.out -- Submitted batch job 8757
+fit_ridge_CV.sh for subject 6: output/fit_ridge_CV_6_true_1_8758.out -- Submitted batch job 8758
+fit_ridge_CV.sh for subject 7: output/fit_ridge_CV_7_true_1_8759.out -- Submitted batch job 8759
+fit_ridge_CV.sh for subject 8: output/fit_ridge_CV_8_true_1_8760.out -- Submitted batch job 8760
+fit_ridge_CV.sh for subject 9: output/fit_ridge_CV_9_true_1_8761.out -- Submitted batch job 8761
+fit_ridge_CV.sh for subject 10: output/fit_ridge_CV_10_true_1_8762.out -- Submitted batch job 8762
+fit_ridge_CV.sh for subject 11: output/fit_ridge_CV_11_true_1_8763.out -- Submitted batch job 8763
+fit_ridge_CV.sh for subject 12: output/fit_ridge_CV_12_true_1_8764.out -- Submitted batch job 8764
+fit_ridge_CV.sh for subject 13: output/fit_ridge_CV_13_true_1_8765.out -- Submitted batch job 8765
+fit_ridge_CV.sh for subject 14: output/fit_ridge_CV_14_true_1_8766.out -- Submitted batch job 8766
+fit_ridge_CV.sh for subject 15: output/fit_ridge_CV_15_true_1_8767.out -- Submitted batch job 8767
+fit_ridge_CV.sh for subject 16: output/fit_ridge_CV_16_true_1_8768.out -- Submitted batch job 8768
+fit_ridge_CV.sh for subject 17: output/fit_ridge_CV_17_true_1_8769.out -- Submitted batch job 8769
+fit_ridge_CV.sh for subject 18: output/fit_ridge_CV_18_true_1_8770.out -- Submitted batch job 8770
+fit_ridge_CV.sh for subject 19: output/fit_ridge_CV_19_true_1_8771.out -- Submitted batch job 8771
+fit_ridge_CV.sh for subject 20: output/fit_ridge_CV_20_true_1_8772.out -- Submitted batch job 8772
+fit_ridge_CV.sh for subject 21: output/fit_ridge_CV_21_true_1_8773.out -- Submitted batch job 8773
+fit_ridge_CV.sh for subject 22: output/fit_ridge_CV_22_true_1_8774.out -- Submitted batch job 8774
+fit_ridge_CV.sh for subject 23: output/fit_ridge_CV_23_true_1_8775.out -- Submitted batch job 8775
+fit_ridge_CV.sh for subject 24: output/fit_ridge_CV_24_true_1_8776.out -- Submitted batch job 8776
+fit_ridge_CV.sh for subject 25: output/fit_ridge_CV_25_true_1_8777.out -- Submitted batch job 8777
+fit_ridge_CV.sh for subject 26: output/fit_ridge_CV_26_true_1_8778.out -- Submitted batch job 8778
+fit_ridge_CV.sh for subject 27: output/fit_ridge_CV_27_true_1_8779.out -- Submitted batch job 8779
+fit_ridge_CV.sh for subject 28: output/fit_ridge_CV_28_true_1_8780.out -- Submitted batch job 8780
+fit_ridge_CV.sh for subject 29: output/fit_ridge_CV_29_true_1_8781.out -- Submitted batch job 8781
+fit_ridge_CV.sh for subject 30: output/fit_ridge_CV_30_true_1_8782.out -- Submitted batch job 8782
+fit_ridge_CV.sh for subject 31: output/fit_ridge_CV_31_true_1_8783.out -- Submitted batch job 8783
+fit_ridge_CV.sh for subject 32: output/fit_ridge_CV_32_true_1_8784.out -- Submitted batch job 8784
