@@ -51,9 +51,9 @@ switch figure_name
         plot([6.5 6.5], [0 0.08], '--', 'color', [0.5 0.5 0.5]);
         text(8.5, 0.075, 'Dorsal/Parietal', 'fontsize', 12, 'HorizontalAlignment', 'center');
         plot([10.5 10.5], [0 0.08], '--', 'color', [0.5 0.5 0.5]);
-        text(12, 0.075, 'Ventral/Temporal', 'fontsize', 12, 'HorizontalAlignment', 'center');
-        plot([13.5 13.5], [0 0.08], '--', 'color', [0.5 0.5 0.5]);
-        text(15, 0.075, 'Early visual', 'fontsize', 12, 'HorizontalAlignment', 'center');
+        text(12.5, 0.075, 'Ventral/Temporal', 'fontsize', 12, 'HorizontalAlignment', 'center');
+        plot([14.5 14.5], [0 0.08], '--', 'color', [0.5 0.5 0.5]);
+        text(15.5, 0.075, 'Early visual', 'fontsize', 12, 'HorizontalAlignment', 'center');
         legend({'EMPA', 'DDQN', 'PCA'});
 
 

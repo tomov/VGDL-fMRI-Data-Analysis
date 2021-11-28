@@ -1924,6 +1924,7 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
 
             which = ismember(visuals.timestamps, regs.state_timestamps); % cross-reference them; annoying stuff
             if ~all(which)
+                % TODO this seems outdated, never hits; remove eventually
                 keyboard
             end
             acf = acf(which);

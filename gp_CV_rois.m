@@ -84,7 +84,6 @@ assert(length(filename_templates) == nregressors);
 
 
 subjects = 1:length(EXPT.subject);
-
 nsubjects = length(subjects)
 
 
