@@ -106,6 +106,14 @@ switch figure_name
         legend({'all layers', 'conv1', 'conv2', 'conv3', 'linear1', 'linear2'});
 
 
+    case 'plot_ridge_CV_EMPA'
+        % plot_ridge_CV.m
+
+        load(fullfile(get_mat_dir(), 'agg_ridge_CV_us=1_glm=1_model=EMPA_theory_subsample=0_project=1.mat'));
+        assert(use_smooth);
+        EXPT = vgdl_expt();
+        bspmview_wrapper(EXPT, tmap);
+
     %
     %
     %% Figure 4: EMPA theory updating

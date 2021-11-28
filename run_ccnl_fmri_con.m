@@ -381,6 +381,11 @@ for i = 1:length(glmodels)
                 {'exploitative_goals'}, ...
                 subjs);
 
+        case {116, 117, 118, 119}
+            ccnl_fmri_con(vgdl_expt(), glmodel, ...
+                {'exploit', 'explore', 'exploit - explore', 'explore - exploit', 'theory_change_flag'}, ...
+                subjs);
+
 
         otherwise
             assert(false, 'invalid glmodel -- should be one of the above');

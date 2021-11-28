@@ -4,11 +4,10 @@
 
 mkdir output
 
-#goodSubjects=( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 )  # same as getGoodSubjects(), e.g. goodSubjects = ( 1 2 3 5 7 10 )
+goodSubjects=( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 )  # same as getGoodSubjects(), e.g. goodSubjects = ( 1 2 3 5 7 10 )
 
-#models=( 120 121 122  )
-goodSubjects=( 1 )
-models=( 58  )
+models=( 120 121 122  )
+
 
 subj_arg="${goodSubjects[@]}" # stringify it
 
