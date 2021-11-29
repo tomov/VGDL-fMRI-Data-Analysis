@@ -2023,6 +2023,36 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
                     assert(false);
             end
 
+        % number of exploratory goals & exploitative goals
+        case {123, 124}
+
+            [regs, ~, ~] = get_regressors(subj_id, run, conn, true);
+            exploratory_goals = regs.Igen_len + regs.Tnov_len;
+            exploitative_goals = regs.T_len;
+
+            multi.names{1} = 'frames';
+            multi.onsets{1} = regs.timestamps';
+            multi.durations{1} = regs.durations';
+
+            multi.orth{1} = 0; % do not orthogonalise them
+
+            multi.pmod(1).name{1} = 'exploratory_goals';
+            multi.pmod(1).param{1} = exploratory_goals;
+            multi.pmod(1).poly{1} = 1;
+
+            if std(exploitative_goals) > 1e-6
+                % make sure they're not constant e.g. subj 24 run 3
+                multi.pmod(1).name{2} = 'exploitative_goals';
+                multi.pmod(1).param{2} = exploitative_goals;
+                multi.pmod(1).poly{2} = 1;
+            end
+
+            % optionally add nuisance regressors
+            if glmodel == 124
+                multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+                multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
+            end
+
         otherwise
             assert(false, 'invalid glmodel -- should be one of the above');
 

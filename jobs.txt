@@ -3996,3 +3996,78 @@ fit_ridge_CV.sh for subject 29: output/fit_ridge_CV_29_true_1_8781.out -- Submit
 fit_ridge_CV.sh for subject 30: output/fit_ridge_CV_30_true_1_8782.out -- Submitted batch job 8782
 fit_ridge_CV.sh for subject 31: output/fit_ridge_CV_31_true_1_8783.out -- Submitted batch job 8783
 fit_ridge_CV.sh for subject 32: output/fit_ridge_CV_32_true_1_8784.out -- Submitted batch job 8784
+----------------
+--- Sun Nov 28 19:39:57 EST 2021: Running ccnl_fmri_con for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32
+----------------
+ccnl_fmri_con.sh for GLMs 116 117 118 119, subjects 25 19 18 20 7 11 17 1 26 28 23 3 13 6 16 12 14 10 8 9 27 4 29 24 21 31 30 22 32 15 2 5: output/ccnl_fmri_con_116_117_118_119_goodSubjects_8785.out -- Submitted batch job 8785
+----------------
+--- Sun Nov 28 19:42:15 EST 2021: Running ccnl_fmri_con for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32
+----------------
+ccnl_fmri_con.sh for GLMs 116 117 118 119, subjects 25 23 19 21 1 4 20 6 15 27 18 3 28 26 29 5 17 2 22 31 14 7 9 30 24 16 32 11 12 10 13 8: output/ccnl_fmri_con_116_117_118_119_goodSubjects_8786.out -- Submitted batch job 8786
+----------------
+--- Running ccnl_fmri_glm_parallel for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32
+----------------
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 29: output/ccnl_fmri_glm_parallel_123_subj_29_8791.out -- Submitted batch job 8791
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 4: output/ccnl_fmri_glm_parallel_123_subj_4_8792.out -- Submitted batch job 8792
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 20: output/ccnl_fmri_glm_parallel_123_subj_20_8793.out -- Submitted batch job 8793
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 21: output/ccnl_fmri_glm_parallel_123_subj_21_8794.out -- Submitted batch job 8794
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 9: output/ccnl_fmri_glm_parallel_123_subj_9_8795.out -- Submitted batch job 8795
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 23: output/ccnl_fmri_glm_parallel_123_subj_23_8796.out -- Submitted batch job 8796
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 14: output/ccnl_fmri_glm_parallel_123_subj_14_8797.out -- Submitted batch job 8797
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 1: output/ccnl_fmri_glm_parallel_123_subj_1_8798.out -- Submitted batch job 8798
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 32: output/ccnl_fmri_glm_parallel_123_subj_32_8799.out -- Submitted batch job 8799
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 3: output/ccnl_fmri_glm_parallel_123_subj_3_8800.out -- Submitted batch job 8800
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 15: output/ccnl_fmri_glm_parallel_123_subj_15_8801.out -- Submitted batch job 8801
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 7: output/ccnl_fmri_glm_parallel_123_subj_7_8802.out -- Submitted batch job 8802
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 27: output/ccnl_fmri_glm_parallel_123_subj_27_8803.out -- Submitted batch job 8803
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 10: output/ccnl_fmri_glm_parallel_123_subj_10_8804.out -- Submitted batch job 8804
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 19: output/ccnl_fmri_glm_parallel_123_subj_19_8805.out -- Submitted batch job 8805
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 17: output/ccnl_fmri_glm_parallel_123_subj_17_8806.out -- Submitted batch job 8806
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 12: output/ccnl_fmri_glm_parallel_123_subj_12_8807.out -- Submitted batch job 8807
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 6: output/ccnl_fmri_glm_parallel_123_subj_6_8808.out -- Submitted batch job 8808
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 24: output/ccnl_fmri_glm_parallel_123_subj_24_8809.out -- Submitted batch job 8809
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 5: output/ccnl_fmri_glm_parallel_123_subj_5_8810.out -- Submitted batch job 8810
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 30: output/ccnl_fmri_glm_parallel_123_subj_30_8811.out -- Submitted batch job 8811
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 2: output/ccnl_fmri_glm_parallel_123_subj_2_8812.out -- Submitted batch job 8812
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 28: output/ccnl_fmri_glm_parallel_123_subj_28_8813.out -- Submitted batch job 8813
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 18: output/ccnl_fmri_glm_parallel_123_subj_18_8814.out -- Submitted batch job 8814
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 8: output/ccnl_fmri_glm_parallel_123_subj_8_8815.out -- Submitted batch job 8815
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 11: output/ccnl_fmri_glm_parallel_123_subj_11_8816.out -- Submitted batch job 8816
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 31: output/ccnl_fmri_glm_parallel_123_subj_31_8817.out -- Submitted batch job 8817
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 22: output/ccnl_fmri_glm_parallel_123_subj_22_8818.out -- Submitted batch job 8818
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 25: output/ccnl_fmri_glm_parallel_123_subj_25_8819.out -- Submitted batch job 8819
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 16: output/ccnl_fmri_glm_parallel_123_subj_16_8820.out -- Submitted batch job 8820
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 13: output/ccnl_fmri_glm_parallel_123_subj_13_8821.out -- Submitted batch job 8821
+ccnl_fmri_glm_parallel.sh for GLM 123, subject 26: output/ccnl_fmri_glm_parallel_123_subj_26_8822.out -- Submitted batch job 8822
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 7: output/ccnl_fmri_glm_parallel_124_subj_7_8823.out -- Submitted batch job 8823
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 26: output/ccnl_fmri_glm_parallel_124_subj_26_8824.out -- Submitted batch job 8824
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 29: output/ccnl_fmri_glm_parallel_124_subj_29_8825.out -- Submitted batch job 8825
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 12: output/ccnl_fmri_glm_parallel_124_subj_12_8826.out -- Submitted batch job 8826
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 22: output/ccnl_fmri_glm_parallel_124_subj_22_8827.out -- Submitted batch job 8827
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 8: output/ccnl_fmri_glm_parallel_124_subj_8_8828.out -- Submitted batch job 8828
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 15: output/ccnl_fmri_glm_parallel_124_subj_15_8829.out -- Submitted batch job 8829
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 9: output/ccnl_fmri_glm_parallel_124_subj_9_8830.out -- Submitted batch job 8830
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 14: output/ccnl_fmri_glm_parallel_124_subj_14_8831.out -- Submitted batch job 8831
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 3: output/ccnl_fmri_glm_parallel_124_subj_3_8832.out -- Submitted batch job 8832
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 1: output/ccnl_fmri_glm_parallel_124_subj_1_8833.out -- Submitted batch job 8833
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 5: output/ccnl_fmri_glm_parallel_124_subj_5_8834.out -- Submitted batch job 8834
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 18: output/ccnl_fmri_glm_parallel_124_subj_18_8835.out -- Submitted batch job 8835
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 10: output/ccnl_fmri_glm_parallel_124_subj_10_8836.out -- Submitted batch job 8836
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 25: output/ccnl_fmri_glm_parallel_124_subj_25_8837.out -- Submitted batch job 8837
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 23: output/ccnl_fmri_glm_parallel_124_subj_23_8838.out -- Submitted batch job 8838
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 11: output/ccnl_fmri_glm_parallel_124_subj_11_8839.out -- Submitted batch job 8839
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 6: output/ccnl_fmri_glm_parallel_124_subj_6_8840.out -- Submitted batch job 8840
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 30: output/ccnl_fmri_glm_parallel_124_subj_30_8841.out -- Submitted batch job 8841
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 28: output/ccnl_fmri_glm_parallel_124_subj_28_8842.out -- Submitted batch job 8842
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 27: output/ccnl_fmri_glm_parallel_124_subj_27_8843.out -- Submitted batch job 8843
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 16: output/ccnl_fmri_glm_parallel_124_subj_16_8844.out -- Submitted batch job 8844
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 17: output/ccnl_fmri_glm_parallel_124_subj_17_8845.out -- Submitted batch job 8845
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 2: output/ccnl_fmri_glm_parallel_124_subj_2_8846.out -- Submitted batch job 8846
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 32: output/ccnl_fmri_glm_parallel_124_subj_32_8847.out -- Submitted batch job 8847
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 19: output/ccnl_fmri_glm_parallel_124_subj_19_8848.out -- Submitted batch job 8848
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 21: output/ccnl_fmri_glm_parallel_124_subj_21_8849.out -- Submitted batch job 8849
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 4: output/ccnl_fmri_glm_parallel_124_subj_4_8850.out -- Submitted batch job 8850
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 31: output/ccnl_fmri_glm_parallel_124_subj_31_8851.out -- Submitted batch job 8851
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 13: output/ccnl_fmri_glm_parallel_124_subj_13_8852.out -- Submitted batch job 8852
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 20: output/ccnl_fmri_glm_parallel_124_subj_20_8853.out -- Submitted batch job 8853
+ccnl_fmri_glm_parallel.sh for GLM 124, subject 24: output/ccnl_fmri_glm_parallel_124_subj_24_8854.out -- Submitted batch job 8854
