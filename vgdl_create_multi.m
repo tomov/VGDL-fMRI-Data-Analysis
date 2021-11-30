@@ -2239,6 +2239,201 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             end
 
 
+        % exploration versus exploitation, downward ramps
+        case {133, 134, 135, 136}
+
+            [regs, ~, ~] = get_regressors(subj_id, run, conn, true, 'empa_regressors');
+            tcf = logical(regs.theory_change_flag);
+            sgf1 = logical(regs.subgoal_flag1);
+            sgf2 = logical(regs.subgoal_flag2);
+
+            [~, visuals, ~] = get_visuals(subj_id, run, conn, true, 'empa_plays_post');
+            acf = logical(visuals.avatar_collision_flag);
+            ks = logical(visuals.killed_sprites);
+            ps = logical(visuals.play_start);
+            pe = logical(visuals.play_end);
+            win = logical(visuals.win);
+
+            which = ismember(visuals.timestamps, regs.state_timestamps);
+            assert(all(which)) % Make sure they are all matching; we used to have to cross-reference them, but not any longer; this is just sent a check to ensure this stays the case
+
+            %acf_broad = acf | [0; acf(1:end-1)];  % account for off-by-one
+            %acf = acf_broad;
+
+            % exploration = subgoals that bring us closer to satisfying termination conditions
+            % exploration = subgoals that lead to theory updating
+            exploit = (sgf1 & acf) | (sgf2 & acf & ks) | (win & acf);
+            explore = (tcf & acf);
+
+            % initiation point for action sequences, both exploration and exploitation
+            starts = exploit | explore | ps;
+
+            % convert to timestamps
+            exploit_ix = find(exploit);
+            explore_ix = find(explore);
+            starts_ix = find(starts);
+
+            idx = 0;
+
+            idx = idx + 1;
+            multi.names{idx} = 'frames';
+            multi.onsets{idx} = regs.timestamps';
+            multi.durations{idx} = regs.durations';
+
+            multi.orth{idx} = 0; % do not orthogonalise them
+
+            pidx = 0;
+
+            % add exploitation ramps 
+            if any(exploit_ix)
+                ramp = zeros(size(exploit));
+                % match exploitation subgoal with closest proceeding action initiation
+                for i = 1:length(exploit_ix)
+                    eix = exploit_ix(i);
+                    sixx = find(starts_ix < eix);
+                    six = starts_ix(sixx(end));
+                    ramp(six:eix) = linspace(1, 0, eix - six + 1);
+                end
+                pidx = pidx + 1;
+                multi.pmod(idx).name{pidx} = 'exploit';
+                multi.pmod(idx).param{pidx} = ramp;
+                multi.pmod(idx).poly{pidx} = 1;
+            end
+
+            % add exploration ramps 
+            if any(explore_ix)
+                ramp = zeros(size(explore));
+                % match exploration subgoal with closest proceeding action initiation
+                for i = 1:length(explore_ix)
+                    eix = explore_ix(i);
+                    sixx = find(starts_ix < eix);
+                    six = starts_ix(sixx(end));
+                    ramp(six:eix) = linspace(1, 0, eix - six + 1);
+                end
+                pidx = pidx + 1;
+                multi.pmod(idx).name{pidx} = 'explore';
+                multi.pmod(idx).param{pidx} = ramp;
+                multi.pmod(idx).poly{pidx} = 1;
+            end
+
+
+            % optional control regressors
+            if ismember(glmodel, [134, 136])
+                if any(regs.theory_change_flag_onsets)
+                    idx = idx + 1;
+                    multi.names{idx} = 'theory_change_flag';
+                    multi.onsets{idx} = regs.theory_change_flag_onsets;
+                    multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+                end
+            end
+            if ismember(glmodel, [135, 136])
+                multi = add_keypresses_to_multi(multi, subj_id, run, conn);
+            end
+
+
+        % exploration versus exploitation, # keypresses to subgoal
+        case {137, 138, 139, 140}
+
+            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
+
+            [regs, ~, ~] = get_regressors(subj_id, run, conn, true, 'empa_regressors');
+            tcf = logical(regs.theory_change_flag);
+            sgf1 = logical(regs.subgoal_flag1);
+            sgf2 = logical(regs.subgoal_flag2);
+
+            [~, visuals, ~] = get_visuals(subj_id, run, conn, true, 'empa_plays_post');
+            acf = logical(visuals.avatar_collision_flag);
+            ks = logical(visuals.killed_sprites);
+            ps = logical(visuals.play_start);
+            pe = logical(visuals.play_end);
+            win = logical(visuals.win);
+
+            which = ismember(visuals.timestamps, regs.state_timestamps);
+            assert(all(which)) % Make sure they are all matching; we used to have to cross-reference them, but not any longer; this is just sent a check to ensure this stays the case
+
+            %acf_broad = acf | [0; acf(1:end-1)];  % account for off-by-one
+            %acf = acf_broad;
+
+            % exploration = subgoals that bring us closer to satisfying termination conditions
+            % exploration = subgoals that lead to theory updating
+            exploit = (sgf1 & acf) | (sgf2 & acf & ks) | (win & acf);
+            explore = (tcf & acf);
+
+            % initiation point for action sequences, both exploration and exploitation
+            starts = exploit | explore | ps;
+
+            % convert to timestamps
+            exploit_ix = find(exploit);
+            explore_ix = find(explore);
+            starts_ix = find(starts);
+
+            idx = 0;
+
+            idx = idx + 1;
+            multi.names{idx} = 'frames';
+            multi.onsets{idx} = regs.timestamps';
+            multi.durations{idx} = regs.durations';
+
+            multi.orth{idx} = 0; % do not orthogonalise them
+
+            pidx = 0;
+
+            % add exploitation ramps 
+            if any(exploit_ix)
+                ktsg = zeros(size(exploit));
+                % match exploitation subgoal with closest proceeding action initiation
+                for i = 1:length(exploit_ix)
+                    eix = exploit_ix(i);
+                    sixx = find(starts_ix < eix);
+                    six = starts_ix(sixx(end));
+                    for j = six:eix
+                        for k = 1:length(keypresses)
+                            ktsg(j) = ktsg(j) + sum((keypresses{k} <= regs.timestamps(eix)) & (keypresses{k} >= regs.timestamps(j)));
+                        end
+                    end
+                end
+                pidx = pidx + 1;
+                multi.pmod(idx).name{pidx} = 'exploit';
+                multi.pmod(idx).param{pidx} = ktsg;
+                multi.pmod(idx).poly{pidx} = 1;
+            end
+
+            % add exploration ramps 
+            if any(explore_ix)
+                ktsg = zeros(size(explore));
+                % match exploration subgoal with closest proceeding action initiation
+                for i = 1:length(explore_ix)
+                    eix = explore_ix(i);
+                    sixx = find(starts_ix < eix);
+                    six = starts_ix(sixx(end));
+                    for j = six:eix
+                        for k = 1:length(keypresses)
+                            ktsg(j) = ktsg(j) + sum((keypresses{k} <= regs.timestamps(eix)) & (keypresses{k} >= regs.timestamps(j)));
+                        end
+                    end
+                end
+                pidx = pidx + 1;
+                multi.pmod(idx).name{pidx} = 'explore';
+                multi.pmod(idx).param{pidx} = ktsg;
+                multi.pmod(idx).poly{pidx} = 1;
+            end
+
+
+            % optional control regressors
+            if ismember(glmodel, [137, 140])
+                if any(regs.theory_change_flag_onsets)
+                    idx = idx + 1;
+                    multi.names{idx} = 'theory_change_flag';
+                    multi.onsets{idx} = regs.theory_change_flag_onsets;
+                    multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+                end
+            end
+            if ismember(glmodel, [139, 140])
+                multi = add_keypresses_to_multi(multi, subj_id, run, conn);
+            end
+
+
+
         otherwise
             assert(false, 'invalid glmodel -- should be one of the above');
 
