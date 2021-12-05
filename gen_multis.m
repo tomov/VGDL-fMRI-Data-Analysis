@@ -1,6 +1,6 @@
 % generate multi.mat files, for NCF (which doesn't support Mongo)
 
-glmodels = [137:140]
+glmodels = [151]
 
 EXPT = vgdl_expt;
 

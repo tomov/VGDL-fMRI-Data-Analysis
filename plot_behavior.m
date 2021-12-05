@@ -5,10 +5,10 @@ conn = mongo('holy7c22101.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserNa
 %conn = mongo('holy7c22101.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'root', 'Password', 'parolatabe')
 %conn = mongo('holy7c22101.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'root', 'Password', 'parolatabe', 'AuthMechanism', 'SCRAM_SHA_256')
 
-%game_names = get_game_names_ordered(12);
-%subj_ids = 12:32;
-game_names = get_game_names_ordered(11);
-subj_ids = 1:11;
+game_names = get_game_names_ordered(12);
+subj_ids = 12:32;
+%game_names = get_game_names_ordered(11);
+%subj_ids = 1:11;
 
 run_ids = 1:6;
 levels = 1:9;
@@ -16,6 +16,8 @@ levels = 1:9;
 agents(1).name = 'Human';
 agents(2).name = 'Random';
 agents(2).tag = 'attempt_1_states';
+agents(3).name = 'EMPA';
+agents(3).tag = 'attempt_1_states';
 %agents(3).name = 'EMPA';
 %agents(3).tag = 'attempt_1_states';
 
@@ -54,7 +56,7 @@ for g = 1:length(game_names)
             if strcmp(agent_name, 'Human')
                 [instance_scores, instance_wins, instance_success_rates, instance_game_names, instance_levels] = get_instance_scores(conn, subj_id, run_ids, true);
             else
-                [instance_scores, instance_wins, instance_success_rates, instance_game_names, instance_levels] = get_agent_level_scores(conn, agent_name, subj_id, levels, agent_tag, true);
+                [instance_scores, instance_wins, instance_success_rates, instance_game_names, instance_levels] = get_agent_level_scores(conn, agent_name, subj_id, levels, agent_tag, false);
             end
             which_instances = strcmp(instance_game_names, game_name);
             %assert(sum(which_instances) >= 6);
@@ -96,7 +98,7 @@ cmap = colormap(jet(length(agents)));
 
 %% per level 
 
-figure('pos', [64 421 2282 838]);
+figure;
 
 for g = 1:length(game_names)
     game_name = game_names{g};
@@ -197,7 +199,7 @@ hold off;
 
 %% all games
 
-figure('position', [420 917 1141 422]);
+figure;
 
 for pw = 1:length(plot_whats)
     plot_what = plot_whats{pw};

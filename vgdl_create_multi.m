@@ -2358,6 +2358,7 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             % exploration = subgoals that lead to theory updating
             exploit = (sgf1 & acf) | (sgf2 & acf & ks) | (win & acf);
             explore = (tcf & acf);
+            exploit = exploit & ~explore; % optionally orthogonalize them 
 
             % initiation point for action sequences, both exploration and exploitation
             starts = exploit | explore | ps;
@@ -2433,6 +2434,396 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             end
 
 
+        % exploration versus exploitation, boxcars (see 116), modified
+        case {141, 142, 143, 144}
+
+            [regs, ~, ~] = get_regressors(subj_id, run, conn, true, 'empa_regressors');
+            tcf = logical(regs.theory_change_flag);
+            icf = logical(regs.interaction_change_flag);
+            tecf = logical(regs.termination_change_flag);
+            sgf1 = logical(regs.subgoal_flag1);
+            sgf2 = logical(regs.subgoal_flag2);
+
+            [~, visuals, ~] = get_visuals(subj_id, run, conn, true, 'empa_plays_post');
+            acf = logical(visuals.avatar_collision_flag);
+            ks = logical(visuals.killed_sprites);
+            ps = logical(visuals.play_start);
+            pe = logical(visuals.play_end);
+            win = logical(visuals.win);
+
+            which = ismember(visuals.timestamps, regs.state_timestamps); % cross-reference them; annoying stuff
+            assert(all(which)) % Make sure they are all matching; we used to have to cross-reference them, but not any longer; this is just sent a check to ensure this stays the case
+
+            % exploration = subgoals that bring us closer to satisfying termination conditions
+            % exploration = subgoals that lead to theory updating
+            exploit = (sgf1 & acf) | (sgf2 & acf & ks) | (win & acf);
+            explore = (icf & acf) | (tecf & acf);
+            exploit = exploit & ~explore; % orthogonalize them
+
+            % initiation point for action sequences, both exploration and exploitation
+            starts = exploit | explore | ps;
+
+            % convert to timestamps
+            exploit_ts = regs.timestamps(exploit);
+            explore_ts = regs.timestamps(explore);
+            starts_ts = regs.timestamps(starts);
+
+            idx = 0;
+
+            % add exploitation boxcars
+            if any(exploit_ts)
+                idx = idx + 1;
+                multi.names{idx} = 'exploit';
+                multi.onsets{idx} = nan(size(exploit_ts));
+                multi.durations{idx} = nan(size(multi.onsets{idx}));
+
+                % match exploitation subgoal with closest proceeding action initiation
+                for i = 1:length(exploit_ts)
+                    en = exploit_ts(i);
+                    ix = find(starts_ts < en);
+                    st = starts_ts(ix(end));
+                    multi.onsets{idx}(i) = st;
+                    multi.durations{idx}(i) = en - st;
+                end
+            end
+
+            % add exploration boxcars
+            if any(explore_ts)
+                idx = idx + 1;
+                multi.names{idx} = 'explore';
+                multi.onsets{idx} = nan(size(explore_ts));
+                multi.durations{idx} = nan(size(multi.onsets{idx}));
+
+                % match exploration subgoal with closest proceeding action initiation
+                for i = 1:length(explore_ts)
+                    en = explore_ts(i);
+                    ix = find(starts_ts < en);
+                    st = starts_ts(ix(end));
+                    multi.onsets{idx}(i) = st;
+                    multi.durations{idx}(i) = en - st;
+                end
+            end
+
+            % optional control regressors
+            if ismember(glmodel, [142, 144])
+                if any(regs.theory_change_flag_onsets)
+                    idx = idx + 1;
+                    multi.names{idx} = 'theory_change_flag';
+                    multi.onsets{idx} = regs.theory_change_flag_onsets;
+                    multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+                end
+            end
+            if ismember(glmodel, [143, 144])
+                multi = add_keypresses_to_multi(multi, subj_id, run, conn);
+            end
+
+        % exploration versus exploitation, downward ramps, orthogonalized
+        case {145, 146, 147, 148}
+
+            [regs, ~, ~] = get_regressors(subj_id, run, conn, true, 'empa_regressors');
+            tcf = logical(regs.theory_change_flag);
+            icf = logical(regs.interaction_change_flag);
+            tecf = logical(regs.termination_change_flag);
+            sgf1 = logical(regs.subgoal_flag1);
+            sgf2 = logical(regs.subgoal_flag2);
+
+            [~, visuals, ~] = get_visuals(subj_id, run, conn, true, 'empa_plays_post');
+            acf = logical(visuals.avatar_collision_flag);
+            ks = logical(visuals.killed_sprites);
+            ps = logical(visuals.play_start);
+            pe = logical(visuals.play_end);
+            win = logical(visuals.win);
+
+            which = ismember(visuals.timestamps, regs.state_timestamps);
+            assert(all(which)) % Make sure they are all matching; we used to have to cross-reference them, but not any longer; this is just sent a check to ensure this stays the case
+
+            %acf_broad = acf | [0; acf(1:end-1)];  % account for off-by-one
+            %acf = acf_broad;
+
+            % exploration = subgoals that bring us closer to satisfying termination conditions
+            % exploration = subgoals that lead to theory updating
+            exploit = (sgf1 & acf) | (sgf2 & acf & ks) | (win & acf);
+            explore = (icf & acf) | (tecf & acf);
+            exploit = exploit & ~explore;
+
+            % initiation point for action sequences, both exploration and exploitation
+            starts = exploit | explore | ps;
+
+            % convert to timestamps
+            exploit_ix = find(exploit);
+            explore_ix = find(explore);
+            starts_ix = find(starts);
+
+            idx = 0;
+
+            idx = idx + 1;
+            multi.names{idx} = 'frames';
+            multi.onsets{idx} = regs.timestamps';
+            multi.durations{idx} = regs.durations';
+
+            multi.orth{idx} = 0; % do not orthogonalise them
+
+            pidx = 0;
+
+            % add exploitation ramps 
+            if any(exploit_ix)
+                ramp = zeros(size(exploit));
+                % match exploitation subgoal with closest proceeding action initiation
+                for i = 1:length(exploit_ix)
+                    eix = exploit_ix(i);
+                    sixx = find(starts_ix < eix);
+                    six = starts_ix(sixx(end));
+                    ramp(six:eix) = linspace(1, 0, eix - six + 1);
+                end
+                pidx = pidx + 1;
+                multi.pmod(idx).name{pidx} = 'exploit';
+                multi.pmod(idx).param{pidx} = ramp;
+                multi.pmod(idx).poly{pidx} = 1;
+            end
+
+            % add exploration ramps 
+            if any(explore_ix)
+                ramp = zeros(size(explore));
+                % match exploration subgoal with closest proceeding action initiation
+                for i = 1:length(explore_ix)
+                    eix = explore_ix(i);
+                    sixx = find(starts_ix < eix);
+                    six = starts_ix(sixx(end));
+                    ramp(six:eix) = linspace(1, 0, eix - six + 1);
+                end
+                pidx = pidx + 1;
+                multi.pmod(idx).name{pidx} = 'explore';
+                multi.pmod(idx).param{pidx} = ramp;
+                multi.pmod(idx).poly{pidx} = 1;
+            end
+
+
+            % optional control regressors
+            if ismember(glmodel, [146, 148])
+                if any(regs.theory_change_flag_onsets)
+                    idx = idx + 1;
+                    multi.names{idx} = 'theory_change_flag';
+                    multi.onsets{idx} = regs.theory_change_flag_onsets;
+                    multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+                end
+            end
+            if ismember(glmodel, [147, 148])
+                multi = add_keypresses_to_multi(multi, subj_id, run, conn);
+            end
+
+        % exploration versus exploitation, impulses at onsets and offsets
+        case {149, 150}
+
+            [regs, ~, ~] = get_regressors(subj_id, run, conn, true, 'empa_regressors');
+            tcf = logical(regs.theory_change_flag);
+            icf = logical(regs.interaction_change_flag);
+            tecf = logical(regs.termination_change_flag);
+            sgf1 = logical(regs.subgoal_flag1);
+            sgf2 = logical(regs.subgoal_flag2);
+
+            [~, visuals, ~] = get_visuals(subj_id, run, conn, true, 'empa_plays_post');
+            acf = logical(visuals.avatar_collision_flag);
+            ks = logical(visuals.killed_sprites);
+            ps = logical(visuals.play_start);
+            pe = logical(visuals.play_end);
+            win = logical(visuals.win);
+
+            which = ismember(visuals.timestamps, regs.state_timestamps); % cross-reference them; annoying stuff
+            assert(all(which));
+
+            %acf_broad = acf | [0; acf(1:end-1)];  % account for off-by-one
+            %acf = acf_broad;
+
+            % exploration = subgoals that bring us closer to satisfying termination conditions
+            % exploration = subgoals that lead to theory updating
+            exploit = (sgf1 & acf) | (sgf2 & acf & ks) | (win & acf);
+            explore = (icf & acf) | (tecf & acf);
+            exploit = exploit & ~explore; % orthogonalize them
+
+            % initiation point for action sequences, both exploration and exploitation
+            starts = exploit | explore | ps;
+
+            % convert to timestamps
+            exploit_ts = regs.timestamps(exploit);
+            explore_ts = regs.timestamps(explore);
+            starts_ts = regs.timestamps(starts);
+
+            idx = 0;
+
+            % add exploitation boxcars
+            if any(exploit_ts)
+                idx = idx + 1;
+                multi.names{idx} = 'exploit_start';
+                multi.onsets{idx} = nan(size(exploit_ts));
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));
+
+                idx = idx + 1;
+                multi.names{idx} = 'exploit_end';
+                multi.onsets{idx} = nan(size(exploit_ts));
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));
+
+                % match exploitation subgoal with closest proceeding action initiation
+                for i = 1:length(exploit_ts)
+                    en = exploit_ts(i);
+                    ix = find(starts_ts < en);
+                    st = starts_ts(ix(end));
+                    multi.onsets{idx - 1}(i) = st;
+                    multi.onsets{idx}(i) = en;
+                end
+            end
+
+            % add exploration boxcars
+            if any(explore_ts)
+                idx = idx + 1;
+                multi.names{idx} = 'explore_start';
+                multi.onsets{idx} = nan(size(explore_ts));
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));
+
+                idx = idx + 1;
+                multi.names{idx} = 'explore_end';
+                multi.onsets{idx} = nan(size(explore_ts));
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));
+
+                % match exploration subgoal with closest proceeding action initiation
+                for i = 1:length(explore_ts)
+                    en = explore_ts(i);
+                    ix = find(starts_ts < en);
+                    st = starts_ts(ix(end));
+                    multi.onsets{idx - 1}(i) = st;
+                    multi.onsets{idx}(i) = en;
+                end
+            end
+
+            % optional control regressors
+            if ismember(glmodel, [150])
+                % GLM 9: nuisance regressors
+                multi = add_games_to_multi(multi, subj_id, run, conn);
+                multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+                multi = add_visuals_to_multi(multi, subj_id, run, conn);
+                multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
+            end
+
+
+        % exploration versus exploitation, impulses at onsets; # keypresses pmods; subgoal completion
+        case {151}
+
+            [keyNames, keyholds, keyholds_post, keypresses] = get_keypresses(subj_id, run, conn, true);
+
+            [regs, ~, ~] = get_regressors(subj_id, run, conn, true, 'empa_regressors');
+            tcf = logical(regs.theory_change_flag);
+            icf = logical(regs.interaction_change_flag);
+            tecf = logical(regs.termination_change_flag);
+            sgf1 = logical(regs.subgoal_flag1);
+            sgf2 = logical(regs.subgoal_flag2);
+
+            [~, visuals, ~] = get_visuals(subj_id, run, conn, true, 'empa_plays_post');
+            acf = logical(visuals.avatar_collision_flag);
+            ks = logical(visuals.killed_sprites);
+            ps = logical(visuals.play_start);
+            pe = logical(visuals.play_end);
+            win = logical(visuals.win);
+
+            which = ismember(visuals.timestamps, regs.state_timestamps); % cross-reference them; annoying stuff
+            assert(all(which));
+
+            %acf_broad = acf | [0; acf(1:end-1)];  % account for off-by-one
+            %acf = acf_broad;
+
+            % exploration = subgoals that bring us closer to satisfying termination conditions
+            % exploration = subgoals that lead to theory updating
+            exploit = (sgf1 & acf) | (sgf2 & acf & ks) | (win & acf);
+            explore = (icf & acf) | (tecf & acf);
+            exploit = exploit & ~explore; % orthogonalize them
+
+            % initiation point for action sequences, both exploration and exploitation
+            starts = exploit | explore | ps;
+            ends = exploit | explore;
+
+            % convert to timestamps
+            exploit_ts = regs.timestamps(exploit);
+            explore_ts = regs.timestamps(explore);
+            starts_ts = regs.timestamps(starts);
+            ends_ts = regs.timestamps(ends);
+
+            idx = 0;
+
+            % add exploitation impulses
+            if any(exploit_ts)
+                idx = idx + 1;
+                multi.names{idx} = 'exploit_start';
+                multi.onsets{idx} = nan(size(exploit_ts));
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));
+                num_keypresses = zeros(size(multi.onsets{idx}));
+
+                multi.orth{idx} = 0; % do not orthogonalise them
+
+                % match exploitation subgoal with closest proceeding action initiation
+                for i = 1:length(exploit_ts)
+                    en = exploit_ts(i);
+                    ix = find(starts_ts < en);
+                    st = starts_ts(ix(end));
+                    multi.onsets{idx}(i) = st;
+
+                    % Parametrically modulated by number of key presses until the subgoal
+                    for k = 1:length(keypresses)
+                        num_keypresses(i) = num_keypresses(i) + sum((keypresses{k} >= st) & (keypresses{k} <= en));
+                    end
+                end
+
+                if std(num_keypresses) > 1e-6
+                    % Make sure they're not the same 
+                    multi.pmod(idx).name{1} = 'keypresses';
+                    multi.pmod(idx).param{1} = num_keypresses;
+                    multi.pmod(idx).poly{1} = 1;
+                end
+            end
+
+            % add exploration impulses
+            if any(explore_ts)
+                idx = idx + 1;
+                multi.names{idx} = 'explore_start';
+                multi.onsets{idx} = nan(size(explore_ts));
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));
+                num_keypresses = zeros(size(multi.onsets{idx}));
+
+                multi.orth{idx} = 0; % do not orthogonalise them
+
+                % match exploration subgoal with closest proceeding action initiation
+                for i = 1:length(explore_ts)
+                    en = explore_ts(i);
+                    ix = find(starts_ts < en);
+                    st = starts_ts(ix(end));
+                    multi.onsets{idx}(i) = st;
+
+                    % Parametrically modulated by number of key presses until the subgoal
+                    for k = 1:length(keypresses)
+                        num_keypresses(i) = num_keypresses(i) + sum((keypresses{k} >= st) & (keypresses{k} <= en));
+                    end
+                end
+
+                if std(num_keypresses) > 1e-6
+                    % Make sure they're not the same 
+                    multi.pmod(idx).name{1} = 'keypresses';
+                    multi.pmod(idx).param{1} = num_keypresses;
+                    multi.pmod(idx).poly{1} = 1;
+                end
+            end
+
+            % add subgoal completion impulses
+            if any(ends_ts)
+                idx = idx + 1;
+                multi.names{idx} = 'subgoal';
+                multi.onsets{idx} = ends_ts;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));
+            end
+
+            % add theories updates control regressor
+            if any(regs.theory_change_flag_onsets)
+                idx = idx + 1;
+                multi.names{idx} = 'theory_change_flag';
+                multi.onsets{idx} = regs.theory_change_flag_onsets;
+                multi.durations{idx} = zeros(size(multi.onsets{idx}));;
+            end
 
         otherwise
             assert(false, 'invalid glmodel -- should be one of the above');

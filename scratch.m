@@ -1,3 +1,5 @@
+%plot behavior
+
 
 %{
 % compare convolved vs non-convolved HRF
@@ -24,6 +26,7 @@ xlabel('TR');
 %% sanity check to run after decode_gp_CV
 %
 
+%{
 %load('mat/decode_gp_CV_HRR_subj=1_minint=300.mat');
 load('mat/decode_gp_CV_subj=1_test.mat');
 
@@ -49,6 +52,7 @@ nlz = fit_gp_simple(Y, ker, x, y, meanfun, covfun, likfun);
 nlz = mean(nlz);
 nlz
 r
+%}
 
 
 

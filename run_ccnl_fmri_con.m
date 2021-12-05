@@ -1,7 +1,7 @@
 function run_ccnl_fmri_con(glmodels, subjs)
 
 if ~exist('subjs', 'var')
-    [~,~,~,subjs] = vgdl_getSubjectsDirsAndRuns();
+    [subjs,~,~,~] = vgdl_getSubjectsDirsAndRuns();
 end
 
 for i = 1:length(glmodels)
@@ -386,11 +386,15 @@ for i = 1:length(glmodels)
                 {'exploitative_goals', 'exploratory_goals', 'exploitative_goals - exploratory_goals', 'exploratory_goals - exploitative_goals'}, ...
                 subjs);
 
-        case {116, 117, 118, 119, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140}
+        case {116, 117, 118, 119, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148}
             ccnl_fmri_con(vgdl_expt(), glmodel, ...
                 {'exploit', 'explore', 'exploit - explore', 'explore - exploit'}, ...
                 subjs);
 
+        case {149, 150}
+            ccnl_fmri_con(vgdl_expt(), glmodel, ...
+                {'exploit_start', 'exploit_end', 'explore_start', 'explore_end', 'exploit_start - explore_start', 'explore_start - exploit_start', 'exploit_end - explore_end', 'explore_end - exploit_end', 'exploit_start - exploit_end', 'explore_start - explore_end'}, ...
+                subjs);
 
         otherwise
             assert(false, 'invalid glmodel -- should be one of the above');
