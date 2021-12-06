@@ -23,7 +23,6 @@ for i = 1:length(filenames)
 
     load(filenames{i}, 'lmes', 'bics');
 
-
     [alpha, exp_r, xp, pxp, bor] = bms(lmes);
     pxps(i,:) = pxp;
     bors(i,:) = bor;
@@ -36,7 +35,7 @@ for i = 1:length(filenames)
     errorbar(me - me(1), sem, 'o', 'MarkerSize', 1);
 
     xlabel('SEM');
-    %ylabel('BIC_{top down} - BIC_{bottom up}');
+    ylabel('\Delta BIC');
     %xticklabels(glm_names(glm_ix));
     xticklabels(SEM_names);
     xtickangle(30);
@@ -46,3 +45,30 @@ end
 
 
 table(event_names', pxps, bors)
+
+
+
+figure;
+
+ms = [];
+sems = [];
+
+for i = 1:length(filenames)
+    load(filenames{i}, 'lmes', 'bics');
+    dbic = bics(:,2) - bics(:,1);
+    %[sems(i), ms(i)] = wse(dbic');
+    ms(i) = mean(dbic);
+    sems(i) = std(dbic) / sqrt(length(dbic));
+end
+
+hold on;
+bar(ms);
+errorbar(ms, sems, 'o', 'MarkerSize', 1);
+
+xlabel('theory update offset');
+ylabel('BIC_{bottom up} - BIC_{top down}');
+%xticklabels(glm_names(glm_ix));
+xticklabels({'+ 0 s', '+ 2 s', '+ 4 s', '+ 6 s'});
+%xtickangle(30);
+xticks(1:4);
+title('SEM model comparison');
