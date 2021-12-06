@@ -4837,3 +4837,73 @@ ccnl_fmri_glm_parallel.sh for GLM 151, subject 14: output/ccnl_fmri_glm_parallel
 ccnl_fmri_glm_parallel.sh for GLM 151, subject 29: output/ccnl_fmri_glm_parallel_151_subj_29_9694.out -- Submitted batch job 9694
 ccnl_fmri_glm_parallel.sh for GLM 151, subject 2: output/ccnl_fmri_glm_parallel_151_subj_2_9695.out -- Submitted batch job 9695
 ccnl_fmri_glm_parallel.sh for GLM 151, subject 18: output/ccnl_fmri_glm_parallel_151_subj_18_9696.out -- Submitted batch job 9696
+----------------
+--- Running ccnl_fmri_glm_parallel for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32
+----------------
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 11: output/ccnl_fmri_glm_parallel_152_subj_11_9700.out -- Submitted batch job 9700
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 21: output/ccnl_fmri_glm_parallel_152_subj_21_9701.out -- Submitted batch job 9701
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 6: output/ccnl_fmri_glm_parallel_152_subj_6_9702.out -- Submitted batch job 9702
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 29: output/ccnl_fmri_glm_parallel_152_subj_29_9703.out -- Submitted batch job 9703
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 26: output/ccnl_fmri_glm_parallel_152_subj_26_9704.out -- Submitted batch job 9704
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 20: output/ccnl_fmri_glm_parallel_152_subj_20_9705.out -- Submitted batch job 9705
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 22: output/ccnl_fmri_glm_parallel_152_subj_22_9706.out -- Submitted batch job 9706
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 2: output/ccnl_fmri_glm_parallel_152_subj_2_9707.out -- Submitted batch job 9707
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 10: output/ccnl_fmri_glm_parallel_152_subj_10_9708.out -- Submitted batch job 9708
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 9: output/ccnl_fmri_glm_parallel_152_subj_9_9709.out -- Submitted batch job 9709
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 19: output/ccnl_fmri_glm_parallel_152_subj_19_9710.out -- Submitted batch job 9710
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 28: output/ccnl_fmri_glm_parallel_152_subj_28_9711.out -- Submitted batch job 9711
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 23: output/ccnl_fmri_glm_parallel_152_subj_23_9712.out -- Submitted batch job 9712
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 5: output/ccnl_fmri_glm_parallel_152_subj_5_9713.out -- Submitted batch job 9713
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 14: output/ccnl_fmri_glm_parallel_152_subj_14_9714.out -- Submitted batch job 9714
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 1: output/ccnl_fmri_glm_parallel_152_subj_1_9715.out -- Submitted batch job 9715
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 30: output/ccnl_fmri_glm_parallel_152_subj_30_9716.out -- Submitted batch job 9716
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 8: output/ccnl_fmri_glm_parallel_152_subj_8_9717.out -- Submitted batch job 9717
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 32: output/ccnl_fmri_glm_parallel_152_subj_32_9718.out -- Submitted batch job 9718
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 12: output/ccnl_fmri_glm_parallel_152_subj_12_9719.out -- Submitted batch job 9719
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 25: output/ccnl_fmri_glm_parallel_152_subj_25_9720.out -- Submitted batch job 9720
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 27: output/ccnl_fmri_glm_parallel_152_subj_27_9721.out -- Submitted batch job 9721
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 7: output/ccnl_fmri_glm_parallel_152_subj_7_9722.out -- Submitted batch job 9722
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 17: output/ccnl_fmri_glm_parallel_152_subj_17_9723.out -- Submitted batch job 9723
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 3: output/ccnl_fmri_glm_parallel_152_subj_3_9724.out -- Submitted batch job 9724
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 13: output/ccnl_fmri_glm_parallel_152_subj_13_9725.out -- Submitted batch job 9725
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 4: output/ccnl_fmri_glm_parallel_152_subj_4_9726.out -- Submitted batch job 9726
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 16: output/ccnl_fmri_glm_parallel_152_subj_16_9727.out -- Submitted batch job 9727
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 31: output/ccnl_fmri_glm_parallel_152_subj_31_9728.out -- Submitted batch job 9728
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 18: output/ccnl_fmri_glm_parallel_152_subj_18_9729.out -- Submitted batch job 9729
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 15: output/ccnl_fmri_glm_parallel_152_subj_15_9730.out -- Submitted batch job 9730
+ccnl_fmri_glm_parallel.sh for GLM 152, subject 24: output/ccnl_fmri_glm_parallel_152_subj_24_9731.out -- Submitted batch job 9731
+----------------
+--- Running ccnl_fmri_glm_parallel for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32
+----------------
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 27: output/ccnl_fmri_glm_parallel_153_subj_27_9732.out -- Submitted batch job 9732
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 11: output/ccnl_fmri_glm_parallel_153_subj_11_9733.out -- Submitted batch job 9733
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 7: output/ccnl_fmri_glm_parallel_153_subj_7_9734.out -- Submitted batch job 9734
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 24: output/ccnl_fmri_glm_parallel_153_subj_24_9735.out -- Submitted batch job 9735
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 20: output/ccnl_fmri_glm_parallel_153_subj_20_9736.out -- Submitted batch job 9736
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 30: output/ccnl_fmri_glm_parallel_153_subj_30_9737.out -- Submitted batch job 9737
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 15: output/ccnl_fmri_glm_parallel_153_subj_15_9738.out -- Submitted batch job 9738
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 5: output/ccnl_fmri_glm_parallel_153_subj_5_9739.out -- Submitted batch job 9739
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 9: output/ccnl_fmri_glm_parallel_153_subj_9_9740.out -- Submitted batch job 9740
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 10: output/ccnl_fmri_glm_parallel_153_subj_10_9741.out -- Submitted batch job 9741
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 26: output/ccnl_fmri_glm_parallel_153_subj_26_9742.out -- Submitted batch job 9742
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 21: output/ccnl_fmri_glm_parallel_153_subj_21_9743.out -- Submitted batch job 9743
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 16: output/ccnl_fmri_glm_parallel_153_subj_16_9744.out -- Submitted batch job 9744
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 6: output/ccnl_fmri_glm_parallel_153_subj_6_9745.out -- Submitted batch job 9745
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 22: output/ccnl_fmri_glm_parallel_153_subj_22_9746.out -- Submitted batch job 9746
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 19: output/ccnl_fmri_glm_parallel_153_subj_19_9747.out -- Submitted batch job 9747
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 13: output/ccnl_fmri_glm_parallel_153_subj_13_9748.out -- Submitted batch job 9748
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 1: output/ccnl_fmri_glm_parallel_153_subj_1_9749.out -- Submitted batch job 9749
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 17: output/ccnl_fmri_glm_parallel_153_subj_17_9750.out -- Submitted batch job 9750
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 28: output/ccnl_fmri_glm_parallel_153_subj_28_9751.out -- Submitted batch job 9751
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 29: output/ccnl_fmri_glm_parallel_153_subj_29_9752.out -- Submitted batch job 9752
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 23: output/ccnl_fmri_glm_parallel_153_subj_23_9753.out -- Submitted batch job 9753
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 25: output/ccnl_fmri_glm_parallel_153_subj_25_9754.out -- Submitted batch job 9754
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 2: output/ccnl_fmri_glm_parallel_153_subj_2_9755.out -- Submitted batch job 9755
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 8: output/ccnl_fmri_glm_parallel_153_subj_8_9756.out -- Submitted batch job 9756
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 18: output/ccnl_fmri_glm_parallel_153_subj_18_9757.out -- Submitted batch job 9757
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 32: output/ccnl_fmri_glm_parallel_153_subj_32_9758.out -- Submitted batch job 9758
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 31: output/ccnl_fmri_glm_parallel_153_subj_31_9759.out -- Submitted batch job 9759
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 14: output/ccnl_fmri_glm_parallel_153_subj_14_9760.out -- Submitted batch job 9760
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 4: output/ccnl_fmri_glm_parallel_153_subj_4_9761.out -- Submitted batch job 9761
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 12: output/ccnl_fmri_glm_parallel_153_subj_12_9762.out -- Submitted batch job 9762
+ccnl_fmri_glm_parallel.sh for GLM 153, subject 3: output/ccnl_fmri_glm_parallel_153_subj_3_9763.out -- Submitted batch job 9763

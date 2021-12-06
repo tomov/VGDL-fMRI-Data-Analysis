@@ -2612,7 +2612,7 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             end
 
         % exploration versus exploitation, impulses at onsets and offsets
-        case {149, 150}
+        case {149, 150, 152, 153}
 
             [regs, ~, ~] = get_regressors(subj_id, run, conn, true, 'empa_regressors');
             tcf = logical(regs.theory_change_flag);
@@ -2637,7 +2637,11 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             % exploration = subgoals that bring us closer to satisfying termination conditions
             % exploration = subgoals that lead to theory updating
             exploit = (sgf1 & acf) | (sgf2 & acf & ks) | (win & acf);
-            explore = (icf & acf) | (tecf & acf);
+            if ismember(glmodel, [152, 153])
+                explore = (tcf & acf);
+            else
+                explore = (icf & acf) | (tecf & acf);
+            end
             exploit = exploit & ~explore; % orthogonalize them
 
             % initiation point for action sequences, both exploration and exploitation
@@ -2695,7 +2699,7 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             end
 
             % optional control regressors
-            if ismember(glmodel, [150])
+            if ismember(glmodel, [150, 153])
                 % GLM 9: nuisance regressors
                 multi = add_games_to_multi(multi, subj_id, run, conn);
                 multi = add_keyholds_to_multi(multi, subj_id, run, conn);
