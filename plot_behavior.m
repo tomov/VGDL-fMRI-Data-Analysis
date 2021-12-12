@@ -5,10 +5,10 @@ conn = mongo('holy7c22101.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserNa
 %conn = mongo('holy7c22101.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'root', 'Password', 'parolatabe')
 %conn = mongo('holy7c22101.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'root', 'Password', 'parolatabe', 'AuthMechanism', 'SCRAM_SHA_256')
 
-game_names = get_game_names_ordered(12);
-subj_ids = 12:32;
-%game_names = get_game_names_ordered(11);
-%subj_ids = 1:11;
+%game_names = get_game_names_ordered(12);
+%subj_ids = 12:32;
+game_names = get_game_names_ordered(11);
+subj_ids = 1:11;
 
 run_ids = 1:6;
 levels = 1:9;
@@ -55,6 +55,8 @@ for g = 1:length(game_names)
 
             if strcmp(agent_name, 'Human')
                 [instance_scores, instance_wins, instance_success_rates, instance_game_names, instance_levels] = get_instance_scores(conn, subj_id, run_ids, true);
+            elseif
+                [instance_scores, instance_wins, instance_success_rates, instance_game_names, instance_levels] = get_dqn_level_scores(game_name, subj_id, levels, false);
             else
                 [instance_scores, instance_wins, instance_success_rates, instance_game_names, instance_levels] = get_agent_level_scores(conn, agent_name, subj_id, levels, agent_tag, false);
             end

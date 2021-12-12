@@ -48,6 +48,7 @@ table(event_names', pxps, bors)
 
 
 
+% for comparing to models only
 figure;
 
 ms = [];
@@ -72,3 +73,29 @@ xticklabels({'+ 0 s', '+ 2 s', '+ 4 s', '+ 6 s'});
 %xtickangle(30);
 xticks(1:4);
 title('SEM model comparison');
+
+
+
+% for comparing to models only, fixed effects
+figure;
+
+ms = [];
+sems = [];
+
+for i = 1:length(filenames)
+    load(filenames{i}, 'lmes', 'bics');
+    dbic = bics(:,2) - bics(:,1);
+    %[sems(i), ms(i)] = wse(dbic');
+    ms(i) = sum(dbic);
+end
+
+hold on;
+bar(ms);
+
+xlabel('theory update offset');
+ylabel('group BIC_{bottom up} - group BIC_{top down}');
+%xticklabels(glm_names(glm_ix));
+xticklabels({'+ 0 s', '+ 2 s', '+ 4 s', '+ 6 s'});
+%xtickangle(30);
+xticks(1:4);
+title('SEM model comparison, fixed effects');
