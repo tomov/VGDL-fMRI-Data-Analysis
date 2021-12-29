@@ -1,3 +1,4 @@
+%{
 clear all;
 close all;
 
@@ -14,10 +15,12 @@ run_ids = 1:6;
 levels = 1:9;
 
 agents(1).name = 'Human';
-agents(2).name = 'Random';
+agents(2).name = 'EMPA';
 agents(2).tag = 'attempt_1_states';
-agents(3).name = 'EMPA';
-agents(3).tag = 'attempt_1_states';
+agents(3).name = 'DQN';
+agents(3).tag = '';
+%agents(4).name = 'Random';
+%agents(4).tag = 'attempt_1_states';
 %agents(3).name = 'EMPA';
 %agents(3).tag = 'attempt_1_states';
 
@@ -55,7 +58,7 @@ for g = 1:length(game_names)
 
             if strcmp(agent_name, 'Human')
                 [instance_scores, instance_wins, instance_success_rates, instance_game_names, instance_levels] = get_instance_scores(conn, subj_id, run_ids, true);
-            elseif
+            elseif strcmp(agent_name, 'DQN')
                 [instance_scores, instance_wins, instance_success_rates, instance_game_names, instance_levels] = get_dqn_level_scores(game_name, subj_id, levels, false);
             else
                 [instance_scores, instance_wins, instance_success_rates, instance_game_names, instance_levels] = get_agent_level_scores(conn, agent_name, subj_id, levels, agent_tag, false);
@@ -198,10 +201,10 @@ legend(h, {agents.name});
 
 hold off;
 
-
+%}
 %% all games
 
-figure;
+figure('pos', [370 585 2033 627]) ;
 
 for pw = 1:length(plot_whats)
     plot_what = plot_whats{pw};
@@ -209,6 +212,7 @@ for pw = 1:length(plot_whats)
     subplot(1, length(plot_whats), pw);
 
     clear ys;
+    maxy = 0;
     for a = 1:length(agents)
         s = eval(plot_what);
         clear ss;
@@ -218,14 +222,24 @@ for pw = 1:length(plot_whats)
         s = mean(ss, 2); % and average across games too
         Violin(s, 0 + agent_center_offsets(a), 'ShowMean', true, 'Width', 0.1, 'ViolinColor', cmap(a, :));
         ys{a} = s;
+        maxy = max(maxy, max(ys{a}));
     end
 
     % significance ***
-    p = ranksum(ys{1}, ys{2}); % Mann Whitney U test across subjects
-    if isnan(p), p = 1; end
-    y = max([max(ys{1}) max(ys{2})]) + 0.5;
-    plot(0 + [agent_center_offsets(1) agent_center_offsets(2)], [y y], 'color', 'black');
-    text(0, y + 0.1 + 0.3 * (p >= 0.05), significance(p), 'HorizontalAlignment', 'center', 'fontsize', 15);
+    for a1 = 1:length(agents)
+        for a2 = a1+1:length(agents)
+            if all(isnan(ys{a1})) || all(isnan(ys{a2}))
+                continue
+            end
+            p = ranksum(ys{a1}, ys{a2}); % Mann Whitney U test across subjects
+            if isnan(p), p = 1; end
+            maxy = maxy + 0.05;
+            y = maxy;
+            x = mean([agent_center_offsets(a1) agent_center_offsets(a2)]);
+            plot(0 + [agent_center_offsets(a1) agent_center_offsets(a2)], [y y], 'color', 'black');
+            text(x, y + 0.01 + 0.0 * (p >= 0.05), significance(p), 'HorizontalAlignment', 'center', 'fontsize', 15);
+        end
+    end
 
     ylabel(get_plot_what_label(plot_what));
     set(gca, 'xtick', []);

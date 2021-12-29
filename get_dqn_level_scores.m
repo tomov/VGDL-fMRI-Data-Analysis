@@ -42,7 +42,6 @@ function [level_scores, level_wins, level_success_rates, game_names, actual_leve
         game_names = [game_names, game_name];
         actual_levels = [actual_levels, level];
 
-        keyboard
     end
     if do_cache
         save(filename, 'level_scores', 'game_names', 'level_wins', 'level_success_rates', 'actual_levels', '-v7.3');
