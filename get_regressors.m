@@ -41,13 +41,16 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, regres
     switch regressors_collection
         case {'empa_regressors'}
             % 818de8d483c140e54eee1c57fae0c0fc1c457725
-            plays_post_collection = 'empa_plays_post'; % separate collection
+            plays_post_collection = 'empa_plays_post2'; % separate collection
 
             % TODO termination_change_flag & interaction_change_flag differ between regressors and plays_post; latter seem more correct
             binreg_fields = {'theory_change_flag', 'sprite_change_flag', 'newEffects_flag', 'newTimeStep_flag', 'replan_flag'}; % binary db.regressors => onsets only, durations irrelevant; have the option of having them as onsets only
             reg_fields = [binreg_fields, {'spriteKL', 'sum_lik', 'n_ts', 'num_effects', 'R_GG', 'R_GGs', 'R_SG', 'R_SGs'}]; % db.regressors 
             binpost_fields = {'interaction_change_flag', 'termination_change_flag'}; % binary db.plays_post, copied & fixed from db.regressors
             post_fields = [binpost_fields {'likelihood', 'surprise', 'sum_lik_play', 'S_len','I_len','T_len','Igen_len','Tnov_len','Ip_len','dS_len','dI_len','dT_len','dIgen_len','dTnov_len','dIp_len', 'subgoal_flag1', 'subgoal_flag2'}]; % db.plays_post 
+
+            % empa_plays_post2
+            post_fields = [post_fields {'hypothesized_new_terminations_len', 'hypothesized_new_terminations_flag', 'falsified_existing_terminations_len', 'falsified_existing_terminations_flag'}];
 
         case {'regressors', 'regressors_DELETEME'}
             % current one -- regressors_and_playspost_2020_05_31_finalTS_block
