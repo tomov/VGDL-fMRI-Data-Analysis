@@ -2830,45 +2830,45 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             end
 
 
-        % hypothesized_new_terminations_flag
+        % hypothesized_terminations_flag
         %
         case 154
 
             regs = get_regressors(subj_id, run, conn, true, 'empa_regressors');
-            hnt = logical(regs.hypothesized_new_terminations_flag);
-            hypothesized_new_terminations_flag_onsets = regs.timestamps(hnt);
+            ht = logical(regs.hypothesized_terminations_flag);
+            hypothesized_terminations_flag_onsets = regs.timestamps(ht);
 
-            multi.names{1} = 'hypothesized_new_terminations_flag';
-            multi.onsets{1} = hypothesized_new_terminations_flag_onsets;
+            multi.names{1} = 'hypothesized_terminations_flag';
+            multi.onsets{1} = hypothesized_terminations_flag_onsets;
             multi.durations{1} = zeros(size(multi.onsets{1}));
 
-        % falsified_existing_terminations_flag
+        % falsified_terminations_flag
         %
         case 155
 
             regs = get_regressors(subj_id, run, conn, true, 'empa_regressors');
-            fet = logical(regs.falsified_existing_terminations_flag);
-            falsified_existing_terminations_flag_onsets = regs.timestamps(fet);
+            ft = logical(regs.falsified_terminations_flag);
+            falsified_terminations_flag_onsets = regs.timestamps(ft);
 
-            multi.names{1} = 'falsified_existing_terminations_flag';
-            multi.onsets{1} = falsified_existing_terminations_flag_onsets;
+            multi.names{1} = 'falsified_terminations_flag';
+            multi.onsets{1} = falsified_terminations_flag_onsets;
             multi.durations{1} = zeros(size(multi.onsets{1}));
 
-        % new_termination_change_flag = hypothesized_new_terminations_flag | falsified_existing_terminations_flag
+        % new_termination_change_flag = hypothesized_terminations_flag | falsified_terminations_flag
         %
         case 156
 
             regs = get_regressors(subj_id, run, conn, true, 'empa_regressors');
-            hnt = logical(regs.hypothesized_new_terminations_flag);
-            fet = logical(regs.falsified_existing_terminations_flag);
-            new_termination_change_flag = hnt | fet;
+            ht = logical(regs.hypothesized_terminations_flag);
+            ft = logical(regs.falsified_terminations_flag);
+            new_termination_change_flag = ht | ft;
             new_termination_change_flag_onsets = regs.timestamps(new_termination_change_flag);
 
             multi.names{1} = 'new_termination_change_flag';
             multi.onsets{1} = new_termination_change_flag_onsets;
             multi.durations{1} = zeros(size(multi.onsets{1}));
 
-        % GLM 102, with new_termination_change_flag = hypothesized_new_terminations_flag | falsified_existing_terminations_flag
+        % GLM 102, with new_termination_change_flag = hypothesized_terminations_flag | falsified_terminations_flag
         % and theory_change_flag = sprite_change_flag | interaction_change_flag | new_termination_change_flag
         %
         case 157
@@ -2876,9 +2876,9 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             regs = get_regressors(subj_id, run, conn, true, 'empa_regressors');
             sc = logical(regs.sprite_change_flag);
             ic = logical(regs.interaction_change_flag);
-            hnt = logical(regs.hypothesized_new_terminations_flag);
-            fet = logical(regs.falsified_existing_terminations_flag);
-            new_theory_change_flag = sc | ic | hnt | fet;
+            ht = logical(regs.hypothesized_terminations_flag);
+            ft = logical(regs.falsified_terminations_flag);
+            new_theory_change_flag = sc | ic | ht | ft;
             new_theory_change_flag_onsets = regs.timestamps(new_theory_change_flag);
 
             multi.names{1} = 'new_theory_change_flag';
@@ -2892,15 +2892,15 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
 
         % GLM 102, with 
-        % and theory_change_flag = sprite_change_flag | interaction_change_flag | falsified_existing_terminations  (i.e. what Pedro thinks it should be)
+        % and theory_change_flag = sprite_change_flag | interaction_change_flag | falsified_terminations  (i.e. what Pedro thinks it should be)
         %
         case 158
 
             regs = get_regressors(subj_id, run, conn, true, 'empa_regressors');
             sc = logical(regs.sprite_change_flag);
             ic = logical(regs.interaction_change_flag);
-            fet = logical(regs.falsified_existing_terminations_flag);
-            new_theory_change_flag = sc | ic | fet;
+            ft = logical(regs.falsified_terminations_flag);
+            new_theory_change_flag = sc | ic | ft;
             new_theory_change_flag_onsets = regs.timestamps(new_theory_change_flag);
 
             multi.names{1} = 'new_theory_change_flag';
@@ -2951,14 +2951,14 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
 
 
-        % GLM 105, with new_termination_change_flag = hypothesized_new_terminations_flag | falsified_existing_terminations_flag
+        % GLM 105, with new_termination_change_flag = hypothesized_terminations_flag | falsified_terminations_flag
         %
         case 161
 
             regs = get_regressors(subj_id, run, conn, true, 'empa_regressors');
-            hnt = logical(regs.hypothesized_new_terminations_flag);
-            fet = logical(regs.falsified_existing_terminations_flag);
-            new_termination_change_flag = hnt | fet;
+            ht = logical(regs.hypothesized_terminations_flag);
+            ft = logical(regs.falsified_terminations_flag);
+            new_termination_change_flag = ht | ft;
             new_termination_change_flag_onsets = regs.timestamps(new_termination_change_flag);
 
             if length(new_termination_change_flag_onsets) > 0
@@ -2973,17 +2973,17 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             multi = add_visuals_to_multi(multi, subj_id, run, conn);
             multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
 
-        % GLM 105, falsified_existing_terminations_flag
+        % GLM 105, falsified_terminations_flag
         %
         case 162
 
             regs = get_regressors(subj_id, run, conn, true, 'empa_regressors');
-            fet = logical(regs.falsified_existing_terminations_flag);
-            falsified_existing_terminations_flag_onsets = regs.timestamps(fet);
+            ft = logical(regs.falsified_terminations_flag);
+            falsified_terminations_flag_onsets = regs.timestamps(ft);
 
-            if length(falsified_existing_terminations_flag_onsets) > 0
-                multi.names{1} = 'falsified_existing_terminations_flag';
-                multi.onsets{1} = falsified_existing_terminations_flag_onsets;
+            if length(falsified_terminations_flag_onsets) > 0
+                multi.names{1} = 'falsified_terminations_flag';
+                multi.onsets{1} = falsified_terminations_flag_onsets;
                 multi.durations{1} = zeros(size(multi.onsets{1}));;
             end
 
@@ -2993,7 +2993,7 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             multi = add_visuals_to_multi(multi, subj_id, run, conn);
             multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
 
-        % GLM 106, but with new_termination_change_flag = hypothesized_new_terminations_flag | falsified_existing_terminations_flag
+        % GLM 106, but with new_termination_change_flag = hypothesized_terminations_flag | falsified_terminations_flag
         case 163
 
             idx = 0;
@@ -3015,9 +3015,9 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             end
 
 
-            hnt = logical(regs.hypothesized_new_terminations_flag);
-            fet = logical(regs.falsified_existing_terminations_flag);
-            new_termination_change_flag = hnt | fet;
+            ht = logical(regs.hypothesized_terminations_flag);
+            ft = logical(regs.falsified_terminations_flag);
+            new_termination_change_flag = ht | ft;
             new_termination_change_flag_onsets = regs.timestamps(new_termination_change_flag);
             if length(new_termination_change_flag_onsets) > 0 
                 idx = idx + 1;
@@ -3032,7 +3032,7 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             multi = add_visuals_to_multi(multi, subj_id, run, conn);
             multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
 
-        % GLM 106, but with falsified_existing_terminations_flag
+        % GLM 106, but with falsified_terminations_flag
         case 164
 
             idx = 0;
@@ -3054,13 +3054,13 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             end
 
 
-            hnt = logical(regs.hypothesized_new_terminations_flag);
-            fet = logical(regs.falsified_existing_terminations_flag);
-            falsified_existing_terminations_flag_onsets = regs.timestamps(fet);
-            if length(falsified_existing_terminations_flag_onsets) > 0
+            ht = logical(regs.hypothesized_terminations_flag);
+            ft = logical(regs.falsified_terminations_flag);
+            falsified_terminations_flag_onsets = regs.timestamps(ft);
+            if length(falsified_terminations_flag_onsets) > 0
                 idx = idx + 1;
-                multi.names{idx} = 'falsified_existing_terminations_flag';
-                multi.onsets{idx} = falsified_existing_terminations_flag_onsets;
+                multi.names{idx} = 'falsified_terminations_flag';
+                multi.onsets{idx} = falsified_terminations_flag_onsets;
                 multi.durations{idx} = zeros(size(multi.onsets{idx}));;
             end
 

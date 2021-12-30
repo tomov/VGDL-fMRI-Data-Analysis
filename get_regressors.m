@@ -50,7 +50,7 @@ function [regs, X, fields] = get_regressors(subj_id, run, conn, do_cache, regres
             post_fields = [binpost_fields {'likelihood', 'surprise', 'sum_lik_play', 'S_len','I_len','T_len','Igen_len','Tnov_len','Ip_len','dS_len','dI_len','dT_len','dIgen_len','dTnov_len','dIp_len', 'subgoal_flag1', 'subgoal_flag2'}]; % db.plays_post 
 
             % empa_plays_post2
-            post_fields = [post_fields {'hypothesized_new_terminations_len', 'hypothesized_new_terminations_flag', 'falsified_existing_terminations_len', 'falsified_existing_terminations_flag'}];
+            post_fields = [post_fields {'hypothesized_terminations_len', 'hypothesized_terminations_flag', 'falsified_terminations_len', 'falsified_terminations_flag'}];
 
         case {'regressors', 'regressors_DELETEME'}
             % current one -- regressors_and_playspost_2020_05_31_finalTS_block
