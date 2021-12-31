@@ -32,8 +32,11 @@ sphere = 10;
 [mask_filenames, regions] = get_masks_from_contrast(glmodel, contrast, true, [], Num, sphere);
 mask_filenames = mask_filenames';
 %}
-atlas_name = 'AAL2_GLM_102';
+
+%atlas_name = 'AAL2_GLM_102';
+atlas_name = 'AAL2_GLM_157';
 [mask_filenames, regions] = get_anatomical_masks(atlas_name);
+
 %ROI_ix = [      1      2      7     10     11     12     13     14     15]; 
 %mask_filenames = mask_filenames(ROI_ix)';
 %regions = regions(ROI_ix);
@@ -50,11 +53,20 @@ atlas_name = 'AAL2_GLM_102';
 %filename = 'mat/glm_bic_bms_single_controls.mat';
 
 % multiplexing, again
+%{
 glms = [102 103 104 105 106]; % with controls
 %glms = [3 85 51 52 53]; % w/o controls
 glm_names = {'th', 's', 'i', 't', 's+i+t'};
 %filename = sprintf('mat/glm_bic_bms_glm=%d_con=%s_Num=%d_sphere=%.1fmm_multiplex.mat', glmodel, contrast, Num, sphere);;
 filename = fullfile(get_mat_dir(false), sprintf('glm_bic_bms_atlas=%s_multiplex_with_controls.mat', atlas_name));
+filename
+%}
+
+% new theory updates -- hypothesized terminations vs. falsified terminations
+glms = [157 158]; 
+glm_names = {'sc|ic|ft|ht', 'sc|ic|ft'};
+%filename = sprintf('mat/glm_bic_bms_glm=%d_con=%s_Num=%d_sphere=%.1fmm_multiplex.mat', glmodel, contrast, Num, sphere);;
+filename = fullfile(get_mat_dir(false), sprintf('glm_bic_bms_157_vs_158_atlas=%s.mat', atlas_name));
 filename
 
 for c = 1:length(mask_filenames)
