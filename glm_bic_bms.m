@@ -63,10 +63,11 @@ filename
 %}
 
 % new theory updates -- hypothesized terminations vs. falsified terminations
-glms = [157 158]; 
-glm_names = {'sc|ic|ft|ht', 'sc|ic|ft'};
-%filename = sprintf('mat/glm_bic_bms_glm=%d_con=%s_Num=%d_sphere=%.1fmm_multiplex.mat', glmodel, contrast, Num, sphere);;
-filename = fullfile(get_mat_dir(false), sprintf('glm_bic_bms_157_vs_158_atlas=%s.mat', atlas_name));
+%glms = [157 158]; 
+%glm_names = {'sc|ic|ft|ht', 'sc|ic|ft'};
+glms = [161 162]; 
+glm_names = {'ft|ht', 'ft'};
+filename = fullfile(get_mat_dir(false), sprintf('glm_bic_bms_161_vs_162_atlas=%s.mat', atlas_name));
 filename
 
 for c = 1:length(mask_filenames)
