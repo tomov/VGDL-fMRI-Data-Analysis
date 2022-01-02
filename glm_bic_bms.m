@@ -35,6 +35,7 @@ mask_filenames = mask_filenames';
 
 %atlas_name = 'AAL2_GLM_102';
 atlas_name = 'AAL2_GLM_157';
+%atlas_name = 'AAL2_GLM_157_all';
 [mask_filenames, regions] = get_anatomical_masks(atlas_name);
 
 %ROI_ix = [      1      2      7     10     11     12     13     14     15]; 
@@ -65,9 +66,11 @@ filename
 % new theory updates -- hypothesized terminations vs. falsified terminations
 %glms = [157 158]; 
 %glm_names = {'sc|ic|ft|ht', 'sc|ic|ft'};
-glms = [161 162]; 
-glm_names = {'ft|ht', 'ft'};
-filename = fullfile(get_mat_dir(false), sprintf('glm_bic_bms_161_vs_162_atlas=%s.mat', atlas_name));
+%glms = [161 162]; 
+%glm_names = {'ft|ht', 'ft'};
+glms = [102 157 158]; 
+glm_names = {'tcf', 'sc|ic|ft|ht', 'sc|ic|ft'};
+filename = fullfile(get_mat_dir(false), sprintf('glm_bic_bms_102_157_158_atlas=%s.mat', atlas_name));
 filename
 
 for c = 1:length(mask_filenames)
