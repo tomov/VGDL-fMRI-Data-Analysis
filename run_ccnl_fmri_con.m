@@ -429,6 +429,39 @@ for i = 1:length(glmodels)
                 {'sprite_change_flag', 'interaction_change_flag', 'falsified_terminations_flag'}, ...
                 subjs);
 
+        case {165}
+            ccnl_fmri_con(vgdl_expt(), glmodel, {'win_plan_length'}, subjs);
+        case {166}
+            ccnl_fmri_con(vgdl_expt(), glmodel, {'log_win_plan_length'}, subjs);
+        case {167}
+            ccnl_fmri_con(vgdl_expt(), glmodel, {'avg_plan_length'}, subjs);
+        case {168}
+            ccnl_fmri_con(vgdl_expt(), glmodel, {'log_avg_plan_length'}, subjs);
+        case {169}
+            ccnl_fmri_con(vgdl_expt(), glmodel, {'num_plans'}, subjs);
+        case {170}
+            ccnl_fmri_con(vgdl_expt(), glmodel, {'log_num_plans'}, subjs);
+        case {171}
+            ccnl_fmri_con(vgdl_expt(), glmodel, {'total_plan_length'}, subjs);
+        case {172}
+            ccnl_fmri_con(vgdl_expt(), glmodel, {'log_total_plan_length'}, subjs);
+        case {173}
+            ccnl_fmri_con(vgdl_expt(), glmodel, {'win_plan_ac'}, subjs);
+        case {174}
+            ccnl_fmri_con(vgdl_expt(), glmodel, {'log_win_plan_ac'}, subjs);
+        case {175}
+            ccnl_fmri_con(vgdl_expt(), glmodel, {'avg_plan_ac'}, subjs);
+        case {176}
+            ccnl_fmri_con(vgdl_expt(), glmodel, {'log_avg_plan_ac'}, subjs);
+        case {177}
+            ccnl_fmri_con(vgdl_expt(), glmodel, {'win_plan_eff'}, subjs);
+        case {178}
+            ccnl_fmri_con(vgdl_expt(), glmodel, {'log_win_plan_eff'}, subjs);
+        case {179}
+            ccnl_fmri_con(vgdl_expt(), glmodel, {'avg_plan_eff'}, subjs);
+        case {180}
+            ccnl_fmri_con(vgdl_expt(), glmodel, {'log_avg_plan_eff'}, subjs);
+
         otherwise
             assert(false, 'invalid glmodel -- should be one of the above');
 
