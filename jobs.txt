@@ -4925,3 +4925,128 @@ ccnl_fmri_glm.sh for GLM 164, subjects 9 5 22 20 16 31 3 2 4 32 15 24 10 27 17 1
 --- Wed Dec 29 20:58:52 EST 2021: Running ccnl_fmri_con for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32
 ----------------
 ccnl_fmri_con.sh for GLMs 157 158 159 160 161 162 163 164, subjects 3 5 21 31 13 24 23 10 32 16 18 2 4 8 12 17 15 29 6 11 22 9 1 27 7 20 30 26 19 25 14 28: output/ccnl_fmri_con_157_158_159_160_161_162_163_164_goodSubjects_10089.out -- Submitted batch job 10089
+----------------
+--- Mon Jan 3 13:23:21 EST 2022: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_EMPA_sprite_true_1_true_10318.out -- Submitted batch job 10318
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_1_EMPA_sprite_true_1_true_10319.out -- Submitted batch job 10319
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_1_EMPA_sprite_true_1_true_10320.out -- Submitted batch job 10320
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_1_EMPA_sprite_true_1_true_10321.out -- Submitted batch job 10321
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_1_EMPA_sprite_true_1_true_10322.out -- Submitted batch job 10322
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_1_EMPA_sprite_true_1_true_10323.out -- Submitted batch job 10323
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_1_EMPA_sprite_true_1_true_10324.out -- Submitted batch job 10324
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_1_EMPA_sprite_true_1_true_10325.out -- Submitted batch job 10325
+fit_gp_CV.sh for subject 9: output/fit_gp_CV_9_true_1_EMPA_sprite_true_1_true_10326.out -- Submitted batch job 10326
+fit_gp_CV.sh for subject 10: output/fit_gp_CV_10_true_1_EMPA_sprite_true_1_true_10327.out -- Submitted batch job 10327
+fit_gp_CV.sh for subject 11: output/fit_gp_CV_11_true_1_EMPA_sprite_true_1_true_10328.out -- Submitted batch job 10328
+fit_gp_CV.sh for subject 12: output/fit_gp_CV_12_true_1_EMPA_sprite_true_1_true_10329.out -- Submitted batch job 10329
+fit_gp_CV.sh for subject 13: output/fit_gp_CV_13_true_1_EMPA_sprite_true_1_true_10330.out -- Submitted batch job 10330
+fit_gp_CV.sh for subject 14: output/fit_gp_CV_14_true_1_EMPA_sprite_true_1_true_10331.out -- Submitted batch job 10331
+fit_gp_CV.sh for subject 15: output/fit_gp_CV_15_true_1_EMPA_sprite_true_1_true_10332.out -- Submitted batch job 10332
+fit_gp_CV.sh for subject 16: output/fit_gp_CV_16_true_1_EMPA_sprite_true_1_true_10333.out -- Submitted batch job 10333
+fit_gp_CV.sh for subject 17: output/fit_gp_CV_17_true_1_EMPA_sprite_true_1_true_10334.out -- Submitted batch job 10334
+fit_gp_CV.sh for subject 18: output/fit_gp_CV_18_true_1_EMPA_sprite_true_1_true_10335.out -- Submitted batch job 10335
+fit_gp_CV.sh for subject 19: output/fit_gp_CV_19_true_1_EMPA_sprite_true_1_true_10336.out -- Submitted batch job 10336
+fit_gp_CV.sh for subject 20: output/fit_gp_CV_20_true_1_EMPA_sprite_true_1_true_10337.out -- Submitted batch job 10337
+fit_gp_CV.sh for subject 21: output/fit_gp_CV_21_true_1_EMPA_sprite_true_1_true_10338.out -- Submitted batch job 10338
+fit_gp_CV.sh for subject 22: output/fit_gp_CV_22_true_1_EMPA_sprite_true_1_true_10339.out -- Submitted batch job 10339
+fit_gp_CV.sh for subject 23: output/fit_gp_CV_23_true_1_EMPA_sprite_true_1_true_10340.out -- Submitted batch job 10340
+fit_gp_CV.sh for subject 24: output/fit_gp_CV_24_true_1_EMPA_sprite_true_1_true_10341.out -- Submitted batch job 10341
+fit_gp_CV.sh for subject 25: output/fit_gp_CV_25_true_1_EMPA_sprite_true_1_true_10342.out -- Submitted batch job 10342
+fit_gp_CV.sh for subject 26: output/fit_gp_CV_26_true_1_EMPA_sprite_true_1_true_10343.out -- Submitted batch job 10343
+fit_gp_CV.sh for subject 27: output/fit_gp_CV_27_true_1_EMPA_sprite_true_1_true_10344.out -- Submitted batch job 10344
+fit_gp_CV.sh for subject 28: output/fit_gp_CV_28_true_1_EMPA_sprite_true_1_true_10345.out -- Submitted batch job 10345
+fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_EMPA_sprite_true_1_true_10346.out -- Submitted batch job 10346
+fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_EMPA_sprite_true_1_true_10347.out -- Submitted batch job 10347
+fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_EMPA_sprite_true_1_true_10348.out -- Submitted batch job 10348
+fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_EMPA_sprite_true_1_true_10349.out -- Submitted batch job 10349
+----------------
+--- Mon Jan 3 13:30:44 EST 2022: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_EMPA_interaction_true_1_true_10350.out -- Submitted batch job 10350
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_1_EMPA_interaction_true_1_true_10351.out -- Submitted batch job 10351
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_1_EMPA_interaction_true_1_true_10352.out -- Submitted batch job 10352
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_1_EMPA_interaction_true_1_true_10353.out -- Submitted batch job 10353
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_1_EMPA_interaction_true_1_true_10354.out -- Submitted batch job 10354
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_1_EMPA_interaction_true_1_true_10355.out -- Submitted batch job 10355
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_1_EMPA_interaction_true_1_true_10356.out -- Submitted batch job 10356
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_1_EMPA_interaction_true_1_true_10357.out -- Submitted batch job 10357
+fit_gp_CV.sh for subject 9: output/fit_gp_CV_9_true_1_EMPA_interaction_true_1_true_10358.out -- Submitted batch job 10358
+fit_gp_CV.sh for subject 10: output/fit_gp_CV_10_true_1_EMPA_interaction_true_1_true_10359.out -- Submitted batch job 10359
+fit_gp_CV.sh for subject 11: output/fit_gp_CV_11_true_1_EMPA_interaction_true_1_true_10360.out -- Submitted batch job 10360
+fit_gp_CV.sh for subject 12: output/fit_gp_CV_12_true_1_EMPA_interaction_true_1_true_10361.out -- Submitted batch job 10361
+fit_gp_CV.sh for subject 13: output/fit_gp_CV_13_true_1_EMPA_interaction_true_1_true_10362.out -- Submitted batch job 10362
+fit_gp_CV.sh for subject 14: output/fit_gp_CV_14_true_1_EMPA_interaction_true_1_true_10363.out -- Submitted batch job 10363
+fit_gp_CV.sh for subject 15: output/fit_gp_CV_15_true_1_EMPA_interaction_true_1_true_10364.out -- Submitted batch job 10364
+fit_gp_CV.sh for subject 16: output/fit_gp_CV_16_true_1_EMPA_interaction_true_1_true_10365.out -- Submitted batch job 10365
+fit_gp_CV.sh for subject 17: output/fit_gp_CV_17_true_1_EMPA_interaction_true_1_true_10366.out -- Submitted batch job 10366
+fit_gp_CV.sh for subject 18: output/fit_gp_CV_18_true_1_EMPA_interaction_true_1_true_10367.out -- Submitted batch job 10367
+fit_gp_CV.sh for subject 19: output/fit_gp_CV_19_true_1_EMPA_interaction_true_1_true_10368.out -- Submitted batch job 10368
+fit_gp_CV.sh for subject 20: output/fit_gp_CV_20_true_1_EMPA_interaction_true_1_true_10369.out -- Submitted batch job 10369
+fit_gp_CV.sh for subject 21: output/fit_gp_CV_21_true_1_EMPA_interaction_true_1_true_10370.out -- Submitted batch job 10370
+fit_gp_CV.sh for subject 22: output/fit_gp_CV_22_true_1_EMPA_interaction_true_1_true_10371.out -- Submitted batch job 10371
+fit_gp_CV.sh for subject 23: output/fit_gp_CV_23_true_1_EMPA_interaction_true_1_true_10372.out -- Submitted batch job 10372
+fit_gp_CV.sh for subject 24: output/fit_gp_CV_24_true_1_EMPA_interaction_true_1_true_10373.out -- Submitted batch job 10373
+fit_gp_CV.sh for subject 25: output/fit_gp_CV_25_true_1_EMPA_interaction_true_1_true_10374.out -- Submitted batch job 10374
+fit_gp_CV.sh for subject 26: output/fit_gp_CV_26_true_1_EMPA_interaction_true_1_true_10375.out -- Submitted batch job 10375
+fit_gp_CV.sh for subject 27: output/fit_gp_CV_27_true_1_EMPA_interaction_true_1_true_10376.out -- Submitted batch job 10376
+fit_gp_CV.sh for subject 28: output/fit_gp_CV_28_true_1_EMPA_interaction_true_1_true_10377.out -- Submitted batch job 10377
+fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_EMPA_interaction_true_1_true_10378.out -- Submitted batch job 10378
+fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_EMPA_interaction_true_1_true_10379.out -- Submitted batch job 10379
+fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_EMPA_interaction_true_1_true_10380.out -- Submitted batch job 10380
+fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_EMPA_interaction_true_1_true_10381.out -- Submitted batch job 10381
+----------------
+--- Mon Jan 3 13:31:29 EST 2022: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_EMPA_termination_true_1_true_10382.out -- Submitted batch job 10382
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_1_EMPA_termination_true_1_true_10383.out -- Submitted batch job 10383
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_1_EMPA_termination_true_1_true_10384.out -- Submitted batch job 10384
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_1_EMPA_termination_true_1_true_10385.out -- Submitted batch job 10385
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_1_EMPA_termination_true_1_true_10386.out -- Submitted batch job 10386
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_1_EMPA_termination_true_1_true_10387.out -- Submitted batch job 10387
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_1_EMPA_termination_true_1_true_10388.out -- Submitted batch job 10388
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_1_EMPA_termination_true_1_true_10389.out -- Submitted batch job 10389
+fit_gp_CV.sh for subject 9: output/fit_gp_CV_9_true_1_EMPA_termination_true_1_true_10390.out -- Submitted batch job 10390
+fit_gp_CV.sh for subject 10: output/fit_gp_CV_10_true_1_EMPA_termination_true_1_true_10391.out -- Submitted batch job 10391
+fit_gp_CV.sh for subject 11: output/fit_gp_CV_11_true_1_EMPA_termination_true_1_true_10392.out -- Submitted batch job 10392
+fit_gp_CV.sh for subject 12: output/fit_gp_CV_12_true_1_EMPA_termination_true_1_true_10393.out -- Submitted batch job 10393
+fit_gp_CV.sh for subject 13: output/fit_gp_CV_13_true_1_EMPA_termination_true_1_true_10394.out -- Submitted batch job 10394
+fit_gp_CV.sh for subject 14: output/fit_gp_CV_14_true_1_EMPA_termination_true_1_true_10395.out -- Submitted batch job 10395
+fit_gp_CV.sh for subject 15: output/fit_gp_CV_15_true_1_EMPA_termination_true_1_true_10396.out -- Submitted batch job 10396
+fit_gp_CV.sh for subject 16: output/fit_gp_CV_16_true_1_EMPA_termination_true_1_true_10397.out -- Submitted batch job 10397
+fit_gp_CV.sh for subject 17: output/fit_gp_CV_17_true_1_EMPA_termination_true_1_true_10398.out -- Submitted batch job 10398
+fit_gp_CV.sh for subject 18: output/fit_gp_CV_18_true_1_EMPA_termination_true_1_true_10399.out -- Submitted batch job 10399
+fit_gp_CV.sh for subject 19: output/fit_gp_CV_19_true_1_EMPA_termination_true_1_true_10400.out -- Submitted batch job 10400
+fit_gp_CV.sh for subject 20: output/fit_gp_CV_20_true_1_EMPA_termination_true_1_true_10401.out -- Submitted batch job 10401
+fit_gp_CV.sh for subject 21: output/fit_gp_CV_21_true_1_EMPA_termination_true_1_true_10402.out -- Submitted batch job 10402
+fit_gp_CV.sh for subject 22: output/fit_gp_CV_22_true_1_EMPA_termination_true_1_true_10403.out -- Submitted batch job 10403
+fit_gp_CV.sh for subject 23: output/fit_gp_CV_23_true_1_EMPA_termination_true_1_true_10404.out -- Submitted batch job 10404
+fit_gp_CV.sh for subject 24: output/fit_gp_CV_24_true_1_EMPA_termination_true_1_true_10405.out -- Submitted batch job 10405
+fit_gp_CV.sh for subject 25: output/fit_gp_CV_25_true_1_EMPA_termination_true_1_true_10406.out -- Submitted batch job 10406
+fit_gp_CV.sh for subject 26: output/fit_gp_CV_26_true_1_EMPA_termination_true_1_true_10407.out -- Submitted batch job 10407
+fit_gp_CV.sh for subject 27: output/fit_gp_CV_27_true_1_EMPA_termination_true_1_true_10408.out -- Submitted batch job 10408
+fit_gp_CV.sh for subject 28: output/fit_gp_CV_28_true_1_EMPA_termination_true_1_true_10409.out -- Submitted batch job 10409
+fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_EMPA_termination_true_1_true_10410.out -- Submitted batch job 10410
+fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_EMPA_termination_true_1_true_10411.out -- Submitted batch job 10411
+fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_EMPA_termination_true_1_true_10412.out -- Submitted batch job 10412
+fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_EMPA_termination_true_1_true_10413.out -- Submitted batch job 10413
+----------------
+--- Mon Jan 3 15:15:51 EST 2022 Running gen_PETHs
+----------------
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_sprite\'): output/gen_PETHs_10417.out -- Submitted batch job 10417
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_sprite\'): output/gen_PETHs_10418.out -- Submitted batch job 10418
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_interaction\'): output/gen_PETHs_10419.out -- Submitted batch job 10419
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_interaction\'): output/gen_PETHs_10420.out -- Submitted batch job 10420
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_termination\'): output/gen_PETHs_10421.out -- Submitted batch job 10421
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_termination\'): output/gen_PETHs_10422.out -- Submitted batch job 10422
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_sprite\', 1): output/gen_PETHs_10423.out -- Submitted batch job 10423
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_sprite\', 1): output/gen_PETHs_10424.out -- Submitted batch job 10424
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_interaction\', 1): output/gen_PETHs_10425.out -- Submitted batch job 10425
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_interaction\', 1): output/gen_PETHs_10426.out -- Submitted batch job 10426
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_termination\', 1): output/gen_PETHs_10427.out -- Submitted batch job 10427
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_termination\', 1): output/gen_PETHs_10428.out -- Submitted batch job 10428
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_sprite\', 1, 1): output/gen_PETHs_10429.out -- Submitted batch job 10429
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_sprite\', 1, 1): output/gen_PETHs_10430.out -- Submitted batch job 10430
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_interaction\', 1, 1): output/gen_PETHs_10431.out -- Submitted batch job 10431
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_interaction\', 1, 1): output/gen_PETHs_10432.out -- Submitted batch job 10432
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_termination\', 1, 1): output/gen_PETHs_10433.out -- Submitted batch job 10433

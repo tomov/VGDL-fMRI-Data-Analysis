@@ -50,6 +50,28 @@ declare -a fn_calls=(
                      "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP\')"
                      )
 
+# Figure 5 ++
+declare -a fn_calls=(
+                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_sprite\')"
+                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_sprite\')"
+                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_interaction\')"
+                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_interaction\')"
+                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_termination\')"
+                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_termination\')"
+                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_sprite\', 1)"
+                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_sprite\', 1)"
+                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_interaction\', 1)"
+                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_interaction\', 1)"
+                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_termination\', 1)"
+                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_termination\', 1)"
+                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_sprite\', 1, 1)"
+                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_sprite\', 1, 1)"
+                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_interaction\', 1, 1)"
+                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_interaction\', 1, 1)"
+                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_termination\', 1, 1)"
+                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_termination\', 1, 1)"
+                     )
+
 #declare -a fn_calls=(
 #                     "gen_PETHs(\'AAL2_GP_EMPA_grouped\', \'\', 0, 0, \'GP_DQN\')"
 #                     "gen_PETHs(\'AAL2_GP_EMPA\', \'\', 0, 0, \'GP_DQN\')"

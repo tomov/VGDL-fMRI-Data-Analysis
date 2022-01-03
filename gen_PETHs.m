@@ -104,11 +104,32 @@ function gen_PETHs(glmodel, contrast, Num, sphere, what, use_CV, no_baseline)
         toc
 
         if strcmp(what, 'GP')
-            disp('extracting predicted BOLD time course from EMPA GP results');
+            disp('extracting predicted BOLD time course from EMPA theory GP results');
             if use_CV
                 load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat_CV');
             else
                 load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat');
+            end
+        elseif strcmp(what, 'GP_sprite')
+            disp('extracting predicted BOLD time course from EMPA sprite GP results');
+            if use_CV
+                load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_sprite_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat_CV');
+            else
+                load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_sprite_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat');
+            end
+        elseif strcmp(what, 'GP_interaction')
+            disp('extracting predicted BOLD time course from EMPA interaction GP results');
+            if use_CV
+                load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_interaction_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat_CV');
+            else
+                load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_interaction_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat');
+            end
+        elseif strcmp(what, 'GP_termination')
+            disp('extracting predicted BOLD time course from EMPA termination GP results');
+            if use_CV
+                load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_termination_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat_CV');
+            else
+                load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_termination_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat');
             end
         elseif strcmp(what, 'GP_DQN')
             disp('extracting predicted BOLD time course from DQN GP results');
@@ -161,7 +182,7 @@ function gen_PETHs(glmodel, contrast, Num, sphere, what, use_CV, no_baseline)
                         % get BOLD time course given run
                         Y_run = nanmean(Y(Y_run_id == SPM_run_id, :), 2);
                         assert(all(size(Y_run) == [EXPT.nTRs, 1]));
-                    case {'GP', 'GP_DQN'}
+                    case {'GP', 'GP_DQN', 'GP_sprite', 'GP_interaction', 'GP_termination'}
                         % get predicted BOLD and BOLD, do not average across voxels
                         Y_run = Y(Y_run_id == SPM_run_id, :);
                         if use_CV
@@ -198,7 +219,7 @@ function gen_PETHs(glmodel, contrast, Num, sphere, what, use_CV, no_baseline)
                         switch what
                             case 'BOLD'
                                 Y_baseline = nanmean(Y_run(event_TR + baseline_dTRs));
-                            case {'GP', 'GP_DQN'}
+                            case {'GP', 'GP_DQN', 'GP_sprite', 'GP_interaction', 'GP_termination'}
                                 z_baseline = nanmean(z_run(event_TR + baseline_dTRs));
                             otherwise
                                 assert(false);
@@ -213,7 +234,7 @@ function gen_PETHs(glmodel, contrast, Num, sphere, what, use_CV, no_baseline)
                         switch what
                             case 'BOLD'
                                 activations(m).(field)(s,valid_TRs) = activations(m).(field)(s,valid_TRs) + (Y_run(TRs(valid_TRs))' - Y_baseline);
-                            case {'GP', 'GP_DQN'}
+                            case {'GP', 'GP_DQN', 'GP_sprite', 'GP_interaction', 'GP_termination'}
                                 activations(m).(field)(s,valid_TRs) = activations(m).(field)(s,valid_TRs) + (z_run(TRs(valid_TRs))' - z_baseline);
                             otherwise
                                 assert(false);
