@@ -3095,6 +3095,9 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
                 case 166
                     multi.pmod(1).name{1} = 'log_win_plan_length';
                     multi.pmod(1).param{1} = log(win_plan_length(acf));
+                    % cleanup nans/infs
+                    multi.pmod(1).param{1}(isnan(multi.pmod(1).param{1})) = 0;
+                    multi.pmod(1).param{1}(isinf(multi.pmod(1).param{1})) = 0;
                 otherwise
                     assert(false);
             end
@@ -3131,6 +3134,9 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
                 case 168
                     multi.pmod(1).name{1} = 'log_avg_plan_length';
                     multi.pmod(1).param{1} = log(avg_plan_length(acf));
+                    % cleanup nans/infs
+                    multi.pmod(1).param{1}(isnan(multi.pmod(1).param{1})) = 0;
+                    multi.pmod(1).param{1}(isinf(multi.pmod(1).param{1})) = 0;
                 otherwise
                     assert(false);
             end
@@ -3167,6 +3173,9 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
                 case 170
                     multi.pmod(1).name{1} = 'log_num_plans';
                     multi.pmod(1).param{1} = log(num_plans(acf));
+                    % cleanup nans/infs
+                    multi.pmod(1).param{1}(isnan(multi.pmod(1).param{1})) = 0;
+                    multi.pmod(1).param{1}(isinf(multi.pmod(1).param{1})) = 0;
                 otherwise
                     assert(false);
             end
@@ -3207,6 +3216,9 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
                 case 172
                     multi.pmod(1).name{1} = 'log_total_plan_length';
                     multi.pmod(1).param{1} = log(total_plan_length(acf));
+                    % cleanup nans/infs
+                    multi.pmod(1).param{1}(isnan(multi.pmod(1).param{1})) = 0;
+                    multi.pmod(1).param{1}(isinf(multi.pmod(1).param{1})) = 0;
                 otherwise
                     assert(false);
             end
@@ -3243,6 +3255,9 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
                 case 174
                     multi.pmod(1).name{1} = 'log_win_plan_ac';
                     multi.pmod(1).param{1} = log(win_plan_ac(acf));
+                    % cleanup nans/infs
+                    multi.pmod(1).param{1}(isnan(multi.pmod(1).param{1})) = 0;
+                    multi.pmod(1).param{1}(isinf(multi.pmod(1).param{1})) = 0;
                 otherwise
                     assert(false);
             end
@@ -3279,6 +3294,9 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
                 case 176
                     multi.pmod(1).name{1} = 'log_avg_plan_ac';
                     multi.pmod(1).param{1} = log(avg_plan_ac(acf));
+                    % cleanup nans/infs
+                    multi.pmod(1).param{1}(isnan(multi.pmod(1).param{1})) = 0;
+                    multi.pmod(1).param{1}(isinf(multi.pmod(1).param{1})) = 0;
                 otherwise
                     assert(false);
             end
@@ -3315,6 +3333,9 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
                 case 178
                     multi.pmod(1).name{1} = 'log_win_plan_eff';
                     multi.pmod(1).param{1} = log(win_plan_eff(acf));
+                    % cleanup nans/infs
+                    multi.pmod(1).param{1}(isnan(multi.pmod(1).param{1})) = 0;
+                    multi.pmod(1).param{1}(isinf(multi.pmod(1).param{1})) = 0;
                 otherwise
                     assert(false);
             end
@@ -3351,6 +3372,9 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
                 case 180
                     multi.pmod(1).name{1} = 'log_avg_plan_eff';
                     multi.pmod(1).param{1} = log(avg_plan_eff(acf));
+                    % cleanup nans/infs
+                    multi.pmod(1).param{1}(isnan(multi.pmod(1).param{1})) = 0;
+                    multi.pmod(1).param{1}(isinf(multi.pmod(1).param{1})) = 0;
                 otherwise
                     assert(false);
             end
