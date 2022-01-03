@@ -3070,7 +3070,297 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             multi = add_visuals_to_multi(multi, subj_id, run, conn);
             multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
 
+        % planning @ avatar collision flag: win_plan_length
+        %
+        case {165, 166}
+            [regs, ~, ~] = get_regressors(subj_id, run, conn, true, 'empa_regressors');
+            win_plan_length = regs.win_plan_length;
+            win_plan_length(isnan(win_plan_length)) = 0;
 
+            [~, visuals, ~] = get_visuals(subj_id, run, conn, true, 'empa_plays_post3');
+            acf = logical(visuals.avatar_collision_flag);
+
+            acf = acf | (win_plan_length > 0); % include beginning-of-episode planning
+
+            multi.names{1} = 'avatar_collision_flag';
+            multi.onsets{1} = regs.timestamps(acf);
+            multi.durations{1} = zeros(size(multi.onsets{1}));;
+
+            multi.orth{1} = 0; % do not orthogonalise them
+
+            switch glmodel
+                case 165
+                    multi.pmod(1).name{1} = 'win_plan_length';
+                    multi.pmod(1).param{1} = win_plan_length(acf);
+                case 166
+                    multi.pmod(1).name{1} = 'log_win_plan_length';
+                    multi.pmod(1).param{1} = log(win_plan_length(acf));
+                otherwise
+                    assert(false);
+            end
+            multi.pmod(1).poly{1} = 1;
+
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
+
+        % planning @ avatar collision flag: avg_plan_length
+        %
+        case {167, 168}
+            [regs, ~, ~] = get_regressors(subj_id, run, conn, true, 'empa_regressors');
+            avg_plan_length = regs.avg_plan_length;
+            avg_plan_length(isnan(avg_plan_length)) = 0;
+
+            [~, visuals, ~] = get_visuals(subj_id, run, conn, true, 'empa_plays_post3');
+            acf = logical(visuals.avatar_collision_flag);
+
+            acf = acf | (avg_plan_length > 0); % include beginning-of-episode planning
+
+            multi.names{1} = 'avatar_collision_flag';
+            multi.onsets{1} = regs.timestamps(acf);
+            multi.durations{1} = zeros(size(multi.onsets{1}));;
+
+            multi.orth{1} = 0; % do not orthogonalise them
+
+            switch glmodel
+                case 167
+                    multi.pmod(1).name{1} = 'avg_plan_length';
+                    multi.pmod(1).param{1} = avg_plan_length(acf);
+                case 168
+                    multi.pmod(1).name{1} = 'log_avg_plan_length';
+                    multi.pmod(1).param{1} = log(avg_plan_length(acf));
+                otherwise
+                    assert(false);
+            end
+            multi.pmod(1).poly{1} = 1;
+
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
+
+        % planning @ avatar collision flag: num_plans
+        %
+        case {169, 170}
+            [regs, ~, ~] = get_regressors(subj_id, run, conn, true, 'empa_regressors');
+            num_plans = regs.num_plans;
+            num_plans(isnan(num_plans)) = 0;
+
+            [~, visuals, ~] = get_visuals(subj_id, run, conn, true, 'empa_plays_post3');
+            acf = logical(visuals.avatar_collision_flag);
+
+            acf = acf | (num_plans > 0); % include beginning-of-episode planning
+
+            multi.names{1} = 'avatar_collision_flag';
+            multi.onsets{1} = regs.timestamps(acf);
+            multi.durations{1} = zeros(size(multi.onsets{1}));;
+
+            multi.orth{1} = 0; % do not orthogonalise them
+
+            switch glmodel
+                case 169
+                    multi.pmod(1).name{1} = 'num_plans';
+                    multi.pmod(1).param{1} = num_plans(acf);
+                case 170
+                    multi.pmod(1).name{1} = 'log_num_plans';
+                    multi.pmod(1).param{1} = log(num_plans(acf));
+                otherwise
+                    assert(false);
+            end
+            multi.pmod(1).poly{1} = 1;
+
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
+
+        % planning @ avatar collision flag: total_plan_length = avg_plan_length * num_plans
+        %
+        case {171, 172}
+            [regs, ~, ~] = get_regressors(subj_id, run, conn, true, 'empa_regressors');
+            num_plans = regs.num_plans;
+            avg_plan_length = regs.avg_plan_length;
+            num_plans(isnan(num_plans)) = 0;
+            avg_plan_length(isnan(avg_plan_length)) = 0;
+
+            total_plan_length = num_plans .* avg_plan_length;
+
+            [~, visuals, ~] = get_visuals(subj_id, run, conn, true, 'empa_plays_post3');
+            acf = logical(visuals.avatar_collision_flag);
+
+            acf = acf | (total_plan_length > 0); % include beginning-of-episode planning
+
+            multi.names{1} = 'avatar_collision_flag';
+            multi.onsets{1} = regs.timestamps(acf);
+            multi.durations{1} = zeros(size(multi.onsets{1}));;
+
+            multi.orth{1} = 0; % do not orthogonalise them
+
+            switch glmodel
+                case 171
+                    multi.pmod(1).name{1} = 'total_plan_length';
+                    multi.pmod(1).param{1} = total_plan_length(acf);
+                case 172
+                    multi.pmod(1).name{1} = 'log_total_plan_length';
+                    multi.pmod(1).param{1} = log(total_plan_length(acf));
+                otherwise
+                    assert(false);
+            end
+            multi.pmod(1).poly{1} = 1;
+
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
+
+        % planning @ avatar collision flag: win_plan_ac
+        %
+        case {173, 174}
+            [regs, ~, ~] = get_regressors(subj_id, run, conn, true, 'empa_regressors');
+            win_plan_ac = regs.win_plan_ac;
+            win_plan_ac(isnan(win_plan_ac)) = 0;
+
+            [~, visuals, ~] = get_visuals(subj_id, run, conn, true, 'empa_plays_post3');
+            acf = logical(visuals.avatar_collision_flag);
+
+            acf = acf | (win_plan_ac > 0); % include beginning-of-episode planning
+
+            multi.names{1} = 'avatar_collision_flag';
+            multi.onsets{1} = regs.timestamps(acf);
+            multi.durations{1} = zeros(size(multi.onsets{1}));;
+
+            multi.orth{1} = 0; % do not orthogonalise them
+
+            switch glmodel
+                case 173
+                    multi.pmod(1).name{1} = 'win_plan_ac';
+                    multi.pmod(1).param{1} = win_plan_ac(acf);
+                case 174
+                    multi.pmod(1).name{1} = 'log_win_plan_ac';
+                    multi.pmod(1).param{1} = log(win_plan_ac(acf));
+                otherwise
+                    assert(false);
+            end
+            multi.pmod(1).poly{1} = 1;
+
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
+
+        % planning @ avatar collision flag: avg_plan_ac
+        %
+        case {175, 176}
+            [regs, ~, ~] = get_regressors(subj_id, run, conn, true, 'empa_regressors');
+            avg_plan_ac = regs.avg_plan_ac;
+            avg_plan_ac(isnan(avg_plan_ac)) = 0;
+
+            [~, visuals, ~] = get_visuals(subj_id, run, conn, true, 'empa_plays_post3');
+            acf = logical(visuals.avatar_collision_flag);
+
+            acf = acf | (avg_plan_ac > 0); % include beginning-of-episode planning
+
+            multi.names{1} = 'avatar_collision_flag';
+            multi.onsets{1} = regs.timestamps(acf);
+            multi.durations{1} = zeros(size(multi.onsets{1}));;
+
+            multi.orth{1} = 0; % do not orthogonalise them
+
+            switch glmodel
+                case 175
+                    multi.pmod(1).name{1} = 'avg_plan_ac';
+                    multi.pmod(1).param{1} = avg_plan_ac(acf);
+                case 176
+                    multi.pmod(1).name{1} = 'log_avg_plan_ac';
+                    multi.pmod(1).param{1} = log(avg_plan_ac(acf));
+                otherwise
+                    assert(false);
+            end
+            multi.pmod(1).poly{1} = 1;
+
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
+
+        % planning @ avatar collision flag: win_plan_eff
+        %
+        case {177, 178}
+            [regs, ~, ~] = get_regressors(subj_id, run, conn, true, 'empa_regressors');
+            win_plan_eff = regs.win_plan_eff;
+            win_plan_eff(isnan(win_plan_eff)) = 0;
+
+            [~, visuals, ~] = get_visuals(subj_id, run, conn, true, 'empa_plays_post3');
+            acf = logical(visuals.avatar_collision_flag);
+
+            acf = acf | (win_plan_eff > 0); % include beginning-of-episode planning
+
+            multi.names{1} = 'avatar_collision_flag';
+            multi.onsets{1} = regs.timestamps(acf);
+            multi.durations{1} = zeros(size(multi.onsets{1}));;
+
+            multi.orth{1} = 0; % do not orthogonalise them
+
+            switch glmodel
+                case 177
+                    multi.pmod(1).name{1} = 'win_plan_eff';
+                    multi.pmod(1).param{1} = win_plan_eff(acf);
+                case 178
+                    multi.pmod(1).name{1} = 'log_win_plan_eff';
+                    multi.pmod(1).param{1} = log(win_plan_eff(acf));
+                otherwise
+                    assert(false);
+            end
+            multi.pmod(1).poly{1} = 1;
+
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
+
+        % planning @ avatar collision flag: avg_plan_eff
+        %
+        case {179, 180}
+            [regs, ~, ~] = get_regressors(subj_id, run, conn, true, 'empa_regressors');
+            avg_plan_eff = regs.avg_plan_eff;
+            avg_plan_eff(isnan(avg_plan_eff)) = 0;
+
+            [~, visuals, ~] = get_visuals(subj_id, run, conn, true, 'empa_plays_post3');
+            acf = logical(visuals.avatar_collision_flag);
+
+            acf = acf | (avg_plan_eff > 0); % include beginning-of-episode planning
+
+            multi.names{1} = 'avatar_collision_flag';
+            multi.onsets{1} = regs.timestamps(acf);
+            multi.durations{1} = zeros(size(multi.onsets{1}));;
+
+            multi.orth{1} = 0; % do not orthogonalise them
+
+            switch glmodel
+                case 179
+                    multi.pmod(1).name{1} = 'avg_plan_eff';
+                    multi.pmod(1).param{1} = avg_plan_eff(acf);
+                case 180
+                    multi.pmod(1).name{1} = 'log_avg_plan_eff';
+                    multi.pmod(1).param{1} = log(avg_plan_eff(acf));
+                otherwise
+                    assert(false);
+            end
+            multi.pmod(1).poly{1} = 1;
+
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
 
         otherwise
             assert(false, 'invalid glmodel -- should be one of the above');
