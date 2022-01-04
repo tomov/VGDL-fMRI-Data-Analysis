@@ -5095,3 +5095,56 @@ ccnl_fmri_glm.sh for GLM 174, subjects 31 32 26 27 25 17 28 9 8 7 18 24 3 11 21 
 ccnl_fmri_glm.sh for GLM 176, subjects 7 19 14 16 27 23 5 24 4 21 11 6 3 26 8 9 10 15 2 18 12 20 13 32 29 28 1 17 22 31 30 25: output/ccnl_fmri_glm_176_goodSubjects_10466.out -- Submitted batch job 10466
 ccnl_fmri_glm.sh for GLM 178, subjects 1 16 28 11 31 17 22 24 30 7 2 18 15 21 10 3 12 26 29 8 19 5 23 13 20 32 6 4 27 9 14 25: output/ccnl_fmri_glm_178_goodSubjects_10467.out -- Submitted batch job 10467
 ccnl_fmri_glm.sh for GLM 180, subjects 24 10 19 6 1 8 9 20 23 15 13 18 29 2 5 32 4 11 25 26 21 14 3 17 28 30 16 7 31 12 27 22: output/ccnl_fmri_glm_180_goodSubjects_10468.out -- Submitted batch job 10468
+----------------
+--- Mon Jan 3 20:36:44 EST 2022: Running ccnl_fmri_glm for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32
+----------------
+ccnl_fmri_glm.sh for GLM 154, subjects 22 10 23 6 30 5 4 8 19 3 16 31 13 17 2 1 11 32 15 29 7 24 28 21 12 25 18 26 9 14 20 27: output/ccnl_fmri_glm_154_goodSubjects_10472.out -- Submitted batch job 10472
+ccnl_fmri_glm.sh for GLM 155, subjects 19 1 27 5 2 20 6 26 8 28 7 11 25 4 9 32 24 13 23 30 22 17 15 16 31 21 18 14 3 29 10 12: output/ccnl_fmri_glm_155_goodSubjects_10473.out -- Submitted batch job 10473
+ccnl_fmri_glm.sh for GLM 156, subjects 32 15 27 14 8 31 28 2 22 10 3 12 18 29 23 6 9 19 16 17 5 20 30 13 25 24 1 26 11 21 4 7: output/ccnl_fmri_glm_156_goodSubjects_10474.out -- Submitted batch job 10474
+ccnl_fmri_glm.sh for GLM 157, subjects 30 3 24 17 19 13 25 5 12 26 28 7 29 31 23 22 2 21 11 8 4 18 14 32 6 15 1 10 16 9 27 20: output/ccnl_fmri_glm_157_goodSubjects_10475.out -- Submitted batch job 10475
+ccnl_fmri_glm.sh for GLM 158, subjects 5 29 4 25 26 20 16 15 9 8 1 7 18 3 6 22 32 30 13 23 27 11 17 28 12 21 2 14 24 19 10 31: output/ccnl_fmri_glm_158_goodSubjects_10476.out -- Submitted batch job 10476
+ccnl_fmri_glm.sh for GLM 159, subjects 10 15 22 29 21 28 19 5 24 20 9 23 8 31 1 13 26 27 32 4 17 11 7 18 16 3 30 14 6 12 2 25: output/ccnl_fmri_glm_159_goodSubjects_10477.out -- Submitted batch job 10477
+ccnl_fmri_glm.sh for GLM 160, subjects 32 8 27 15 2 31 16 22 18 9 3 13 30 28 4 23 14 11 20 10 24 26 21 5 17 12 6 7 19 29 25 1: output/ccnl_fmri_glm_160_goodSubjects_10478.out -- Submitted batch job 10478
+ccnl_fmri_glm.sh for GLM 161, subjects 21 7 18 23 15 30 25 27 19 13 1 12 5 24 8 10 16 3 6 26 17 9 31 14 2 22 20 32 4 11 28 29: output/ccnl_fmri_glm_161_goodSubjects_10479.out -- Submitted batch job 10479
+ccnl_fmri_glm.sh for GLM 162, subjects 27 16 11 19 25 26 9 29 22 31 2 15 8 17 3 18 5 6 32 13 1 30 4 21 14 28 23 7 10 20 24 12: output/ccnl_fmri_glm_162_goodSubjects_10480.out -- Submitted batch job 10480
+ccnl_fmri_glm.sh for GLM 163, subjects 12 26 11 3 5 2 19 13 16 24 21 25 17 15 30 31 22 9 6 4 1 7 32 29 23 20 18 27 8 10 14 28: output/ccnl_fmri_glm_163_goodSubjects_10481.out -- Submitted batch job 10481
+ccnl_fmri_glm.sh for GLM 164, subjects 23 32 27 26 24 7 2 1 10 4 9 14 11 21 31 18 30 16 19 17 28 6 15 12 20 13 3 29 8 25 5 22: output/ccnl_fmri_glm_164_goodSubjects_10482.out -- Submitted batch job 10482
+----------------
+--- Tue Jan 4 09:46:17 EST 2022: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_EMPA_theory_true_1_true_10484.out -- Submitted batch job 10484
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_1_EMPA_theory_true_1_true_10485.out -- Submitted batch job 10485
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_1_EMPA_theory_true_1_true_10486.out -- Submitted batch job 10486
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_1_EMPA_theory_true_1_true_10487.out -- Submitted batch job 10487
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_1_EMPA_theory_true_1_true_10488.out -- Submitted batch job 10488
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_1_EMPA_theory_true_1_true_10489.out -- Submitted batch job 10489
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_1_EMPA_theory_true_1_true_10490.out -- Submitted batch job 10490
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_1_EMPA_theory_true_1_true_10491.out -- Submitted batch job 10491
+fit_gp_CV.sh for subject 9: output/fit_gp_CV_9_true_1_EMPA_theory_true_1_true_10492.out -- Submitted batch job 10492
+fit_gp_CV.sh for subject 10: output/fit_gp_CV_10_true_1_EMPA_theory_true_1_true_10493.out -- Submitted batch job 10493
+fit_gp_CV.sh for subject 11: output/fit_gp_CV_11_true_1_EMPA_theory_true_1_true_10494.out -- Submitted batch job 10494
+fit_gp_CV.sh for subject 12: output/fit_gp_CV_12_true_1_EMPA_theory_true_1_true_10495.out -- Submitted batch job 10495
+fit_gp_CV.sh for subject 13: output/fit_gp_CV_13_true_1_EMPA_theory_true_1_true_10496.out -- Submitted batch job 10496
+fit_gp_CV.sh for subject 14: output/fit_gp_CV_14_true_1_EMPA_theory_true_1_true_10497.out -- Submitted batch job 10497
+fit_gp_CV.sh for subject 15: output/fit_gp_CV_15_true_1_EMPA_theory_true_1_true_10498.out -- Submitted batch job 10498
+fit_gp_CV.sh for subject 16: output/fit_gp_CV_16_true_1_EMPA_theory_true_1_true_10499.out -- Submitted batch job 10499
+fit_gp_CV.sh for subject 17: output/fit_gp_CV_17_true_1_EMPA_theory_true_1_true_10500.out -- Submitted batch job 10500
+fit_gp_CV.sh for subject 18: output/fit_gp_CV_18_true_1_EMPA_theory_true_1_true_10501.out -- Submitted batch job 10501
+fit_gp_CV.sh for subject 19: output/fit_gp_CV_19_true_1_EMPA_theory_true_1_true_10502.out -- Submitted batch job 10502
+fit_gp_CV.sh for subject 20: output/fit_gp_CV_20_true_1_EMPA_theory_true_1_true_10503.out -- Submitted batch job 10503
+fit_gp_CV.sh for subject 21: output/fit_gp_CV_21_true_1_EMPA_theory_true_1_true_10504.out -- Submitted batch job 10504
+fit_gp_CV.sh for subject 22: output/fit_gp_CV_22_true_1_EMPA_theory_true_1_true_10505.out -- Submitted batch job 10505
+fit_gp_CV.sh for subject 23: output/fit_gp_CV_23_true_1_EMPA_theory_true_1_true_10506.out -- Submitted batch job 10506
+fit_gp_CV.sh for subject 24: output/fit_gp_CV_24_true_1_EMPA_theory_true_1_true_10507.out -- Submitted batch job 10507
+fit_gp_CV.sh for subject 25: output/fit_gp_CV_25_true_1_EMPA_theory_true_1_true_10508.out -- Submitted batch job 10508
+fit_gp_CV.sh for subject 26: output/fit_gp_CV_26_true_1_EMPA_theory_true_1_true_10509.out -- Submitted batch job 10509
+fit_gp_CV.sh for subject 27: output/fit_gp_CV_27_true_1_EMPA_theory_true_1_true_10510.out -- Submitted batch job 10510
+fit_gp_CV.sh for subject 28: output/fit_gp_CV_28_true_1_EMPA_theory_true_1_true_10511.out -- Submitted batch job 10511
+fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_EMPA_theory_true_1_true_10512.out -- Submitted batch job 10512
+fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_EMPA_theory_true_1_true_10513.out -- Submitted batch job 10513
+fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_EMPA_theory_true_1_true_10514.out -- Submitted batch job 10514
+fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_EMPA_theory_true_1_true_10515.out -- Submitted batch job 10515
+----------------
+--- Tue Jan 4 09:51:03 EST 2022: Running ccnl_fmri_con for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32
+----------------
+ccnl_fmri_con.sh for GLMs 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184, subjects 4 16 3 28 12 15 31 6 27 1 29 24 26 10 30 9 14 8 25 11 5 21 2 19 7 17 32 13 20 18 23 22: output/ccnl_fmri_con_157_158_159_160_161_162_163_164_165_166_167_168_169_170_171_172_173_174_175_176_177_178_179_180_181_182_183_184_goodSubjects_10516.out -- Submitted batch job 10516
