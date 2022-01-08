@@ -1,7 +1,7 @@
-function dir = get_mat_dir(fasse_ncf)
+function dir = get_mat_dir(location)
 
-    if ~exist('fasse_ncf', 'var')
-        fasse_ncf = false;
+    if ~exist('location', 'var')
+        location = 0; % fasse storage
     end
 
     [~, name] = system('hostname');
@@ -10,12 +10,18 @@ function dir = get_mat_dir(fasse_ncf)
         dir = 'mat/';
     elseif  ~isempty( strfind(name,'fasse')) || ~isempty( strfind(name,'holy'))
         % fasse
-        if fasse_ncf
-            % ncf Mount
-            dir = fullfile(getenv('MY_NCF_LAB'), 'Lab/scripts/matlab/VGDL_fMRI/mat/');
-        else
-            % regular
-            dir = fullfile(getenv('MY_LAB'), 'VGDL', 'mat/');
+        switch location
+            case 1
+                % ncf Mount
+                dir = fullfile(getenv('MY_NCF_LAB'), 'Lab/scripts/matlab/VGDL_fMRI/mat/');
+            case 0
+                % regular storage
+                dir = fullfile(getenv('MY_LAB'), 'VGDL', 'mat/');
+            case 2
+                %  fasse scratch
+                dir = fullfile(getenv('MY_SCRATCH'), 'VGDL', 'mat/');
+            otherwise
+                assert(false);
         end
     else
         % ncf
