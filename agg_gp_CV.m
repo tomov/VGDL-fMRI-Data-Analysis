@@ -14,23 +14,24 @@ subjects = 1:length(EXPT.subject);
 
 %model_name = 'PCA';
 %model_name = 'state';
-model_name = 'irrelevant';
+%model_name = 'irrelevant';
 %model_name = 'DQN';
-%model_name = 'EMPA';
+model_name = 'EMPA';
 %what = 'conv3';
 %%%what = 'linear2';
 %what = 'all';
-what = '';
+what = 'novelty';
 %what = 'termination';
 %what = 'sprite';
-project = 0;
+project = 1;
 glmodel = 1;
 %suffix = '_nowhiten_nofilter';
 %suffix = '_';
 suffix = '';
-%fasse_ncf = true;
-fasse_ncf = false;
 normalize = 1;
+concat = 0;
+novelty = 0;
+saveYhat = 1;
 
 %agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_%s_fast.mat', use_smooth, glmodel, what);
 %agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_model=EMPA_%s_nsamples=100_fast_WTF.mat', use_smooth, glmodel, what);
@@ -38,7 +39,7 @@ normalize = 1;
 %agg_filename = sprintf('/Volumes/fMRI-2/Mac_mat/agg_gp_CV_us=%d_glm=%d_model=%s_%s_nsamples=100_project=%d_fast=1.mat', use_smooth, glmodel, model_name, what, project);
 % fasse
 %agg_filename = fullfile(get_mat_dir(), sprintf('agg_gp_CV_us=%d_glm=%d_model=%s_%s_nsamples=100_project=%d_fast=1%s.mat', use_smooth, glmodel, model_name, what, project, suffix));
-agg_filename = fullfile(get_mat_dir(), sprintf('agg_gp_CV_us=%d_glm=%d_model=%s_%s_nsamples=100_project=%d_norm=%d_fast=1%s.mat', use_smooth, glmodel, model_name, what, project, normalize, suffix));
+agg_filename = fullfile(get_mat_dir(), sprintf('agg_gp_CV_us=%d_glm=%d_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=1%s.mat', use_smooth, glmodel, model_name, what, project, normalize, concat, novelty, suffix));
 agg_filename
 
 lme = [];
@@ -52,7 +53,7 @@ for s = 1:1:length(subjects)
     %filename = sprintf('/Volumes/fMRI-2/Mac_mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=EMPA_%s_nsamples=100_project=%d_fast=1_.mat', subj_id, use_smooth, glmodel, what, project);
     %filename = sprintf('/Volumes/fMRI-2/Mac_mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_fast=1.mat', subj_id, use_smooth, glmodel, model_name, what, project);
     %filename = fullfile(get_mat_dir(), sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_fast=1.mat', subj_id, use_smooth, glmodel, model_name, what, project));
-    filename = fullfile(get_mat_dir(fasse_ncf), sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_norm=%d_fast=1%s_saveYhat=0.mat', subj_id, use_smooth, glmodel, model_name, what, project, normalize, suffix));
+    filename = fullfile(get_mat_dir(2), sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=1_saveYhat=%d%s.mat', subj_id, use_smooth, glmodel, model_name, what, project, normalize, concat, novelty, saveYhat, suffix));
     filename
     %filename = sprintf('mat/fit_gp_CV_noRKW_HRR_subj=%d_us=%d_glm=21_mask=mask_%s.mat', subj_id, use_smooth, what);
 

@@ -13,8 +13,11 @@ fasse_ncf = false;
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_grouped.mat'); % !!!!!!!!!!!!!!!!!!!!!!!!!!!
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA.mat'); % !!!!!!!!!!!!!!!!!!!!!!!!!
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_state.mat');
-agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_no_project.mat');
+%agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_no_project.mat');
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_one-sided.mat');
+
+%agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_grouped_noNoveltyRule.mat');
+agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_noNoveltyRule.mat');
 
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=Brodmann.mat');
 
@@ -40,6 +43,13 @@ ylabel('\Delta BIC');
 %
 %% fraction significant voxels
 %
+figure('position', [1147 521 1045 418]);
+h = plot_gp_CV_rois_helper(fs, 'signrank', 'median', regressor_names, roi_names, [], [], 10);
+title('Fraction significant voxels in ROIs');
+ylabel('Fraction significant voxels');
+
+abcc
+
 
 figure('position', [1147 521 1045 418]);
 %ix = ismember(regressor_names, {'theory', 'DQN', 'PCA'});

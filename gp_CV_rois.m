@@ -6,15 +6,15 @@ EXPT = vgdl_expt();
 alpha = 0.01; % significance threshold for individual voxels
 
 %atlas = 'AAL2_grouped';
-atlas = 'AAL2_GP_EMPA_grouped';
-%atlas = 'AAL2_GP_EMPA';
+%atlas = 'AAL2_GP_EMPA_grouped';
+atlas = 'AAL2_GP_EMPA';
 %atlas = 'AAL2_grouped2';
 %atlas = 'Brodmann';
 %atlas = 'AAL3v1';
 %atlas = 'HarvardOxford-maxprob-thr0';
 
 fasse_ncf = false;
-agg_filename = fullfile(get_mat_dir(fasse_ncf), sprintf('gp_CV_rois_alpha=%.3f_atlas=%s_.mat', alpha, atlas));
+agg_filename = fullfile(get_mat_dir(fasse_ncf), sprintf('gp_CV_rois_alpha=%.3f_atlas=%s_noNoveltyRule.mat', alpha, atlas));
 agg_filename
 
 %% get masks
@@ -50,6 +50,19 @@ regressor_names = { ...
 };
 %}
 
+% include or exclude novelty rules
+filename_templates = { ...
+    fullfile(get_mat_dir(fasse_ncf), 'fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=1_fast=1.mat'), ...
+    fullfile(get_mat_dir(2), 'fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=1_norm=1_concat=0_novelty=0_fast=1_saveYhat=1.mat'), ...
+};
+
+regressor_names = { ...
+    'theory', ...
+    'theory_no_noveltyRule', ...
+};
+
+% THIS IS IT
+%{
 filename_templates = { ...
     fullfile(get_mat_dir(fasse_ncf), 'fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=1_fast=1.mat'), ...
     fullfile(get_mat_dir(fasse_ncf), 'fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_sprite_nsamples=100_project=1_fast=1.mat'), ...
@@ -77,6 +90,7 @@ regressor_names = { ...
     'linear2', ...
     'PCA', ...
 };
+%}
 
 
 nregressors = length(filename_templates)
