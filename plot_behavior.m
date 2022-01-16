@@ -202,6 +202,7 @@ legend(h, {agents.name});
 hold off;
 
 %}
+
 %% all games
 
 figure('pos', [370 585 2033 627]) ;
