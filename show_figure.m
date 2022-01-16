@@ -121,9 +121,9 @@ switch figure_name
     %
 
 
-    case 'GLM_157'
+    case 'GLM_102'
 
-        ccnl_view(vgdl_expt(), 157, 'new_theory_change_flag');
+        ccnl_view(vgdl_expt(), 102, 'theory_change_flag');
 
     case 'plot_confirmatory_betas_for_masks_AAL2_GLM_102'
         % plot_confirmatory_betas_for_masks.m
