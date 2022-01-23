@@ -1,4 +1,3 @@
-%{
 clear all;
 close all;
 
@@ -8,17 +7,18 @@ conn = mongo('holy7c22101.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserNa
 
 %game_names = get_game_names_ordered(12);
 %subj_ids = 12:32;
-game_names = get_game_names_ordered(11);
-subj_ids = 1:11;
+game_names = get_game_names_ordered(12);
+subj_ids = 12:12;
 
 run_ids = 1:6;
 levels = 1:9;
 
 agents(1).name = 'Human';
 agents(2).name = 'EMPA';
-agents(2).tag = 'attempt_1_states';
-agents(3).name = 'DQN';
-agents(3).tag = '';
+%agents(2).tag = 'attempt_1_states'; % 1..11
+agents(2).tag = 'attempt_3_colors';  % 12?
+%agents(3).name = 'DQN';
+%agents(3).tag = '';   % 1..11
 %agents(4).name = 'Random';
 %agents(4).tag = 'attempt_1_states';
 %agents(3).name = 'EMPA';
@@ -50,6 +50,7 @@ for g = 1:length(game_names)
         agent_tag = agents(a).tag;
         agent_name
 
+        % TODO count levels that were never played as lost / 0 core / zero success rate (nan -> zero)
         scores{g, a} = nan(length(subj_ids), length(levels));
         wins{g, a} = nan(length(subj_ids), length(levels));
         success_rates{g, a} = nan(length(subj_ids), length(levels));
@@ -101,6 +102,7 @@ agent_center_offsets = - overall_width / 2 + agent_width * ((1:length(agents)) -
 cmap = colormap(jet(length(agents)));
 
 
+%{
 %% per level 
 
 figure;
@@ -203,6 +205,8 @@ hold off;
 
 %}
 
+
+
 %% all games
 
 figure('pos', [370 585 2033 627]) ;
@@ -211,6 +215,7 @@ for pw = 1:length(plot_whats)
     plot_what = plot_whats{pw};
 
     subplot(1, length(plot_whats), pw);
+    hold on;
 
     clear ys;
     maxy = 0;
@@ -246,13 +251,14 @@ for pw = 1:length(plot_whats)
     set(gca, 'xtick', []);
 
     % hacky custom legend
-    h = zeros(length(agents), 1);
+    hh = zeros(length(agents), 1);
     for a = 1:length(agents)
-        h(a) = plot(NaN, NaN, 'color', cmap(a,:));
+        hh(a) = plot(NaN, NaN, 'color', cmap(a,:));
     end
-    legend(h, {agents.name});
+    legend(hh, {agents.name});
 
     title(sprintf('Subjects %d..%d', min(subj_ids), max(subj_ids)), 'interpreter', 'none');
+    hold off;
 end
 
 

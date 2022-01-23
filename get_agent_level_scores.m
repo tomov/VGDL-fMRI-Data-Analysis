@@ -15,6 +15,7 @@ function [level_scores, level_wins, level_success_rates, game_names, actual_leve
     filename
     if do_cache
         if exist(filename, 'file')
+            disp('loading from cache!')
             load(filename);
             return
         end
@@ -56,6 +57,7 @@ function [level_scores, level_wins, level_success_rates, game_names, actual_leve
 
             level_scores = [level_scores, level_score];
             level_wins = [level_wins, level_win];
+            assert(nplays > 0, 'level must have been played at least once -- likely bug above');
             level_success_rates = [level_success_rates, level_win / nplays];
             game_names = [game_names, game_name];
             actual_levels = [actual_levels, level];
