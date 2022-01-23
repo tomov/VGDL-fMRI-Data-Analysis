@@ -50,10 +50,10 @@ for g = 1:length(game_names)
         agent_tag = agents(a).tag;
         agent_name
 
-        % TODO count levels that were never played as lost / 0 core / zero success rate (nan -> zero)
-        scores{g, a} = nan(length(subj_ids), length(levels));
-        wins{g, a} = nan(length(subj_ids), length(levels));
-        success_rates{g, a} = nan(length(subj_ids), length(levels));
+        % count levels that were never played as lost / 0 core / zero success rate (nan -> zero)
+        scores{g, a} = zeros(length(subj_ids), length(levels));
+        wins{g, a} = zeros(length(subj_ids), length(levels));
+        success_rates{g, a} = zeros(length(subj_ids), length(levels));
         for s = 1:length(subj_ids)
             subj_id = subj_ids(s);
 
