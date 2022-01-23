@@ -72,7 +72,8 @@ function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, r
                         [p,~,stats] = signrank(y1, null_value, 'Tail','right');
                 end
                 if p <= 0.05
-                    text(x1, u_fs(m,r1) + 0.002 * significant_scale, significance(p), 'HorizontalAlignment', 'center');
+                    %text(x1, u_fs(m,r1) + 0.002 * significant_scale, significance(p), 'HorizontalAlignment', 'center');
+                    text(x1, u_fs(m,r1) + 0.002 * significant_scale, significance(p), 'HorizontalAlignment', 'center', 'FontSize', significant_scale);
             %        maxy = maxy + 0.003;
                 end
             end
@@ -97,8 +98,9 @@ function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, r
                         [p,~,stats] = signrank(y1, y2);
                 end
                 if p <= 0.05
-                    plot([x1 x2], [maxy maxy] + 0.001 * significant_scale, '-', 'color', [0 0 0]);
-                    text(mean([x1 x2]), maxy + 0.002 * significant_scale, significance(p), 'HorizontalAlignment', 'center');
+                    plot([x1 x2], [maxy maxy] + 0.002 * significant_scale, '-', 'color', [0 0 0]);
+                    %text(mean([x1 x2]), maxy + 0.002 * significant_scale, significance(p), 'HorizontalAlignment', 'center');
+                    text(mean([x1 x2]), maxy + 0.002 * significant_scale, significance(p), 'HorizontalAlignment', 'center', 'FontSize', significant_scale);
                     maxy = maxy + 0.003 * significant_scale;
                     fprintf('ROI %s: %s vs. %s -- p = %.5f\n', roi_names{m}, regressor_names{r1}, regressor_names{r2}, p);
                 end
