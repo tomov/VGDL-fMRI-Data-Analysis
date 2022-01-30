@@ -5,18 +5,18 @@ conn = mongo('holy7c22101.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserNa
 %conn = mongo('holy7c22101.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'root', 'Password', 'parolatabe')
 %conn = mongo('holy7c22101.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'root', 'Password', 'parolatabe', 'AuthMechanism', 'SCRAM_SHA_256')
 
+game_names = get_game_names_ordered(11);
+subj_ids = 1:11;
 %game_names = get_game_names_ordered(12);
 %subj_ids = 12:32;
-game_names = get_game_names_ordered(12);
-subj_ids = 12:12;
 
 run_ids = 1:6;
 levels = 1:9;
 
 agents(1).name = 'Human';
 agents(2).name = 'EMPA';
-%agents(2).tag = 'attempt_1_states'; % 1..11
-agents(2).tag = 'attempt_3_colors';  % 12?
+agents(2).tag = 'attempt_1_states'; % 1..11
+%agents(2).tag = 'attempt_3_colors';  % 12..32
 %agents(3).name = 'DQN';
 %agents(3).tag = '';   % 1..11
 %agents(4).name = 'Random';
@@ -26,7 +26,7 @@ agents(2).tag = 'attempt_3_colors';  % 12?
 
 %plot_what = 'success_rates'
 %plot_what = 'wins'
-plot_what = 'scores'
+plot_what = 'success_rates'
 plot_whats = {'scores', 'wins', 'success_rates'};
 assert(ismember(plot_what, plot_whats));
 y_label = get_plot_what_label(plot_what);
@@ -62,7 +62,7 @@ for g = 1:length(game_names)
             elseif strcmp(agent_name, 'DQN')
                 [instance_scores, instance_wins, instance_success_rates, instance_game_names, instance_levels] = get_dqn_level_scores(game_name, subj_id, levels, false);
             else
-                [instance_scores, instance_wins, instance_success_rates, instance_game_names, instance_levels] = get_agent_level_scores(conn, agent_name, subj_id, levels, agent_tag, false);
+                [instance_scores, instance_wins, instance_success_rates, instance_game_names, instance_levels] = get_agent_level_scores(conn, agent_name, subj_id, levels, agent_tag, true);
             end
             which_instances = strcmp(instance_game_names, game_name);
             %assert(sum(which_instances) >= 6);
@@ -102,7 +102,6 @@ agent_center_offsets = - overall_width / 2 + agent_width * ((1:length(agents)) -
 cmap = colormap(jet(length(agents)));
 
 
-%{
 %% per level 
 
 figure;
@@ -203,7 +202,6 @@ legend(h, {agents.name});
 
 hold off;
 
-%}
 
 
 
