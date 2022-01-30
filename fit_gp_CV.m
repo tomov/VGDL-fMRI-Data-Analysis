@@ -76,6 +76,8 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
             ker = load_DQN_kernel(subj, unique(run_id), what, normalize);
         case 'PCA'
             ker = load_PCA_kernel(subj, unique(run_id), normalize);
+        case 'VAE'
+            ker = load_VAE_kernel(subj, unique(run_id), normalize);
         case 'game'
             ker = load_game_kernel(EXPT, subj); % GLM 1 game id features
         case 'nuisance'
