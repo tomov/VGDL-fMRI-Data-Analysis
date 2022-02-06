@@ -25,8 +25,8 @@ glmodel=1
 use_smooth=true
 project=true
 normalize=1
-concat=true
-novelty=false
+concat=0
+novelty=1
 fast=true
 save_Y_hat=true
 
