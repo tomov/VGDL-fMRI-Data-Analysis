@@ -5603,3 +5603,38 @@ fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_EMPA_theory_true_1_true_
 fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_EMPA_theory_true_1_true_14267.out -- Submitted batch job 14267
 fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_EMPA_theory_true_1_true_14268.out -- Submitted batch job 14268
 fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_EMPA_theory_true_1_true_14269.out -- Submitted batch job 14269
+----------------
+--- Sun Feb 6 11:13:23 EST 2022: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_VAE__true_1_false_14270.out -- Submitted batch job 14270
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_1_VAE__true_1_false_14271.out -- Submitted batch job 14271
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_1_VAE__true_1_false_14272.out -- Submitted batch job 14272
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_1_VAE__true_1_false_14273.out -- Submitted batch job 14273
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_1_VAE__true_1_false_14274.out -- Submitted batch job 14274
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_1_VAE__true_1_false_14275.out -- Submitted batch job 14275
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_1_VAE__true_1_false_14276.out -- Submitted batch job 14276
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_1_VAE__true_1_false_14277.out -- Submitted batch job 14277
+fit_gp_CV.sh for subject 9: output/fit_gp_CV_9_true_1_VAE__true_1_false_14278.out -- Submitted batch job 14278
+fit_gp_CV.sh for subject 10: output/fit_gp_CV_10_true_1_VAE__true_1_false_14279.out -- Submitted batch job 14279
+fit_gp_CV.sh for subject 11: output/fit_gp_CV_11_true_1_VAE__true_1_false_14280.out -- Submitted batch job 14280
+fit_gp_CV.sh for subject 12: output/fit_gp_CV_12_true_1_VAE__true_1_false_14281.out -- Submitted batch job 14281
+fit_gp_CV.sh for subject 13: output/fit_gp_CV_13_true_1_VAE__true_1_false_14282.out -- Submitted batch job 14282
+fit_gp_CV.sh for subject 14: output/fit_gp_CV_14_true_1_VAE__true_1_false_14283.out -- Submitted batch job 14283
+fit_gp_CV.sh for subject 15: output/fit_gp_CV_15_true_1_VAE__true_1_false_14284.out -- Submitted batch job 14284
+fit_gp_CV.sh for subject 16: output/fit_gp_CV_16_true_1_VAE__true_1_false_14285.out -- Submitted batch job 14285
+fit_gp_CV.sh for subject 17: output/fit_gp_CV_17_true_1_VAE__true_1_false_14286.out -- Submitted batch job 14286
+fit_gp_CV.sh for subject 18: output/fit_gp_CV_18_true_1_VAE__true_1_false_14287.out -- Submitted batch job 14287
+fit_gp_CV.sh for subject 19: output/fit_gp_CV_19_true_1_VAE__true_1_false_14288.out -- Submitted batch job 14288
+fit_gp_CV.sh for subject 20: output/fit_gp_CV_20_true_1_VAE__true_1_false_14289.out -- Submitted batch job 14289
+fit_gp_CV.sh for subject 21: output/fit_gp_CV_21_true_1_VAE__true_1_false_14290.out -- Submitted batch job 14290
+fit_gp_CV.sh for subject 22: output/fit_gp_CV_22_true_1_VAE__true_1_false_14291.out -- Submitted batch job 14291
+fit_gp_CV.sh for subject 23: output/fit_gp_CV_23_true_1_VAE__true_1_false_14292.out -- Submitted batch job 14292
+fit_gp_CV.sh for subject 24: output/fit_gp_CV_24_true_1_VAE__true_1_false_14293.out -- Submitted batch job 14293
+fit_gp_CV.sh for subject 25: output/fit_gp_CV_25_true_1_VAE__true_1_false_14294.out -- Submitted batch job 14294
+fit_gp_CV.sh for subject 26: output/fit_gp_CV_26_true_1_VAE__true_1_false_14295.out -- Submitted batch job 14295
+fit_gp_CV.sh for subject 27: output/fit_gp_CV_27_true_1_VAE__true_1_false_14296.out -- Submitted batch job 14296
+fit_gp_CV.sh for subject 28: output/fit_gp_CV_28_true_1_VAE__true_1_false_14297.out -- Submitted batch job 14297
+fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_VAE__true_1_false_14298.out -- Submitted batch job 14298
+fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_VAE__true_1_false_14299.out -- Submitted batch job 14299
+fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_VAE__true_1_false_14300.out -- Submitted batch job 14300
+fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_VAE__true_1_false_14301.out -- Submitted batch job 14301

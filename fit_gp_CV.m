@@ -50,7 +50,8 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
 
     [~,maskname,~] = fileparts(mask);
     %filename = sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_project=%d_fast=%d_nowhiten_nofilter.mat', subj, use_smooth, glmodel, maskname, model_name, what, project, fast);
-    filename = sprintf('fit_gp_CV_HRR_cannon_repro_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=%d_saveYhat=%d.mat', subj, use_smooth, glmodel, maskname, model_name, what, project, normalize, concat, novelty, fast, save_Y_hat);
+    %filename = sprintf('fit_gp_CV_HRR_cannon_repro_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=%d_saveYhat=%d.mat', subj, use_smooth, glmodel, maskname, model_name, what, project, normalize, concat, novelty, fast, save_Y_hat);
+    filename = sprintf('fit_gp_CV_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=%d_saveYhat=%d.mat', subj, use_smooth, glmodel, maskname, model_name, what, project, normalize, concat, novelty, fast, save_Y_hat);
     filename = fullfile(get_mat_dir(2), filename);
     filename
 
