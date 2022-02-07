@@ -96,14 +96,16 @@ function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, r
                         [~,p,ci,stats] = ttest(y1,y2);
                     case 'signrank'
                         [p,~,stats] = signrank(y1, y2);
+                    case 'ranksum'
+                        [p,~,stats] = ranksum(y1, y2);
                 end
                 if p <= 0.05
                     plot([x1 x2], [maxy maxy] + 0.002 * significant_scale, '-', 'color', [0 0 0]);
-                    %text(mean([x1 x2]), maxy + 0.002 * significant_scale, significance(p), 'HorizontalAlignment', 'center');
-                    text(mean([x1 x2]), maxy + 0.002 * significant_scale, significance(p), 'HorizontalAlignment', 'center', 'FontSize', significant_scale);
+                    text(mean([x1 x2]), maxy + 0.002 * significant_scale, significance(p), 'HorizontalAlignment', 'center');
+                    %text(mean([x1 x2]), maxy + 0.002 * significant_scale, significance(p), 'HorizontalAlignment', 'center', 'FontSize', significant_scale);
                     maxy = maxy + 0.003 * significant_scale;
-                    fprintf('ROI %s: %s vs. %s -- p = %.5f\n', roi_names{m}, regressor_names{r1}, regressor_names{r2}, p);
                 end
+                fprintf('ROI %s: %s vs. %s -- p = %.5f\n', roi_names{m}, regressor_names{r1}, regressor_names{r2}, p);
 
             end
         end

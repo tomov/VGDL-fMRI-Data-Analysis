@@ -89,16 +89,28 @@ switch figure_name
         EXPT = vgdl_expt();
         bspmview_wrapper(EXPT, tmap);
 
+    case 'plot_gp_CV_VAE'
+        % plot_gp_CV.m
+
+        load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=VAE__nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1.mat')); % !!!
+        assert(use_smooth);
+        EXPT = vgdl_expt();
+        bspmview_wrapper(EXPT, tmap);
+
+
     case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA'
         % plot_gp_CV_rois.m
 
-        agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA.mat');
+        %agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA.mat');
+        agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_vae.mat');
         agg_filename
         load(agg_filename);
 
         figure('position', [1147 521 1045 418]);
-        ix = ismember(regressor_names, {'theory', 'DQN', 'PCA'});
-        h = plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names);
+        ix = ismember(regressor_names, {'theory', 'DQN', 'PCA', 'VAE'});
+        h = plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names, [], [], 1, [1:2]);
+        %h = plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], [], 1, [1:2]);
+        %h = plot_gp_CV_rois_helper(fs(:,ix,:), 'ttest', 'mean', regressor_names(ix), roi_names, [], [], 1, [1:2]);
         title('Model comparison by ROI');
         ylabel('Fraction significant voxels');
 
@@ -110,7 +122,7 @@ switch figure_name
         text(12.5, 0.075, 'Ventral/Temporal', 'fontsize', 12, 'HorizontalAlignment', 'center');
         plot([14.5 14.5], [0 0.08], '--', 'color', [0.5 0.5 0.5]);
         text(15.5, 0.075, 'Early visual', 'fontsize', 12, 'HorizontalAlignment', 'center');
-        l = legend({'EMPA', 'DDQN', 'PCA'});
+        l = legend({'EMPA', 'DDQN', 'PCA', 'VAE'});
         l.Position = [0.8491 0.7065 0.0842 0.1196];
 
         orient(gcf, 'landscape');
@@ -120,17 +132,20 @@ switch figure_name
     case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped'
         % plot_gp_CV_rois.m
 
-        agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_grouped.mat');
+        %agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_grouped.mat');
+        agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_grouped_vae.mat');
         agg_filename
         load(agg_filename);
 
         figure('position', [1147 522 537 417]);
-        ix = ismember(regressor_names, {'theory', 'DQN', 'PCA'});
-        h = plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names);
+        ix = ismember(regressor_names, {'theory', 'DQN', 'PCA', 'VAE'});
+        h = plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names, [], [], 1, [1:2]);
+        %h = plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], [], 1, [1:2]);
+        %h = plot_gp_CV_rois_helper(fs(:,ix,:), 'ttest', 'mean', regressor_names(ix), roi_names, [], [], 1, [1:2]);
         title('Model comparison by ROI group');
         ylabel('Fraction significant voxels');
         xticklabels({'Frontal/Motor', 'Dorsal/Parietal', 'Ventral/Temporal', 'Early visual'});
-        l = legend({'EMPA', 'DDQN', 'PCA'});
+        l = legend({'EMPA', 'DDQN', 'PCA', 'VAE'});
 
         print('pdf/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped.pdf', '-dpdf');
 
