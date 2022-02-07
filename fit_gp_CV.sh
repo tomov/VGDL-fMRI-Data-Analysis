@@ -10,15 +10,14 @@ mask="masks/mask.nii"
 #model_name="game"
 #model_name="irrelevant"
 #model_name="state"
-#model_name="DQN"
+model_name="DQN"
 #model_name="PCA"
-model_name="VAE"
+#model_name="VAE"
 #what="conv3"
 #what="linear2"
-#what="all"
-#what=""
+what="all"
 #what="theory"
-what=""
+#what=""
 #what="sprite"
 #what="interaction"
 #what="termination"
@@ -30,7 +29,7 @@ normalize=1
 concat=0
 novelty=1
 fast=true
-save_Y_hat=false
+save_Y_hat=true
 
 echo ---------------- >> jobs.txt
 echo --- $(date): Running fit_gp_CV for subjects ${subj_arg} in parallel >> jobs.txt
