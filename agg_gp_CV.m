@@ -31,10 +31,10 @@ glmodel = 1;
 %suffix = '_nowhiten_nofilter';
 %suffix = '_';
 suffix = '';
-normalize = 1;
+normalize = 2;
 concat = 0;
 novelty = 1;
-saveYhat = 1;
+saveYhat = 0;
 
 %agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_%s_fast.mat', use_smooth, glmodel, what);
 %agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_model=EMPA_%s_nsamples=100_fast_WTF.mat', use_smooth, glmodel, what);
@@ -58,7 +58,8 @@ for s = 1:1:length(subjects)
     %filename = sprintf('/Volumes/fMRI-2/Mac_mat/fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_fast=1.mat', subj_id, use_smooth, glmodel, model_name, what, project);
     %filename = fullfile(get_mat_dir(), sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_fast=1.mat', subj_id, use_smooth, glmodel, model_name, what, project));
     %filename = fullfile(get_mat_dir(2), sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=1_saveYhat=%d%s.mat', subj_id, use_smooth, glmodel, model_name, what, project, normalize, concat, novelty, saveYhat, suffix));
-    filename = fullfile(get_mat_dir(2), sprintf('fit_gp_CV_HRR_cannon_repro_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=1_saveYhat=%d%s.mat', subj_id, use_smooth, glmodel, model_name, what, project, normalize, concat, novelty, saveYhat, suffix));
+    %filename = fullfile(get_mat_dir(2), sprintf('fit_gp_CV_HRR_cannon_repro_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=1_saveYhat=%d%s.mat', subj_id, use_smooth, glmodel, model_name, what, project, normalize, concat, novelty, saveYhat, suffix));
+    filename = fullfile(get_mat_dir(2), sprintf('fit_gp_CV_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=1_saveYhat=%d%s.mat', subj_id, use_smooth, glmodel, model_name, what, project, normalize, concat, novelty, saveYhat, suffix)); % this should be it_gp_CV_HRR_cannon_repro_
     filename
     %filename = sprintf('mat/fit_gp_CV_noRKW_HRR_subj=%d_us=%d_glm=21_mask=mask_%s.mat', subj_id, use_smooth, what);
 
