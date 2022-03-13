@@ -5746,3 +5746,117 @@ fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_EMPA_theory_true_2_0_231
 fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_EMPA_theory_true_2_0_23111.out -- Submitted batch job 23111
 fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_EMPA_theory_true_2_0_23112.out -- Submitted batch job 23112
 fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_EMPA_theory_true_2_0_23113.out -- Submitted batch job 23113
+----------------
+--- Sun Mar 13 16:16:43 EDT 2022: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_EMPA_theory_0_2_0_23135.out -- Submitted batch job 23135
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_1_EMPA_theory_0_2_0_23136.out -- Submitted batch job 23136
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_1_EMPA_theory_0_2_0_23137.out -- Submitted batch job 23137
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_1_EMPA_theory_0_2_0_23138.out -- Submitted batch job 23138
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_1_EMPA_theory_0_2_0_23139.out -- Submitted batch job 23139
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_1_EMPA_theory_0_2_0_23140.out -- Submitted batch job 23140
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_1_EMPA_theory_0_2_0_23141.out -- Submitted batch job 23141
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_1_EMPA_theory_0_2_0_23142.out -- Submitted batch job 23142
+fit_gp_CV.sh for subject 9: output/fit_gp_CV_9_true_1_EMPA_theory_0_2_0_23143.out -- Submitted batch job 23143
+fit_gp_CV.sh for subject 10: output/fit_gp_CV_10_true_1_EMPA_theory_0_2_0_23144.out -- Submitted batch job 23144
+fit_gp_CV.sh for subject 11: output/fit_gp_CV_11_true_1_EMPA_theory_0_2_0_23145.out -- Submitted batch job 23145
+fit_gp_CV.sh for subject 12: output/fit_gp_CV_12_true_1_EMPA_theory_0_2_0_23146.out -- Submitted batch job 23146
+fit_gp_CV.sh for subject 13: output/fit_gp_CV_13_true_1_EMPA_theory_0_2_0_23147.out -- Submitted batch job 23147
+fit_gp_CV.sh for subject 14: output/fit_gp_CV_14_true_1_EMPA_theory_0_2_0_23148.out -- Submitted batch job 23148
+fit_gp_CV.sh for subject 15: output/fit_gp_CV_15_true_1_EMPA_theory_0_2_0_23149.out -- Submitted batch job 23149
+fit_gp_CV.sh for subject 16: output/fit_gp_CV_16_true_1_EMPA_theory_0_2_0_23150.out -- Submitted batch job 23150
+fit_gp_CV.sh for subject 17: output/fit_gp_CV_17_true_1_EMPA_theory_0_2_0_23151.out -- Submitted batch job 23151
+fit_gp_CV.sh for subject 18: output/fit_gp_CV_18_true_1_EMPA_theory_0_2_0_23152.out -- Submitted batch job 23152
+fit_gp_CV.sh for subject 19: output/fit_gp_CV_19_true_1_EMPA_theory_0_2_0_23153.out -- Submitted batch job 23153
+fit_gp_CV.sh for subject 20: output/fit_gp_CV_20_true_1_EMPA_theory_0_2_0_23154.out -- Submitted batch job 23154
+fit_gp_CV.sh for subject 21: output/fit_gp_CV_21_true_1_EMPA_theory_0_2_0_23155.out -- Submitted batch job 23155
+fit_gp_CV.sh for subject 22: output/fit_gp_CV_22_true_1_EMPA_theory_0_2_0_23156.out -- Submitted batch job 23156
+fit_gp_CV.sh for subject 23: output/fit_gp_CV_23_true_1_EMPA_theory_0_2_0_23157.out -- Submitted batch job 23157
+fit_gp_CV.sh for subject 24: output/fit_gp_CV_24_true_1_EMPA_theory_0_2_0_23158.out -- Submitted batch job 23158
+fit_gp_CV.sh for subject 25: output/fit_gp_CV_25_true_1_EMPA_theory_0_2_0_23159.out -- Submitted batch job 23159
+fit_gp_CV.sh for subject 26: output/fit_gp_CV_26_true_1_EMPA_theory_0_2_0_23160.out -- Submitted batch job 23160
+fit_gp_CV.sh for subject 27: output/fit_gp_CV_27_true_1_EMPA_theory_0_2_0_23161.out -- Submitted batch job 23161
+fit_gp_CV.sh for subject 28: output/fit_gp_CV_28_true_1_EMPA_theory_0_2_0_23162.out -- Submitted batch job 23162
+fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_EMPA_theory_0_2_0_23163.out -- Submitted batch job 23163
+fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_EMPA_theory_0_2_0_23164.out -- Submitted batch job 23164
+fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_EMPA_theory_0_2_0_23165.out -- Submitted batch job 23165
+fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_EMPA_theory_0_2_0_23166.out -- Submitted batch job 23166
+----------------
+--- Sun Mar 13 16:22:15 EDT 2022: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_DQN_all_0_2_0_23167.out -- Submitted batch job 23167
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_1_DQN_all_0_2_0_23168.out -- Submitted batch job 23168
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_1_DQN_all_0_2_0_23169.out -- Submitted batch job 23169
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_1_DQN_all_0_2_0_23170.out -- Submitted batch job 23170
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_1_DQN_all_0_2_0_23171.out -- Submitted batch job 23171
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_1_DQN_all_0_2_0_23172.out -- Submitted batch job 23172
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_1_DQN_all_0_2_0_23173.out -- Submitted batch job 23173
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_1_DQN_all_0_2_0_23174.out -- Submitted batch job 23174
+fit_gp_CV.sh for subject 9: output/fit_gp_CV_9_true_1_DQN_all_0_2_0_23175.out -- Submitted batch job 23175
+fit_gp_CV.sh for subject 10: output/fit_gp_CV_10_true_1_DQN_all_0_2_0_23176.out -- Submitted batch job 23176
+fit_gp_CV.sh for subject 11: output/fit_gp_CV_11_true_1_DQN_all_0_2_0_23177.out -- Submitted batch job 23177
+fit_gp_CV.sh for subject 12: output/fit_gp_CV_12_true_1_DQN_all_0_2_0_23178.out -- Submitted batch job 23178
+fit_gp_CV.sh for subject 13: output/fit_gp_CV_13_true_1_DQN_all_0_2_0_23179.out -- Submitted batch job 23179
+fit_gp_CV.sh for subject 14: output/fit_gp_CV_14_true_1_DQN_all_0_2_0_23180.out -- Submitted batch job 23180
+fit_gp_CV.sh for subject 15: output/fit_gp_CV_15_true_1_DQN_all_0_2_0_23181.out -- Submitted batch job 23181
+fit_gp_CV.sh for subject 16: output/fit_gp_CV_16_true_1_DQN_all_0_2_0_23182.out -- Submitted batch job 23182
+fit_gp_CV.sh for subject 17: output/fit_gp_CV_17_true_1_DQN_all_0_2_0_23183.out -- Submitted batch job 23183
+fit_gp_CV.sh for subject 18: output/fit_gp_CV_18_true_1_DQN_all_0_2_0_23184.out -- Submitted batch job 23184
+fit_gp_CV.sh for subject 19: output/fit_gp_CV_19_true_1_DQN_all_0_2_0_23185.out -- Submitted batch job 23185
+fit_gp_CV.sh for subject 20: output/fit_gp_CV_20_true_1_DQN_all_0_2_0_23186.out -- Submitted batch job 23186
+fit_gp_CV.sh for subject 21: output/fit_gp_CV_21_true_1_DQN_all_0_2_0_23187.out -- Submitted batch job 23187
+fit_gp_CV.sh for subject 22: output/fit_gp_CV_22_true_1_DQN_all_0_2_0_23188.out -- Submitted batch job 23188
+fit_gp_CV.sh for subject 23: output/fit_gp_CV_23_true_1_DQN_all_0_2_0_23189.out -- Submitted batch job 23189
+fit_gp_CV.sh for subject 24: output/fit_gp_CV_24_true_1_DQN_all_0_2_0_23190.out -- Submitted batch job 23190
+fit_gp_CV.sh for subject 25: output/fit_gp_CV_25_true_1_DQN_all_0_2_0_23191.out -- Submitted batch job 23191
+fit_gp_CV.sh for subject 26: output/fit_gp_CV_26_true_1_DQN_all_0_2_0_23192.out -- Submitted batch job 23192
+fit_gp_CV.sh for subject 27: output/fit_gp_CV_27_true_1_DQN_all_0_2_0_23193.out -- Submitted batch job 23193
+fit_gp_CV.sh for subject 28: output/fit_gp_CV_28_true_1_DQN_all_0_2_0_23194.out -- Submitted batch job 23194
+fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_DQN_all_0_2_0_23195.out -- Submitted batch job 23195
+fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_DQN_all_0_2_0_23196.out -- Submitted batch job 23196
+fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_DQN_all_0_2_0_23197.out -- Submitted batch job 23197
+fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_DQN_all_0_2_0_23198.out -- Submitted batch job 23198
+----------------
+--- Sun Mar 13 16:28:15 EDT 2022: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_VAE__1_1_1_23199.out -- Submitted batch job 23199
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_1_VAE__1_1_1_23200.out -- Submitted batch job 23200
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_1_VAE__1_1_1_23201.out -- Submitted batch job 23201
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_1_VAE__1_1_1_23202.out -- Submitted batch job 23202
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_1_VAE__1_1_1_23203.out -- Submitted batch job 23203
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_1_VAE__1_1_1_23204.out -- Submitted batch job 23204
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_1_VAE__1_1_1_23205.out -- Submitted batch job 23205
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_1_VAE__1_1_1_23206.out -- Submitted batch job 23206
+fit_gp_CV.sh for subject 9: output/fit_gp_CV_9_true_1_VAE__1_1_1_23207.out -- Submitted batch job 23207
+fit_gp_CV.sh for subject 10: output/fit_gp_CV_10_true_1_VAE__1_1_1_23208.out -- Submitted batch job 23208
+fit_gp_CV.sh for subject 11: output/fit_gp_CV_11_true_1_VAE__1_1_1_23209.out -- Submitted batch job 23209
+fit_gp_CV.sh for subject 12: output/fit_gp_CV_12_true_1_VAE__1_1_1_23210.out -- Submitted batch job 23210
+fit_gp_CV.sh for subject 13: output/fit_gp_CV_13_true_1_VAE__1_1_1_23211.out -- Submitted batch job 23211
+fit_gp_CV.sh for subject 14: output/fit_gp_CV_14_true_1_VAE__1_1_1_23212.out -- Submitted batch job 23212
+fit_gp_CV.sh for subject 15: output/fit_gp_CV_15_true_1_VAE__1_1_1_23213.out -- Submitted batch job 23213
+fit_gp_CV.sh for subject 16: output/fit_gp_CV_16_true_1_VAE__1_1_1_23214.out -- Submitted batch job 23214
+fit_gp_CV.sh for subject 17: output/fit_gp_CV_17_true_1_VAE__1_1_1_23215.out -- Submitted batch job 23215
+fit_gp_CV.sh for subject 18: output/fit_gp_CV_18_true_1_VAE__1_1_1_23216.out -- Submitted batch job 23216
+fit_gp_CV.sh for subject 19: output/fit_gp_CV_19_true_1_VAE__1_1_1_23217.out -- Submitted batch job 23217
+fit_gp_CV.sh for subject 20: output/fit_gp_CV_20_true_1_VAE__1_1_1_23218.out -- Submitted batch job 23218
+fit_gp_CV.sh for subject 21: output/fit_gp_CV_21_true_1_VAE__1_1_1_23219.out -- Submitted batch job 23219
+fit_gp_CV.sh for subject 22: output/fit_gp_CV_22_true_1_VAE__1_1_1_23220.out -- Submitted batch job 23220
+fit_gp_CV.sh for subject 23: output/fit_gp_CV_23_true_1_VAE__1_1_1_23221.out -- Submitted batch job 23221
+fit_gp_CV.sh for subject 24: output/fit_gp_CV_24_true_1_VAE__1_1_1_23222.out -- Submitted batch job 23222
+fit_gp_CV.sh for subject 25: output/fit_gp_CV_25_true_1_VAE__1_1_1_23223.out -- Submitted batch job 23223
+fit_gp_CV.sh for subject 26: output/fit_gp_CV_26_true_1_VAE__1_1_1_23224.out -- Submitted batch job 23224
+fit_gp_CV.sh for subject 27: output/fit_gp_CV_27_true_1_VAE__1_1_1_23225.out -- Submitted batch job 23225
+fit_gp_CV.sh for subject 28: output/fit_gp_CV_28_true_1_VAE__1_1_1_23226.out -- Submitted batch job 23226
+fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_VAE__1_1_1_23227.out -- Submitted batch job 23227
+fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_VAE__1_1_1_23228.out -- Submitted batch job 23228
+fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_VAE__1_1_1_23229.out -- Submitted batch job 23229
+fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_VAE__1_1_1_23230.out -- Submitted batch job 23230
+----------------
+--- Sun Mar 13 17:16:45 EDT 2022 Running gen_PETHs
+----------------
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_grouped\', \'\', 0, 0, \'GP_VAE\'): output/gen_PETHs_23231.out -- Submitted batch job 23231
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA\', \'\', 0, 0, \'GP_VAE\'): output/gen_PETHs_23232.out -- Submitted batch job 23232
+gen_PETHs.sh gen_PETHs(\'AAL2_GLM_102_grouped\', \'\', 0, 0, \'GP_VAE\'): output/gen_PETHs_23233.out -- Submitted batch job 23233
+gen_PETHs.sh gen_PETHs(\'AAL2_GLM_102\', \'\', 0, 0, \'GP_VAE\'): output/gen_PETHs_23234.out -- Submitted batch job 23234
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_VAE\'): output/gen_PETHs_23235.out -- Submitted batch job 23235
+gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_VAE\'): output/gen_PETHs_23236.out -- Submitted batch job 23236

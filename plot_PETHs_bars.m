@@ -25,13 +25,14 @@ clear all;
 %ROI_ix = [      1      2      7     10     11     12     13     14     15]; 
 %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP.mat')); % !!!!!!!!!!!!
 %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_grouped_GP_CV.mat'));
-load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_grouped_GP_CV_no_baseline.mat')); % !!!!!!!!!!!!!!!!
+%load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_grouped_GP_CV_no_baseline.mat')); % !!!!!!!!!!!!!!!!
 %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_grouped_GP_CV_no_baseline_.mat')); % sanity check
 %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GLM_102_GP_CV_no_baseline.mat'));
 %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_grouped_GP_CV_no_baseline.mat'));
 %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP_CV_no_baseline.mat'));
 %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP_CV.mat'));
 %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP_DQN.mat')); 
+load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_grouped_GP_DQN.mat')); 
 ROI_ix = 1:length(mask_filenames);
 
 mask_filenames = mask_filenames(ROI_ix);

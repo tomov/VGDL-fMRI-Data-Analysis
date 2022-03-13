@@ -15,15 +15,15 @@ subjects = 1:length(EXPT.subject);
 %model_name = 'PCA';
 %model_name = 'state';
 %model_name = 'irrelevant';
-%model_name = 'DQN';
-model_name = 'EMPA';
+model_name = 'DQN';
+%model_name = 'EMPA';
 %model_name = 'VAE';
 %what = 'conv3';
 %%%what = 'linear2';
-%what = 'all';
+what = 'all';
 %what = 'novelty';
 %what = '';
-what = 'theory';
+%what = 'theory';
 %what = 'termination';
 %what = 'sprite';
 project = 1;
@@ -43,7 +43,8 @@ saveYhat = 0;
 % fasse
 %agg_filename = fullfile(get_mat_dir(), sprintf('agg_gp_CV_us=%d_glm=%d_model=%s_%s_nsamples=100_project=%d_fast=1%s.mat', use_smooth, glmodel, model_name, what, project, suffix));
 %agg_filename = fullfile(get_mat_dir(), sprintf('agg_gp_CV_us=%d_glm=%d_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=1%s.mat', use_smooth, glmodel, model_name, what, project, normalize, concat, novelty, suffix));
-agg_filename = fullfile(get_mat_dir(), sprintf('agg_gp_CV_cannon_repro_us=%d_glm=%d_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=1%s.mat', use_smooth, glmodel, model_name, what, project, normalize, concat, novelty, suffix));
+%agg_filename = fullfile(get_mat_dir(), sprintf('agg_gp_CV_cannon_repro_us=%d_glm=%d_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=1%s.mat', use_smooth, glmodel, model_name, what, project, normalize, concat, novelty, suffix));
+agg_filename = fullfile(get_mat_dir(), sprintf('agg_gp_CV_us=%d_glm=%d_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=1%s.mat', use_smooth, glmodel, model_name, what, project, normalize, concat, novelty, suffix));
 agg_filename
 
 lme = [];
@@ -59,7 +60,8 @@ for s = 1:1:length(subjects)
     %filename = fullfile(get_mat_dir(), sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_fast=1.mat', subj_id, use_smooth, glmodel, model_name, what, project));
     %filename = fullfile(get_mat_dir(2), sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=1_saveYhat=%d%s.mat', subj_id, use_smooth, glmodel, model_name, what, project, normalize, concat, novelty, saveYhat, suffix));
     %filename = fullfile(get_mat_dir(2), sprintf('fit_gp_CV_HRR_cannon_repro_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=1_saveYhat=%d%s.mat', subj_id, use_smooth, glmodel, model_name, what, project, normalize, concat, novelty, saveYhat, suffix));
-    filename = fullfile(get_mat_dir(2), sprintf('fit_gp_CV_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=1_saveYhat=%d%s.mat', subj_id, use_smooth, glmodel, model_name, what, project, normalize, concat, novelty, saveYhat, suffix)); % this should be it_gp_CV_HRR_cannon_repro_
+    %filename = fullfile(get_mat_dir(2), sprintf('fit_gp_CV_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=1_saveYhat=%d%s.mat', subj_id, use_smooth, glmodel, model_name, what, project, normalize, concat, novelty, saveYhat, suffix)); % this should be it_gp_CV_HRR_cannon_repro_, for normalize=2
+    filename = fullfile(get_mat_dir(0), sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_norm=%d_fast=1.mat', subj_id, use_smooth, glmodel, model_name, what, project, normalize)); % DQN normalize=2
     filename
     %filename = sprintf('mat/fit_gp_CV_noRKW_HRR_subj=%d_us=%d_glm=21_mask=mask_%s.mat', subj_id, use_smooth, what);
 

@@ -1,5 +1,6 @@
 mkdir output
 
+
 outfileprefix="output/gen_PETHs"
 echo File prefix = $outfileprefix
 
@@ -51,26 +52,26 @@ declare -a fn_calls=(
                      )
 
 # Figure 5 ++
-declare -a fn_calls=(
-                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_sprite\')"
-                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_sprite\')"
-                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_interaction\')"
-                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_interaction\')"
-                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_termination\')"
-                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_termination\')"
-                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_sprite\', 1)"
-                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_sprite\', 1)"
-                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_interaction\', 1)"
-                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_interaction\', 1)"
-                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_termination\', 1)"
-                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_termination\', 1)"
-                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_sprite\', 1, 1)"
-                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_sprite\', 1, 1)"
-                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_interaction\', 1, 1)"
-                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_interaction\', 1, 1)"
-                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_termination\', 1, 1)"
-                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_termination\', 1, 1)"
-                     )
+#declare -a fn_calls=(
+#                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_sprite\')"
+#                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_sprite\')"
+#                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_interaction\')"
+#                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_interaction\')"
+#                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_termination\')"
+#                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_termination\')"
+#                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_sprite\', 1)"
+#                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_sprite\', 1)"
+#                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_interaction\', 1)"
+#                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_interaction\', 1)"
+#                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_termination\', 1)"
+#                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_termination\', 1)"
+#                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_sprite\', 1, 1)"
+#                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_sprite\', 1, 1)"
+#                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_interaction\', 1, 1)"
+#                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_interaction\', 1, 1)"
+#                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_termination\', 1, 1)"
+#                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_termination\', 1, 1)"
+#                     )
 
 #declare -a fn_calls=(
 #                     "gen_PETHs(\'AAL2_GP_EMPA_grouped\', \'\', 0, 0, \'GP_DQN\')"
@@ -80,6 +81,15 @@ declare -a fn_calls=(
 #                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_DQN\')"
 #                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_DQN\')"
 #                     )
+
+declare -a fn_calls=(
+                     "gen_PETHs(\'AAL2_GP_EMPA_grouped\', \'\', 0, 0, \'GP_VAE\')"
+                     "gen_PETHs(\'AAL2_GP_EMPA\', \'\', 0, 0, \'GP_VAE\')"
+                     "gen_PETHs(\'AAL2_GLM_102_grouped\', \'\', 0, 0, \'GP_VAE\')"
+                     "gen_PETHs(\'AAL2_GLM_102\', \'\', 0, 0, \'GP_VAE\')"
+                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_VAE\')"
+                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_VAE\')"
+                     )
 
 # Figure 4 without baseline
 #
