@@ -5860,3 +5860,38 @@ gen_PETHs.sh gen_PETHs(\'AAL2_GLM_102_grouped\', \'\', 0, 0, \'GP_VAE\'): output
 gen_PETHs.sh gen_PETHs(\'AAL2_GLM_102\', \'\', 0, 0, \'GP_VAE\'): output/gen_PETHs_23234.out -- Submitted batch job 23234
 gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102_grouped\', \'\', 0, 0, \'GP_VAE\'): output/gen_PETHs_23235.out -- Submitted batch job 23235
 gen_PETHs.sh gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'GP_VAE\'): output/gen_PETHs_23236.out -- Submitted batch job 23236
+----------------
+--- Sun Mar 13 19:20:39 EDT 2022: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_PCA__1_1_1_23237.out -- Submitted batch job 23237
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_1_PCA__1_1_1_23238.out -- Submitted batch job 23238
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_1_PCA__1_1_1_23239.out -- Submitted batch job 23239
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_1_PCA__1_1_1_23240.out -- Submitted batch job 23240
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_1_PCA__1_1_1_23241.out -- Submitted batch job 23241
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_1_PCA__1_1_1_23242.out -- Submitted batch job 23242
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_1_PCA__1_1_1_23243.out -- Submitted batch job 23243
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_1_PCA__1_1_1_23244.out -- Submitted batch job 23244
+fit_gp_CV.sh for subject 9: output/fit_gp_CV_9_true_1_PCA__1_1_1_23245.out -- Submitted batch job 23245
+fit_gp_CV.sh for subject 10: output/fit_gp_CV_10_true_1_PCA__1_1_1_23246.out -- Submitted batch job 23246
+fit_gp_CV.sh for subject 11: output/fit_gp_CV_11_true_1_PCA__1_1_1_23247.out -- Submitted batch job 23247
+fit_gp_CV.sh for subject 12: output/fit_gp_CV_12_true_1_PCA__1_1_1_23248.out -- Submitted batch job 23248
+fit_gp_CV.sh for subject 13: output/fit_gp_CV_13_true_1_PCA__1_1_1_23249.out -- Submitted batch job 23249
+fit_gp_CV.sh for subject 14: output/fit_gp_CV_14_true_1_PCA__1_1_1_23250.out -- Submitted batch job 23250
+fit_gp_CV.sh for subject 15: output/fit_gp_CV_15_true_1_PCA__1_1_1_23251.out -- Submitted batch job 23251
+fit_gp_CV.sh for subject 16: output/fit_gp_CV_16_true_1_PCA__1_1_1_23252.out -- Submitted batch job 23252
+fit_gp_CV.sh for subject 17: output/fit_gp_CV_17_true_1_PCA__1_1_1_23253.out -- Submitted batch job 23253
+fit_gp_CV.sh for subject 18: output/fit_gp_CV_18_true_1_PCA__1_1_1_23254.out -- Submitted batch job 23254
+fit_gp_CV.sh for subject 19: output/fit_gp_CV_19_true_1_PCA__1_1_1_23255.out -- Submitted batch job 23255
+fit_gp_CV.sh for subject 20: output/fit_gp_CV_20_true_1_PCA__1_1_1_23256.out -- Submitted batch job 23256
+fit_gp_CV.sh for subject 21: output/fit_gp_CV_21_true_1_PCA__1_1_1_23257.out -- Submitted batch job 23257
+fit_gp_CV.sh for subject 22: output/fit_gp_CV_22_true_1_PCA__1_1_1_23258.out -- Submitted batch job 23258
+fit_gp_CV.sh for subject 23: output/fit_gp_CV_23_true_1_PCA__1_1_1_23259.out -- Submitted batch job 23259
+fit_gp_CV.sh for subject 24: output/fit_gp_CV_24_true_1_PCA__1_1_1_23260.out -- Submitted batch job 23260
+fit_gp_CV.sh for subject 25: output/fit_gp_CV_25_true_1_PCA__1_1_1_23261.out -- Submitted batch job 23261
+fit_gp_CV.sh for subject 26: output/fit_gp_CV_26_true_1_PCA__1_1_1_23262.out -- Submitted batch job 23262
+fit_gp_CV.sh for subject 27: output/fit_gp_CV_27_true_1_PCA__1_1_1_23263.out -- Submitted batch job 23263
+fit_gp_CV.sh for subject 28: output/fit_gp_CV_28_true_1_PCA__1_1_1_23264.out -- Submitted batch job 23264
+fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_PCA__1_1_1_23265.out -- Submitted batch job 23265
+fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_PCA__1_1_1_23266.out -- Submitted batch job 23266
+fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_PCA__1_1_1_23267.out -- Submitted batch job 23267
+fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_PCA__1_1_1_23268.out -- Submitted batch job 23268

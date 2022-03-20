@@ -70,7 +70,9 @@ tmap(mask) = ts;
 
 % normalize=2
 %load(fullfile(get_mat_dir(), 'agg_gp_CV_cannon_repro_us=1_glm=1_model=EMPA_theory_nsamples=100_project=1_norm=2_concat=0_novelty=1_fast=1.mat'));
-load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=DQN_all_nsamples=100_project=1_norm=2_concat=0_novelty=1_fast=1.mat'));
+%load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=DQN_all_nsamples=100_project=1_norm=2_concat=0_novelty=1_fast=1.mat'));
+%load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/agg_gp_CV_us=1_glm=1_model=EMPA_theory_nsamples=100_project=0_norm=2_concat=0_novelty=1_fast=1.mat');
+load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/agg_gp_CV_us=1_glm=1_model=DQN_all_nsamples=100_project=0_norm=2_concat=0_novelty=1_fast=1.mat');
 
 %load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=state__nsamples=100_project=1_norm=1_fast=1.mat'));
 %load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=state__nsamples=100_project=0_norm=1_fast=1.mat'));  % !!!

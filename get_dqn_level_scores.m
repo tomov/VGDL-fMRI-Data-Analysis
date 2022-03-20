@@ -11,7 +11,8 @@ function [level_scores, level_wins, level_success_rates, game_names, actual_leve
         do_cache = false;
     end
    
-    filename = fullfile(get_mat_dir(false), sprintf('get_dqn_level_scores_game=%s_subj=%d_levels=%s.mat', game_name, subj_id, sprintf('%d_', levels)));
+    %filename = fullfile(get_mat_dir(false), sprintf('get_dqn_level_scores_game=%s_subj=%d_levels=%s.mat', game_name, subj_id, sprintf('%d_', levels)));
+    filename = fullfile(get_mat_dir(false), sprintf('get_dqn25m_level_scores_game=%s_subj=%d_levels=%s.mat', game_name, subj_id, sprintf('%d_', levels)));
     filename
     if do_cache
         if exist(filename, 'file')
@@ -20,7 +21,9 @@ function [level_scores, level_wins, level_success_rates, game_names, actual_leve
         end
     end
 
-    filepath = fullfile('/n/home_fasse/mtomov13/RC_RL/reward_histories', sprintf('%s_reward_history_fmri_trial%d.csv', game_name, subj_id));
+    %filepath = fullfile('/n/home_fasse/mtomov13/RC_RL/reward_histories', sprintf('%s_reward_history_fmri_trial%d.csv', game_name, subj_id));
+    %filepatu = fullfile('/n/home_fasse/mtomov13/RC_RL/reward_histories_25M', sprintf('%s_reward_history_fmri_trial%d.csv', game_name, subj_id));
+    filepath = fullfile('/n/home_fasse/mtomov13/RC_RL/reward_histories_25M_eval_1200', sprintf('%s_reward_history_fmri_trial%d.csv', game_name, subj_id));
     T = readtable(filepath);
 
     level_scores = [];

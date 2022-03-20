@@ -72,8 +72,8 @@ for m = 1:nROIs
         disp(field)
 
         D = activations(m).(field)(subjs,:); % subj x TRs PETH's
-        as(m,i,:) = mean(D(:, PETH_dTRs > 5), 2); % average across time, ignoring baseline
-        %as(m,i,:) = mean(D(:, PETH_dTRs > 0), 2); % average across time, ignoring baseline
+        %as(m,i,:) = mean(D(:, PETH_dTRs > 5), 2); % average across time, ignoring baseline
+        as(m,i,:) = mean(D(:, PETH_dTRs > 0), 2); % average across time, ignoring baseline
     end
 end
 
