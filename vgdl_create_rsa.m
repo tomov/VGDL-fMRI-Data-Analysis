@@ -42,7 +42,7 @@ function [rsa, game_names_ordered] = vgdl_create_rsa(rsa_idx, subj_id, seed)
     % just pre-generate the multi's locally, then load them on the cluster
     try
         %conn = mongo('127.0.0.1', 27017, 'heroku_7lzprs54');
-        conn = mongo('holy7c22101.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'reader', 'Password', 'parolatamadafaqa')
+        conn = mongo('holy7c22107.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'reader', 'Password', 'parolatamadafaqa')
     catch e
         %e
         %fprintf('loading from %s\n', filename);

@@ -22,8 +22,10 @@ function [level_scores, level_wins, level_success_rates, game_names, actual_leve
     end
 
     %filepath = fullfile('/n/home_fasse/mtomov13/RC_RL/reward_histories', sprintf('%s_reward_history_fmri_trial%d.csv', game_name, subj_id));
-    %filepatu = fullfile('/n/home_fasse/mtomov13/RC_RL/reward_histories_25M', sprintf('%s_reward_history_fmri_trial%d.csv', game_name, subj_id));
+    %filepath = fullfile('/n/home_fasse/mtomov13/RC_RL/reward_histories_25M_eval_120000', sprintf('%s_reward_history_fmri_trial%d.csv', game_name, subj_id));
+    %filepath = fullfile('/n/home_fasse/mtomov13/RC_RL/reward_histories_25M_eval_12000', sprintf('%s_reward_history_fmri_trial%d.csv', game_name, subj_id));
     filepath = fullfile('/n/home_fasse/mtomov13/RC_RL/reward_histories_25M_eval_1200', sprintf('%s_reward_history_fmri_trial%d.csv', game_name, subj_id));
+    filepath
     T = readtable(filepath);
 
     level_scores = [];
@@ -35,7 +37,11 @@ function [level_scores, level_wins, level_success_rates, game_names, actual_leve
     for l = 1:length(levels)
         level = levels(l);
 
-        level_score = NaN;
+        level_score = max(T.ep_reward((T.level == l - 1) & strcmp(T.win, 'True')));
+        if isempty(level_score)
+            level_score = 0;
+        end
+        %level_score = max(T.ep_reward(T.level == l - 1));
         level_win = sum(strcmp(T.win(T.level == l - 1), 'True'));
         nplays = sum(T.level == l - 1);
 

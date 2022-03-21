@@ -74,7 +74,10 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
             ker = load_HRR_kernel(subj, unique(run_id), what, normalize, concat, novelty);
         case 'DQN'
             assert(ismember(what, {'conv1', 'conv2', 'conv3', 'linear1', 'linear2', 'all'}));
-            ker = load_DQN_kernel(subj, unique(run_id), what, normalize);
+            ker = load_DQN_kernel(subj, unique(run_id), what, normalize, '');
+        case 'DQN25M'
+            assert(ismember(what, {'conv1', 'conv2', 'conv3', 'linear1', 'linear2', 'all'}));
+            ker = load_DQN_kernel(subj, unique(run_id), what, normalize, '25M');
         case 'PCA'
             ker = load_PCA_kernel(subj, unique(run_id), normalize);
         case 'VAE'

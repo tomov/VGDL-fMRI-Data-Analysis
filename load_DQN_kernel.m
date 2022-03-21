@@ -1,8 +1,8 @@
-function [ker] = load_DQN_kernel(subj_id, which_run_ids, what, normalize)
+function [ker] = load_DQN_kernel(subj_id, which_run_ids, what, normalize, suffix)
     assert(ismember(what, {'conv1', 'conv2', 'conv3', 'linear1', 'linear2', 'all'}));
 
     %filename = sprintf('DQN_subject_kernel_subj=%d_sigma_w=1.000_norm=%d.mat', subj_id, normalize);
-    filename = sprintf('DQN25M_subject_kernel_subj=%d_sigma_w=1.000_norm=%d.mat', subj_id, normalize);
+    filename = sprintf('DQN%s_subject_kernel_subj=%d_sigma_w=1.000_norm=%d.mat', suffix, subj_id, normalize);
     filename = fullfile(get_mat_dir(), filename);
 
     if strcmp(what, 'all')
