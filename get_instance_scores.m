@@ -1,4 +1,4 @@
-function [instance_scores, instance_wins, instance_success_rates, game_names, levels] = get_instance_scores(conn, subj_id, run_ids, do_cache)
+function [instance_scores, instance_wins, instance_success, instance_success_rates, game_names, levels] = get_instance_scores(conn, subj_id, run_ids, do_cache)
 
     % get score for each instance (i.e. level) as max across all won plays 
     % this was the same way we determined to pay out for the fMRI study
@@ -18,6 +18,7 @@ function [instance_scores, instance_wins, instance_success_rates, game_names, le
 
     instance_scores = [];
     instance_wins = [];
+    instance_success = [];
     instance_success_rates = [];
     game_names = {};
     levels = [];
@@ -66,6 +67,7 @@ function [instance_scores, instance_wins, instance_success_rates, game_names, le
 
                 instance_scores = [instance_scores, instance_score];
                 instance_wins = [instance_wins, instance_win];
+                instance_success = [instance_success, instance_win > 0];
                 instance_success_rates = [instance_success_rates, instance_win / nplays];
                 game_names = [game_names, {game_name}];
                 levels = [levels, instance.level_id + 1];
@@ -74,5 +76,5 @@ function [instance_scores, instance_wins, instance_success_rates, game_names, le
     end
 
     if do_cache
-        save(filename, 'instance_scores', 'game_names', 'instance_wins', 'instance_success_rates', 'levels', '-v7.3');
+        save(filename, 'instance_scores', 'game_names', 'instance_wins', 'instance_success', 'instance_success_rates', 'levels', '-v7.3');
     end

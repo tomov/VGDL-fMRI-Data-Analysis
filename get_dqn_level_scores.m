@@ -1,4 +1,4 @@
-function [level_scores, level_wins, level_success_rates, game_names, actual_levels] = get_dqn_level_scores(game_name, subj_id, levels, do_cache)
+function [level_scores, level_wins, level_success, level_success_rates, game_names, actual_levels] = get_dqn_level_scores(game_name, subj_id, levels, do_cache)
     %agent_name = 'DQN';
     %subj_id = 13;
     %levels = [0, 1];
@@ -30,6 +30,7 @@ function [level_scores, level_wins, level_success_rates, game_names, actual_leve
 
     level_scores = [];
     level_wins = [];
+    level_success = [];
     level_success_rates = [];
     game_names = {};
     actual_levels = [];
@@ -47,11 +48,12 @@ function [level_scores, level_wins, level_success_rates, game_names, actual_leve
 
         level_scores = [level_scores, level_score];
         level_wins = [level_wins, level_win];
+        level_success = [level_success, level_win > 0];
         level_success_rates = [level_success_rates, level_win / nplays];
         game_names = [game_names, game_name];
         actual_levels = [actual_levels, level];
 
     end
     if do_cache
-        save(filename, 'level_scores', 'game_names', 'level_wins', 'level_success_rates', 'actual_levels', '-v7.3');
+        save(filename, 'level_scores', 'game_names', 'level_wins', 'level_success', 'level_success_rates', 'actual_levels', '-v7.3');
     end

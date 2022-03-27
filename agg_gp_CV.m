@@ -30,7 +30,7 @@ what = 'all';
 %what = 'theory';
 %what = 'termination';
 %what = 'sprite';
-project = 1;
+project = 0;
 glmodel = 1;
 %suffix = '_nowhiten_nofilter';
 %suffix = '_';
@@ -65,7 +65,8 @@ for s = 1:1:length(subjects)
     %filename = fullfile(get_mat_dir(2), sprintf('fit_gp_CV_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=1_saveYhat=%d%s.mat', subj_id, use_smooth, glmodel, model_name, what, project, normalize, concat, novelty, saveYhat, suffix)); % this should be it_gp_CV_HRR_cannon_repro_, for normalize=2
     %filename = fullfile(get_mat_dir(0), sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_norm=%d_fast=1.mat', subj_id, use_smooth, glmodel, model_name, what, project, normalize)); % DQN normalize=2
     %filename = fullfile(get_mat_dir(2), sprintf('fit_gp_CV_subj=%d_us=%d_glm=%d_mask=mask_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=1_saveYhat=%d%s.mat', subj_id, use_smooth, glmodel, model_name, what, project, normalize, concat, novelty, saveYhat, suffix)); % DQN normalize=2, project=0
-    filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=DQN25M_all_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_saveYhat=0.mat', subj_id);
+    %filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=DQN25M_all_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_saveYhat=0.mat', subj_id); % DQN 25M
+    filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=DQN25M_all_nsamples=100_project=0_norm=1_concat=0_novelty=1_fast=1_saveYhat=0.mat', subj_id);
     filename
     %filename = sprintf('mat/fit_gp_CV_noRKW_HRR_subj=%d_us=%d_glm=21_mask=mask_%s.mat', subj_id, use_smooth, what);
 

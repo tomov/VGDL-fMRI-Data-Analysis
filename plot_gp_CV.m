@@ -52,7 +52,8 @@ tmap(mask) = ts;
 %load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=DQN_linear1_nsamples=100_project=1_fast=1.mat'));
 %load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=DQN_linear2_nsamples=100_project=1_fast=1.mat'));
 %load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=DQN_all_nsamples=100_project=1_norm=1_fast=1.mat')); % !!!
-load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/agg_gp_CV_us=1_glm=1_model=DQN25M_all_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1.mat');
+%load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/agg_gp_CV_us=1_glm=1_model=DQN25M_all_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1.mat');
+load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/agg_gp_CV_us=1_glm=1_model=DQN25M_all_nsamples=100_project=0_norm=1_concat=0_novelty=1_fast=1.mat');
 
 
 %load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=PCA_all_nsamples=100_project=1_norm=1_fast=1.mat')); % !!!
