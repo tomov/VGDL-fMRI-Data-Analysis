@@ -6,56 +6,69 @@ switch figure_name
     case 'plot_behavior'
         % plot_behavior.m
         %
-        load(fullfile(get_mat_dir(), 'plot_behavior.mat'));
+        %load(fullfile(get_mat_dir(), 'plot_behavior.mat'));
+        figure('pos', [370 777 462*2 435]) ;
+        files = {'plot_behavior_1-11_dqn1200.mat', 'plot_behavior_12-32_dqn1200.mat'};
+        for group_idx = 1:length(files)
+            load(fullfile(get_mat_dir(), 'show_figure', files{group_idx}));
+            subplot(1, length(files), group_idx);
 
-        figure('pos', [370 777 462 435]) ;
+            pw = 1; % expected payout
+            plot_what = plot_whats{pw};
 
-        pw = 3; % success rate
-        plot_what = plot_whats{pw};
+            agents = agents(1:3);
+            agent_center_offsets = [-0.25, 0, 0.25];
 
-        clear ys;
-        maxy = 0;
-        for a = 1:length(agents)
-            s = eval(plot_what);
-            clear ss;
-            for g = 1:length(game_names)
-                ss(:,g) = nanmean(s{g, a}, 2); % average across levels
-            end
-            s = mean(ss, 2); % and average across games too
-            Violin(s, 0 + agent_center_offsets(a), 'ShowMean', true, 'Width', 0.1, 'ViolinColor', cmap(a, :));
-            ys{a} = s;
-            maxy = max(maxy, max(ys{a}));
-        end
-
-        % significance ***
-        for a1 = 1:length(agents)
-            for a2 = a1+1:length(agents)
-                if all(isnan(ys{a1})) || all(isnan(ys{a2}))
-                    continue
+            clear ys;
+            maxy = 0;
+            for a = 1:length(agents)
+                s = eval(plot_what);
+                clear ss;
+                for g = 1:length(game_names)
+                    ss(:,g) = nanmean(s{g, a}, 2); % average across levels
                 end
-                p = ranksum(ys{a1}, ys{a2}); % Mann Whitney U test across subjects
-                if isnan(p), p = 1; end
-                maxy = maxy + 0.05;
-                y = maxy;
-                x = mean([agent_center_offsets(a1) agent_center_offsets(a2)]);
-                plot(0 + [agent_center_offsets(a1) agent_center_offsets(a2)], [y y], 'color', 'black');
-                text(x, y + 0.01 + 0.0 * (p >= 0.05), significance(p), 'HorizontalAlignment', 'center', 'fontsize', 15);
+                s = mean(ss, 2); % and average across games too
+                Violin(s, 0 + agent_center_offsets(a), 'ShowMean', true, 'Width', 0.1, 'ViolinColor', cmap(a, :));
+                ys{a} = s;
+                maxy = max(maxy, max(ys{a}));
             end
+
+            % significance ***
+            for a1 = 1:length(agents)
+                for a2 = a1+1:length(agents)
+                    if all(isnan(ys{a1})) || all(isnan(ys{a2}))
+                        continue
+                    end
+                    p = ranksum(ys{a1}, ys{a2}); % Mann Whitney U test across subjects
+                    if isnan(p), p = 1; end
+                    %maxy = maxy + 0.05;
+                    maxy = maxy + 0.8;
+                    y = maxy;
+                    x = mean([agent_center_offsets(a1) agent_center_offsets(a2)]);
+                    plot(0 + [agent_center_offsets(a1) agent_center_offsets(a2)], [y y], 'color', 'black');
+                    text(x, y + 0.2 + 0.2 * (p >= 0.05), significance(p), 'HorizontalAlignment', 'center', 'fontsize', 15);
+                end
+            end
+
+            ylabel('expected payout ($)');
+            xlabel('agent');
+            set(gca, 'xtick', []);
+            xlim([-0.38 0.38])
+            ylim([0 14])
+
+            % hacky custom legend
+            h = zeros(length(agents), 1);
+            for a = 1:length(agents)
+                h(a) = plot(NaN, NaN, 'color', cmap(a,:));
+            end
+            %l = legend(h, {agents.name});
+            if group_idx == length(files)
+                l = legend(h, {'Human', 'EMPA', 'DDQN'});
+                l.Position = [0.7783 0.6806 0.1056 0.1149];
+            end
+
+            title(sprintf('Subjects %d..%d', min(subj_ids), max(subj_ids)), 'interpreter', 'none');
         end
-
-        ylabel('success rate');
-        %set(gca, 'xtick', []);
-        xlim([-0.35 0.35])
-
-        % hacky custom legend
-        h = zeros(length(agents), 1);
-        for a = 1:length(agents)
-            h(a) = plot(NaN, NaN, 'color', cmap(a,:));
-        end
-        l = legend(h, {agents.name});
-        l.Position = [0.6783 0.6806 0.2056 0.1149];
-
-        title(sprintf('Subjects %d..%d', min(subj_ids), max(subj_ids)), 'interpreter', 'none');
 
         print('pdf/plot_behavior.pdf', '-dpdf');
 

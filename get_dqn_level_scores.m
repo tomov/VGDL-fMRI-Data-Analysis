@@ -23,8 +23,8 @@ function [level_scores, level_wins, level_success, level_success_rates, game_nam
 
     %filepath = fullfile('/n/home_fasse/mtomov13/RC_RL/reward_histories', sprintf('%s_reward_history_fmri_trial%d.csv', game_name, subj_id));
     %filepath = fullfile('/n/home_fasse/mtomov13/RC_RL/reward_histories_25M_eval_120000', sprintf('%s_reward_history_fmri_trial%d.csv', game_name, subj_id));
-    %filepath = fullfile('/n/home_fasse/mtomov13/RC_RL/reward_histories_25M_eval_12000', sprintf('%s_reward_history_fmri_trial%d.csv', game_name, subj_id));
-    filepath = fullfile('/n/home_fasse/mtomov13/RC_RL/reward_histories_25M_eval_1200', sprintf('%s_reward_history_fmri_trial%d.csv', game_name, subj_id));
+    filepath = fullfile('/n/home_fasse/mtomov13/RC_RL/reward_histories_25M_eval_12000', sprintf('%s_reward_history_fmri_trial%d.csv', game_name, subj_id));
+    %filepath = fullfile('/n/home_fasse/mtomov13/RC_RL/reward_histories_25M_eval_1200', sprintf('%s_reward_history_fmri_trial%d.csv', game_name, subj_id));
     filepath
     T = readtable(filepath);
 
