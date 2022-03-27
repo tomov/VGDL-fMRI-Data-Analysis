@@ -3,7 +3,7 @@ function [ker] = load_DQN_kernel(subj_id, which_run_ids, what, normalize, suffix
 
     %filename = sprintf('DQN_subject_kernel_subj=%d_sigma_w=1.000_norm=%d.mat', subj_id, normalize);
     filename = sprintf('DQN%s_subject_kernel_subj=%d_sigma_w=1.000_norm=%d.mat', suffix, subj_id, normalize);
-    filename = fullfile(get_mat_dir(), filename);
+    filename = fullfile(get_mat_dir(2), filename);
 
     if strcmp(what, 'all')
         % special case for the concatenation of all laye

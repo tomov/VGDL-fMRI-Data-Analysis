@@ -7,7 +7,7 @@ switch figure_name
         % plot_behavior.m
         %
         %load(fullfile(get_mat_dir(), 'plot_behavior.mat'));
-        figure('pos', [370 777 462*2 435]) ;
+        figure('pos', [370 777 462*2*0.6 435*0.6]) ;
         files = {'plot_behavior_1-11_dqn1200.mat', 'plot_behavior_12-32_dqn1200.mat'};
         for group_idx = 1:length(files)
             load(fullfile(get_mat_dir(), 'show_figure', files{group_idx}));
@@ -46,7 +46,7 @@ switch figure_name
                     y = maxy;
                     x = mean([agent_center_offsets(a1) agent_center_offsets(a2)]);
                     plot(0 + [agent_center_offsets(a1) agent_center_offsets(a2)], [y y], 'color', 'black');
-                    text(x, y + 0.2 + 0.2 * (p >= 0.05), significance(p), 'HorizontalAlignment', 'center', 'fontsize', 15);
+                    text(x, y + 0.2 + 0.2 * (p >= 0.05), significance(p), 'HorizontalAlignment', 'center', 'fontsize', 10);
                 end
             end
 
@@ -64,7 +64,7 @@ switch figure_name
             %l = legend(h, {agents.name});
             if group_idx == length(files)
                 l = legend(h, {'Human', 'EMPA', 'DDQN'});
-                l.Position = [0.7783 0.6806 0.1056 0.1149];
+                l.Position = [0.3483 0.3806 0.1056 0.1149];
             end
 
             title(sprintf('Subjects %d..%d', min(subj_ids), max(subj_ids)), 'interpreter', 'none');
@@ -89,7 +89,8 @@ switch figure_name
     case 'plot_gp_CV_DDQN'
         % plot_gp_CV.m
 
-        load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=DQN_all_nsamples=100_project=1_norm=1_fast=1.mat')); % !!!
+        %load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=DQN_all_nsamples=100_project=1_norm=1_fast=1.mat')); % !!!
+        load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=DQN25M_all_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1.mat')); % !!!
         assert(use_smooth);
         EXPT = vgdl_expt();
         bspmview_wrapper(EXPT, tmap);
