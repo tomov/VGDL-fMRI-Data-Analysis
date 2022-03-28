@@ -111,6 +111,36 @@ switch figure_name
         EXPT = vgdl_expt();
         bspmview_wrapper(EXPT, tmap);
 
+    case 'plot_gp_CV_game'
+        % plot_gp_CV.m
+        load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=game__nsamples=100_project=0_norm=1_concat=0_novelty=1_fast=1.mat'));
+        assert(use_smooth);
+        EXPT = vgdl_expt();
+        bspmview_wrapper(EXPT, tmap);
+
+    case 'plot_gp_CV_EMPA_noproject'
+        % plot_gp_CV.m
+
+        load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=EMPA_theory_nsamples=100_project=0_norm=1_concat=0_novelty=1_fast=1.mat')); % 
+        assert(use_smooth);
+        EXPT = vgdl_expt();
+        bspmview_wrapper(EXPT, tmap);
+
+    case 'plot_gp_CV_DDQN_noproject'
+        % plot_gp_CV.m
+
+        load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=DQN25M_all_nsamples=100_project=0_norm=1_concat=0_novelty=1_fast=1.mat')); % !!!
+        assert(use_smooth);
+        EXPT = vgdl_expt();
+        bspmview_wrapper(EXPT, tmap);
+
+    case 'plot_gp_CV_PCA_noproject'
+        % plot_gp_CV.m
+
+        load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=PCA__nsamples=100_project=0_norm=1_concat=0_novelty=1_fast=1.mat')); % !!!
+        assert(use_smooth);
+        EXPT = vgdl_expt();
+        bspmview_wrapper(EXPT, tmap);
 
     case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA'
         % plot_gp_CV_rois.m
@@ -165,6 +195,7 @@ switch figure_name
 
         print('pdf/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped.pdf', '-dpdf');
 
+
     case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped_EMPA_components'
         % plot_gp_CV_rois.m
 
@@ -183,6 +214,7 @@ switch figure_name
         l.Position = [0.1799 0.7430 0.1922 0.1205];
 
         print('pdf/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped_EMPA_components.pdf', '-dpdf');
+
 
     case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped_DDQN_layers'
         % plot_gp_CV_rois.m
