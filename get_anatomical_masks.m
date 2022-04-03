@@ -490,7 +490,7 @@ switch atlas_name
         assert(false, 'no such Atlas');
 end
 
-nROIs = length(roi_labels)
+nROIs = length(roi_labels);
 assert(length(roi_names) == nROIs);
 
 for m = 1:nROIs

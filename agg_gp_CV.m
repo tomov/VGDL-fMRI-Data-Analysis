@@ -15,7 +15,7 @@ end
 subjects = 1:length(EXPT.subject);
 %subjects = 1:2:32; % odd
 
-model_name = 'PCA';
+%model_name = 'PCA';
 %model_name = 'state';
 %model_name = 'irrelevant';
 %model_name = 'DQN';
@@ -23,12 +23,13 @@ model_name = 'PCA';
 %model_name = 'game';
 %model_name = 'EMPA';
 %model_name = 'VAE';
+model_name = 'VAE_e1k';
 %what = 'conv3';
 %%%what = 'linear2';
 %what = 'all';
-%what = '';
-%what = 'novelty';
 what = '';
+%what = 'novelty';
+%what = 'all';
 %what = 'theory';
 %what = 'termination';
 %what = 'sprite';
@@ -71,7 +72,9 @@ for s = 1:1:length(subjects)
     %filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=DQN25M_all_nsamples=100_project=0_norm=1_concat=0_novelty=1_fast=1_saveYhat=0.mat', subj_id);
     %filename = sprintf('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=game_all_nsamples=100_project=0_norm=1_fast=1_saveYhat=0.mat', subj_id)
     %filename = sprintf('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=0_norm=1_fast=1_saveYhat=0.mat', subj_id);
-    filename = sprintf('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=PCA_all_nsamples=100_project=0_norm=1_fast=1_saveYhat=0.mat', subj_id);
+    %filename = sprintf('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=PCA_all_nsamples=100_project=0_norm=1_fast=1_saveYhat=0.mat', subj_id);
+    %filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=VAE__nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_saveYhat=0.mat', subj_id); % VAE e1k
+    filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=VAE__nsamples=100_project=0_norm=1_concat=0_novelty=1_fast=1_saveYhat=0.mat', subj_id); % VAE e1k
     filename
     %filename = sprintf('mat/fit_gp_CV_noRKW_HRR_subj=%d_us=%d_glm=21_mask=mask_%s.mat', subj_id, use_smooth, what);
 

@@ -36,7 +36,8 @@ clear all;
 %{
 %load('mat/agg_gp_CV_us=1_glm=101_model=nuisance__nsamples=100_project=0_fast=1.mat');
 %load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=DQN_all_nsamples=100_project=1_norm=1_fast=1.mat')); % !!!
-load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=VAE__nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1.mat'));
+%load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=VAE__nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1.mat'));
+load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/agg_gp_CV_us=1_glm=1_model=DQN25M_all_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1.mat');
 zs_control = zs;
 %load('mat/agg_gp_CV_us=1_glm=9_theory_nsamples=100_project=0_fast=1.mat');
 load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=EMPA_theory_nsamples=100_project=1_fast=1.mat')); % this is it !!!!!!!!!!!!!!!!!!!!ontroller five
@@ -53,7 +54,9 @@ tmap(mask) = ts;
 %load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=DQN_linear2_nsamples=100_project=1_fast=1.mat'));
 %load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=DQN_all_nsamples=100_project=1_norm=1_fast=1.mat')); % !!!
 %load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/agg_gp_CV_us=1_glm=1_model=DQN25M_all_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1.mat');
-load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/agg_gp_CV_us=1_glm=1_model=DQN25M_all_nsamples=100_project=0_norm=1_concat=0_novelty=1_fast=1.mat');
+%load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/agg_gp_CV_us=1_glm=1_model=DQN25M_all_nsamples=100_project=0_norm=1_concat=0_novelty=1_fast=1.mat');
+%load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_25M_e1k.mat');
+%load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/agg_gp_CV_us=1_glm=1_model=PCA_all_nsamples=100_project=0_norm=1_concat=0_novelty=1_fast=1.mat');
 
 
 %load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=PCA_all_nsamples=100_project=1_norm=1_fast=1.mat')); % !!!
