@@ -46,12 +46,14 @@ function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, r
                 case 'mean'
                     errorbar(xs(m,reg), mean(y), sem(y), '.', 'MarkerSize', 1, 'MarkerFaceColor', h(reg).FaceColor, 'LineWidth', 1, 'Color', h(reg).FaceColor, 'AlignVertexCenters', 'off');
                     u_fs(m,reg) = mean(y) + sem(y); % upper confidence bound
+                    l_fs(m,reg) = mean(y) - sem(y); % lower confidence bound
                 case 'median'
                     q = quantile(y, [0.25 0.75]);
                     neg = m_fs(m,reg) - q(1);
                     pos = q(2) - m_fs(m,reg);
                     errorbar(xs(m,reg), m_fs(m,reg), neg, pos, '.', 'MarkerSize', 1, 'MarkerFaceColor', h(reg).FaceColor, 'LineWidth', 1, 'Color', h(reg).FaceColor, 'AlignVertexCenters', 'off');
                     u_fs(m,reg) = q(2); % upper confidence bound
+                    l_fs(m,reg) = q(1); % lower confidence bound
             end
             %Violin(squeeze(fs(m,reg,:)), xs(m,reg), 'Width', 0.1, 'ViolinColor', h(reg).FaceColor, 'ViolinAlpha', 0.3);
         end
@@ -73,7 +75,13 @@ function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, r
                 end
                 if p <= 0.05
                     %text(x1, u_fs(m,r1) + 0.002 * significant_scale, significance(p), 'HorizontalAlignment', 'center');
-                    text(x1, u_fs(m,r1) + 0.002 * significant_scale, significance(p), 'HorizontalAlignment', 'center', 'FontSize', significant_scale);
+                    if mean(y1) < 0
+                        y = l_fs(m,r1) - 0.004 * significant_scale;
+                    else
+                        y = u_fs(m,r1) + 0.002 * significant_scale;
+                    end
+                    text(x1, y, significance(p), 'HorizontalAlignment', 'center', 'FontSize', significant_scale);
+                   % text(x1, y,  [roi_names{m}, '-', regressor_names{r1}], 'HorizontalAlignment', 'center', 'FontSize', significant_scale);
             %        maxy = maxy + 0.003;
                 end
             end
@@ -101,8 +109,8 @@ function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, r
                 end
                 if p <= 0.05
                     plot([x1 x2], [maxy maxy] + 0.002 * significant_scale, '-', 'color', [0 0 0]);
-                    text(mean([x1 x2]), maxy + 0.002 * significant_scale, significance(p), 'HorizontalAlignment', 'center');
-                    %text(mean([x1 x2]), maxy + 0.002 * significant_scale, significance(p), 'HorizontalAlignment', 'center', 'FontSize', significant_scale);
+                    text(mean([x1 x2]), maxy + 0.002 * significant_scale, significance(p), 'HorizontalAlignment', 'center', 'FontSize', significant_scale);
+                    %text(mean([x1 x2]), maxy + 0.002 * significant_scale, [roi_names{m}, '-', regressor_names{r1}], 'HorizontalAlignment', 'center', 'FontSize', significant_scale);
                     maxy = maxy + 0.003 * significant_scale;
                 end
                 fprintf('ROI %s: %s vs. %s -- p = %.5f\n', roi_names{m}, regressor_names{r1}, regressor_names{r2}, p);
