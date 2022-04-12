@@ -890,7 +890,7 @@ switch figure_name
         regions = regions(ROI_ix);
         activations = activations(ROI_ix);
 
-        figure('pos', [64 460 1296 799]);
+        figure('pos', [64 460 1296*0.5 799*0.5]);
 
         % optionally plot theory change flag only
         %fields(find(strcmp(fields, 'theory_change_flag'))) = [];
@@ -936,7 +936,13 @@ switch figure_name
                     j_init = find(PETH_dTRs > 0); % ignore baselines
                     for j = j_init:length(t)
                         if p(j) <= 0.05
-                            text(t(j) + ix * 0.1, ax.YLim(2) - 0.02 - ix * 0.01, significance(p(j)), 'color', cmap(i,:), 'fontsize', 7, 'HorizontalAlignment', 'center');
+                            if mean(me) < 0
+                                y = ax.YLim(1) + 0.01 - ix * 0.01;
+                            else
+                                y = ax.YLim(2) - 0.01 - ix * 0.01;
+                            end
+                            h = text(t(j) + ix * 0.1, y, significance(p(j)), 'color', cmap(i,:), 'fontsize', 7, 'HorizontalAlignment', 'center');
+                            set(h,'Rotation',90);
                         end
                     end
                 end
@@ -948,7 +954,7 @@ switch figure_name
             if m == 1
                 %l = legend(hh, fields, 'interpreter', 'none');
                 l = legend(hh, {'theory update', 'interaction', 'avatar interaction', 'new object', 'killed object', 'episode start', 'episode end'}, 'interpreter', 'none');
-                l.Position = [0.4023 0.1854 0.1289 0.1314];
+                l.Position = [0.4023 0.1654 0.1289 0.1314];
             end
             %ylabel('z');
             ylabel('\Delta z');
@@ -957,7 +963,8 @@ switch figure_name
         end
 
         orient(gcf, 'landscape');
-        print('pdf/plot_PETH_AAL2_GP_EMPA_GLM_102_GP.pdf', '-dpdf', '-bestfit');
+        %print('pdf/plot_PETH_AAL2_GP_EMPA_GLM_102_GP.pdf', '-dpdf', '-bestfit');
+        print('pdf/plot_PETH_AAL2_GP_EMPA_GLM_102_GP.pdf', '-dpdf');
  
 
     case 'plot_PETH_components_AAL2_GP_EMPA_GLM_102_GP'
@@ -981,7 +988,7 @@ switch figure_name
         interaction_activations = interaction_activations(ROI_ix);
         termination_activations = termination_activations(ROI_ix);
 
-        figure('pos', [64 460 1296 799]);
+        figure('pos', [64 460 1296*0.5 799*0.5]);
 
         % only look at the components
         fields = {'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag'};
@@ -989,7 +996,8 @@ switch figure_name
         subjs = 1:1:32;
 
         %cmap = colormap(jet(length(fields)));
-        cmap = colormap(jet(9));
+        %cmap = colormap(jet(9));
+        cmap = [0.8 0.5 0.2]' * [0    0.4470    0.7410] + [0.2 0.5 0.8]' * [1 1 1];
         t = PETH_dTRs * EXPT.TR; % s
 
         % loop over masks
@@ -1017,7 +1025,6 @@ switch figure_name
                 %me = nanmean(activations(m).(field), 1);
                 %sem = nanstd(activations(m).(field), 1) / sqrt(size(activations(m).(field), 1)); % TODO wse
                 [h,p,ci,stats] = ttest(D);
-
                 %errorbar(dTRs, m, se);
                 hh(i) = plot(t, me, 'color', cmap(i,:));
                 h = fill([t flip(t)], [me + sem flip(me - sem)], cmap(i,:));
@@ -1030,7 +1037,8 @@ switch figure_name
                     j_init = find(PETH_dTRs > 0); % ignore baselines
                     for j = j_init:length(t)
                         if p(j) <= 0.05
-                            text(t(j) + ix * 0.1, ax.YLim(2) - 0.02 - ix * 0.01, significance(p(j)), 'color', cmap(i,:), 'fontsize', 7, 'HorizontalAlignment', 'center');
+                            h = text(t(j) + ix * 0.5, ax.YLim(2) + 0.005 + ix * 0.002, significance(p(j)), 'color', cmap(i,:), 'fontsize', 7, 'HorizontalAlignment', 'center');
+                            set(h,'Rotation',90);
                         end
                     end
                 end
@@ -1048,10 +1056,13 @@ switch figure_name
             %ylabel('z');
             xlabel('time (s)');
             title(regions{m}, 'interpreter', 'none');
+            ll = ylim;
+            ylim([ll(1) ll(2)*1.2]);
         end
 
         orient(gcf, 'landscape');
-        print('pdf/plot_PETH_components_AAL2_GP_EMPA_GLM_102_GP.pdf', '-dpdf', '-bestfit');
+        %print('pdf/plot_PETH_components_AAL2_GP_EMPA_GLM_102_GP.pdf', '-dpdf', '-bestfit');
+        print('pdf/plot_PETH_components_AAL2_GP_EMPA_GLM_102_GP.pdf', '-dpdf');
 
 
     case 'plot_PETH_bars_AAL2_GP_EMPA_GLM_102_GP'
@@ -1102,10 +1113,10 @@ switch figure_name
         end
 
         % Piggyback off of plot_gp_CV_rois.m
-        figure('pos', [49 329 2143 610]);
+        figure('pos', [49 329 2143*0.5 610*0.5]);
 
         ix = 1:nregressors;
-        h = plot_gp_CV_rois_helper(as(:,ix,:), 'ttest', 'mean', fields(ix), regions, 0, cmap, 5, 1);
+        h = plot_gp_CV_rois_helper(as(:,ix,:), 'ttest', 'mean', fields(ix), regions, 0, cmap, 2, 1, 4);
         title('Average Fisher z-transformed Pearson correlation change');
         ylabel('\Delta z');
         %title('Average Fisher z-transformed Pearson correlation in ROIs');
@@ -1113,18 +1124,21 @@ switch figure_name
 
         % Prettyfy it 
         % specifically for agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA.mat');
-        text(1.5, 0.25, 'Frontal/Motor', 'fontsize', 12, 'HorizontalAlignment', 'center');
+        text(1.5, 0.15, 'Frontal/Motor', 'fontsize', 12, 'HorizontalAlignment', 'center');
         plot([2.5 2.5], [0 0.3], '--', 'color', [0.5 0.5 0.5]);
-        text(3.5, 0.25, 'Dorsal/Parietal', 'fontsize', 12, 'HorizontalAlignment', 'center');
+        text(3.5, 0.15, 'Dorsal/Parietal', 'fontsize', 12, 'HorizontalAlignment', 'center');
         plot([4.5 4.5], [0 0.3], '--', 'color', [0.5 0.5 0.5]);
-        text(6, 0.25, 'Ventral/Temporal', 'fontsize', 12, 'HorizontalAlignment', 'center');
+        text(6, 0.15, 'Ventral/Temporal', 'fontsize', 12, 'HorizontalAlignment', 'center');
         %l = legend(fields(ix), 'interpreter', 'none');
         l = legend({'theory update', 'interaction', 'avatar interaction', 'new object', 'killed object', 'episode start', 'episode end'}, 'interpreter', 'none');
-        l.Position = [0.5597 0.7038 0.0807 0.1836];
-        l.FontSize = 6;
+        l.Position = [0.5597 0.6938 0.0807 0.1836];
+        l.FontSize = 7;
+        ylim([-0.05 0.2]);
 
         orient(gcf, 'landscape');
-        print('pdf/plot_PETH_bars_AAL2_GP_EMPA_GLM_102_GP.pdf', '-dpdf', '-bestfit');
+        %print('pdf/plot_PETH_bars_AAL2_GP_EMPA_GLM_102_GP.pdf', '-dpdf', '-bestfit');
+        print('pdf/plot_PETH_bars_AAL2_GP_EMPA_GLM_102_GP.pdf', '-dpdf');
+
 
 
     case 'plot_PETH_bars_AAL2_GP_EMPA_GLM_102_grouped_GP'
@@ -1175,10 +1189,10 @@ switch figure_name
         end
 
         % Piggyback off of plot_gp_CV_rois.m
-        figure('pos', [47 487 656 448]);
+        figure('pos', [47 487 456 248]);
 
         ix = 1:nregressors;
-        h = plot_gp_CV_rois_helper(as(:,ix,:), 'ttest', 'mean', fields(ix), regions, 0, cmap, 5, 1);
+        h = plot_gp_CV_rois_helper(as(:,ix,:), 'ttest', 'mean', fields(ix), regions, 0, cmap, 2, 1, 6);
         title('Average Fisher z-transformed Pearson correlation change');
         ylabel('\Delta z');
         %title('Average Fisher z-transformed Pearson correlation in ROIs');
@@ -1187,8 +1201,10 @@ switch figure_name
         % Prettyfy it 
         %legend(fields(ix), 'interpreter', 'none');
         l = legend({'theory update', 'interaction', 'avatar interaction', 'new object', 'killed object', 'episode start', 'episode end'}, 'interpreter', 'none');
-        l.Position = [0.3663 0.6003 0.2637 0.2500];
+        l.Position = [0.3663 0.6003 0.2637 0.1600];
+        l.FontSize = 6;
         xticklabels({'Frontal/Motor (IFG)', 'Dorsal/Parietal', 'Ventral/Temporal'});
+        ylim([-0.02 0.125]);
 
          
         orient(gcf, 'landscape');
@@ -1258,7 +1274,7 @@ switch figure_name
         figure('pos', [750 464 1457 471]);
 
         ix = 1:nregressors;
-        h = plot_gp_CV_rois_helper(as(:,ix,:), 'ttest', 'mean', fields(ix), regions, 0, cmap, 5);
+        h = plot_gp_CV_rois_helper(as(:,ix,:), 'ttest', 'mean', fields(ix), regions, 0, cmap, 3, 1:3, 4);
         title('Average Fisher z-transformed Pearson correlation change');
         ylabel('\Delta z');
         %title('Average Fisher z-transformed Pearson correlation in ROIs');
@@ -1343,7 +1359,7 @@ switch figure_name
         figure('pos', [1489 437 703 502]);
 
         ix = 1:nregressors;
-        h = plot_gp_CV_rois_helper(as(:,ix,:), 'ttest', 'mean', fields(ix), regions, 0, cmap, 5);
+        h = plot_gp_CV_rois_helper(as(:,ix,:), 'ttest', 'mean', fields(ix), regions, 0, cmap, 1, 1:3, 5);
         title('Average Fisher z-transformed Pearson correlation change');
         ylabel('\Delta z');
         %title('Average Fisher z-transformed Pearson correlation in ROIs');
