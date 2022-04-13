@@ -15,52 +15,15 @@ function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, r
         regressors_to_compare = 1:nregressors;
     end
 
-    % convert to table, for box charts
-    x_rows = [];
-    roi_rows = [];
-    regressor_rows = [];
-    subject_rows = [];
-    f_rows = [];
-    for m = 1:nROIs
-        for reg = 1:nregressors
-            y = squeeze(fs(m,reg,:));
-            %x = m - 0.2 + reg * 0.1;
-            x = m * 1.5;
-            x_rows = [x_rows; repmat(x, length(y), 1)];
-            roi_rows = [roi_rows; repmat(roi_names(m), length(y), 1)];
-            regressor_rows = [regressor_rows; repmat(regressor_names(reg), length(y), 1)];
-            subject_rows = [subject_rows; (1:length(y))'];
-            f_rows = [f_rows; y];
-        end
-    end
-    tbl = table(x_rows, roi_rows, regressor_rows, subject_rows, f_rows, 'VariableNames', {'x', 'ROI', 'regressor', 'subject', 'f'});
-    tbl.ROI = categorical(tbl.ROI, roi_names);
-    tbl.regressor = categorical(tbl.regressor, regressor_names);
-
     % bars
     switch statistic
         case 'mean'
             m_fs = mean(fs, 3);
-            h = bar(1:nROIs, m_fs);
-            xticks(1:nROIs);
-            xticklabels(roi_names);
-            xtickangle(30);
-            set(gca,'TickLength',[0 0]);
-            set(gca,'TickLabelInterpreter','none');
         case 'median'
             m_fs = median(fs, 3);
-            %b = boxchart(tbl.ROI, tbl.f, 'GroupByColor', tbl.regressor, 'Notch', 'on', 'BoxWidth', 0.75);
-            b = boxchart(tbl.x, tbl.f, 'GroupByColor', tbl.regressor, 'BoxWidth', 0.75);
-            for i = 1:nregressors
-                b(i).JitterOutliers = 'on';
-                b(i).MarkerStyle = 'none';
-                %b(i).MarkerStyle = '.';
-            end
-            xticks(1.5:1.5:1.5*nROIs);
-            xticklabels(roi_names);
     end
-
-    legend(regressor_names, 'interpreter', 'none');
+    sem_fs = std(fs, 0, 3) / sqrt(nsubjects);
+    h = bar(1:nROIs, m_fs);
 
     % color the bars
     if exist('cmap', 'var') && ~isempty(cmap)
@@ -159,5 +122,11 @@ function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, r
         end
     end
 
+    legend(regressor_names, 'interpreter', 'none');
+    xticks(1:nROIs);
+    xticklabels(roi_names);
+    xtickangle(30);
+    set(gca,'TickLength',[0 0]);
+    set(gca,'TickLabelInterpreter','none');
 
 end
