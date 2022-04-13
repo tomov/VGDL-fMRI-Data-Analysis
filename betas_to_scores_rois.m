@@ -1,7 +1,7 @@
 function betas_to_scores_rois(glmodel, regressor_name, atlas)
     % correlate betas to subject scores
     % TODO dedupe w betas_to_scores.m
-    conn = mongo('holy7c22107.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'reader', 'Password', 'parolatamadafaqa')
+    conn = mongo('holy7c22105.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'reader', 'Password', 'parolatamadafaqa')
 
     EXPT = vgdl_expt();
 
