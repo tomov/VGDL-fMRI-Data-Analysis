@@ -68,8 +68,8 @@ switch figure_name
             end
         end
 
-        ylabel('expected payout ($)');
-        xlabel('agent');
+        ylabel('Expected payout ($)');
+        xlabel('Agent');
         set(gca, 'xtick', []);
         xlim([-0.38 0.38])
         ylim([0 14])
@@ -88,6 +88,7 @@ switch figure_name
         title('Human and model behavior', 'interpreter', 'none');
 
         print('pdf/plot_behavior.pdf', '-dpdf');
+        print('svg/plot_behavior.svg', '-dsvg');
 
 
     case 'plot_behavior_separate_DEPRECATED'
@@ -158,6 +159,7 @@ switch figure_name
         end
 
         print('pdf/plot_behavior_separate.pdf', '-dpdf');
+        print('svg/plot_behavior_separate.svg', '-dsvg');
 
     %
     %
@@ -249,31 +251,33 @@ switch figure_name
         agg_filename
         load(agg_filename);
 
-        figure('position', [1147 521 1045 418]);
+        figure('position', [1147 521 1045 218]);
         ix = ismember(regressor_names, {'theory', 'DQN', 'PCA', 'VAE'});
         %h = plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names, [], [], 1, [1:2]);
         %h = plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], [], 2, [1:1]);
         %h = plot_gp_CV_rois_helper(zs(:,ix,:), 'ttest', 'mean', regressor_names(ix), roi_names, [], [], 1, [1:2]);
-        h = plot_gp_CV_rois_helper_boxcharts(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], [], 5, [1:1]);
+        h = plot_gp_CV_rois_helper_boxcharts(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], [], 8, [1:1], 1.2);
         title('Model comparison by ROI');
         ylabel('Fraction significant voxels');
 
         % Prettify it
-        yscale = 7.0;
-        xscale = 1.5;
+        yscale = 7.2;
+        xscale = 1.25;
         text(xscale * 3.5, yscale * 0.075, 'Frontal/Motor', 'fontsize', 10, 'HorizontalAlignment', 'center');
         plot([xscale * 6.5 xscale * 6.5], yscale * [0 0.18], '--', 'color', [0.5 0.5 0.5]);
         text(xscale * 8.5, yscale * 0.075, 'Dorsal/Parietal', 'fontsize', 10, 'HorizontalAlignment', 'center');
         plot([xscale * 10.5 xscale * 10.5], [0 yscale *0.18], '--', 'color', [0.5 0.5 0.5]);
-        text(xscale * 12.5, yscale *0.075, 'Ventral/Temporal', 'fontsize', 10, 'HorizontalAlignment', 'center');
+        text(xscale * 12.6, yscale *0.075, 'Ventral/Temporal', 'fontsize', 10, 'HorizontalAlignment', 'center');
         plot([xscale * 14.5 xscale * 14.5], [0 yscale *0.18], '--', 'color', [0.5 0.5 0.5]);
-        text(xscale * 15.5, yscale * 0.075, 'Early visual', 'fontsize', 10, 'HorizontalAlignment', 'center');
+        text(xscale * 15.6, yscale * 0.075, 'Early visual', 'fontsize', 10, 'HorizontalAlignment', 'center');
         ylim([0 yscale *0.08]);
+        xlim([0.5 * xscale xscale * (length(roi_names) + 0.5)]);
         l = legend({'EMPA', 'DDQN', 'PCA', 'VAE'});
-        l.Position = [0.8491 0.6565 0.0842 0.1196];
+        l.Position = [0.1371 0.6119 0.0842 0.2821];
 
         orient(gcf, 'landscape');
         print('pdf/plot_gp_CV_rois_fraction_AAL2_GP_EMPA.pdf', '-dpdf');
+        print('svg/plot_gp_CV_rois_fraction_AAL2_GP_EMPA.svg', '-dsvg');
 
 
     case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped'

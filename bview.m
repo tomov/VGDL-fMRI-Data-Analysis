@@ -1,5 +1,6 @@
 function view(filename)
 
-struc = fullfile('masks','mean.nii');
+EXPT = vgdl_expt();
+struc = fullfile(EXPT.modeldir,'mean.nii');
 bspmview(filename, struc);
 

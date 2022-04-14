@@ -14,6 +14,7 @@ function h = plot_gp_CV_rois_helper_boxcharts(fs, test_type, statistic, regresso
     if ~exist('regressors_to_compare', 'var') %|| isempty(regressors_to_compare)
         regressors_to_compare = 1:nregressors;
     end
+    xscale = 1.25;
 
     % convert to table, for box charts
     x_rows = [];
@@ -25,14 +26,14 @@ function h = plot_gp_CV_rois_helper_boxcharts(fs, test_type, statistic, regresso
         for reg = 1:nregressors
             y = squeeze(fs(m,reg,:));
             %x = m - 0.2 + reg * 0.1;
-            x = m * 1.5;
+            x = m * xscale;
             x_rows = [x_rows; repmat(x, length(y), 1)];
             roi_rows = [roi_rows; repmat(roi_names(m), length(y), 1)];
             regressor_rows = [regressor_rows; repmat(regressor_names(reg), length(y), 1)];
             subject_rows = [subject_rows; (1:length(y))'];
             f_rows = [f_rows; y];
             u_fs(m,reg) = max(y(~isoutlier(y, 'quartiles'))); % upper limit
-            xs(m,reg) = x - 0.375 + 0.75 * (reg - 1) / (nregressors - 1);
+            xs(m,reg) = x - 0.45 / 1.5 * xscale + 0.75 * (reg - 1) / (nregressors - 1);
         end
     end
     tbl = table(x_rows, roi_rows, regressor_rows, subject_rows, f_rows, 'VariableNames', {'x', 'ROI', 'regressor', 'subject', 'f'});
@@ -92,7 +93,7 @@ function h = plot_gp_CV_rois_helper_boxcharts(fs, test_type, statistic, regresso
     end
 
     legend(regressor_names, 'interpreter', 'none');
-    xticks(1.5:1.5:1.5*nROIs);
+    xticks(xscale:xscale:xscale*nROIs);
     xticklabels(roi_names);
     xtickangle(30);
     set(gca,'TickLength',[0 0]);
