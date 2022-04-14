@@ -252,20 +252,22 @@ switch figure_name
         figure('position', [1147 521 1045 418]);
         ix = ismember(regressor_names, {'theory', 'DQN', 'PCA', 'VAE'});
         %h = plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names, [], [], 1, [1:2]);
-        h = plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], [], 2, [1:1]);
+        %h = plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], [], 2, [1:1]);
         %h = plot_gp_CV_rois_helper(zs(:,ix,:), 'ttest', 'mean', regressor_names(ix), roi_names, [], [], 1, [1:2]);
+        h = plot_gp_CV_rois_helper_boxcharts(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], [], 5, [1:1]);
         title('Model comparison by ROI');
         ylabel('Fraction significant voxels');
 
         % Prettify it
-        yscale = 3.7;
-        text(3.5, yscale * 0.075, 'Frontal/Motor', 'fontsize', 12, 'HorizontalAlignment', 'center');
-        plot([6.5 6.5], yscale * [0 0.08], '--', 'color', [0.5 0.5 0.5]);
-        text(8.5, yscale * 0.075, 'Dorsal/Parietal', 'fontsize', 12, 'HorizontalAlignment', 'center');
-        plot([10.5 10.5], [0 yscale *0.08], '--', 'color', [0.5 0.5 0.5]);
-        text(12.5, yscale *0.075, 'Ventral/Temporal', 'fontsize', 12, 'HorizontalAlignment', 'center');
-        plot([14.5 14.5], [0 yscale *0.08], '--', 'color', [0.5 0.5 0.5]);
-        text(15.5, yscale * 0.075, 'Early visual', 'fontsize', 12, 'HorizontalAlignment', 'center');
+        yscale = 7.0;
+        xscale = 1.5;
+        text(xscale * 3.5, yscale * 0.075, 'Frontal/Motor', 'fontsize', 10, 'HorizontalAlignment', 'center');
+        plot([xscale * 6.5 xscale * 6.5], yscale * [0 0.18], '--', 'color', [0.5 0.5 0.5]);
+        text(xscale * 8.5, yscale * 0.075, 'Dorsal/Parietal', 'fontsize', 10, 'HorizontalAlignment', 'center');
+        plot([xscale * 10.5 xscale * 10.5], [0 yscale *0.18], '--', 'color', [0.5 0.5 0.5]);
+        text(xscale * 12.5, yscale *0.075, 'Ventral/Temporal', 'fontsize', 10, 'HorizontalAlignment', 'center');
+        plot([xscale * 14.5 xscale * 14.5], [0 yscale *0.18], '--', 'color', [0.5 0.5 0.5]);
+        text(xscale * 15.5, yscale * 0.075, 'Early visual', 'fontsize', 10, 'HorizontalAlignment', 'center');
         ylim([0 yscale *0.08]);
         l = legend({'EMPA', 'DDQN', 'PCA', 'VAE'});
         l.Position = [0.8491 0.6565 0.0842 0.1196];
