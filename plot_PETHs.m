@@ -23,13 +23,13 @@ clear all;
 
 %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GLM_102_BOLD.mat')); % !!!!!!!!!!!!
 %ROI_ix = [      1      2      7     10     11     12     13     14     15]; 
-load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GLM_102_grouped_BOLD.mat'));
+%load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GLM_102_grouped_BOLD.mat'));
 %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP.mat')); % !!!!!!!!!!!!
 %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP_no_baseline.mat')); 
 %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP_CV_no_baseline.mat')); 
 %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP_CV_no_baseline.mat'));   % ---- for CV version
 %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP_CV.mat')); 
-%load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_grouped_GP.mat')); % !!!!!!!!!!!!
+load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_grouped_GP.mat')); % !!!!!!!!!!!!
 %load(fullfile(get_mat_dir(false), 'PETHs_atlas=AAL2_GP_EMPA_GLM_102_GP_DQN.mat')); 
 ROI_ix = 1:length(mask_filenames);
 
@@ -50,7 +50,7 @@ fields(find(strcmp(fields, 'block_end'))) = [];
 fields(find(strcmp(fields, 'instance_start'))) = [];
 fields(find(strcmp(fields, 'instance_end'))) = [];
 
-fields = {'theory_change_flag'};
+%fields = {'theory_change_flag'};
 
 subjs = 1:1:32;
 
@@ -61,7 +61,7 @@ t = PETH_dTRs * EXPT.TR; % s
 for m = 1:length(mask_filenames)
     disp(mask_name{m});
 
-    %subplot(3, 3, m);
+    subplot(3, 3, m);
     hold on;
 
     for i = 1:length(fields)
@@ -96,8 +96,8 @@ for m = 1:length(mask_filenames)
     end
 
     if m == 1
-        %legend(hh, fields, 'interpreter', 'none');
-        legend(hh, regions, 'interpreter', 'none');
+        legend(hh, fields, 'interpreter', 'none');
+        %legend(hh, regions, 'interpreter', 'none');
     end
     if exist('what', 'var') && strcmp(what, 'GP')
         ylabel('z');
