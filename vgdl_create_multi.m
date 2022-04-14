@@ -50,7 +50,7 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
     % just pre-generate the multi's locally, then load them on the cluster
     if ~ismember(glmodel, 23)
         try
-            conn = mongo('holy7c22105.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'reader', 'Password', 'parolatamadafaqa')
+            conn = mongo('holy7c22406.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'reader', 'Password', 'parolatamadafaqa')
         catch e
             e
             fprintf('loading from %s\n', filename);
@@ -3494,6 +3494,28 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
                     assert(false);
             end
 
+        % like GLM 102, but with lags
+        %
+        case {185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195}
+
+            % optionally offset from the theory_change_flag time
+            lag = (glmodel - 185) * 2;
+            fprintf('glm %d -> lag %d', glmodel, lag);
+
+            % from GLM 3: theory_change_flag
+            %
+            regs = get_regressors(subj_id, run, conn, true);
+            onsets = regs.theory_change_flag_onsets;
+
+            multi.names{1} = 'theory_change_flag';
+            multi.onsets{1} = onsets + lag;
+            multi.durations{1} = zeros(size(multi.onsets{1}));;
+
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
 
         otherwise
             assert(false, 'invalid glmodel -- should be one of the above');

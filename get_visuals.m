@@ -1,7 +1,7 @@
 function [legacy_fields, visuals, fields] = get_visuals(subj_id, run, conn, do_cache, plays_post_collection)
 
 %clear all;
-%conn = mongo('holy7c22105.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'reader', 'Password', 'parolatamadafaqa')
+%conn = mongo('holy7c22406.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'reader', 'Password', 'parolatamadafaqa')
 %subj_id = 1;
 %run_id = 6;
 %query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id) % in python we index runs from 0 (but not subjects) 
