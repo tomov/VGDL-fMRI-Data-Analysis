@@ -82,7 +82,7 @@ function h = plot_gp_CV_rois_helper_boxcharts(fs, test_type, statistic, regresso
                 end
                 if p <= 0.05
                     plot([x1 x2], [maxy maxy] + 0.002 * significant_scale, '-', 'color', [0 0 0]);
-                    text(mean([x1 x2]), maxy + 0.002 * significant_scale, significance(p), 'HorizontalAlignment', 'center', 'FontSize', significant_scale * font_scale);
+                    text(mean([x1 x2]), maxy + 0.0025 * significant_scale, significance(p), 'HorizontalAlignment', 'center', 'FontSize', significant_scale * font_scale);
                     %text(mean([x1 x2]), maxy + 0.002 * significant_scale, [roi_names{m}, '-', regressor_names{r1}], 'HorizontalAlignment', 'center', 'FontSize', significant_scale);
                     maxy = maxy + 0.003 * significant_scale;
                 end

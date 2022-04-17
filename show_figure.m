@@ -256,7 +256,7 @@ switch figure_name
         %h = plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names, [], [], 1, [1:2]);
         %h = plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], [], 2, [1:1]);
         %h = plot_gp_CV_rois_helper(zs(:,ix,:), 'ttest', 'mean', regressor_names(ix), roi_names, [], [], 1, [1:2]);
-        h = plot_gp_CV_rois_helper_boxcharts(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], [], 8, [1:1], 1.2);
+        h = plot_gp_CV_rois_helper_boxcharts(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], [], 8, [1:1], 0.9);
         title('Model comparison by ROI');
         ylabel('Fraction significant voxels');
 
@@ -292,17 +292,19 @@ switch figure_name
         agg_filename
         load(agg_filename);
 
-        figure('position', [1147 522 537 417]);
+        figure('position', [1147 521 345 218]);
         ix = ismember(regressor_names, {'theory', 'DQN', 'PCA', 'VAE'});
         %h = plot_gp_CV_rois_helper(fs(:,ix,:), 'ranksum', 'median', regressor_names(ix), roi_names, [], [], 1, [1:2]);
-        h = plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], [], 2, [1:1]);
+        %h = plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], [], 2, [1:1]);
         %h = plot_gp_CV_rois_helper(fs(:,ix,:), 'ttest', 'mean', regressor_names(ix), roi_names, [], [], 1, [1:2]);
+        h = plot_gp_CV_rois_helper_boxcharts(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], [], 8, [1:1], 1.0);
         title('Model comparison by ROI group');
         ylabel('Fraction significant voxels');
         xticklabels({'Frontal/Motor', 'Dorsal/Parietal', 'Ventral/Temporal', 'Early visual'});
         l = legend({'EMPA', 'DDQN', 'PCA', 'VAE'});
 
         print('pdf/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped.pdf', '-dpdf');
+        print('svg/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped.svg', '-dsvg');
 
 
     case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped_EMPA_components'
