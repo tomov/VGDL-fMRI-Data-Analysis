@@ -1,4 +1,4 @@
-function h = plot_gp_CV_rois_helper_boxcharts(fs, test_type, statistic, regressor_names, roi_names, null_value, cmap, significant_scale, regressors_to_compare, font_scale)
+function h = plot_gp_CV_rois_helper_boxcharts(fs, test_type, statistic, regressor_names, roi_names, null_value, cmap, significant_scale, regressors_to_compare, font_scale, outliers)
     sem = @(x) std(x) / sqrt(length(x));
 
     nROIs = size(fs, 1);
@@ -13,6 +13,9 @@ function h = plot_gp_CV_rois_helper_boxcharts(fs, test_type, statistic, regresso
     end
     if ~exist('regressors_to_compare', 'var') %|| isempty(regressors_to_compare)
         regressors_to_compare = 1:nregressors;
+    end
+    if ~exist('outliers', 'var') || isempty(outliers)
+        outliers = false;
     end
     xscale = 1.25;
 
@@ -32,7 +35,11 @@ function h = plot_gp_CV_rois_helper_boxcharts(fs, test_type, statistic, regresso
             regressor_rows = [regressor_rows; repmat(regressor_names(reg), length(y), 1)];
             subject_rows = [subject_rows; (1:length(y))'];
             f_rows = [f_rows; y];
-            u_fs(m,reg) = max(y(~isoutlier(y, 'quartiles'))); % upper limit
+            if outliers
+                u_fs(m,reg) = max(y); % upper limit
+            else
+                u_fs(m,reg) = max(y(~isoutlier(y, 'quartiles'))); % upper limit
+            end
             xs(m,reg) = x - 0.45 / 1.5 * xscale + 0.75 * (reg - 1) / (nregressors - 1);
         end
     end
@@ -47,13 +54,27 @@ function h = plot_gp_CV_rois_helper_boxcharts(fs, test_type, statistic, regresso
         case 'median'
             m_fs = median(fs, 3);
             %b = boxchart(tbl.ROI, tbl.f, 'GroupByColor', tbl.regressor, 'Notch', 'on', 'BoxWidth', 0.75);
-            h = boxchart(tbl.x, tbl.f, 'GroupByColor', tbl.regressor, 'BoxWidth', 0.75);
-            for i = 1:nregressors
-                %h(i).JitterOutliers = 'on';
-                h(i).MarkerStyle = 'none';
-                %h(i).MarkerStyle = '.';
+            h = boxchart(tbl.x, tbl.f, 'GroupByColor', tbl.regressor, 'BoxWidth', 0.75); 
+            if outliers
+                for i = 1:nregressors
+                    h(i).JitterOutliers = 'on';
+                    h(i).MarkerStyle = '.';
+                end
+            else
+                for i = 1:nregressors
+                    h(i).MarkerStyle = 'none';
+                end
             end
     end
+
+    % color the bars
+    if exist('cmap', 'var') && ~isempty(cmap)
+        for i = 1:length(h)
+            h(i).BoxFaceColor = cmap(i,:);
+            h(i).MarkerColor = cmap(i,:);
+        end
+    end
+
 
     hold on;
 
