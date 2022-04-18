@@ -154,7 +154,6 @@ switch figure_name
         regions = regions(ROI_ix);
         activations = activations(ROI_ix);
 
-        %figure('pos', [64 348 2110*0.5 911*0.5]);
         figure('position', [147 605 1411 134]);
 
         % optionally plot theory change flag only
@@ -176,7 +175,6 @@ switch figure_name
         for m = 1:length(mask_filenames)
             disp(mask_name{m});
 
-            %subplot(3, 4, m + (floor((m - 1) / 3)));
             subplot(1, 9, m);
             hold on;
 
@@ -214,7 +212,7 @@ switch figure_name
             title(regions{m}, 'interpreter', 'none');
             %ylim([-0.2 0.5]); 
 
-            if m <= 6
+            if m <= 7
                 ylim([ax.YLim(1) ax.YLim(2) * 1.3]);
             end
             plot(ax.XLim, [0 0], '--', 'color', [0.5 0.5 0.5]);
@@ -233,8 +231,6 @@ switch figure_name
             end
         end
 
-        %orient(gcf, 'landscape');
-        %print('pdf/plot_PETH_AAL2_GLM_102_BOLD.pdf', '-dpdf', '-fillpage');
         print('svg/figure4/plot_PETH_AAL2_GLM_102_BOLD.svg', '-dsvg');
 
 
@@ -295,7 +291,7 @@ switch figure_name
             title('Average Fisher z-transformed Pearson correlation change');
             ylabel('\Delta z');
         else
-            title('Average BOLD change in ROIs');
+            %title('Average BOLD change in ROIs');
             ylabel('\Delta BOLD');
         end
 
@@ -305,12 +301,12 @@ switch figure_name
         plot([2.5 2.5], [0 0.8], '--', 'color', [0.5 0.5 0.5]);
         text(3.00, 0.55, 'Dorsal/Parietal', 'fontsize', 9, 'HorizontalAlignment', 'center');
         plot([3.5 3.5], [0 0.8], '--', 'color', [0.5 0.5 0.5]);
-        text(5.5, 0.55, 'Ventral/Temporal', 'fontsize', 9, 'HorizontalAlignment', 'center');
-        plot([7.5 7.5], [0 0.8], '--', 'color', [0.5 0.5 0.5]);
-        text(8.5, 0.55, 'Early visual', 'fontsize', 9, 'HorizontalAlignment', 'center');
+        text(5.0, 0.55, 'Ventral/Temporal', 'fontsize', 9, 'HorizontalAlignment', 'center');
+        plot([6.5 6.5], [0 0.8], '--', 'color', [0.5 0.5 0.5]);
+        text(8.2, 0.55, 'Early visual', 'fontsize', 9, 'HorizontalAlignment', 'center');
         %legend(fields(ix), 'interpreter', 'none');
         l = legend({'theory update', 'interaction', 'avatar interaction', 'new object', 'killed object', 'episode start', 'episode end'}, 'interpreter', 'none');
-        l.Position = [0.6830 0.6410 0.0742 0.2344];
+        l.Position = [0.6255 0.6383 0.1163 0.3532];
         l.FontSize = 6;
         ylim([-0.1 0.6]);
 
@@ -335,30 +331,23 @@ switch figure_name
         regions = regions(ROI_ix);
         activations = activations(ROI_ix);
 
-        figure('pos', [64 348 2110*0.5 911*0.5]);
+        figure('position', [147 605 1411 134]);
 
         % optionally plot theory change flag only
         fields = {'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag'};
-        %fields(find(strcmp(fields, 'theory_change_flag'))) = [];
-        %%fields(find(strcmp(fields, 'sprite_change_flag'))) = [];
-        %%fields(find(strcmp(fields, 'interaction_change_flag'))) = [];
-        %%fields(find(strcmp(fields, 'termination_change_flag'))) = [];
-        %fields(find(strcmp(fields, 'block_start'))) = [];
-        %fields(find(strcmp(fields, 'block_end'))) = [];
-        %fields(find(strcmp(fields, 'instance_start'))) = [];
-        %fields(find(strcmp(fields, 'instance_end'))) = [];
 
         subjs = 1:1:32;
 
         %cmap = colormap(jet(length(fields)));
-        cmap = [0.8 0.5 0.2]' * [0    0.4470    0.7410] + [0.2 0.5 0.8]' * [1 1 1];
+        %cmap = [0.8 0.5 0.2]' * [0    0.4470    0.7410] + [0.2 0.5 0.8]' * [1 1 1];
+        cmap = [0.9 0.5 0.2]' * [0    0.4470    0.7410] + [0.1 0.5 0.8]' * [0 0 0];
         t = PETH_dTRs * EXPT.TR; % s
 
         % loop over masks
         for m = 1:length(mask_filenames)
             disp(mask_name{m});
 
-            subplot(3, 4, m + (floor((m - 1) / 3)));
+            subplot(1, 9, m);
             hold on;
 
             for i = 1:length(fields)
@@ -383,8 +372,8 @@ switch figure_name
                     j_init = find(PETH_dTRs > 0); % ignore baselines
                     for j = j_init:length(t)
                         if p(j) <= 0.05
-                            h = text(t(j) + ix * 0.5, ax.YLim(2) - 0.02 - ix * 0.02, significance(p(j)), 'color', cmap(i,:), 'fontsize', 7, 'HorizontalAlignment', 'center');
-                            set(h,'Rotation',90);
+                            %h = text(t(j) + ix * 0.5, ax.YLim(2) - 0.02 - ix * 0.02, significance(p(j)), 'color', cmap(i,:), 'fontsize', 7, 'HorizontalAlignment', 'center');
+                            %set(h,'Rotation',90);
                         end
                     end
                 end
@@ -394,23 +383,21 @@ switch figure_name
             end
 
             if m == length(mask_filenames)
-                %legend(hh, fields, 'interpreter', 'none');
-                %l = legend(hh, {'object update', 'relation update', 'goal update', 'interaction', 'avatar interaction', 'new object', 'killed object', 'episode start', 'episode end'}, 'interpreter', 'none');
-                l = legend(hh, {'object update', 'relation update', 'goal update'}, 'interpreter', 'none');
-                l.Position = [0.7399 0.7786 0.0948 0.1570];
+                %l = legend(hh, {'object update', 'relation update', 'goal update'}, 'interpreter', 'none');
+                %l.Position = [0.7399 0.7786 0.0948 0.1570];
             end
-            if exist('what', 'var') && strcmp(what, 'GP')
-                ylabel('\Delta z');
-            else
-                ylabel('\Delta BOLD');
+            if m == 1
+                if exist('what', 'var') && strcmp(what, 'GP')
+                    ylabel('\Delta z');
+                else
+                    ylabel('\Delta BOLD');
+                end
             end
             xlabel('time (s)');
             title(regions{m}, 'interpreter', 'none');
         end
 
-        orient(gcf, 'landscape');
-        %print('pdf/plot_PETH_components_AAL2_GLM_102_BOLD.pdf', '-dpdf', '-fillpage');
-        print('pdf/plot_PETH_components_AAL2_GLM_102_BOLD.pdf', '-dpdf');
+        print('svg/figure4/plot_PETH_components_AAL2_GLM_102_BOLD.svg', '-dsvg');
 
 
     case 'plot_PETHs_bars_components_AAL2_GLM_102_BOLD'
@@ -427,14 +414,6 @@ switch figure_name
 
         % optionally plot theory change flag only
         fields = {'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag'};
-        %fields(find(strcmp(fields, 'theory_change_flag'))) = [];
-        %%fields(find(strcmp(fields, 'sprite_change_flag'))) = [];
-        %%fields(find(strcmp(fields, 'interaction_change_flag'))) = [];
-        %%fields(find(strcmp(fields, 'termination_change_flag'))) = [];
-        %fields(find(strcmp(fields, 'block_start'))) = [];
-        %fields(find(strcmp(fields, 'block_end'))) = [];
-        %fields(find(strcmp(fields, 'instance_start'))) = [];
-        %fields(find(strcmp(fields, 'instance_end'))) = [];
 
         subjs = 1:1:32;
 
@@ -445,7 +424,8 @@ switch figure_name
         as = nan(nROIs,nregressors,nsubjects);
 
         %cmap = colormap(jet(length(fields)));
-        cmap = [0.8 0.5 0.2]' * [0    0.4470    0.7410] + [0.2 0.5 0.8]' * [1 1 1];
+        %cmap = [0.8 0.5 0.2]' * [0    0.4470    0.7410] + [0.2 0.5 0.8]' * [1 1 1];
+        cmap = [0.9 0.5 0.2]' * [0    0.4470    0.7410] + [0.1 0.5 0.8]' * [0 0 0];
         t = PETH_dTRs * EXPT.TR; % s
 
         % loop over masks
@@ -462,38 +442,36 @@ switch figure_name
         end
 
         % Piggyback off of plot_gp_CV_rois.m
-        figure('pos', [49 329 943 410]);
+        figure('position', [147 521 1045 218]);
 
         ix = 1:nregressors;
-        h = plot_gp_CV_rois_helper(as(:,ix,:), 'ttest', 'mean', fields(ix), regions, 0, cmap, 8, 1:3);
+        h = plot_gp_CV_rois_helper(as(:,ix,:), 'ttest', 'mean', fields(ix), regions, 0, cmap, 8, 1:3, 0.7);
         if exist('what', 'var') && strcmp(what, 'GP')
             title('Average Fisher z-transformed Pearson correlation change');
             ylabel('\Delta z');
         else
-            title('Average BOLD change in ROIs');
+            %title('Average BOLD change in ROIs');
             ylabel('\Delta BOLD');
         end
 
         % Prettyfy it 
         % specifically for agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA.mat');
-        text(1.5, 0.50, 'Frontal/Motor', 'fontsize', 9, 'HorizontalAlignment', 'center');
+        text(1.5, 0.55, 'Frontal/Motor', 'fontsize', 9, 'HorizontalAlignment', 'center');
         plot([2.5 2.5], [0 0.8], '--', 'color', [0.5 0.5 0.5]);
-        text(3.05, 0.50, 'Dorsal/Parietal', 'fontsize', 9, 'HorizontalAlignment', 'center');
+        text(3.00, 0.55, 'Dorsal/Parietal', 'fontsize', 9, 'HorizontalAlignment', 'center');
         plot([3.5 3.5], [0 0.8], '--', 'color', [0.5 0.5 0.5]);
-        text(5.5, 0.50, 'Ventral/Temporal', 'fontsize', 9, 'HorizontalAlignment', 'center');
-        plot([7.5 7.5], [0 0.8], '--', 'color', [0.5 0.5 0.5]);
-        text(8.5, 0.50, 'Early visual', 'fontsize', 9, 'HorizontalAlignment', 'center');
+        text(5.0, 0.55, 'Ventral/Temporal', 'fontsize', 9, 'HorizontalAlignment', 'center');
+        plot([6.5 6.5], [0 0.8], '--', 'color', [0.5 0.5 0.5]);
+        text(8.0, 0.55, 'Early visual', 'fontsize', 9, 'HorizontalAlignment', 'center');
         %legend(fields(ix), 'interpreter', 'none');
         %l = legend({'object update', 'relation update', 'goal update', 'interaction', 'avatar interaction', 'new object', 'killed object', 'episode start', 'episode end'}, 'interpreter', 'none');
         l = legend({'object update', 'relation update', 'goal update'}, 'interpreter', 'none');
-        l.Position = [0.6830 0.6710 0.0742 0.0944];
+        l.Position = [0.6230 0.7910 0.0742 0.0944];
         l.FontSize = 6;
-        ylim([-0.2 0.55]);
+        ylim([-0.2 0.60]);
 
 
-        orient(gcf, 'landscape');
-        %print('pdf/plot_PETHs_bars_components_AAL2_GLM_102_BOLD.pdf', '-dpdf', '-bestfit');
-        print('pdf/plot_PETHs_bars_components_AAL2_GLM_102_BOLD.pdf', '-dpdf');
+        print('svg/figure4/plot_PETHs_bars_components_AAL2_GLM_102_BOLD.svg', '-dsvg');
 
 
 
@@ -539,7 +517,7 @@ switch figure_name
         bs = bs - bs(:,1,:); % subtract first model
 
         % Piggyback off of plot_gp_CV_rois.m
-        figure('pos', [49 568 1252 371]);
+        figure('pos', [49 568 852 371]);
 
         %cmap = [1 0.8 0.6 0.4 0.2]' * [0    0.4470    0.7410];
         %cmap = [ ...
@@ -550,20 +528,20 @@ switch figure_name
         cmap = [cmap; 0.7294    0.3333    0.8275];
         glm_names = {'theory updates', 'object updates', 'relation updates', 'goal updates', 'object, relation, goal updates'};
         ix = [2,3,4,5];
-        h = plot_gp_CV_rois_helper(bs(:,ix,:), 'ttest', 'mean', glm_names(ix), regions, 0, cmap, 11, []);
+        h = plot_gp_CV_rois_helper(bs(:,ix,:), 'ttest', 'mean', glm_names(ix), regions, 0, cmap, 12, [], 0.6);
         ylabel('\Delta BIC relative to theory updates');
         title('GLM comparison');
 
         % Prettyfy it 
         % specifically for agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA.mat');
-        text(1.5, 0.85 * 50000, 'Frontal/Motor', 'fontsize', 12, 'HorizontalAlignment', 'center');
+        text(1.5, 0.85 * 50000, 'Frontal/Motor', 'fontsize', 11, 'HorizontalAlignment', 'center');
         plot([2.5 2.5], [0 1.8 * 50000], '--', 'color', [0.5 0.5 0.5]);
-        text(3.05, 0.85 * 50000, 'Dorsal/Parietal', 'fontsize', 12, 'HorizontalAlignment', 'center');
+        text(3.00, 0.85 * 50000, 'Dorsal/Parietal', 'fontsize', 11, 'HorizontalAlignment', 'center');
         plot([3.5 3.5], [0 1.8 * 50000], '--', 'color', [0.5 0.5 0.5]);
-        text(5, 0.85 * 50000, 'Ventral/Temporal', 'fontsize', 12, 'HorizontalAlignment', 'center');
+        text(5, 0.85 * 50000, 'Ventral/Temporal', 'fontsize', 11, 'HorizontalAlignment', 'center');
         ylim([-40000 50000]);
         l = legend(glm_names(ix),  'interpreter', 'none');
-        l.Position = [0.2619 0.2435 0.1815 0.1775];
+        l.Position = [0.2191 0.1626 0.2413 0.1775];
         l.FontSize = 8;
 
         % minor adjustments
@@ -573,8 +551,7 @@ switch figure_name
         H(19).Position(2) = H(19).Position(2) - 3000;
         H(26).Position(2) = H(26).Position(2) - 3000;
 
-        orient(gcf, 'landscape');
-        print('pdf/plot_glm_bic_bms_AAL2_GLM_102_multiplex_with_controls.pdf', '-dpdf', '-bestfit');
+        print('svg/figure4/plot_glm_bic_bms_AAL2_GLM_102_multiplex_with_controls.svg', '-dsvg');
 
 
     otherwise
