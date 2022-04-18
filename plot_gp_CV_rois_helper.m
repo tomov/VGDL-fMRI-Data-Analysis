@@ -79,9 +79,9 @@ function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, r
                 if p <= 0.05
                     %text(x1, u_fs(m,r1) + 0.002 * significant_scale, significance(p), 'HorizontalAlignment', 'center');
                     if mean(y1) < 0
-                        y = l_fs(m,r1) - 0.004 * significant_scale;
+                        y = l_fs(m,r1) - 0.003 * significant_scale;
                     else
-                        y = u_fs(m,r1) + 0.002 * significant_scale;
+                        y = u_fs(m,r1) + 0.003 * significant_scale;
                     end
                     text(x1, y, significance(p), 'HorizontalAlignment', 'center', 'FontSize', significant_scale * font_scale);
                    % text(x1, y,  [roi_names{m}, '-', regressor_names{r1}], 'HorizontalAlignment', 'center', 'FontSize', significant_scale);

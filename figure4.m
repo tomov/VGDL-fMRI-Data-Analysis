@@ -524,11 +524,11 @@ switch figure_name
         % 0         0    1.0000; ...
         % 0    0.3333    1.0000; ...
         % 0    0.6667    1.0000];
-        cmap = [0.8 0.5 0.2]' * [0    0.4470    0.7410] + [0.2 0.5 0.8]' * [1 1 1];
+        cmap = [0.9 0.5 0.2]' * [0    0.4470    0.7410] + [0.1 0.5 0.8]' * [0 0 0];
         cmap = [cmap; 0.7294    0.3333    0.8275];
         glm_names = {'theory updates', 'object updates', 'relation updates', 'goal updates', 'object, relation, goal updates'};
         ix = [2,3,4,5];
-        h = plot_gp_CV_rois_helper(bs(:,ix,:), 'ttest', 'mean', glm_names(ix), regions, 0, cmap, 12, [], 0.6);
+        h = plot_gp_CV_rois_helper(bs(:,ix,:), 'ttest', 'mean', glm_names(ix), regions, 0, cmap, 300000, [], 0.000025);
         ylabel('\Delta BIC relative to theory updates');
         title('GLM comparison');
 
