@@ -11,6 +11,14 @@ switch figure_name
         EXPT = vgdl_expt();
         bspmview_wrapper(EXPT, tmap);
 
+    case 'plot_gp_CV_EMPA_table'
+        % plot_gp_CV.m
+
+        load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=EMPA_theory_nsamples=100_project=1_fast=1.mat'));
+        filename = bspmview_save_map(vgdl_expt, tmap);
+        %ccnl_results_table('AAL2', 'peak', filename, [], [], 0.001, '+/-', 0.05, 20, 3, true, [], 31);
+        ccnl_results_table('AAL2', 'vote', filename, [], [], 0.001, '+', 0.05, 20, 3, true, [], 31);
+
     case 'plot_gp_CV_DDQN'
         % plot_gp_CV.m
 

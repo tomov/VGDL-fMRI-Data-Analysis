@@ -8,6 +8,11 @@ switch figure_name
 
         ccnl_view(vgdl_expt(), 102, 'theory_change_flag');
 
+    case 'GLM_102_table'
+
+        ccnl_results_table('AAL2', 'peak', vgdl_expt(), 102, 'theory_change_flag', 0.001, '+/-', 0.05, 20, 3, true);
+        %ccnl_results_table('AAL2', 'vote', vgdl_expt(), 102, 'theory_change_flag', 0.001, '-', 0.05, 20, 3, true);
+
     case 'plot_confirmatory_betas_for_masks_AAL2_GLM_102'
         % plot_confirmatory_betas_for_masks.m
 
