@@ -50,7 +50,7 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
     % just pre-generate the multi's locally, then load them on the cluster
     if ~ismember(glmodel, 23)
         try
-            conn = mongo('holy7c22406.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'reader', 'Password', 'parolatamadafaqa')
+            conn = mongo('holy7c22108.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'reader', 'Password', 'parolatamadafaqa')
         catch e
             e
             fprintf('loading from %s\n', filename);
