@@ -8,7 +8,8 @@ subj_ids = {1:32, 1:32, 1:32, 1:32, 1:11, 12:32, 1:32};
 num_levels = 9;
 
 %figure('pos', [99 96 1822 803]);
-figure('pos', [99 181 1274 718]);
+%figure('pos', [99 181 1274 718]);
+figure('pos', [99 201 1445 698]);
 h = tiledlayout(length(game_names), num_levels, 'TileSpacing', 'none', 'Padding', 'none');
 
 for g = 1:length(game_names)
@@ -46,4 +47,6 @@ end
 
 sgtitle('Theory updates (smoothed)');
 
+orient(gcf, 'landscape');
 print('svg/neuron_revision/figure_neuron_R1_learning.svg', '-dsvg');
+print('pdf/neuron_revision/figure_neuron_R1_learning.pdf', '-dpdf', '-bestfit');
