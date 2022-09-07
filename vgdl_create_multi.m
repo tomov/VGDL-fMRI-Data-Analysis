@@ -3517,6 +3517,26 @@ function multi = vgdl_create_multi(glmodel, subj_id, run_id, save_output)
             multi = add_visuals_to_multi(multi, subj_id, run, conn);
             multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
 
+        % like GLM 102, but with separate regressors for each data partition
+        %
+        case 196
+
+            % from GLM 3: theory_change_flag
+            %
+            regs = get_regressors(subj_id, run, conn, true);
+            onsets = regs.theory_change_flag_onsets;
+
+            partition_id = partition_id_from_run_id(run_id);
+            multi.names{1} = sprintf('theory_change_flag_part%d', partition_id);
+            multi.onsets{1} = onsets;
+            multi.durations{1} = zeros(size(multi.onsets{1}));;
+
+            % GLM 9: nuisance regressors
+            multi = add_games_to_multi(multi, subj_id, run, conn);
+            multi = add_keyholds_to_multi(multi, subj_id, run, conn);
+            multi = add_visuals_to_multi(multi, subj_id, run, conn);
+            multi = add_onoff_to_multi(multi, subj_id, run, conn, {'play_start', 'play_end'});
+
         otherwise
             assert(false, 'invalid glmodel -- should be one of the above');
 
