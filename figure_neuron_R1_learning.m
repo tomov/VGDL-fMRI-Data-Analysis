@@ -1,3 +1,5 @@
+% In response to neuron reviewer 1, comment about learning
+
 function show_figure(figure_name)
 
 switch figure_name

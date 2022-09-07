@@ -1,8 +1,31 @@
+
+
+
+
+mongo_connect;
+
+subj_id = 1;
+all_games = {};
+
+for run_id = 1:6
+    run = get_run(subj_id, run_id);
+
+    [game_names, onsets, durs] = get_games(subj_id, run, conn);
+    all_games = [all_games, game_names'];
+end
+
+
+
+
+
+
+
 %plot behavior
 
 
 %{
 % compare convolved vs non-convolved HRF
+
 
 figure;
 plot(HRRs(:,1));
