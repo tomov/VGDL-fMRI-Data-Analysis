@@ -33,7 +33,7 @@ concat=0
 novelty=1
 fast=true
 save_Y_hat=0
-which_partitions=(1 2)
+which_partitions=(2 3)
 
 
 which_partitions_arg="${which_partitions[@]}"  # stringify it with spaces
