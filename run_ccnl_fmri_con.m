@@ -462,6 +462,12 @@ for i = 1:length(glmodels)
         case {180}
             ccnl_fmri_con(vgdl_expt(), glmodel, {'log_avg_plan_eff'}, subjs);
 
+        case {196}
+            ccnl_fmri_con(vgdl_expt(), glmodel, ...
+                {'theory_change_flag_part1', 'theory_change_flag_part2', 'theory_change_flag_part3', ...
+                 'theory_change_flag_part1 - theory_change_flag_part3', 'theory_change_flag_part3 - theory_change_flag_part1'}, ...
+                 subjs);
+
         otherwise
             assert(false, 'invalid glmodel -- should be one of the above');
 

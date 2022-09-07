@@ -11,7 +11,7 @@ subj_arg="${goodSubjects[@]}" # stringify it
 
 #models=( 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 )
 #models=( 166  168 170 172 174 176 178 180 )
-models=( 185 )
+models=( 196 )
 #models=( 181 182 183 184 )
 
 echo ---------------- >> jobs.txt

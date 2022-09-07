@@ -3,11 +3,13 @@
 
 mkdir output
 
-goodSubjects=( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 )  # same as getGoodSubjects(), e.g. goodSubjects = ( 1 2 3 5 7 10 )
+#goodSubjects=( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 )  # same as getGoodSubjects(), e.g. goodSubjects = ( 1 2 3 5 7 10 )
+goodSubjects=( 1 2 3 4 5 6 7 8 9 10 11 12 13 14                16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 )  # EXCLUDED 15!!!!!!!!!!!!!!!!!
 subj_arg="${goodSubjects[@]}" # stringify it
 
 #models=( 27 28 29 76 82 83 81 80 86 87 88 68 30 34 31 35 36 37 42 43 46 47 48 49 57 )
-models=( 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 )
+#models=( 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 )
+models=( 196 )
 models_arg="${models[@]}" # stringify it with spaces
 models_str=`echo $models_arg | sed 's/ /_/g'` # stringify with underscores
 

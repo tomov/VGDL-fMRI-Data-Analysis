@@ -1,4 +1,4 @@
-function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, normalize, concat, novelty, fast, save_Y_hat, debug)
+function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, normalize, concat, novelty, fast, save_Y_hat, which_partitions, debug)
 
     %{
     clear all;
@@ -45,13 +45,17 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
     if ~exist('novelty', 'var')
         novelty = 1;
     end
+    if ~exist('which_partitions', 'var')
+        which_partitions = [1,2,3];
+    end
 
 
 
     [~,maskname,~] = fileparts(mask);
     %filename = sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_project=%d_fast=%d_nowhiten_nofilter.mat', subj, use_smooth, glmodel, maskname, model_name, what, project, fast);
     %filename = sprintf('fit_gp_CV_HRR_cannon_repro_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=%d_saveYhat=%d.mat', subj, use_smooth, glmodel, maskname, model_name, what, project, normalize, concat, novelty, fast, save_Y_hat);
-    filename = sprintf('fit_gp_CV_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=%d_saveYhat=%d.mat', subj, use_smooth, glmodel, maskname, model_name, what, project, normalize, concat, novelty, fast, save_Y_hat);
+    which_partitions_str = sprintf('%d', which_partitions);
+    filename = sprintf('fit_gp_CV_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=%d_saveYhat=%d_parts=%s.mat', subj, use_smooth, glmodel, maskname, model_name, what, project, normalize, concat, novelty, fast, save_Y_hat, which_partitions_str);
     filename = fullfile(get_mat_dir(2), filename);
     filename
 
@@ -109,12 +113,18 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
     % every couple of runs form a partition
     partition_id = partition_id_from_run_id(run_id);
     assert(size(partition_id, 1) == size(Y, 1));
-    n_partitions = max(partition_id);
+
+    % only include partitions that we care about
+    partitions = unique(partition_id);
+    partitions = partitions(ismember(partitions, which_partitions));
+    n_partitions = length(partitions);
 
     disp('run_id');
     disp(run_id');
     disp('partition_id');
     disp(partition_id');
+    disp('partitions');
+    disp(partitions');
 
     % find nearest symmetric positive definite matrix (it's not b/c of numerical issues, floating points, etc.)
     ker = nearestSPD(ker);
@@ -176,12 +186,14 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
         fprintf('inverting kernel for subj %d, sigma %.3f\n', subj, s);
         tic
 
+        all = ismember(partition_id, partitions); % all trials
+
         [sn2(j), ...
          ldB2(j), ...
          solveKiW{j}, ...
-         invKi{j}] = calc_invKi(ker, x, s, hyp, covfun);
+         invKi{j}] = calc_invKi(ker(all, all), x(all), s, hyp, covfun);
 
-        ker_invKi{j} = ker * invKi{j};
+        ker_invKi{j} = ker(all, all) * invKi{j};
 
         toc
 
@@ -192,12 +204,12 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
         % CV
         %
         for p = 1:n_partitions % for each partition
-            train = partition_id ~= p;
-            test = partition_id == p;
+            train = (partition_id ~= partitions(p)) & all;
+            test = (partition_id == partitions(p)) & all;
 
-            if ~any(test)
+            if ~any(test) || ~any(train)
                 % empty partition 
-                disp(['kernel skipping empty partition', num2str(p)]);
+                disp(['kernel skipping empty partition', num2str(partitions(p))]);
                 continue;
             end
 
@@ -272,8 +284,9 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
 
         % no CV; use marginal likelihood for model comparison
         %
-        train = partition_id > 0; % all trials
-        test = train; % test data = train data here
+        all = ismember(partition_id, partitions); % all trials
+        train = all;
+        test = all; % test data = train data here
 
         [sigma(i), ...
          logmarglik(i), ...
@@ -303,12 +316,12 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
         %
         y_hat_CV = nan(size(y));
         for p = 1:n_partitions % for each partition
-            train = partition_id ~= p;
-            test = partition_id == p;
+            train = (partition_id ~= partitions(p)) & all;
+            test = (partition_id == partitions(p)) & all;
 
-            if ~any(test)
+            if ~any(test) || ~any(train)
                 % empty partition 
-                disp(['skipping empty partition', num2str(p)]);
+                disp(['skipping empty partition', num2str(partitions(p))]);
                 continue;
             end
 
@@ -388,14 +401,14 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
                        'sigma_CV', 'logmarglik_CV', 'logpredlik_CV', 'R2_CV', 'adjR2_CV', 'r_CV', 'MSE_CV', 'SMSE_CV', ...
                        'ceil_sigma', 'ceil_logmarglik', 'ceil_logpseudolik', 'ceil_R2', 'ceil_adjR2', 'ceil_r', 'ceil_MSE', 'ceil_SMSE', ...
                        'ceil_sigma_CV', 'ceil_logmarglik_CV', 'ceil_logpseudolik_CV', 'ceil_R2_CV', 'ceil_adjR2_CV', 'ceil_r_CV', 'ceil_MSE_CV', 'ceil_SMSE_CV', ...
-                       'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'sigmas', 'n', 'partition_id', 'Y', 'Y_hat_CV', 'Y_hat', ...
+                       'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'sigmas', 'n', 'partition_id', 'partitions', 'Y', 'Y_hat_CV', 'Y_hat', ...
         '-v7.3');
     else
         save(filename, 'sigma', 'logmarglik', 'logpredlik', 'R2', 'adjR2', 'r', 'MSE', 'SMSE', ... 
                        'sigma_CV', 'logmarglik_CV', 'logpredlik_CV', 'R2_CV', 'adjR2_CV', 'r_CV', 'MSE_CV', 'SMSE_CV', ...
                        'ceil_sigma', 'ceil_logmarglik', 'ceil_logpseudolik', 'ceil_R2', 'ceil_adjR2', 'ceil_r', 'ceil_MSE', 'ceil_SMSE', ...
                        'ceil_sigma_CV', 'ceil_logmarglik_CV', 'ceil_logpseudolik_CV', 'ceil_R2_CV', 'ceil_adjR2_CV', 'ceil_r_CV', 'ceil_MSE_CV', 'ceil_SMSE_CV', ...
-                       'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'sigmas', 'n', 'partition_id', ...
+                       'subj', 'use_smooth', 'glmodel', 'mask', 'what', 'sigmas', 'n', 'partition_id', 'partitions', ...
         '-v7.3');
     end
 

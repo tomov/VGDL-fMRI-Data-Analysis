@@ -55,7 +55,7 @@ function [sigma, logmarglik, logpredlik, y_hat, R2, adjR2, r, MSE, SMSE] = fit_g
     y_hat = ker_invKi{j} * y(train);
 
     % R^2
-    assert(all(train == test) || ~any(train == test));
+    %assert(all(train == test) || ~any(train == test)); % <-- not true if using some partitions
     if all(train == test)
         p = 1; % # 1 (hyper)param = sigma; b/c we fit on same data 
     else
