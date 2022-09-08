@@ -1,59 +1,18 @@
 
 figure_scale = 0.7;
 
-
-%{
-% Get game for each TR
-%
-mongo_connect;
-
-nruns = 6;
-nTRs = 1698;
-initial_TRs = 7;
-n_games_per_run = 3;
-nTRs_per_game = (nTRs / nruns - initial_TRs) / n_games_per_run;
-
 EXPT = vgdl_expt;
 glmodel = 1;
 subj_id = 1;
-subj_games = {};
 
-% Get game order for subject
-for run_id = 1:nruns
-    run = get_run(subj_id, run_id);
+[games, levels] = get_game_for_each_TR(subj_id);
 
-    [game_names, onsets, durs] = get_games(subj_id, run, conn);
-    subj_games = [subj_games, game_names'];
-end
-
-% Expand games and levels to each TR
-
-games = {};
-levels = [];
-
-for r = 1:nruns
-    games = [games; repmat({''}, [initial_TRs, 1])];
-    levels = [levels; repmat(nan, [initial_TRs, 1])];
-    
-    p = partition_id_from_run_id(r);
-    for g = (r - 1) * n_games_per_run + 1 : r * n_games_per_run
-        games = [games; repmat(subj_games(g), [nTRs_per_game, 1])];
-        levels = [levels; (ceil((1:nTRs_per_game) / nTRs_per_game * 3) + (p - 1) * 3)'];
-    end
-end
-
-assert(length(games) == nTRs);
-assert(length(levels) == nTRs);
+% Get game for each TR
+%
 
 % Convert game names
 
-proper_games = games;
-proper_games(strcmp(games, 'vgfmri3_chase')) = {'Chase'};
-proper_games(strcmp(games, 'vgfmri3_helper')) = {'Helper'};
-proper_games(strcmp(games, 'vgfmri3_bait')) = {'Bait'};
-proper_games(strcmp(games, 'vgfmri3_lemmings')) = {'Lemmings'};
-proper_games(strcmp(games, 'vgfmri3_plaqueAttack')) = {'Plaque Attack'};
-proper_games(strcmp(games, 'vgfmri3_zelda')) = {'Zelda'};
+proper_games = convert_game_names(games);
 
 % Get HRR
 
@@ -77,8 +36,8 @@ gscatter(Y(:,1), Y(:,2), proper_games);
 xlabel('dimension 1');
 ylabel('dimension 2');
 title('EMPA theory HRRs: t-SNE');
+legend('Location','southwest');
 
-%}
 
 % Plot t-SNE for each games
 
@@ -86,13 +45,7 @@ figure('pos', [712 152 figure_scale*764*3/2+300 figure_scale*764]);
 
 game_names_ordered = get_game_names_ordered(subj_id);
 
-proper_game_names_ordered = game_names_ordered;
-proper_game_names_ordered(strcmp(game_names_ordered, 'vgfmri3_chase')) = {'Chase'};
-proper_game_names_ordered(strcmp(game_names_ordered, 'vgfmri3_helper')) = {'Helper'};
-proper_game_names_ordered(strcmp(game_names_ordered, 'vgfmri3_bait')) = {'Bait'};
-proper_game_names_ordered(strcmp(game_names_ordered, 'vgfmri3_lemmings')) = {'Lemmings'};
-proper_game_names_ordered(strcmp(game_names_ordered, 'vgfmri3_plaqueAttack')) = {'Plaque Attack'};
-proper_game_names_ordered(strcmp(game_names_ordered, 'vgfmri3_zelda')) = {'Zelda'};
+proper_game_names_ordered = convert_game_names(game_names_ordered);
 
 
 for g = 1:6
@@ -128,6 +81,6 @@ end
 %ylabel('dimension 2');
 %title(sprintf('Subject %d', subj_id));
 
-%close(conn);
+close(conn);
 
 
