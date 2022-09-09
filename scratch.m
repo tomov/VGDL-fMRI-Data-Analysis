@@ -1,4 +1,7 @@
+clear all;
 
+
+%{
 figure_scale = 0.7;
 
 EXPT = vgdl_expt;
@@ -83,4 +86,4 @@ end
 
 close(conn);
 
-
+%}
