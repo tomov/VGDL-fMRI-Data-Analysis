@@ -190,7 +190,7 @@ switch figure_name
         figure('position', [147 521 1045 318]);
         ix = ismember(regressor_names, {'sprite', 'interaction', 'termination'});
         cmap = [0.9 0.5 0.2]' * [0    0.4470    0.7410] + [0.1 0.5 0.8]' * [0 0 0];
-        h = plot_gp_CV_rois_helper_boxcharts(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], cmap, 8, [1:1], 0.9, true);
+        h = plot_gp_CV_rois_helper_boxcharts(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], cmap, 8, [1:3], 0.9, true);
         title('EMPA theory components');
         ylabel('Fraction significant voxels');
 
@@ -206,7 +206,6 @@ switch figure_name
         text(xscale * 20.0, yscale * 0.075, 'Early visual', 'fontsize', 10, 'HorizontalAlignment', 'center');
         ylim([0 yscale *0.08]);
         xlim([0.5 * xscale xscale * (length(roi_names) + 0.5)]);
-        ix = ismember(regressor_names, {'theory', 'DQN', 'PCA', 'VAE'});
         l = legend({'objects', 'relations', 'goals'});
         l.Position = [0.1371 0.7119 0.0842 0.2121];
 
@@ -225,7 +224,7 @@ switch figure_name
         figure('position', [147 521 345 318]);
         ix = ismember(regressor_names, {'sprite', 'interaction', 'termination'});
         cmap = [0.9 0.5 0.2]' * [0    0.4470    0.7410] + [0.1 0.5 0.8]' * [0 0 0];
-        h = plot_gp_CV_rois_helper_boxcharts(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], cmap, 8, [1:1], 1.0, true);
+        h = plot_gp_CV_rois_helper_boxcharts(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], cmap, 8, [1:3], 1.0, true);
         title('EMPA theory components');
         ylabel('Fraction significant voxels');
         xticklabels({'Frontal/Motor', 'Dorsal/Parietal', 'Ventral/Temporal', 'Early visual'}); 
@@ -251,7 +250,7 @@ switch figure_name
         figure('position', [147 521 1045 318]);
         ix = ismember(regressor_names, {'conv1', 'conv2', 'conv3', 'linear1', 'linear2'});
         cmap = [0.9 0.7 0.5 0.3 0.1]' * [0.8500    0.3250    0.0980] + [0.1 0.3 0.5 0.7 0.9]' * [0 0 0];
-        h = plot_gp_CV_rois_helper_boxcharts(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], cmap, 8, [1:1], 0.9, true);
+        h = plot_gp_CV_rois_helper_boxcharts(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], cmap, 8, [1:5], 0.9, true);
         title('DDQN layers');
         ylabel('Fraction significant voxels');
 
@@ -284,7 +283,7 @@ switch figure_name
         figure('position', [147 521 345 318]);
         ix = ismember(regressor_names, {'conv1', 'conv2', 'conv3', 'linear1', 'linear2'});
         cmap = [0.9 0.7 0.5 0.3 0.1]' * [0.8500    0.3250    0.0980] + [0.1 0.3 0.5 0.7 0.9]' * [0 0 0];
-        h = plot_gp_CV_rois_helper_boxcharts(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], cmap, 8, [1:1], 1.0, true);
+        h = plot_gp_CV_rois_helper_boxcharts(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], cmap, 8, [1:5], 1.0, true);
         title('DDQN layers');
         ylabel('Fraction significant voxels');
         xticklabels({'Frontal/Motor', 'Dorsal/Parietal', 'Ventral/Temporal', 'Early visual'}); 

@@ -229,6 +229,65 @@ switch figure_name
 
         print('svg/neuron_revision/figure_neuron_R1_regressors_tsne_per_game_GLM1_projected.svg', '-dsvg');
 
+    case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA__components_and_EMPA__outliers'
+        % plot_gp_CV_rois.m
+        % see figure3.m
+
+        agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.050_atlas=AAL2_GP_EMPA2_25M_e1k.mat');
+        agg_filename
+        load(agg_filename);
+
+        figure('position', [147 521 1045 318]);
+        ix = ismember(regressor_names, {'theory', 'sprite', 'interaction', 'termination'});
+        cmap = [1 0.7 0.4 0.1]' * [0    0.4470    0.7410] + [0.0 0.3 0.6 0.9]' * [0 0 0];
+        h = plot_gp_CV_rois_helper_boxcharts(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], cmap, 8, [1:3], 0.9, true);
+        title('EMPA theory components');
+        ylabel('Fraction significant voxels');
+
+        % Prettify it
+        yscale = 11.9;
+        xscale = 1.25;
+        text(xscale * 4.5, yscale * 0.075, 'Frontal/Motor', 'fontsize', 10, 'HorizontalAlignment', 'center');
+        plot([xscale * 7.5 xscale * 7.5], yscale * [0 0.18], '--', 'color', [0.5 0.5 0.5]);
+        text(xscale * 11.0, yscale * 0.075, 'Dorsal/Parietal', 'fontsize', 10, 'HorizontalAlignment', 'center');
+        plot([xscale * 14.5 xscale * 14.5], [0 yscale *0.18], '--', 'color', [0.5 0.5 0.5]);
+        text(xscale * 16.8, yscale *0.075, 'Ventral/Temporal', 'fontsize', 10, 'HorizontalAlignment', 'center');
+        plot([xscale * 18.5 xscale * 18.5], [0 yscale *0.18], '--', 'color', [0.5 0.5 0.5]);
+        text(xscale * 20.0, yscale * 0.075, 'Early visual', 'fontsize', 10, 'HorizontalAlignment', 'center');
+        ylim([0 yscale *0.08]);
+        xlim([0.5 * xscale xscale * (length(roi_names) + 0.5)]);
+        l = legend({'theory', 'objects', 'relations', 'goals'});
+        l.Position = [0.1371 0.7119 0.0842 0.2121];
+
+        orient(gcf, 'landscape');
+        print('svg/neuron_revision/plot_gp_CV_rois_fraction_AAL2_GP_EMPA__components_and_EMPA__outliers.svg', '-dsvg');
+
+
+
+    case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__components_and_EMPA__outliers'
+        % plot_gp_CV_rois.m
+
+        agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.050_atlas=AAL2_GP_EMPA2_grouped_25M_e1k.mat');
+        agg_filename
+        load(agg_filename);
+
+        figure('position', [147 521 345 318]);
+        ix = ismember(regressor_names, {'theory', 'sprite', 'interaction', 'termination'});
+        cmap = [1 0.7 0.4 0.1]' * [0    0.4470    0.7410] + [0.0 0.3 0.6 0.9]' * [0 0 0];
+        h = plot_gp_CV_rois_helper_boxcharts(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], cmap, 8, [1:3], 1.0, true);
+        title('EMPA theory components');
+        ylabel('Fraction significant voxels');
+        xticklabels({'Frontal/Motor', 'Dorsal/Parietal', 'Ventral/Temporal', 'Early visual'}); 
+
+        % prettify
+        yscale = 11.9;
+        xscale = 1.25;
+        xlim([0.5 * xscale xscale * (length(roi_names) + 0.5)]);
+        l = legend({'theory', 'objects', 'relations', 'goals'});
+        l.Position = [0.1593 0.7034 0.2481 0.1934];
+
+        print('svg/neuron_revision/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__components_and_EMPA__outliers.svg', '-dsvg'); 
+ 
 
     otherwise
         assert(false, 'Invalid figure name');
