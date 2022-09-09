@@ -77,7 +77,30 @@ switch figure_name
         % plot_gp_CV.m
 
         load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/agg_gp_CV_us=1_glm=1_model=EMPA_theory_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_parts=12.mat');
-        assert(use_smooth);
+        EXPT = vgdl_expt();
+        bspmview_wrapper(EXPT, tmap);
+
+    case 'plot_gp_CV_EMPA_partitions_2_3'
+        % plot_gp_CV.m
+
+        load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/agg_gp_CV_us=1_glm=1_model=EMPA_theory_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_parts=23.mat');
+        EXPT = vgdl_expt();
+        bspmview_wrapper(EXPT, tmap);
+
+
+    case 'plot_gp_CV_EMPA_partitions_contrast'
+        % plot_gp_CV.m
+
+        load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/agg_gp_CV_us=1_glm=1_model=EMPA_theory_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_parts=12.mat');
+        zs_12 = zs;
+
+        load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/agg_gp_CV_us=1_glm=1_model=EMPA_theory_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_parts=23.mat');
+        zs_23 = zs;
+
+        [h,p,ci,stats] = ttest(zs_12, zs_23);
+        ts = stats.tstat;
+        tmap(mask) = ts;
+
         EXPT = vgdl_expt();
         bspmview_wrapper(EXPT, tmap);
 

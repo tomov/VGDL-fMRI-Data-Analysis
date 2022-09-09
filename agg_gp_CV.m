@@ -37,7 +37,7 @@ project = 1;
 glmodel = 1;
 %suffix = '_nowhiten_nofilter';
 %suffix = '_';
-suffix = '_parts=12';
+suffix = '_parts=23';
 normalize = 1;
 concat = 0;
 novelty = 1;
@@ -75,7 +75,8 @@ for s = 1:1:length(subjects)
     %filename = sprintf('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=PCA_all_nsamples=100_project=0_norm=1_fast=1_saveYhat=0.mat', subj_id);
     %filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=VAE__nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_saveYhat=0.mat', subj_id); % VAE e1k
     %filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=VAE__nsamples=100_project=0_norm=1_concat=0_novelty=1_fast=1_saveYhat=0.mat', subj_id); % VAE e1k
-    filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_saveYhat=0_parts=12.mat', subj_id); % fit_gp_CV from paper, except partitions 1 and 2
+    %filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_saveYhat=0_parts=12.mat', subj_id); % fit_gp_CV from paper, except partitions 1 and 2
+    filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_saveYhat=0_parts=23.mat', subj_id); % fit_gp_CV from paper, except partitions 2 and 3
     filename
     %filename = sprintf('mat/fit_gp_CV_noRKW_HRR_subj=%d_us=%d_glm=21_mask=mask_%s.mat', subj_id, use_smooth, what);
 
