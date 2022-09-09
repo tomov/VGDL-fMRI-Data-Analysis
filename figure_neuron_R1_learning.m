@@ -54,8 +54,48 @@ switch figure_name
         sgtitle('Theory updates (smoothed)');
 
         orient(gcf, 'landscape');
-        print('svg/neuron_revision/figure_neuron_R1_learning.svg', '-dsvg');
-        print('pdf/neuron_revision/figure_neuron_R1_learning.pdf', '-dpdf', '-bestfit');
+        print('svg/neuron_revision/figure_neuron_R1_learning_theory_update_timecourse.svg', '-dsvg');
+
+
+    case 'theory_update_timecourse_merged'
+
+        load(fullfile(get_mat_dir(false), 'neuron_R1_learning.mat'));
+
+        game_names = {'Chase','Helper','Bait','Lemmings',{'Plaque', 'Attack'}, {'Avoid', 'George'},'Zelda'};
+        game_ids = {1, 2, 3, 4, 5, 5, 6};
+        subj_ids = {1:32, 1:32, 1:32, 1:32, 1:11, 12:32, 1:32};
+        num_levels = 9;
+
+        figure('pos', [99 201 1445 698]);
+        h = tiledlayout(length(game_names), 1, 'TileSpacing', 'none', 'Padding', 'none');
+
+        for g = 1:length(game_names)
+            game_name = game_names{g};
+            game_id = game_ids{g};
+            subjs = subj_ids{g};
+
+            tcfs = [];
+            for level = 1:num_levels
+                tcf_smooth = nanmean(learning(game_id, level).tcf_smooth(subjs, :), 1);
+                tcfs(level, :) = tcf_smooth;
+            end
+
+            nexttile
+
+            t = 1/frequency:1/frequency:level_duration;
+            plot(t, tcfs);
+            xlabel('time (s)');
+            ylabel(game_name, 'fontweight','bold');
+            legend({'level 1', 'level 2', 'level 3', ...
+                    'level 4', 'level 5', 'level 6', ...
+                    'level 7', 'level 8', 'level 9'});
+        end
+
+        sgtitle('Theory updates (smoothed)');
+
+        orient(gcf, 'landscape');
+        print('svg/neuron_revision/figure_neuron_R1_learning_theory_update_timecourse_merged.svg', '-dsvg');
+
 
     case 'GLM_102'
 
