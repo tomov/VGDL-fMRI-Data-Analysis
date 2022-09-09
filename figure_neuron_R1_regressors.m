@@ -66,7 +66,7 @@ switch figure_name
         gscatter(Y(:,1), Y(:,2), proper_games);
         xlabel('dimension 1');
         ylabel('dimension 2');
-        title('EMPA theory HRRs: t-SNE');
+        title('t-SNE');
         legend('Location','southwest');
 
         print('svg/neuron_revision/figure_neuron_R1_regressors_tsne.svg', '-dsvg');
@@ -128,7 +128,7 @@ switch figure_name
         h = colorbar;
         %set(h, 'XTickLabel', arrayfun(@(x) sprintf('%.4f', x), exp(h.Ticks), 'UniformOutput', false));
 
-        print('svg/neuron_revision/figure_neuron_R1_regressors_theory_HRRs.svg', '-dsvg');
+        print('svg/neuron_revision/figure_neuron_R1_regressors_theory_HRRs_GLM1_projected.svg', '-dsvg');
 
 
 
