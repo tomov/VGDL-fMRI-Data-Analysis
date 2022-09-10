@@ -105,6 +105,10 @@ switch figure_name
 
         ccnl_view(vgdl_expt(), 196, 'theory_change_flag_part1');
 
+    case 'GLM_196_second_partition'
+
+        ccnl_view(vgdl_expt(), 196, 'theory_change_flag_part2');
+
     case 'GLM_196_third_partition'
 
         ccnl_view(vgdl_expt(), 196, 'theory_change_flag_part3');
