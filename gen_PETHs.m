@@ -26,7 +26,7 @@ function gen_PETHs(glmodel, contrast, Num, sphere, what, use_CV, no_baseline)
     % spherical mask around top ROI from contrast
 
     if ischar(glmodel)
-        if ismember(glmodel, {'AAL2', 'AAL3v1', 'HarvardOxford', 'AAL2_GP_EMPA_grouped', 'AAL2_GP_EMPA', 'AAL2_GLM_102_grouped', 'AAL2_GLM_102', 'AAL2_GP_EMPA_GLM_102_grouped', 'AAL2_GP_EMPA_GLM_102'})
+        if ismember(glmodel, {'AAL2', 'AAL3v1', 'HarvardOxford', 'AAL2_GP_EMPA_grouped', 'AAL2_GP_EMPA', 'AAL2_GLM_102_grouped', 'AAL2_GLM_102', 'AAL2_GP_EMPA_GLM_102_grouped', 'AAL2_GP_EMPA_GLM_102', 'Brodmann', 'AAL3v1_neuron'})
             % anatomical ROI
             atlas_name = glmodel;
             [mask_filenames, regions] = get_anatomical_masks(atlas_name);
@@ -38,7 +38,7 @@ function gen_PETHs(glmodel, contrast, Num, sphere, what, use_CV, no_baseline)
             if no_baseline
                 baseline_suffix = '_no_baseline';
             end
-            filename = fullfile(get_mat_dir(false), sprintf('PETHs_atlas=%s_%s%s%s_.mat', atlas_name, what, CV_suffix, baseline_suffix));
+            filename = fullfile(get_mat_dir(false), sprintf('PETHs_atlas=%s_what=%s_%s%s_.mat', atlas_name, what, CV_suffix, baseline_suffix));
         else
             % a priori ROIs
             tag = glmodel; % fake "glmodel" = study tag
@@ -108,7 +108,7 @@ function gen_PETHs(glmodel, contrast, Num, sphere, what, use_CV, no_baseline)
             if use_CV
                 load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat_CV');
             else
-                load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat');
+                load(fullfile(get_mat_dir(2), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat');
             end
         elseif strcmp(what, 'GP_sprite')
             disp('extracting predicted BOLD time course from EMPA sprite GP results');

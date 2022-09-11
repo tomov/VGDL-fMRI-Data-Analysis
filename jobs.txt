@@ -6552,3 +6552,15 @@ fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_EMPA_theory_1_1_0_23_385
 fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_EMPA_theory_1_1_0_23_385835.out -- Submitted batch job 385835
 fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_EMPA_theory_1_1_0_23_385836.out -- Submitted batch job 385836
 fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_EMPA_theory_1_1_0_23_385837.out -- Submitted batch job 385837
+----------------
+--- Sat Sep 10 20:50:21 EDT 2022 Running gen_PETHs
+----------------
+gen_PETHs.sh gen_PETHs(\'Brodmann\', \'\', 0, 0, \'BOLD\'): output/gen_PETHs_411744.out -- Submitted batch job 411744
+gen_PETHs.sh gen_PETHs(\'Brodmann\', \'\', 0, 0, \'GP\'): output/gen_PETHs_411745.out -- Submitted batch job 411745
+gen_PETHs.sh gen_PETHs(\'AAL3v1_neuron\', \'\', 0, 0, \'BOLD\'): output/gen_PETHs_411746.out -- Submitted batch job 411746
+gen_PETHs.sh gen_PETHs(\'AAL3v1_neuron\', \'\', 0, 0, \'GP\'): output/gen_PETHs_411747.out -- Submitted batch job 411747
+----------------
+--- Sat Sep 10 20:56:16 EDT 2022 Running gen_PETHs
+----------------
+gen_PETHs.sh gen_PETHs(\'Brodmann\', \'\', 0, 0, \'GP\'): output/gen_PETHs_411750.out -- Submitted batch job 411750
+gen_PETHs.sh gen_PETHs(\'AAL3v1_neuron\', \'\', 0, 0, \'GP\'): output/gen_PETHs_411751.out -- Submitted batch job 411751

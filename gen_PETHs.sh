@@ -102,6 +102,14 @@ declare -a fn_calls=(
 #                     "gen_PETHs(\'AAL2_GP_EMPA_GLM_102\', \'\', 0, 0, \'BOLD\\', false, true)"
 #                     )
 
+# your on
+
+declare -a fn_calls=(
+                     #"gen_PETHs(\'Brodmann\', \'\', 0, 0, \'BOLD\')"
+                     "gen_PETHs(\'Brodmann\', \'\', 0, 0, \'GP\')"
+                     "gen_PETHs(\'AAL3v1_neuron\', \'\', 0, 0, \'BOLD\')"
+                     "gen_PETHs(\'AAL3v1_neuron\', \'\', 0, 0, \'GP\')"
+                     )
 
 for fn_call in "${fn_calls[@]}"
 do

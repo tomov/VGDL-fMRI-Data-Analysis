@@ -4,6 +4,15 @@ function show_figure(figure_name)
 
     switch figure_name
 
+        case 'plot_gp_CV_EMPA_theory'
+            % plot_gp_CV.m
+
+            load(fullfile(get_mat_dir(), 'agg_gp_CV_us=1_glm=1_model=EMPA_theory_nsamples=100_project=1_fast=1.mat')); % 
+
+            assert(use_smooth);
+            EXPT = vgdl_expt();
+            bspmview_wrapper(EXPT, tmap);
+
         case 'plot_gp_CV_EMPA_sprite'
             % plot_gp_CV.m
 

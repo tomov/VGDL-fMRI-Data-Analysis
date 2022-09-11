@@ -8,17 +8,18 @@ alpha = 0.05; % significance threshold for individual voxels
 %atlas = 'AAL2_grouped';
 %atlas = 'AAL2_GP_EMPA_grouped';
 %atlas = 'AAL2_GP_EMPA2';
-atlas = 'AAL2_GP_EMPA2_grouped';
+%atlas = 'AAL2_GP_EMPA2_grouped';
 %atlas = 'AAL2_GP_EMPA';
 %atlas = 'AAL2_grouped2';
-%atlas = 'Brodmann';
+atlas = 'Brodmann';
 %atlas = 'AAL3v1';
 %atlas = 'HarvardOxford-maxprob-thr0';
 
 fasse_ncf = false;
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), sprintf('gp_CV_rois_alpha=%.3f_atlas=%s_noNoveltyRule.mat', alpha, atlas));
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), sprintf('gp_CV_rois_alpha=%.3f_atlas=%s_vae.mat', alpha, atlas));
-agg_filename = fullfile(get_mat_dir(fasse_ncf), sprintf('gp_CV_rois_alpha=%.3f_atlas=%s_25M_e1k.mat', alpha, atlas));
+%agg_filename = fullfile(get_mat_dir(fasse_ncf), sprintf('gp_CV_rois_alpha=%.3f_atlas=%s_25M_e1k.mat', alpha, atlas));
+agg_filename = fullfile(get_mat_dir(fasse_ncf), sprintf('gp_CV_rois_alpha=%.3f_atlas=%s_neuron.mat', alpha, atlas));
 agg_filename
 
 %% get masks
