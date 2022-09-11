@@ -108,28 +108,32 @@ function gen_PETHs(glmodel, contrast, Num, sphere, what, use_CV, no_baseline)
             if use_CV
                 load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat_CV');
             else
-                load(fullfile(get_mat_dir(2), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat');
+                %load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat');
+                load(fullfile(get_mat_dir(2), sprintf('fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_saveYhat=1_parts=123.mat', subj_id)), 'Y_hat');
             end
         elseif strcmp(what, 'GP_sprite')
             disp('extracting predicted BOLD time course from EMPA sprite GP results');
             if use_CV
                 load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_sprite_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat_CV');
             else
-                load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_sprite_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat');
+                %load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_sprite_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat');
+                load(fullfile(get_mat_dir(2), sprintf('fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=EMPA_sprite_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_saveYhat=1_parts=123.mat', subj_id)), 'Y_hat');
             end
         elseif strcmp(what, 'GP_interaction')
             disp('extracting predicted BOLD time course from EMPA interaction GP results');
             if use_CV
                 load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_interaction_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat_CV');
             else
-                load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_interaction_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat');
+                %load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_interaction_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat');
+                load(fullfile(get_mat_dir(2), sprintf('fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=EMPA_interaction_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_saveYhat=1_parts=123.mat', subj_id)), 'Y_hat');
             end
         elseif strcmp(what, 'GP_termination')
             disp('extracting predicted BOLD time course from EMPA termination GP results');
             if use_CV
                 load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_termination_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat_CV');
             else
-                load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_termination_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat');
+                %load(fullfile(get_mat_dir(false), sprintf('fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_termination_nsamples=100_project=1_norm=1_fast=1_saveYhat=1.mat', subj_id)), 'Y_hat');
+                load(fullfile(get_mat_dir(2), sprintf('fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=EMPA_termination_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_saveYhat=1_parts=123.mat', subj_id)), 'Y_hat');
             end
         elseif strcmp(what, 'GP_DQN')
             disp('extracting predicted BOLD time course from DQN GP results');

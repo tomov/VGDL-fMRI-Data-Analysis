@@ -103,12 +103,22 @@ declare -a fn_calls=(
 #                     )
 
 # your on
+# Neuron R1
 
 declare -a fn_calls=(
-                     #"gen_PETHs(\'Brodmann\', \'\', 0, 0, \'BOLD\')"
+                     "gen_PETHs(\'Brodmann\', \'\', 0, 0, \'BOLD\')"
                      "gen_PETHs(\'Brodmann\', \'\', 0, 0, \'GP\')"
                      "gen_PETHs(\'AAL3v1_neuron\', \'\', 0, 0, \'BOLD\')"
                      "gen_PETHs(\'AAL3v1_neuron\', \'\', 0, 0, \'GP\')"
+                     )
+
+declare -a fn_calls=(
+                     "gen_PETHs(\'Brodmann\', \'\', 0, 0, \'GP_sprite\')"
+                     "gen_PETHs(\'Brodmann\', \'\', 0, 0, \'GP_interaction\')"
+                     "gen_PETHs(\'Brodmann\', \'\', 0, 0, \'GP_termination\')"
+                     "gen_PETHs(\'AAL3v1_neuron\', \'\', 0, 0, \'GP_sprite\')"
+                     "gen_PETHs(\'AAL3v1_neuron\', \'\', 0, 0, \'GP_interaction\')"
+                     "gen_PETHs(\'AAL3v1_neuron\', \'\', 0, 0, \'GP_termination\')"
                      )
 
 for fn_call in "${fn_calls[@]}"

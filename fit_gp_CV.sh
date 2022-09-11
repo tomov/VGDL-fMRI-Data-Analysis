@@ -19,11 +19,11 @@ model_name="EMPA"
 #what="conv3"
 #what="conv1"
 #what="all"
-what="theory"
+#what="theory"
 #what=""
 #what="sprite"
 #what="interaction"
-#what="termination"
+what="termination"
 #what="novelty"
 glmodel=1
 use_smooth=true
@@ -32,8 +32,8 @@ normalize=1
 concat=0
 novelty=1
 fast=true
-save_Y_hat=0
-which_partitions=(2 3)
+save_Y_hat=1
+which_partitions=(1 2 3)
 
 
 which_partitions_arg="${which_partitions[@]}"  # stringify it with spaces
