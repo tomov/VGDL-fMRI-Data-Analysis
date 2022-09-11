@@ -189,6 +189,121 @@ switch figure_name
 
 
 
+    case 'plot_PETH_components_AAL2_GP_EMPA_GLM_102_GP____R1_rois'
+        % plot_PETHs.m
+
+        load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/PETHs_atlas=Brodmann_what=GP_sprite__.mat')
+        sprite_activations = activations;
+        load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/PETHs_atlas=Brodmann_what=GP_interaction__.mat')
+        interaction_activations = activations;
+        load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/PETHs_atlas=Brodmann_what=GP_termination__.mat')
+        termination_activations = activations;
+        clear activations;
+        ROI_ix = [5];
+
+        mask_filenames_ = mask_filenames(ROI_ix);
+        mask_name_ = mask_name(ROI_ix);
+        regions_ = regions(ROI_ix);
+        sprite_activations_ = sprite_activations(ROI_ix);
+        interaction_activations_ = interaction_activations(ROI_ix);
+        termination_activations_ = termination_activations(ROI_ix);
+
+        load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/PETHs_atlas=AAL3v1_neuron_what=GP_sprite__.mat')
+        sprite_activations = activations;
+        load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/PETHs_atlas=AAL3v1_neuron_what=GP_interaction__.mat')
+        interaction_activations = activations;
+        load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/PETHs_atlas=AAL3v1_neuron_what=GP_termination__.mat')
+        termination_activations = activations;
+        clear activations;
+        ROI_ix = [7 8 9];
+
+        mask_filenames_ = [mask_filenames_ mask_filenames(ROI_ix)];
+        mask_name_ = [mask_name_ mask_name(ROI_ix)];
+        regions_ = [regions_; regions(ROI_ix)];
+        sprite_activations_ = [sprite_activations_ sprite_activations(ROI_ix)];
+        interaction_activations_ = [interaction_activations_ interaction_activations(ROI_ix)];
+        termination_activations_ = [termination_activations_ termination_activations(ROI_ix)];
+
+        mask_filenames = mask_filenames_;
+        mask_name = mask_name_;
+        regions = regions_;
+        sprite_activations = sprite_activations_;
+        interaction_activations = interaction_activations_;
+        termination_activations = termination_activations_;
+
+        %figure('pos', [64 460 1296*0.5 799*0.5]);
+        figure('position', [147 605 1211 134]);
+
+        % only look at the components
+        fields = {'sprite_change_flag', 'interaction_change_flag', 'termination_change_flag'};
+
+        subjs = 1:1:32;
+
+        cmap = [0.9 0.5 0.2]' * [0    0.4470    0.7410] + [0.1 0.5 0.8]' * [0 0 0];
+        t = PETH_dTRs * EXPT.TR; % s
+
+        % loop over masks
+        for m = 1:length(mask_filenames)
+            disp(mask_name{m});
+
+            subplot(1, 7, m);
+            hold on;
+
+            for i = 1:length(fields)
+                field = fields{i};
+                disp(field)
+
+                % hardcoded
+                if  i == 1
+                    D = sprite_activations(m).(field)(subjs,:); % subj x TRs PETH's
+                elseif i == 2
+                    D = interaction_activations(m).(field)(subjs,:); % subj x TRs PETH's
+                elseif i == 3
+                    D = termination_activations(m).(field)(subjs,:); % subj x TRs PETH's
+                else
+                    assert(false, 'we are matching component update events with the corresponding component activations; unclear which activations to show for non-component update events');
+                end
+                [sem, me] = wse(D);
+                %me = nanmean(activations(m).(field), 1);
+                %sem = nanstd(activations(m).(field), 1) / sqrt(size(activations(m).(field), 1)); % TODO wse
+                [h,p,ci,stats] = ttest(D);
+                %errorbar(dTRs, m, se);
+                hh(i) = plot(t, me, 'color', cmap(i,:));
+                h = fill([t flip(t)], [me + sem flip(me - sem)], cmap(i,:));
+                set(h, 'facealpha', 0.3, 'edgecolor', 'none');
+
+                ax = gca;
+                xlim([t(1) - 1, t(end) + 1]);
+                if ismember(field, regs_fields)
+                    ix = find(strcmp(field, regs_fields)) - 1;
+                    j_init = find(PETH_dTRs > 0); % ignore baselines
+                    for j = j_init:length(t)
+                        if p(j) <= 0.05
+                            %h = text(t(j) + ix * 0.5, ax.YLim(2) + 0.005 + ix * 0.002, significance(p(j)), 'color', cmap(i,:), 'fontsize', 7, 'HorizontalAlignment', 'center');
+                            %set(h,'Rotation',90);
+                        end
+                    end
+                end
+
+            end
+
+            plot([0 0], ax.YLim, '--', 'color', [0.5 0.5 0.5]);
+            plot(ax.XLim, [0 0], '--', 'color', [0.5 0.5 0.5]);
+            if m == 1
+                %legend(hh, fields, 'interpreter', 'none');
+                %l = legend(hh, {'object update', 'relation update', 'goal update'}, 'interpreter', 'none');
+                %l.Position = [0.4162 0.1941 0.1073 0.0588];
+                %ylabel('z');
+                ylabel('\Delta z');
+            end
+            xlabel('time (s)');
+            title(regions{m}, 'interpreter', 'none');
+        end
+
+        print('svg/neuron_revision/plot_PETH_components_AAL2_GP_EMPA_GLM_102_GP__R1_rois.svg', '-dsvg');
+
+
+
 
     otherwise
         assert(false, 'Invalid figure name');

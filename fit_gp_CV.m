@@ -1,4 +1,4 @@
-function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, normalize, concat, novelty, fast, save_Y_hat, which_partitions, debug)
+function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, normalize, concat, novelty, fast, save_Y_hat, which_partitions, which_games, debug)
 
     %{
     clear all;
@@ -47,6 +47,9 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
     end
     if ~exist('which_partitions', 'var')
         which_partitions = [1,2,3];
+    end
+    if ~exist('which_games', 'var')
+        which_games = []; % all games
     end
 
 
@@ -177,6 +180,17 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
         Y_hat_CV = nan(size(Y));
     end
 
+    % figure out which TRs we are including
+    %
+    all = ismember(partition_id, partitions); % sub select partitions
+    if ~isempty(which_games)
+        % sub select games
+        [games, levels] = get_game_for_each_TR(subj);
+        assert(length(games) == length(all));
+        all = all & ismember(games, which_games);
+    end
+    keyboard
+
     % precompute (K + sigma^2 I) ^ (-1) for every sigma
     % also K(X*,X) * (K(X,X) + sigma^2 I) ^ (-1)  (predictive Eq. 2.23)
     %
@@ -185,8 +199,6 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
 
         fprintf('inverting kernel for subj %d, sigma %.3f\n', subj, s);
         tic
-
-        all = ismember(partition_id, partitions); % all trials
 
         [sn2(j), ...
          ldB2(j), ...
