@@ -58,7 +58,12 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
     %filename = sprintf('fit_gp_CV_HRR_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_project=%d_fast=%d_nowhiten_nofilter.mat', subj, use_smooth, glmodel, maskname, model_name, what, project, fast);
     %filename = sprintf('fit_gp_CV_HRR_cannon_repro_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=%d_saveYhat=%d.mat', subj, use_smooth, glmodel, maskname, model_name, what, project, normalize, concat, novelty, fast, save_Y_hat);
     which_partitions_str = sprintf('%d', which_partitions);
-    filename = sprintf('fit_gp_CV_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=%d_saveYhat=%d_parts=%s.mat', subj, use_smooth, glmodel, maskname, model_name, what, project, normalize, concat, novelty, fast, save_Y_hat, which_partitions_str);
+    if isempty(which_games)
+        which_games_str = 'all';
+    else
+        which_games_str = strjoin(which_games, '');
+    end
+    filename = sprintf('fit_gp_CV_subj=%d_us=%d_glm=%d_mask=%s_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=%d_saveYhat=%d_parts=%s_games=%s.mat', subj, use_smooth, glmodel, maskname, model_name, what, project, normalize, concat, novelty, fast, save_Y_hat, which_partitions_str, which_games_str);
     filename = fullfile(get_mat_dir(2), filename);
     filename
 
@@ -189,7 +194,7 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
         assert(length(games) == length(all));
         all = all & ismember(games, which_games);
     end
-    keyboard
+    all
 
     % precompute (K + sigma^2 I) ^ (-1) for every sigma
     % also K(X*,X) * (K(X,X) + sigma^2 I) ^ (-1)  (predictive Eq. 2.23)

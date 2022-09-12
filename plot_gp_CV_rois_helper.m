@@ -107,6 +107,7 @@ function h = plot_gp_CV_rois_helper(fs, test_type, statistic, regressor_names, r
                         [~,p,ci,stats] = ttest(y1,y2);
                     case 'signrank'
                         [p,~,stats] = signrank(y1, y2);
+                        %[p,~,stats] = signrank(y1, y2, 'tail', 'right');
                     case 'ranksum'
                         [p,~,stats] = ranksum(y1, y2);
                 end

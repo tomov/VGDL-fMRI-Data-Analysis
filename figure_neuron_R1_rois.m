@@ -46,6 +46,8 @@ switch figure_name
         cmap = colormap(jet(length(fields)));
         t = PETH_dTRs * EXPT.TR; % s
 
+        titles = {'RSC', 'HC', 'PHC', 'TPO'};
+
         % loop over masks
         for m = 1:length(mask_filenames)
             disp(mask_name{m});
@@ -99,7 +101,8 @@ switch figure_name
                 ylabel('\Delta z');
             end
             xlabel('time (s)');
-            title(regions{m}, 'interpreter', 'none');
+            %title(regions{m}, 'interpreter', 'none');
+            title(titles{m}, 'interpreter', 'none');
         end
 
         %orient(gcf, 'landscape');

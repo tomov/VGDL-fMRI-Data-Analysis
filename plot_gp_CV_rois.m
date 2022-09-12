@@ -20,7 +20,8 @@ fasse_ncf = false;
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_noNoveltyRule.mat');
 
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_vae.mat');
-agg_filename = '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_alpha=0.050_atlas=AAL2_GP_EMPA2_neuron.mat';
+%agg_filename = '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_alpha=0.050_atlas=AAL2_GP_EMPA2_neuron.mat';
+agg_filename = '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_alpha=0.050_atlas=AAL2_GP_EMPA2_grouped_neuron.mat';
 
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), 'gp_CV_rois_alpha=0.010_atlas=Brodmann.mat');
 
