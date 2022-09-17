@@ -23,12 +23,16 @@ function [games, levels] = get_game_for_each_TR(subj_id, do_cache)
 
     EXPT = vgdl_expt;
     glmodel = 1;
-    subj_id = 1;
     subj_games = {};
 
     % Get game order for subject
 
+    [ subjects, subjdirs, goodRuns, goodSubjects ] = vgdl_getSubjectsDirsAndRuns();
+
     for run_id = 1:nruns
+        if ~goodRuns{subj_id}(run_id)
+            continue
+        end
         run = get_run(subj_id, run_id);
 
         [game_names, onsets, durs] = get_games(subj_id, run, conn);
@@ -40,7 +44,7 @@ function [games, levels] = get_game_for_each_TR(subj_id, do_cache)
     games = {};
     levels = [];
 
-    for r = 1:nruns
+    for r = 1:sum(goodRuns{subj_id})
         games = [games; repmat({''}, [initial_TRs, 1])];
         levels = [levels; repmat(nan, [initial_TRs, 1])];
         
@@ -51,8 +55,9 @@ function [games, levels] = get_game_for_each_TR(subj_id, do_cache)
         end
     end
 
-    assert(length(games) == nTRs);
-    assert(length(levels) == nTRs);
+    %assert(length(games) == nTRs);
+    %assert(length(levels) == nTRs);
+    assert(length(levels) == length(games));
 
     if do_cache
         save(filename, 'games', 'levels', '-v7.3');
