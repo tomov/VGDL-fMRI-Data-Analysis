@@ -97,11 +97,11 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
         case 'game'
             ker = load_game_kernel(EXPT, subj); % GLM 1 game id features
         case 'nuisance'
-            ker = load_nuisance_kernel(EXPT, subj);
+            ker = load_nuisance_kernel(EXPT, subj, normalize);
         case 'state'
-            ker = load_state_kernel(EXPT, subj); 
+            ker = load_state_kernel(EXPT, subj, normalize); 
         case 'irrelevant'
-            ker = load_irrelevant_kernel(EXPT, subj); 
+            ker = load_irrelevant_kernel(EXPT, subj, normalize); 
         otherwise
             assert(false, 'invalid model name')
     end
@@ -190,11 +190,12 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
     all = ismember(partition_id, partitions); % sub select partitions
     if ~isempty(which_games)
         % sub select games
-        [games, levels] = get_game_for_each_TR(subj);
+        [games, levels] = get_game_for_each_TR(subj, true);
         assert(length(games) == length(all));
         all = all & ismember(games, which_games);
     end
-    all
+    disp('all');
+    disp(all');
 
     % precompute (K + sigma^2 I) ^ (-1) for every sigma
     % also K(X*,X) * (K(X,X) + sigma^2 I) ^ (-1)  (predictive Eq. 2.23)
@@ -301,7 +302,6 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
 
         % no CV; use marginal likelihood for model comparison
         %
-        all = ismember(partition_id, partitions); % all trials
         train = all;
         test = all; % test data = train data here
 

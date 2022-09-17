@@ -72,7 +72,7 @@ function show_figure(figure_name)
             subplot(3,1,1);
             imagesc(X);
             title('Example HRRs');
-            xlabel('component');
+            xlabel('feature');
             yticks([1,2,3,4]);
             yticklabels(labels);
             colorbar;
@@ -108,7 +108,7 @@ function show_figure(figure_name)
             figure('pos', [712 152 479*figure_scale 764*figure_scale]);
             imagesc(theory_Xx);
             title('Design matrix');
-            xlabel('regressor');
+            xlabel('regressor / feature');
             ylabel('TR');
             colorbar
 
@@ -218,7 +218,7 @@ function show_figure(figure_name)
             figure('pos', [712 152 479*figure_scale 764*figure_scale]);
             imagesc(R*K*W*theory_Xx);
             title('Design matrix, controlling for game id');
-            xlabel('regressor');
+            xlabel('regressor / feature');
             ylabel('TR');
 
             set(gca,'ColorScale','log');

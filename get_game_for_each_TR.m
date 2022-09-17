@@ -1,5 +1,18 @@
-function [games, levels] = get_game_for_each_TR(subj_id)
+function [games, levels] = get_game_for_each_TR(subj_id, do_cache)
+    if ~exist('do_cache', 'var')
+        do_cache = false;
+    end
 
+    filename = fullfile(get_mat_dir(false), sprintf('get_game_for_each_TR_subj=%d.mat', subj_id));
+    filename
+    % optionally cache
+    if do_cache
+        if exist(filename, 'file')
+            load(filename);
+            return
+        end
+    end
+    
     mongo_connect;
 
     nruns = 6;
@@ -40,3 +53,7 @@ function [games, levels] = get_game_for_each_TR(subj_id)
 
     assert(length(games) == nTRs);
     assert(length(levels) == nTRs);
+
+    if do_cache
+        save(filename, 'games', 'levels', '-v7.3');
+    end

@@ -1,6 +1,27 @@
+
+
+%for subj = 1:32
+%    get_game_for_each_TR(subj, true);
+%end
+
+
 clear all;
+close all
 
 
+EXPT = vgdl_expt;
+subj = 1;
+[ker, features] = load_state_kernel(EXPT, subj, 1); 
+
+glmodel = 1
+[R, K, W] = get_R_K_W(EXPT, glmodel, subj);
+
+figure;
+imagesc(ker);
+colorbar
+figure;
+imagesc(features);
+colorbar
 %{
 figure_scale = 0.7;
 
