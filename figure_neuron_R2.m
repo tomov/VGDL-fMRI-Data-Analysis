@@ -23,7 +23,7 @@ switch figure_name
         plot(theory_update(283:2*283));
         legend({'theory (top PC)', 'theory update'});
         xlabel('time within run (TR)');
-        ylabel('Signal (a.u.)');
+        ylabel('signal (a.u.)');
         title('Subject 1');
 
         subplot(3,1,2)
