@@ -1,10 +1,44 @@
 
+%clear all;
+%close all
+
+
+% Theory updates
+%
+%{
+EXPT = vgdl_expt;
+glmodel = 102;
+subj_id = 1;
+[~, theory_update] = load_GLM_kernel(EXPT, glmodel, subj_id, {'theory_change_flag'}, false, false);
+%}
+
+
+% Theory representations
+%
+%{
+load(sprintf('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/HRR_cannon_repro_subject_kernel_subj=%d_K=10_N=10_E=0.050_nsamples=100_sigma_w=1.000_norm=1_concat=0_novelty=1.mat', subj_id), 'theory_Xx');
+rng default; % reproducibility
+Y = tsne(theory_Xx);
+%}
+
+[coeff,score,latent,tsquared,explained,mu] = pca(theory_Xx);
+
+figure;
+plot(theory_update);
+hold on;
+plot(Y(:,1));
+plot(Y(:,2));
+legend({'theory update', 'Y1', 'Y2'});
+
+figure;
+scatter(theory_update, Y(:,1));
 
 %for subj = 1:32
 %    get_game_for_each_TR(subj, true);
 %end
 
 
+%{
 clear all;
 close all
 
@@ -22,6 +56,12 @@ colorbar
 figure;
 imagesc(features);
 colorbar
+%}
+
+
+
+
+
 %{
 figure_scale = 0.7;
 
