@@ -20,7 +20,7 @@ load(sprintf('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/HRR_canno
 rng default; % reproducibility
 Y = tsne(theory_Xx);
 %}
-
+%{
 [coeff,score,latent,tsquared,explained,mu] = pca(theory_Xx);
 
 figure;
@@ -33,35 +33,104 @@ legend({'theory update', 'Y1', 'Y2'});
 figure;
 scatter(theory_update, Y(:,1));
 
+%}
+
+
+
 %for subj = 1:32
 %    get_game_for_each_TR(subj, true);
 %end
 
 
-%{
+
+
 clear all;
 close all
 
 
 EXPT = vgdl_expt;
 subj = 1;
-[ker, features] = load_state_kernel(EXPT, subj, 1); 
 
 glmodel = 1
 [R, K, W] = get_R_K_W(EXPT, glmodel, subj);
 
 figure;
+
+[ker, features] = load_state_kernel(EXPT, subj, 1); 
+
+subplot(4,4,1);
 imagesc(ker);
 colorbar
-figure;
+title('state kernel');
+
+subplot(4,4,2);
 imagesc(features);
 colorbar
-%}
+title('state features');
+
+
+subplot(4,4,3);
+imagesc(R*K*W*ker*W'*K'*R');
+colorbar
+title('state kernel, game projected');
+
+subplot(4,4,4);
+imagesc(R*K*W*features);
+colorbar
+title('state features, game projected');
 
 
 
 
+load(sprintf('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/HRR_cannon_repro_subject_kernel_subj=%d_K=10_N=10_E=0.050_nsamples=100_sigma_w=1.000_norm=1_concat=0_novelty=1.mat', subj), 'theory_Xx');
+features = theory_Xx;
+ker = features * features';
 
+subplot(4,4,5);
+imagesc(ker);
+colorbar
+title('theory kernel');
+
+subplot(4,4,6);
+imagesc(features);
+colorbar
+title('theory features');
+
+
+subplot(4,4,7);
+imagesc(R*K*W*ker*W'*K'*R');
+colorbar
+title('theory kernel, game projected');
+
+subplot(4,4,8);
+imagesc(R*K*W*features);
+colorbar
+title('theory features, game projected');
+
+
+
+[ker, features] = load_game_kernel(EXPT, subj); 
+
+subplot(4,4,9);
+imagesc(ker);
+colorbar
+title('game kernel');
+
+subplot(4,4,10);
+imagesc(features);
+colorbar
+title('game features');
+
+
+subplot(4,4,11);
+imagesc(R*K*W*ker*W'*K'*R');
+colorbar
+title('game kernel, game projected');
+
+subplot(4,4,12);
+imagesc(R*K*W*features);
+colorbar
+title('game features, game projected');
 %{
 figure_scale = 0.7;
 

@@ -13,7 +13,7 @@ function [ker, features] = load_GLM_kernel(EXPT, glmodel, subj_id, regressor_nam
     end
 
     if ~exist('normalize', 'var')
-        normalize = 0
+        normalize = 0;
     end
 
     % optionally normalize each regressor, to make sure they're on the same scale

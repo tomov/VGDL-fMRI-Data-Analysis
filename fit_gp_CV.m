@@ -83,25 +83,25 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
     switch model_name
         case 'EMPA'
             assert(ismember(what, {'theory', 'sprite', 'interaction', 'termination', 'novelty'}));
-            ker = load_HRR_kernel(subj, unique(run_id), what, normalize, concat, novelty);
+            [ker, features] = load_HRR_kernel(subj, unique(run_id), what, normalize, concat, novelty);
         case 'DQN'
             assert(ismember(what, {'conv1', 'conv2', 'conv3', 'linear1', 'linear2', 'all'}));
-            ker = load_DQN_kernel(subj, unique(run_id), what, normalize, '');
+            [ker, features] = load_DQN_kernel(subj, unique(run_id), what, normalize, '');
         case 'DQN25M'
             assert(ismember(what, {'conv1', 'conv2', 'conv3', 'linear1', 'linear2', 'all'}));
-            ker = load_DQN_kernel(subj, unique(run_id), what, normalize, '25M');
+            [ker, features] = load_DQN_kernel(subj, unique(run_id), what, normalize, '25M');
         case 'PCA'
-            ker = load_PCA_kernel(subj, unique(run_id), normalize);
+            [ker, features] = load_PCA_kernel(subj, unique(run_id), normalize);
         case 'VAE'
-            ker = load_VAE_kernel(subj, unique(run_id), normalize);
+            [ker, features] = load_VAE_kernel(subj, unique(run_id), normalize);
         case 'game'
-            ker = load_game_kernel(EXPT, subj); % GLM 1 game id features
+            [ker, features] = load_game_kernel(EXPT, subj); % GLM 1 game id features
         case 'nuisance'
-            ker = load_nuisance_kernel(EXPT, subj, normalize);
+            [ker, features] = load_nuisance_kernel(EXPT, subj, normalize);
         case 'state'
-            ker = load_state_kernel(EXPT, subj, normalize); 
+            [ker, features] = load_state_kernel(EXPT, subj, normalize); 
         case 'irrelevant'
-            ker = load_irrelevant_kernel(EXPT, subj, normalize); 
+            [ker, features] = load_irrelevant_kernel(EXPT, subj, normalize); 
         otherwise
             assert(false, 'invalid model name')
     end
@@ -109,11 +109,22 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
 
     fprintf('Memory usage: %.3f MB\n', monitor_memory_whos);
 
-    % whiten, filter & project out nuisance regressors
-    if project
+    % optionally whiten, filter & project out nuisance regressors
+    if project == 5
+    ker_old = ker;
+        Y = R*K*W*Y;
+    elseif project == 4
+        Y = R_*Y;
+    elseif project == 3
+        % no white and no filter, manually compute residual forming matrix
+        R_ = eye(size(features, 1)) - features * pinv(features);
+        Y = R_*Y;
+        ker = R_*ker*R_';
+    elseif project == 2
         % no white and no filter
-        %Y = R_*Y;
-        %ker = R_*ker*R_';
+        Y = R_*Y;
+        ker = R_*ker*R_';
+    elseif project == 1
         Y = R*K*W*Y;
         ker = R*K*W*ker*W'*K'*R';
     end
@@ -136,7 +147,6 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
 
     % find nearest symmetric positive definite matrix (it's not b/c of numerical issues, floating points, etc.)
     ker = nearestSPD(ker);
-
 
     %
     % GP shenanighans
@@ -290,6 +300,7 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
     % GP
     % for each voxel
     %
+    %for i = [132583, 129408] %1:size(Y, 2)
     for i = 1:size(Y, 2)
 
         if (fast && mod(i,1000) == 0) || (~fast)
@@ -374,6 +385,9 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
             Y_hat_CV(:,i) = y_hat_CV;
         end
 
+        %save('tmp.mat', 'ker', 'ker_old', 'y', 'y_hat', 'y_hat_CV', 'r_CV', '-v7.3');
+        %keyboard
+
         %figure;
         %hold on;
         %plot(y);
@@ -393,6 +407,7 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
     toc
 
     fprintf('Memory usage: %.3f MB\n', monitor_memory_whos);
+
 
     filename
     %{
