@@ -90,6 +90,9 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
         case 'DQN25M'
             assert(ismember(what, {'conv1', 'conv2', 'conv3', 'linear1', 'linear2', 'all'}));
             [ker, features] = load_DQN_kernel(subj, unique(run_id), what, normalize, '25M');
+        case 'DQN25M_PCA'
+            assert(ismember(what, {'conv1', 'conv2', 'conv3', 'linear1', 'linear2', 'all'}));
+            [ker, features] = load_DQN_kernel(subj, unique(run_id), what, normalize, '25M_PCA');
         case 'PCA'
             [ker, features] = load_PCA_kernel(subj, unique(run_id), normalize);
         case 'VAE'
@@ -146,6 +149,7 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
     disp(partitions');
 
     % find nearest symmetric positive definite matrix (it's not b/c of numerical issues, floating points, etc.)
+    ker(isnan(ker)) = 0; % during normalization, sometimes we get 0/0
     ker = nearestSPD(ker);
 
     %

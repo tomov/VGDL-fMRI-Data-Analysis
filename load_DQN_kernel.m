@@ -10,10 +10,12 @@ function [ker, features] = load_DQN_kernel(subj_id, which_run_ids, what, normali
         % NOTE: this assumes that there is only a single sample,  and that sigma_w = 1
         load(filename, 'layer_conv1_output_Xx', 'layer_conv2_output_Xx', 'layer_conv3_output_Xx', 'layer_linear1_output_Xx', 'layer_linear2_output_Xx', 'r_id');
         Xx = [layer_conv1_output_Xx layer_conv2_output_Xx layer_conv3_output_Xx layer_linear1_output_Xx layer_linear2_output_Xx];
+
         ker = Xx * Xx';
         features = Xx;
     else
-        load(filename, 'layer_conv1_output_kernel', 'layer_conv2_output_kernel', 'layer_conv3_output_kernel', 'layer_linear1_output_kernel', 'layer_linear2_output_kernel', 'r_id');
+        load(filename, 'layer_conv1_output_kernel', 'layer_conv2_output_kernel', 'layer_conv3_output_kernel', 'layer_linear1_output_kernel', 'layer_linear2_output_kernel', 'layer_conv1_output_Xx', 'layer_conv2_output_Xx', 'layer_conv3_output_Xx', 'layer_linear1_output_Xx', 'layer_linear2_output_Xx', 'r_id');
+
         ker = eval(['layer_', what, '_output_kernel']);
         features = eval(['layer_', what, '_output_Xx']);
     end

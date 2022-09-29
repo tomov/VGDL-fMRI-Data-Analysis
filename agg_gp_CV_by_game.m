@@ -43,7 +43,7 @@ suffix = '_parts=123';
 normalize = 1;
 concat = 0;
 novelty = 1;
-saveYhat = 1;
+saveYhat = 0;
 
 agg_filename = fullfile(get_mat_dir(), sprintf('agg_gp_CV_us=%d_glm=%d_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=1%s_by_game.mat', use_smooth, glmodel, model_name, what, project, normalize, concat, novelty, suffix));
 agg_filename
@@ -78,9 +78,6 @@ zs_collapsed = sum(rs, 2);
 [h,p,ci,stats] = ttest(zs_collapsed);
 ts = stats.tstat;
 
-
-tmap = zeros(size(mask));
-tmap(mask) = ts;
 
 agg_filename
 save(agg_filename);
