@@ -22,20 +22,20 @@ subjects = [1:14 16:length(EXPT.subject)];
 %model_name = 'irrelevant';
 %model_name = 'DQN';
 %model_name = 'DQN25M';
+%model_name = 'DQN25M_PCA';
 %model_name = 'game';
-model_name = 'EMPA';
-%model_name = 'VAE';
+%model_name = 'EMPA';
+model_name = 'VAE';
 %model_name = 'VAE_e1k';
 %what = 'conv3';
 %%%what = 'linear2';
-%what = 'all';
-%what = '';
+what = '';
 %what = 'novelty';
 %what = 'all';
-what = 'theory';
+%what = 'theory';
 %what = 'termination';
 %what = 'sprite';
-project = 1;
+project = 0;
 glmodel = 1;
 %suffix = '_nowhiten_nofilter';
 %suffix = '_';
@@ -45,7 +45,7 @@ concat = 0;
 novelty = 1;
 saveYhat = 0;
 
-agg_filename = fullfile(get_mat_dir(), sprintf('agg_gp_CV_us=%d_glm=%d_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=1%s_by_game.mat', use_smooth, glmodel, model_name, what, project, normalize, concat, novelty, suffix));
+agg_filename = fullfile(get_mat_dir(), sprintf('agg_gp_CV_by_game_us=%d_glm=%d_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=1%s.mat', use_smooth, glmodel, model_name, what, project, normalize, concat, novelty, suffix));
 agg_filename
 
 for s = 1:1:length(subjects)
@@ -55,7 +55,8 @@ for s = 1:1:length(subjects)
     for g = 1:length(game_names)
         game_name = game_names{g};
 
-        filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_saveYhat=1_parts=123_games=%s.mat', subj_id, game_name);
+        %filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=0_norm=1_concat=0_novelty=1_fast=1_saveYhat=1_parts=123_games=%s.mat', subj_id, game_name);
+        filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=%s_%s_nsamples=100_project=%d_norm=%d_concat=%d_novelty=%d_fast=1_saveYhat=%d%s_games=%s.mat', subj_id, model_name, what, project, normalize, concat, novelty, saveYhat, suffix, game_name);
         filename
 
         load(filename, 'n', 'logmarglik', 'adjR2', 'R2_CV', 'sigma', 'mask', 'r', 'r_CV', 'mask', 'MSE', 'SMSE', 'MSE_CV', 'SMSE_CV', 'partition_id');
@@ -78,6 +79,8 @@ zs_collapsed = sum(rs, 2);
 [h,p,ci,stats] = ttest(zs_collapsed);
 ts = stats.tstat;
 
+tmap = zeros(size(mask));
+tmap(mask) = ts;
 
 agg_filename
 save(agg_filename);

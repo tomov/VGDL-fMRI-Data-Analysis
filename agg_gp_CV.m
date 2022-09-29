@@ -20,14 +20,15 @@ subjects = 1:length(EXPT.subject);
 %model_name = 'irrelevant';
 %model_name = 'DQN';
 %model_name = 'DQN25M';
-model_name = 'game';
+model_name = 'DQN25M_PCA';
+%model_name = 'game';
 %model_name = 'EMPA';
 %model_name = 'VAE';
 %model_name = 'VAE_e1k';
 %what = 'conv3';
-%%%what = 'linear2';
+what = 'linear2';
 %what = 'all';
-what = '';
+%what = '';
 %what = 'novelty';
 %what = 'all';
 %what = 'theory';
@@ -41,7 +42,7 @@ suffix = '_parts=123';
 normalize = 1;
 concat = 0;
 novelty = 1;
-saveYhat = 1;
+saveYhat = 0;
 
 %agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_%s_fast.mat', use_smooth, glmodel, what);
 %agg_filename = sprintf('mat/agg_gp_CV_us=%d_glm=%d_model=EMPA_%s_nsamples=100_fast_WTF.mat', use_smooth, glmodel, what);
@@ -79,9 +80,13 @@ for s = 1:1:length(subjects)
     %filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_saveYhat=0_parts=12.mat', subj_id); % fit_gp_CV from paper, except partitions 1 and 2
     %filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_saveYhat=0_parts=23.mat', subj_id); % fit_gp_CV from paper, except partitions 2 and 3
     %filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=game__nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_saveYhat=0_parts=123.mat', subj_id); % game id ???????????? wtf..........
-    filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=game__nsamples=100_project=0_norm=1_concat=0_novelty=1_fast=1_saveYhat=1_parts=123_games=all.mat', subj_id); % game id ???????????? wtf..........
+    %filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=game__nsamples=100_project=0_norm=1_concat=0_novelty=1_fast=1_saveYhat=1_parts=123_games=all.mat', subj_id); % game id ???????????? wtf..........
     %filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=state__nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_saveYhat=1_parts=123_games=all.mat', subj_id); % state features, z-scored across time, and normalized across features
     %filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=state__nsamples=100_project=0_norm=1_concat=0_novelty=1_fast=1_saveYhat=1_parts=123_games=all.mat', subj_id); % state features, z-scored across time, and normalized across features
+    %filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=DQN25M_PCA_all_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_saveYhat=0_parts=123_games=all.mat', subj_id); %  DQN + PCA
+    %filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=DQN25M_PCA_all_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_saveYhat=0_parts=123_games=all.mat', subj_id); %  DQN + PCA
+    %filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=DQN25M_PCA_conv3_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_saveYhat=0_parts=123_games=all.mat', subj_id); %  DQN + PCA
+    filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=DQN25M_PCA_linear2_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_saveYhat=0_parts=123_games=all.mat', subj_id); %  DQN + PCA
     filename
     %filename = sprintf('mat/fit_gp_CV_noRKW_HRR_subj=%d_us=%d_glm=21_mask=mask_%s.mat', subj_id, use_smooth, what);
 
