@@ -2,7 +2,8 @@ clear all;
 close all;
 
 
-agg_filename = '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_by_game_alpha=0.050_atlas=AAL2_GP_EMPA2_neuron.mat';
+%agg_filename = '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_by_game_alpha=0.050_atlas=AAL2_GP_EMPA2_neuron.mat';
+agg_filename = '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_by_game_alpha=0.050_atlas=AAL2_GP_EMPA2_grouped_neuron.mat';
 agg_filename
 
 load(agg_filename);

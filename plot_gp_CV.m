@@ -105,7 +105,8 @@ tmap(mask) = ts;
 %load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/agg_gp_CV_by_game_us=1_glm=1_model=DQN25M_PCA_all_nsamples=100_project=0_norm=1_concat=0_novelty=1_fast=1_parts=123.mat');
 %load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/agg_gp_CV_by_game_us=1_glm=1_model=PCA__nsamples=100_project=0_norm=1_concat=0_novelty=1_fast=1_parts=123.mat');
 %load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/agg_gp_CV_by_game_us=1_glm=1_model=PCA__nsamples=100_project=0_norm=1_concat=0_novelty=1_fast=1_parts=123.mat');
-load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/agg_gp_CV_by_game_us=1_glm=1_model=VAE__nsamples=100_project=0_norm=1_concat=0_novelty=1_fast=1_parts=123.mat');
+%load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/agg_gp_CV_by_game_us=1_glm=1_model=VAE__nsamples=100_project=0_norm=1_concat=0_novelty=1_fast=1_parts=123.mat');
+load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/agg_gp_CV_us=1_glm=1_model=DQN25M_PCA_all_nsamples=100_project=0_norm=1_concat=0_novelty=1_fast=1_parts=123.mat');
 
 %load('mat/agg_gp_CV_us=1_glm=9_theory_fast.mat');
 %load('mat/agg_gp_CV_us=1_glm=9_theory_nsamples=1_fast.mat');
