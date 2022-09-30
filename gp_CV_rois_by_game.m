@@ -8,8 +8,8 @@ alpha = 0.05; % significance threshold for individual voxels
 
 %atlas = 'AAL2_grouped';
 %atlas = 'AAL2_GP_EMPA_grouped';
-atlas = 'AAL2_GP_EMPA2';
-%atlas = 'AAL2_GP_EMPA2_grouped';
+%atlas = 'AAL2_GP_EMPA2';
+atlas = 'AAL2_GP_EMPA2_grouped';
 %atlas = 'AAL2_GP_EMPA';
 %atlas = 'AAL2_grouped2';
 %atlas = 'Brodmann';
