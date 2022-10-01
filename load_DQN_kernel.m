@@ -2,7 +2,8 @@ function [ker, features] = load_DQN_kernel(subj_id, which_run_ids, what, normali
     assert(ismember(what, {'conv1', 'conv2', 'conv3', 'linear1', 'linear2', 'all'}));
 
     %filename = sprintf('DQN_subject_kernel_subj=%d_sigma_w=1.000_norm=%d.mat', subj_id, normalize);
-    filename = sprintf('DQN%s_subject_kernel_subj=%d_sigma_w=1.000_norm=%d.mat', suffix, subj_id, normalize);
+    filename = sprintf('DQN%s_subject_kernel_subj=%d_sigma_w=1.000_norm=%d.mat', suffix, subj_id, normalize); % <--- 25M! in submission
+    %filename = sprintf('DQN%s_subject_kernel_subj=%d_sigma_w=1.000_norm=%d_comp=50.mat', suffix, subj_id, normalize);
     filename = fullfile(get_mat_dir(2), 'dqn_layers', filename);
 
     if strcmp(what, 'all')
