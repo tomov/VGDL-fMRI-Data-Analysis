@@ -3,7 +3,9 @@ close all;
 
 
 %agg_filename = '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_by_game_alpha=0.050_atlas=AAL2_GP_EMPA2_neuron.mat';
-agg_filename = '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_by_game_alpha=0.050_atlas=AAL2_GP_EMPA2_grouped_neuron.mat';
+%agg_filename = '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_by_game_alpha=0.050_atlas=AAL2_GP_EMPA2_grouped_neuron.mat';
+%agg_filename = '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_by_game_alpha=0.050_atlas=AAL2_GP_EMPA2_project=1_neuron.mat';
+agg_filename = '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_by_game_alpha=0.050_atlas=AAL2_GP_EMPA2_grouped_project=1_neuron.mat'; % YASSSS
 agg_filename
 
 load(agg_filename);
@@ -18,7 +20,7 @@ subj_ids = {1:32, 1:32, 1:32, 1:32, 1:11, 12:32, 1:32};
 %% fraction significant voxels
 %
 figure('pos', [99 201 1445 698]);
-tiledlayout(length(game_names), 1, 'TileSpacing', 'none', 'Padding', 'none');
+tiledlayout(length(game_names) + 1, 1, 'TileSpacing', 'none', 'Padding', 'none');
 
 for g = 1:length(game_names)
     nexttile
@@ -30,3 +32,10 @@ for g = 1:length(game_names)
 
 end
 
+
+figure('pos', [99 201 1445 698]);
+
+f = squeeze(mean(fs, 1));
+h = plot_gp_CV_rois_helper(f, 'signrank', 'median', regressor_names, roi_names, [], [], 10);
+title('all games');
+ylabel('Fraction significant voxels');
