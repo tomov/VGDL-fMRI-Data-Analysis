@@ -1,5 +1,7 @@
 function show_figure(figure_name)
 
+dqn_pca = true;
+
 
 switch figure_name
 
@@ -91,8 +93,11 @@ switch figure_name
         %agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_vae_repro.mat');
         %agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.010_atlas=AAL2_GP_EMPA_25M_e1k.mat');
         %agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.050_atlas=AAL2_GP_EMPA_25M_e1k.mat');
-        agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.050_atlas=AAL2_GP_EMPA2_25M_e1k.mat');  % !!!! THIS IS IT
-        %agg_filename = '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_alpha=0.050_atlas=AAL2_GP_EMPA2_neuron.mat';
+        if dqn_pca
+            agg_filename = '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_alpha=0.050_atlas=AAL2_GP_EMPA2_neuron.mat';
+        else
+            agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.050_atlas=AAL2_GP_EMPA2_25M_e1k.mat');  % !!!! THIS IS IT -- initial submission
+        end
         %agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.001_atlas=AAL2_GP_EMPA_25M_e1k.mat');
         agg_filename
         load(agg_filename);
@@ -122,14 +127,21 @@ switch figure_name
         l.Position = [0.1371 0.6119 0.0842 0.2821];
 
         orient(gcf, 'landscape');
-        print('svg/figure3/plot_gp_CV_rois_fraction_AAL2_GP_EMPA.svg', '-dsvg');
-        %print('svg/figure3/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_neuron.svg', '-dsvg');
+        if dqn_pca
+            print('svg/figure3/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_neuron.svg', '-dsvg');
+        else
+            print('svg/figure3/plot_gp_CV_rois_fraction_AAL2_GP_EMPA.svg', '-dsvg');
+        end
 
 
     case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA__outliers'
         % plot_gp_CV_rois.m
 
-        agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.050_atlas=AAL2_GP_EMPA2_25M_e1k.mat');
+        if dqn_pca
+            agg_filename = '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_alpha=0.050_atlas=AAL2_GP_EMPA2_neuron.mat';
+        else
+            agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.050_atlas=AAL2_GP_EMPA2_25M_e1k.mat');
+        end
         agg_filename
         load(agg_filename);
 
@@ -155,13 +167,21 @@ switch figure_name
         l.Position = [0.1371 0.7119 0.0842 0.2121];
 
         orient(gcf, 'landscape');
-        print('svg/figure3/plot_gp_CV_rois_fraction_AAL2_GP_EMPA__outliers.svg', '-dsvg');
+        if dqn_pca
+            print('svg/figure3/plot_gp_CV_rois_fraction_AAL2_GP_EMPA__outliers_neuron.svg', '-dsvg');
+        else
+            print('svg/figure3/plot_gp_CV_rois_fraction_AAL2_GP_EMPA__outliers.svg', '-dsvg');
+        end
 
 
     case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__outliers'
         % plot_gp_CV_rois.m
 
-        agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.050_atlas=AAL2_GP_EMPA2_grouped_25M_e1k.mat');
+        if dqn_pca
+            agg_filename = '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_alpha=0.050_atlas=AAL2_GP_EMPA2_grouped_neuron.mat';
+        else
+            agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.050_atlas=AAL2_GP_EMPA2_grouped_25M_e1k.mat');
+        end
         agg_filename
         load(agg_filename);
 
@@ -179,7 +199,11 @@ switch figure_name
         l = legend({'EMPA', 'DDQN', 'PCA', 'VAE'});
         l.Position = [0.1393 0.7034 0.2481 0.1934];
 
-        print('svg/figure3/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__outliers.svg', '-dsvg'); 
+        if dqn_pca
+            print('svg/figure3/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__outliers_neuron.svg', '-dsvg'); 
+        else
+            print('svg/figure3/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__outliers.svg', '-dsvg'); 
+        end
  
 
     case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA__components__outliers'
@@ -245,8 +269,11 @@ switch figure_name
     case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA__DDQN_layers__outliers'
         % plot_gp_CV_rois.m
 
-        agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.050_atlas=AAL2_GP_EMPA2_25M_e1k.mat');
-        %agg_filename = '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_alpha=0.050_atlas=AAL2_GP_EMPA2_neuron.mat';
+        if dqn_pca
+            agg_filename = '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_alpha=0.050_atlas=AAL2_GP_EMPA2_neuron.mat';
+        else
+            agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.050_atlas=AAL2_GP_EMPA2_25M_e1k.mat'); % !!!! initial submission
+        end
         agg_filename
         load(agg_filename);
 
@@ -273,14 +300,21 @@ switch figure_name
         l.Position = [0.1371 0.7119 0.0842 0.2121];
 
         orient(gcf, 'landscape');
-        print('svg/figure3/plot_gp_CV_rois_fraction_AAL2_GP_EMPA__DDQN_layers__outliers.svg', '-dsvg');
-        %print('svg/figure3/plot_gp_CV_rois_fraction_AAL2_GP_EMPA__DDQN_layers__outliers__neuron.svg', '-dsvg');
+        if dqn_pca
+            print('svg/figure3/plot_gp_CV_rois_fraction_AAL2_GP_EMPA__DDQN_layers__outliers__neuron.svg', '-dsvg');
+        else
+            print('svg/figure3/plot_gp_CV_rois_fraction_AAL2_GP_EMPA__DDQN_layers__outliers.svg', '-dsvg');
+        end
 
 
     case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__DDQN_layers__outliers'
         % plot_gp_CV_rois.m
 
-        agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.050_atlas=AAL2_GP_EMPA2_grouped_25M_e1k.mat');
+        if dqn_pca
+            agg_filename = '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_alpha=0.050_atlas=AAL2_GP_EMPA2_grouped_neuron.mat';
+        else
+            agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.050_atlas=AAL2_GP_EMPA2_grouped_25M_e1k.mat');
+        end
         agg_filename
         load(agg_filename);
 
@@ -299,7 +333,11 @@ switch figure_name
         l = legend({'conv1', 'conv2', 'conv3', 'linear1', 'linear2'});
         l.Position = [0.1693 0.7534 0.1881 0.1334];
 
-        print('svg/figure3/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__DDQN_layers__outliers.svg', '-dsvg'); 
+        if dqn_pca
+            print('svg/figure3/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__DDQN_layers__outliers_neuron.svg', '-dsvg'); 
+        else
+            print('svg/figure3/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__DDQN_layers__outliers.svg', '-dsvg'); 
+        end
  
 
 
