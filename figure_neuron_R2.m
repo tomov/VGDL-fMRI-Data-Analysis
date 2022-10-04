@@ -95,6 +95,11 @@ switch figure_name
         print('svg/neuron_revision/figure_neuron_R2_corr_theory_HRR_theory_update__all_subj.svg', '-dsvg');
 
 
+    case 'AAL2_gross'
+        [mask_filenames, roi_names, roi_masks] = get_anatomical_masks('AAL2_gross');
+        bspmview_wrapper(vgdl_expt, roi_masks{1} + roi_masks{2} * 2 + roi_masks{3} * 3 + roi_masks{4} * 4)
+
+
     otherwise
         assert(false, 'Invalid figure name');
 end
