@@ -103,6 +103,8 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
             [ker, features] = load_nuisance_kernel(EXPT, subj, normalize);
         case 'state'
             [ker, features] = load_state_kernel(EXPT, subj, normalize); 
+        case 'HRR_states'
+            [ker, features] = load_HRR_states_kernel(subj, unique(run_id), normalize); 
         case 'irrelevant'
             [ker, features] = load_irrelevant_kernel(EXPT, subj, normalize); 
         otherwise
