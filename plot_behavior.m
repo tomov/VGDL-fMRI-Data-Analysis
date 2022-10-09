@@ -5,17 +5,19 @@ conn = mongo('holy7c22108.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserNa
 %conn = mongo('holy7c22108.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'root', 'Password', 'parolatabe')
 %conn = mongo('holy7c22108.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'root', 'Password', 'parolatabe', 'AuthMechanism', 'SCRAM_SHA_256')
 
-game_names = get_game_names_ordered(11);
-subj_ids = 1:11;
+%game_names = get_game_names_ordered(11);
+%subj_ids = 1:11;
 game_names = get_game_names_ordered(12);
 subj_ids = 12:32;
+subj_ids = [12];
 
 run_ids = 1:6;
 levels = 1:9;
 
+%{
 agents(1).name = 'Human';
 agents(2).name = 'EMPA';
-agents(2).tag = 'attempt_1_states'; % 1..11
+%agents(2).tag = 'attempt_1_states'; % 1..11
 agents(2).tag = 'attempt_3_colors';  % 12..32
 agents(3).name = 'DQN';
 %agents(3).tag = '';   % 1..11
@@ -23,6 +25,20 @@ agents(4).name = 'Random';
 agents(4).tag = 'attempt_1_states';
 %agents(3).name = 'EMPA';
 %agents(3).tag = 'attempt_1_states';
+%}
+
+agents(1).name = 'EMPA';
+agents(1).tag = 'attempt_3_colors';  % 12..32
+agents(2).name = 'EMPA';
+agents(2).tag = 'ablation_AGH3_attempt_1';  % 12..32
+agents(3).name = 'EMPA';
+agents(3).tag = 'ablation_IW_attempt_1';  % 12..32
+agents(4).name = 'EMPA';
+agents(4).tag = 'ablation_greedy_attempt_1';  % 12..32
+agents(5).name = 'EMPA';
+agents(5).tag = 'ablation_nodes_attempt_1';  % 12..32
+agents(6).name = 'EMPA';
+agents(6).tag = 'ablation_lessnodes_attempt_1';  % 12..32
 
 %plot_what = 'success_rates'
 %plot_what = 'wins'
