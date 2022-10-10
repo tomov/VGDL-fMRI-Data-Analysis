@@ -100,6 +100,33 @@ switch figure_name
         bspmview_wrapper(vgdl_expt, roi_masks{1} + roi_masks{2} * 2 + roi_masks{3} * 3 + roi_masks{4} * 4)
 
 
+    case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__outliers__by_game'
+        % plot_gp_CV_rois.m
+
+       % agg_filename = fullfile(get_mat_dir(false), 'gp_CV_rois_alpha=0.050_atlas=AAL2_GP_EMPA2_grouped_25M_e1k.mat');
+        agg_filename = '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_by_game_alpha=0.050_atlas=AAL2_GP_EMPA2_grouped_project=1_neuron.mat'; % YASSSS
+        agg_filename
+        load(agg_filename);
+
+        figure('position', [147 521 345 318]);
+        ix = ismember(regressor_names, {'theory', 'DQN', 'PCA', 'VAE'});
+        f = squeeze(mean(fs, 1)); % average across games
+        h = plot_gp_CV_rois_helper_boxcharts(f(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], [], 8, [1:1], 1.0, true);
+        title('Model comparison within games');
+        ylabel('Fraction significant voxels');
+        xticklabels({'Frontal/Motor', 'Dorsal/Parietal', 'Ventral/Temporal', 'Early visual'}); 
+
+        % prettify
+        yscale = 11.9;
+        xscale = 1.25;
+        xlim([0.5 * xscale xscale * (length(roi_names) + 0.5)]);
+        ylim([0 0.7]);
+        l = legend({'EMPA', 'DDQN', 'PCA', 'VAE'});
+        l.Position = [0.1393 0.7034 0.2481 0.1934];
+
+        print('svg/neuron_revision/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__outliers__by_game_neuron.svg', '-dsvg'); 
+ 
+
     otherwise
         assert(false, 'Invalid figure name');
 end
