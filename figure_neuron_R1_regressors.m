@@ -67,9 +67,10 @@ function show_figure(figure_name)
                       'type * missile + color * red'};
             labels = {'A', 'B', 'C', 'D'};
 
-            figure('pos', [712 152 300*figure_scale 800*figure_scale]);
+            %figure('pos', [712 152 300*figure_scale 800*figure_scale]);  % vertical
+            figure('pos', [712 152 1300*figure_scale 300*figure_scale]);
 
-            subplot(3,1,1);
+            subplot(1,3,1);
             imagesc(X);
             title('Example HRRs');
             xlabel('feature');
@@ -77,7 +78,7 @@ function show_figure(figure_name)
             yticklabels(labels);
             colorbar;
 
-            subplot(3,1,2);
+            subplot(1,3,2);
             imagesc(corr(X'));
             xticks([1,2,3,4]);
             yticks([1,2,3,4]);
@@ -88,7 +89,7 @@ function show_figure(figure_name)
             %ytickangle(60);
             colorbar;
 
-            subplot(3,1,3);
+            subplot(1,3,3);
             imagesc(X * X');
             xticks([1,2,3,4]);
             yticks([1,2,3,4]);
