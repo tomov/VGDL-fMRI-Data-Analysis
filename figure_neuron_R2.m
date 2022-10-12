@@ -173,7 +173,7 @@ switch figure_name
         xlim([0.5 * xscale xscale * (length(roi_names) + 0.5)]);
         ylim([0 0.7]);
         l = legend({'EMPA', 'DDQN', 'PCA', 'VAE'});
-        l.Position = [0.1393 0.7234 0.2481 0.1934];
+        l.Position = [0.1193 0.7234 0.2481 0.1934];
 
         print('svg/neuron_revision/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__outliers__by_game_neuron__less_planning.svg', '-dsvg'); 
 
@@ -192,7 +192,7 @@ switch figure_name
         f2 = reshape(f2, [size(f2, 1), 1, size(f2, 2)]); % add back EMPA dimension
         f = cat(2, f1, f2);
         h = plot_gp_CV_rois_helper_boxcharts(f, 'signrank', 'median', {'more planning', 'less planning'}, roi_names, [], [], 8, [1:1], 1.0, true);
-        title('Games with more vs. less planning');
+        title('EMPA by more vs. less planning');
         ylabel('Fraction significant voxels');
         xticklabels({'Frontal/Motor', 'Dorsal/Parietal', 'Ventral/Temporal', 'Early visual'}); 
 
