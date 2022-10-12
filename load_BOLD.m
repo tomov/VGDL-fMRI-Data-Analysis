@@ -1,6 +1,6 @@
 % load BOLD for subject, project out GLM
 %
-function [Y, K, W, R, run_id, R_] = load_BOLD(EXPT, glmodel, subj_id, mask, Vmask)
+function [Y, K, W, R, run_id, R_, X, KWY, KWX] = load_BOLD(EXPT, glmodel, subj_id, mask, Vmask)
     % load subject data
     % Y = raw BOLD
     % K = filter matrix
