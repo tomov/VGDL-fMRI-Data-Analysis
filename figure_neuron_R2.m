@@ -126,6 +126,85 @@ switch figure_name
 
         print('svg/neuron_revision/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__outliers__by_game_neuron.svg', '-dsvg'); 
  
+    case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__outliers__by_game__more_planning'
+        % plot_gp_CV_rois.m
+
+        agg_filename = '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_by_game_alpha=0.050_atlas=AAL2_GP_EMPA2_grouped_project=1_neuron.mat'; % YASSSS
+        agg_filename
+        load(agg_filename);
+
+        figure('position', [147 521 345 318]);
+        ix = ismember(regressor_names, {'theory', 'DQN', 'PCA', 'VAE'});
+        f = squeeze(mean(fs([2,3,4,6],:,:,:), 1)); % average across games (helper, bait, zelda, lemmings)
+        h = plot_gp_CV_rois_helper_boxcharts(f(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], [], 8, [1:1], 1.0, true);
+        title('Games with more planning');
+        ylabel('Fraction significant voxels');
+        xticklabels({'Frontal/Motor', 'Dorsal/Parietal', 'Ventral/Temporal', 'Early visual'}); 
+
+        % prettify
+        yscale = 11.9;
+        xscale = 1.25;
+        xlim([0.5 * xscale xscale * (length(roi_names) + 0.5)]);
+        ylim([0 0.7]);
+        l = legend({'EMPA', 'DDQN', 'PCA', 'VAE'});
+        l.Position = [0.1393 0.7234 0.2481 0.1934];
+
+        print('svg/neuron_revision/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__outliers__by_game_neuron__more_planning.svg', '-dsvg'); 
+
+
+    case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__outliers__by_game__less_planning'
+        % plot_gp_CV_rois.m
+
+        agg_filename = '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_by_game_alpha=0.050_atlas=AAL2_GP_EMPA2_grouped_project=1_neuron.mat'; % YASSSS
+        agg_filename
+        load(agg_filename);
+
+        figure('position', [147 521 345 318]);
+        ix = ismember(regressor_names, {'theory', 'DQN', 'PCA', 'VAE'});
+        f = squeeze(mean(fs([1,5],:,:,:), 1)); % average across games (chase,  plaque attack, avoid George)
+        h = plot_gp_CV_rois_helper_boxcharts(f(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], [], 8, [1:1], 1.0, true);
+        title('Games with less planning');
+        ylabel('Fraction significant voxels');
+        xticklabels({'Frontal/Motor', 'Dorsal/Parietal', 'Ventral/Temporal', 'Early visual'}); 
+
+        % prettify
+        yscale = 11.9;
+        xscale = 1.25;
+        xlim([0.5 * xscale xscale * (length(roi_names) + 0.5)]);
+        ylim([0 0.7]);
+        l = legend({'EMPA', 'DDQN', 'PCA', 'VAE'});
+        l.Position = [0.1393 0.7234 0.2481 0.1934];
+
+        print('svg/neuron_revision/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__outliers__by_game_neuron__less_planning.svg', '-dsvg'); 
+
+    case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__more_verses_less_planning'
+        % plot_gp_CV_rois.m
+
+        agg_filename = '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_by_game_alpha=0.050_atlas=AAL2_GP_EMPA2_grouped_project=1_neuron.mat'; % YASSSS
+        agg_filename
+        load(agg_filename);
+
+        figure('position', [147 521 345 318]);
+        ix = ismember(regressor_names, {'theory'});
+        f1 = squeeze(mean(fs([2,3,4,6],:,ix,:), 1)); % average across games (helper, bait, zelda, lemmings)
+        f2 = squeeze(mean(fs([1,5],:,ix,:), 1)); % average across games (chase,  plaque attack, avoid George)
+        f1 = reshape(f1, [size(f1, 1), 1, size(f1, 2)]); % add back EMPA dimension
+        f2 = reshape(f2, [size(f2, 1), 1, size(f2, 2)]); % add back EMPA dimension
+        f = cat(2, f1, f2);
+        h = plot_gp_CV_rois_helper_boxcharts(f, 'signrank', 'median', {'more planning', 'less planning'}, roi_names, [], [], 8, [1:1], 1.0, true);
+        title('Games with more vs. less planning');
+        ylabel('Fraction significant voxels');
+        xticklabels({'Frontal/Motor', 'Dorsal/Parietal', 'Ventral/Temporal', 'Early visual'}); 
+
+        % prettify
+        yscale = 11.9;
+        xscale = 1.25;
+        xlim([0.5 * xscale xscale * (length(roi_names) + 0.5)]);
+        ylim([0 0.7]);
+        l = legend({'more planning', 'less planning'});
+        l.Position = [0.2093 0.7234 0.2481 0.1934];
+
+        print('svg/neuron_revision/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__more_verses_less_planning.svg', '-dsvg'); 
 
     otherwise
         assert(false, 'Invalid figure name');
