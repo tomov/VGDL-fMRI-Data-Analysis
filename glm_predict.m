@@ -24,7 +24,7 @@ for glmodel = glmodels
 
         tic
         fprintf('           loading BOLD for %d...\n', subj_id);
-        [Y, ~, ~, ~, ~, ~, X, KWY, KWX] = load_BOLD(EXPT, glmodel, subj_id, whole_brain_mask, Vwhole_brain_mask);
+        [Y, ~, ~, ~, ~, ~, X, ~, KWX] = load_BOLD(EXPT, glmodel, subj_id, whole_brain_mask, Vwhole_brain_mask);
         toc
 
         tic
@@ -40,14 +40,18 @@ for glmodel = glmodels
         %predict
         Yhat = X * B;
 
-        rs = nan(1, size(Yhat, 2));
-        ps = nan(1, size(Yhat, 2));
+        r = nan(1, size(Yhat, 2));
+        p = nan(1, size(Yhat, 2));
         for i = 1:size(Yhat, 2)
-            [rs(i), ps(i)] = corr(Y(:,i), Yhat(:,i));
+            [r(i), p(i)] = corr(Y(:,i), Yhat(:,i));
         end
         
         filename = sprintf('glm_predict_glm=%d_subj=%d.mat', glmodel, subj_id);
         fprintf('Saving to %s\n', filename);
+        clear Y;
+        clear Yhat;
+        clear KWX;
+        clear B;
         save(fullfile(get_mat_dir(2), filename));
     end
     
