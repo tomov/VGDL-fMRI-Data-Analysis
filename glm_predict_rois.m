@@ -7,7 +7,8 @@ test_subjects = 2:2:length(EXPT.subject);
 
 alpha = 0.05; % significance threshold for individual voxels
 
-agg_filename = fullfile(get_mat_dir(), sprintf('glm_predict_rois_alpha=%.3f_neuron.mat', alpha, atlas));
+%agg_filename = fullfile(get_mat_dir(), sprintf('glm_predict_rois_alpha=%.3f_neuron.mat', alpha));
+agg_filename = fullfile(get_mat_dir(), sprintf('glm_predict_rois_alpha=%.3f_neuron_KWY.mat', alpha));
 agg_filename
 
 %% get masks
@@ -39,7 +40,7 @@ for g = 1:nglmodels
         s
         subj_id = test_subjects(s);
 
-        filename = sprintf('glm_predict_glm=%d_subj=%d.mat', glmodel, subj_id);
+        filename = sprintf('glm_predict_glm=%d_subj=%d_KWY.mat', glmodel, subj_id);
         load(fullfile(get_mat_dir(2), filename), 'r', 'p');
 
         significant = p < alpha; % which voxels are significant
