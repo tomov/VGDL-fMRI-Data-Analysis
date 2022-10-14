@@ -2,7 +2,8 @@
 clear all;
 close all;
 
-agg_filename= '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/glm_predict_rois_alpha=0.050_neuron.mat';
+%agg_filename= '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/glm_predict_rois_alpha=0.050_neuron.mat';
+agg_filename= '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/glm_predict2_rois_alpha=0.050_neuron.mat';
 
 agg_filename
 
