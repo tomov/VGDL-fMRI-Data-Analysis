@@ -9957,3 +9957,182 @@ fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_HRR_states__0_1_0_123_56
 fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_HRR_states__0_1_0_123_565227.out -- Submitted batch job 565227
 fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_HRR_states__0_1_0_123_565228.out -- Submitted batch job 565228
 fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_HRR_states__0_1_0_123_565229.out -- Submitted batch job 565229
+----------------
+--- Fri Oct 14 15:07:15 EDT 2022: Running fit_gp_CV for subjects 1 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_theory_change_flag__1_0_0_123_571219.out -- Submitted batch job 571219
+----------------
+--- Fri Oct 14 15:17:14 EDT 2022: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_theory_change_flag__1_0_0_123_571264.out -- Submitted batch job 571264
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_1_theory_change_flag__1_0_0_123_571265.out -- Submitted batch job 571265
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_1_theory_change_flag__1_0_0_123_571266.out -- Submitted batch job 571266
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_1_theory_change_flag__1_0_0_123_571267.out -- Submitted batch job 571267
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_1_theory_change_flag__1_0_0_123_571268.out -- Submitted batch job 571268
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_1_theory_change_flag__1_0_0_123_571269.out -- Submitted batch job 571269
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_1_theory_change_flag__1_0_0_123_571271.out -- Submitted batch job 571271
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_1_theory_change_flag__1_0_0_123_571272.out -- Submitted batch job 571272
+fit_gp_CV.sh for subject 9: output/fit_gp_CV_9_true_1_theory_change_flag__1_0_0_123_571273.out -- Submitted batch job 571273
+fit_gp_CV.sh for subject 10: output/fit_gp_CV_10_true_1_theory_change_flag__1_0_0_123_571274.out -- Submitted batch job 571274
+fit_gp_CV.sh for subject 11: output/fit_gp_CV_11_true_1_theory_change_flag__1_0_0_123_571275.out -- Submitted batch job 571275
+fit_gp_CV.sh for subject 12: output/fit_gp_CV_12_true_1_theory_change_flag__1_0_0_123_571276.out -- Submitted batch job 571276
+fit_gp_CV.sh for subject 13: output/fit_gp_CV_13_true_1_theory_change_flag__1_0_0_123_571277.out -- Submitted batch job 571277
+fit_gp_CV.sh for subject 14: output/fit_gp_CV_14_true_1_theory_change_flag__1_0_0_123_571278.out -- Submitted batch job 571278
+fit_gp_CV.sh for subject 15: output/fit_gp_CV_15_true_1_theory_change_flag__1_0_0_123_571279.out -- Submitted batch job 571279
+fit_gp_CV.sh for subject 16: output/fit_gp_CV_16_true_1_theory_change_flag__1_0_0_123_571280.out -- Submitted batch job 571280
+fit_gp_CV.sh for subject 17: output/fit_gp_CV_17_true_1_theory_change_flag__1_0_0_123_571281.out -- Submitted batch job 571281
+fit_gp_CV.sh for subject 18: output/fit_gp_CV_18_true_1_theory_change_flag__1_0_0_123_571282.out -- Submitted batch job 571282
+fit_gp_CV.sh for subject 19: output/fit_gp_CV_19_true_1_theory_change_flag__1_0_0_123_571283.out -- Submitted batch job 571283
+fit_gp_CV.sh for subject 20: output/fit_gp_CV_20_true_1_theory_change_flag__1_0_0_123_571284.out -- Submitted batch job 571284
+fit_gp_CV.sh for subject 21: output/fit_gp_CV_21_true_1_theory_change_flag__1_0_0_123_571285.out -- Submitted batch job 571285
+fit_gp_CV.sh for subject 22: output/fit_gp_CV_22_true_1_theory_change_flag__1_0_0_123_571286.out -- Submitted batch job 571286
+fit_gp_CV.sh for subject 23: output/fit_gp_CV_23_true_1_theory_change_flag__1_0_0_123_571287.out -- Submitted batch job 571287
+fit_gp_CV.sh for subject 24: output/fit_gp_CV_24_true_1_theory_change_flag__1_0_0_123_571288.out -- Submitted batch job 571288
+fit_gp_CV.sh for subject 25: output/fit_gp_CV_25_true_1_theory_change_flag__1_0_0_123_571289.out -- Submitted batch job 571289
+fit_gp_CV.sh for subject 26: output/fit_gp_CV_26_true_1_theory_change_flag__1_0_0_123_571290.out -- Submitted batch job 571290
+fit_gp_CV.sh for subject 27: output/fit_gp_CV_27_true_1_theory_change_flag__1_0_0_123_571291.out -- Submitted batch job 571291
+fit_gp_CV.sh for subject 28: output/fit_gp_CV_28_true_1_theory_change_flag__1_0_0_123_571292.out -- Submitted batch job 571292
+fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_theory_change_flag__1_0_0_123_571293.out -- Submitted batch job 571293
+fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_theory_change_flag__1_0_0_123_571294.out -- Submitted batch job 571294
+fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_theory_change_flag__1_0_0_123_571295.out -- Submitted batch job 571295
+fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_theory_change_flag__1_0_0_123_571296.out -- Submitted batch job 571296
+----------------
+--- Fri Oct 14 15:17:51 EDT 2022: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_sprite_change_flag__1_0_0_123_571297.out -- Submitted batch job 571297
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_1_sprite_change_flag__1_0_0_123_571298.out -- Submitted batch job 571298
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_1_sprite_change_flag__1_0_0_123_571299.out -- Submitted batch job 571299
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_1_sprite_change_flag__1_0_0_123_571300.out -- Submitted batch job 571300
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_1_sprite_change_flag__1_0_0_123_571301.out -- Submitted batch job 571301
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_1_sprite_change_flag__1_0_0_123_571302.out -- Submitted batch job 571302
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_1_sprite_change_flag__1_0_0_123_571303.out -- Submitted batch job 571303
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_1_sprite_change_flag__1_0_0_123_571304.out -- Submitted batch job 571304
+fit_gp_CV.sh for subject 9: output/fit_gp_CV_9_true_1_sprite_change_flag__1_0_0_123_571305.out -- Submitted batch job 571305
+fit_gp_CV.sh for subject 10: output/fit_gp_CV_10_true_1_sprite_change_flag__1_0_0_123_571306.out -- Submitted batch job 571306
+fit_gp_CV.sh for subject 11: output/fit_gp_CV_11_true_1_sprite_change_flag__1_0_0_123_571307.out -- Submitted batch job 571307
+fit_gp_CV.sh for subject 12: output/fit_gp_CV_12_true_1_sprite_change_flag__1_0_0_123_571308.out -- Submitted batch job 571308
+fit_gp_CV.sh for subject 13: output/fit_gp_CV_13_true_1_sprite_change_flag__1_0_0_123_571309.out -- Submitted batch job 571309
+fit_gp_CV.sh for subject 14: output/fit_gp_CV_14_true_1_sprite_change_flag__1_0_0_123_571310.out -- Submitted batch job 571310
+fit_gp_CV.sh for subject 15: output/fit_gp_CV_15_true_1_sprite_change_flag__1_0_0_123_571311.out -- Submitted batch job 571311
+fit_gp_CV.sh for subject 16: output/fit_gp_CV_16_true_1_sprite_change_flag__1_0_0_123_571312.out -- Submitted batch job 571312
+fit_gp_CV.sh for subject 17: output/fit_gp_CV_17_true_1_sprite_change_flag__1_0_0_123_571313.out -- Submitted batch job 571313
+fit_gp_CV.sh for subject 18: output/fit_gp_CV_18_true_1_sprite_change_flag__1_0_0_123_571314.out -- Submitted batch job 571314
+fit_gp_CV.sh for subject 19: output/fit_gp_CV_19_true_1_sprite_change_flag__1_0_0_123_571315.out -- Submitted batch job 571315
+fit_gp_CV.sh for subject 20: output/fit_gp_CV_20_true_1_sprite_change_flag__1_0_0_123_571316.out -- Submitted batch job 571316
+fit_gp_CV.sh for subject 21: output/fit_gp_CV_21_true_1_sprite_change_flag__1_0_0_123_571317.out -- Submitted batch job 571317
+fit_gp_CV.sh for subject 22: output/fit_gp_CV_22_true_1_sprite_change_flag__1_0_0_123_571318.out -- Submitted batch job 571318
+fit_gp_CV.sh for subject 23: output/fit_gp_CV_23_true_1_sprite_change_flag__1_0_0_123_571319.out -- Submitted batch job 571319
+fit_gp_CV.sh for subject 24: output/fit_gp_CV_24_true_1_sprite_change_flag__1_0_0_123_571320.out -- Submitted batch job 571320
+fit_gp_CV.sh for subject 25: output/fit_gp_CV_25_true_1_sprite_change_flag__1_0_0_123_571321.out -- Submitted batch job 571321
+fit_gp_CV.sh for subject 26: output/fit_gp_CV_26_true_1_sprite_change_flag__1_0_0_123_571322.out -- Submitted batch job 571322
+fit_gp_CV.sh for subject 27: output/fit_gp_CV_27_true_1_sprite_change_flag__1_0_0_123_571323.out -- Submitted batch job 571323
+fit_gp_CV.sh for subject 28: output/fit_gp_CV_28_true_1_sprite_change_flag__1_0_0_123_571324.out -- Submitted batch job 571324
+fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_sprite_change_flag__1_0_0_123_571325.out -- Submitted batch job 571325
+fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_sprite_change_flag__1_0_0_123_571326.out -- Submitted batch job 571326
+fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_sprite_change_flag__1_0_0_123_571327.out -- Submitted batch job 571327
+fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_sprite_change_flag__1_0_0_123_571328.out -- Submitted batch job 571328
+----------------
+--- Fri Oct 14 15:19:03 EDT 2022: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_interaction_change_flag__1_0_0_123_571329.out -- Submitted batch job 571329
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_1_interaction_change_flag__1_0_0_123_571330.out -- Submitted batch job 571330
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_1_interaction_change_flag__1_0_0_123_571331.out -- Submitted batch job 571331
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_1_interaction_change_flag__1_0_0_123_571332.out -- Submitted batch job 571332
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_1_interaction_change_flag__1_0_0_123_571333.out -- Submitted batch job 571333
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_1_interaction_change_flag__1_0_0_123_571334.out -- Submitted batch job 571334
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_1_interaction_change_flag__1_0_0_123_571335.out -- Submitted batch job 571335
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_1_interaction_change_flag__1_0_0_123_571336.out -- Submitted batch job 571336
+fit_gp_CV.sh for subject 9: output/fit_gp_CV_9_true_1_interaction_change_flag__1_0_0_123_571337.out -- Submitted batch job 571337
+fit_gp_CV.sh for subject 10: output/fit_gp_CV_10_true_1_interaction_change_flag__1_0_0_123_571338.out -- Submitted batch job 571338
+fit_gp_CV.sh for subject 11: output/fit_gp_CV_11_true_1_interaction_change_flag__1_0_0_123_571339.out -- Submitted batch job 571339
+fit_gp_CV.sh for subject 12: output/fit_gp_CV_12_true_1_interaction_change_flag__1_0_0_123_571340.out -- Submitted batch job 571340
+fit_gp_CV.sh for subject 13: output/fit_gp_CV_13_true_1_interaction_change_flag__1_0_0_123_571341.out -- Submitted batch job 571341
+fit_gp_CV.sh for subject 14: output/fit_gp_CV_14_true_1_interaction_change_flag__1_0_0_123_571342.out -- Submitted batch job 571342
+fit_gp_CV.sh for subject 15: output/fit_gp_CV_15_true_1_interaction_change_flag__1_0_0_123_571343.out -- Submitted batch job 571343
+fit_gp_CV.sh for subject 16: output/fit_gp_CV_16_true_1_interaction_change_flag__1_0_0_123_571344.out -- Submitted batch job 571344
+fit_gp_CV.sh for subject 17: output/fit_gp_CV_17_true_1_interaction_change_flag__1_0_0_123_571346.out -- Submitted batch job 571346
+fit_gp_CV.sh for subject 18: output/fit_gp_CV_18_true_1_interaction_change_flag__1_0_0_123_571347.out -- Submitted batch job 571347
+fit_gp_CV.sh for subject 19: output/fit_gp_CV_19_true_1_interaction_change_flag__1_0_0_123_571348.out -- Submitted batch job 571348
+fit_gp_CV.sh for subject 20: output/fit_gp_CV_20_true_1_interaction_change_flag__1_0_0_123_571349.out -- Submitted batch job 571349
+fit_gp_CV.sh for subject 21: output/fit_gp_CV_21_true_1_interaction_change_flag__1_0_0_123_571350.out -- Submitted batch job 571350
+fit_gp_CV.sh for subject 22: output/fit_gp_CV_22_true_1_interaction_change_flag__1_0_0_123_571351.out -- Submitted batch job 571351
+fit_gp_CV.sh for subject 23: output/fit_gp_CV_23_true_1_interaction_change_flag__1_0_0_123_571352.out -- Submitted batch job 571352
+fit_gp_CV.sh for subject 24: output/fit_gp_CV_24_true_1_interaction_change_flag__1_0_0_123_571353.out -- Submitted batch job 571353
+fit_gp_CV.sh for subject 25: output/fit_gp_CV_25_true_1_interaction_change_flag__1_0_0_123_571354.out -- Submitted batch job 571354
+fit_gp_CV.sh for subject 26: output/fit_gp_CV_26_true_1_interaction_change_flag__1_0_0_123_571355.out -- Submitted batch job 571355
+fit_gp_CV.sh for subject 27: output/fit_gp_CV_27_true_1_interaction_change_flag__1_0_0_123_571356.out -- Submitted batch job 571356
+fit_gp_CV.sh for subject 28: output/fit_gp_CV_28_true_1_interaction_change_flag__1_0_0_123_571357.out -- Submitted batch job 571357
+fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_interaction_change_flag__1_0_0_123_571358.out -- Submitted batch job 571358
+fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_interaction_change_flag__1_0_0_123_571359.out -- Submitted batch job 571359
+fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_interaction_change_flag__1_0_0_123_571360.out -- Submitted batch job 571360
+fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_interaction_change_flag__1_0_0_123_571361.out -- Submitted batch job 571361
+----------------
+--- Fri Oct 14 15:19:39 EDT 2022: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_termination_change_flag__1_0_0_123_571362.out -- Submitted batch job 571362
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_1_termination_change_flag__1_0_0_123_571363.out -- Submitted batch job 571363
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_1_termination_change_flag__1_0_0_123_571364.out -- Submitted batch job 571364
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_1_termination_change_flag__1_0_0_123_571365.out -- Submitted batch job 571365
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_1_termination_change_flag__1_0_0_123_571366.out -- Submitted batch job 571366
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_1_termination_change_flag__1_0_0_123_571367.out -- Submitted batch job 571367
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_1_termination_change_flag__1_0_0_123_571368.out -- Submitted batch job 571368
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_1_termination_change_flag__1_0_0_123_571369.out -- Submitted batch job 571369
+fit_gp_CV.sh for subject 9: output/fit_gp_CV_9_true_1_termination_change_flag__1_0_0_123_571370.out -- Submitted batch job 571370
+fit_gp_CV.sh for subject 10: output/fit_gp_CV_10_true_1_termination_change_flag__1_0_0_123_571371.out -- Submitted batch job 571371
+fit_gp_CV.sh for subject 11: output/fit_gp_CV_11_true_1_termination_change_flag__1_0_0_123_571372.out -- Submitted batch job 571372
+fit_gp_CV.sh for subject 12: output/fit_gp_CV_12_true_1_termination_change_flag__1_0_0_123_571373.out -- Submitted batch job 571373
+fit_gp_CV.sh for subject 13: output/fit_gp_CV_13_true_1_termination_change_flag__1_0_0_123_571374.out -- Submitted batch job 571374
+fit_gp_CV.sh for subject 14: output/fit_gp_CV_14_true_1_termination_change_flag__1_0_0_123_571375.out -- Submitted batch job 571375
+fit_gp_CV.sh for subject 15: output/fit_gp_CV_15_true_1_termination_change_flag__1_0_0_123_571376.out -- Submitted batch job 571376
+fit_gp_CV.sh for subject 16: output/fit_gp_CV_16_true_1_termination_change_flag__1_0_0_123_571377.out -- Submitted batch job 571377
+fit_gp_CV.sh for subject 17: output/fit_gp_CV_17_true_1_termination_change_flag__1_0_0_123_571378.out -- Submitted batch job 571378
+fit_gp_CV.sh for subject 18: output/fit_gp_CV_18_true_1_termination_change_flag__1_0_0_123_571379.out -- Submitted batch job 571379
+fit_gp_CV.sh for subject 19: output/fit_gp_CV_19_true_1_termination_change_flag__1_0_0_123_571380.out -- Submitted batch job 571380
+fit_gp_CV.sh for subject 20: output/fit_gp_CV_20_true_1_termination_change_flag__1_0_0_123_571381.out -- Submitted batch job 571381
+fit_gp_CV.sh for subject 21: output/fit_gp_CV_21_true_1_termination_change_flag__1_0_0_123_571382.out -- Submitted batch job 571382
+fit_gp_CV.sh for subject 22: output/fit_gp_CV_22_true_1_termination_change_flag__1_0_0_123_571383.out -- Submitted batch job 571383
+fit_gp_CV.sh for subject 23: output/fit_gp_CV_23_true_1_termination_change_flag__1_0_0_123_571384.out -- Submitted batch job 571384
+fit_gp_CV.sh for subject 24: output/fit_gp_CV_24_true_1_termination_change_flag__1_0_0_123_571385.out -- Submitted batch job 571385
+fit_gp_CV.sh for subject 25: output/fit_gp_CV_25_true_1_termination_change_flag__1_0_0_123_571386.out -- Submitted batch job 571386
+fit_gp_CV.sh for subject 26: output/fit_gp_CV_26_true_1_termination_change_flag__1_0_0_123_571387.out -- Submitted batch job 571387
+fit_gp_CV.sh for subject 27: output/fit_gp_CV_27_true_1_termination_change_flag__1_0_0_123_571388.out -- Submitted batch job 571388
+fit_gp_CV.sh for subject 28: output/fit_gp_CV_28_true_1_termination_change_flag__1_0_0_123_571389.out -- Submitted batch job 571389
+fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_termination_change_flag__1_0_0_123_571390.out -- Submitted batch job 571390
+fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_termination_change_flag__1_0_0_123_571391.out -- Submitted batch job 571391
+fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_termination_change_flag__1_0_0_123_571392.out -- Submitted batch job 571392
+fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_termination_change_flag__1_0_0_123_571393.out -- Submitted batch job 571393
+----------------
+--- Fri Oct 14 15:20:23 EDT 2022: Running fit_gp_CV for subjects 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_multiplexing__1_0_0_123_571394.out -- Submitted batch job 571394
+fit_gp_CV.sh for subject 2: output/fit_gp_CV_2_true_1_multiplexing__1_0_0_123_571395.out -- Submitted batch job 571395
+fit_gp_CV.sh for subject 3: output/fit_gp_CV_3_true_1_multiplexing__1_0_0_123_571396.out -- Submitted batch job 571396
+fit_gp_CV.sh for subject 4: output/fit_gp_CV_4_true_1_multiplexing__1_0_0_123_571397.out -- Submitted batch job 571397
+fit_gp_CV.sh for subject 5: output/fit_gp_CV_5_true_1_multiplexing__1_0_0_123_571398.out -- Submitted batch job 571398
+fit_gp_CV.sh for subject 6: output/fit_gp_CV_6_true_1_multiplexing__1_0_0_123_571399.out -- Submitted batch job 571399
+fit_gp_CV.sh for subject 7: output/fit_gp_CV_7_true_1_multiplexing__1_0_0_123_571400.out -- Submitted batch job 571400
+fit_gp_CV.sh for subject 8: output/fit_gp_CV_8_true_1_multiplexing__1_0_0_123_571401.out -- Submitted batch job 571401
+fit_gp_CV.sh for subject 9: output/fit_gp_CV_9_true_1_multiplexing__1_0_0_123_571402.out -- Submitted batch job 571402
+fit_gp_CV.sh for subject 10: output/fit_gp_CV_10_true_1_multiplexing__1_0_0_123_571403.out -- Submitted batch job 571403
+fit_gp_CV.sh for subject 11: output/fit_gp_CV_11_true_1_multiplexing__1_0_0_123_571404.out -- Submitted batch job 571404
+fit_gp_CV.sh for subject 12: output/fit_gp_CV_12_true_1_multiplexing__1_0_0_123_571405.out -- Submitted batch job 571405
+fit_gp_CV.sh for subject 13: output/fit_gp_CV_13_true_1_multiplexing__1_0_0_123_571406.out -- Submitted batch job 571406
+fit_gp_CV.sh for subject 14: output/fit_gp_CV_14_true_1_multiplexing__1_0_0_123_571407.out -- Submitted batch job 571407
+fit_gp_CV.sh for subject 15: output/fit_gp_CV_15_true_1_multiplexing__1_0_0_123_571409.out -- Submitted batch job 571409
+fit_gp_CV.sh for subject 16: output/fit_gp_CV_16_true_1_multiplexing__1_0_0_123_571410.out -- Submitted batch job 571410
+fit_gp_CV.sh for subject 17: output/fit_gp_CV_17_true_1_multiplexing__1_0_0_123_571411.out -- Submitted batch job 571411
+fit_gp_CV.sh for subject 18: output/fit_gp_CV_18_true_1_multiplexing__1_0_0_123_571412.out -- Submitted batch job 571412
+fit_gp_CV.sh for subject 19: output/fit_gp_CV_19_true_1_multiplexing__1_0_0_123_571413.out -- Submitted batch job 571413
+fit_gp_CV.sh for subject 20: output/fit_gp_CV_20_true_1_multiplexing__1_0_0_123_571414.out -- Submitted batch job 571414
+fit_gp_CV.sh for subject 21: output/fit_gp_CV_21_true_1_multiplexing__1_0_0_123_571415.out -- Submitted batch job 571415
+fit_gp_CV.sh for subject 22: output/fit_gp_CV_22_true_1_multiplexing__1_0_0_123_571416.out -- Submitted batch job 571416
+fit_gp_CV.sh for subject 23: output/fit_gp_CV_23_true_1_multiplexing__1_0_0_123_571417.out -- Submitted batch job 571417
+fit_gp_CV.sh for subject 24: output/fit_gp_CV_24_true_1_multiplexing__1_0_0_123_571418.out -- Submitted batch job 571418
+fit_gp_CV.sh for subject 25: output/fit_gp_CV_25_true_1_multiplexing__1_0_0_123_571419.out -- Submitted batch job 571419
+fit_gp_CV.sh for subject 26: output/fit_gp_CV_26_true_1_multiplexing__1_0_0_123_571420.out -- Submitted batch job 571420
+fit_gp_CV.sh for subject 27: output/fit_gp_CV_27_true_1_multiplexing__1_0_0_123_571421.out -- Submitted batch job 571421
+fit_gp_CV.sh for subject 28: output/fit_gp_CV_28_true_1_multiplexing__1_0_0_123_571422.out -- Submitted batch job 571422
+fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_multiplexing__1_0_0_123_571423.out -- Submitted batch job 571423
+fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_multiplexing__1_0_0_123_571424.out -- Submitted batch job 571424
+fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_multiplexing__1_0_0_123_571425.out -- Submitted batch job 571425
+fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_multiplexing__1_0_0_123_571426.out -- Submitted batch job 571426
