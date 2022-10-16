@@ -164,7 +164,7 @@ switch figure_name
         ylim([0 yscale *0.08]);
         xlim([0.5 * xscale xscale * (length(roi_names) + 0.5)]);
         l = legend({'EMPA', 'DDQN', 'PCA', 'VAE'});
-        l.Position = [0.1371 0.7119 0.0842 0.2121];
+        l.Position = [0.1371 0.7219 0.0842 0.2121];
 
         orient(gcf, 'landscape');
         if dqn_pca
@@ -197,7 +197,7 @@ switch figure_name
         xscale = 1.25;
         xlim([0.5 * xscale xscale * (length(roi_names) + 0.5)]);
         l = legend({'EMPA', 'DDQN', 'PCA', 'VAE'});
-        l.Position = [0.1393 0.7034 0.2481 0.1934];
+        l.Position = [0.1393 0.7334 0.2481 0.1934];
 
         if dqn_pca
             print('svg/figure3/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__outliers_neuron.svg', '-dsvg'); 
