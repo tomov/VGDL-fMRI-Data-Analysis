@@ -10343,3 +10343,6 @@ fit_gp_CV.sh for subject 26: output/fit_gp_CV_26_true_1_EMPA_theory_2_1_1_123_57
 fit_gp_CV.sh for subject 27: output/fit_gp_CV_27_true_1_EMPA_theory_2_1_1_123_575524.out -- Submitted batch job 575524
 fit_gp_CV.sh for subject 28: output/fit_gp_CV_28_true_1_EMPA_theory_2_1_1_123_575525.out -- Submitted batch job 575525
 fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_EMPA_theory_2_1_1_123_575526.out -- Submitted batch job 575526
+fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_EMPA_theory_2_1_1_123_575527.out -- Submitted batch job 575527
+fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_EMPA_theory_2_1_1_123_575528.out -- Submitted batch job 575528
+fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_EMPA_theory_2_1_1_123_575529.out -- Submitted batch job 575529

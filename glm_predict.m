@@ -1,4 +1,4 @@
-
+% predict bold signal from average betas (across subjects and runs)
 close all;
 clear all;
 
