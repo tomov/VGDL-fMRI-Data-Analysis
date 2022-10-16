@@ -109,15 +109,15 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
             [ker, features] = load_irrelevant_kernel(EXPT, subj, normalize); 
 
         case 'theory_change_flag'
-            [ker, features] = load_GLM_kernel(EXPT, 102, subj, {'theory_change_flag'}, false, normalize);
+            [ker, features] = load_GLM_kernel(EXPT, 102, subj, [{'theory_change_flag'}, get_nuisance_regressor_names(subj)], 1, normalize);
         case 'sprite_change_flag'
-            [ker, features] = load_GLM_kernel(EXPT, 103, subj, {'sprite_change_flag'}, false, normalize);
+            [ker, features] = load_GLM_kernel(EXPT, 103, subj, [{'sprite_change_flag'}, get_nuisance_regressor_names(subj)], 1, normalize);
         case 'interaction_change_flag'
-            [ker, features] = load_GLM_kernel(EXPT, 104, subj, {'interaction_change_flag'}, false, normalize);
+            [ker, features] = load_GLM_kernel(EXPT, 104, subj, [{'interaction_change_flag'}, get_nuisance_regressor_names(subj)], 1, normalize);
         case 'termination_change_flag'
-            [ker, features] = load_GLM_kernel(EXPT, 105, subj, {'termination_change_flag'}, false, normalize);
+            [ker, features] = load_GLM_kernel(EXPT, 105, subj, [{'termination_change_flag'}, get_nuisance_regressor_names(subj)], 1, normalize);
         case 'multiplexing'
-            [ker, features] = load_GLM_kernel(EXPT, 106, subj, {'sprite_change_flag','interaction_change_flag','termination_change_flag'}, false, normalize);
+            [ker, features] = load_GLM_kernel(EXPT, 106, subj, [{'sprite_change_flag','interaction_change_flag','termination_change_flag'}, get_nuisance_regressor_names(subj)], 1, normalize);
 
         otherwise
             assert(false, 'invalid model name')
