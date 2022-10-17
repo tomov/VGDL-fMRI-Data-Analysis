@@ -52,8 +52,9 @@ ylabel('\Delta BIC');
 %
 figure('position', [1147 521 1045 418]);
 %ix = ismember(regressor_names, {'DQN', 'conv1', 'conv2', 'conv3', 'linear1', 'linear2'});
-%h = plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], [], 10);
-h = plot_gp_CV_rois_helper(fs(:,:,:), 'signrank', 'median', regressor_names, roi_names, [], [], 10);
+ix = [1 5];
+h = plot_gp_CV_rois_helper(fs(:,ix,:), 'signrank', 'median', regressor_names(ix), roi_names, [], [], 10);
+%h = plot_gp_CV_rois_helper(fs(:,:,:), 'signrank', 'median', regressor_names, roi_names, [], [], 10);
 title('Fraction significant voxels in ROIs');
 ylabel('Fraction significant voxels');
 

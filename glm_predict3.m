@@ -22,7 +22,7 @@ for glmodel = glmodels
 
         tic
         fprintf('           loading BOLD for %d...\n', subj_id);
-        [Y, ~, ~, ~, ~, ~, X, ~, KWX] = load_BOLD(EXPT, glmodel, subj_id, whole_brain_mask, Vwhole_brain_mask);
+        [Y, ~, ~, ~, run_id, ~, X, ~, KWX] = load_BOLD(EXPT, glmodel, subj_id, whole_brain_mask, Vwhole_brain_mask);
         toc
 
         tic
@@ -39,10 +39,15 @@ for glmodel = glmodels
         %predict
         Yhat = X * B_CV;
 
-        r = nan(1, size(Yhat, 2));
-        p = nan(1, size(Yhat, 2));
-        for i = 1:size(Yhat, 2)
-            [r(i), p(i)] = corr(Y(:,i), Yhat(:,i));
+        % Compute correlation separately for every run
+        run_ids = unique(run_id);
+        r = nan(length(run_ids), size(Yhat, 2));
+        p = nan(length(run_ids), size(Yhat, 2));
+        for k = 1:length(run_ids)
+            which = (run_id == run_ids(k));
+            for i = 1:size(Yhat, 2)
+                [r(k,i), p(k,i)] = corr(Y(which,i), Yhat(which,i));
+            end
         end
         
         filename = sprintf('glm_predict3_glm=%d_subj=%d.mat', glmodel, subj_id);
