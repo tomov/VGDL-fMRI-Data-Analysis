@@ -24,7 +24,7 @@ fasse_ncf = false;
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), sprintf('gp_CV_rois_alpha=%.3f_atlas=%s_vae.mat', alpha, atlas));
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), sprintf('gp_CV_rois_alpha=%.3f_atlas=%s_25M_e1k.mat', alpha, atlas));
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), sprintf('gp_CV_rois_alpha=%.3f_atlas=%s_neuron_bms.mat', alpha, atlas));
-agg_filename = fullfile(get_mat_dir(fasse_ncf), sprintf('gp_CV_rois_alpha=%.3f_atlas=%s_neuron_bms_nuisance_z.mat', alpha, atlas));
+agg_filename = fullfile(get_mat_dir(fasse_ncf), sprintf('gp_CV_rois_alpha=%.3f_atlas=%s_neuron_bms_norm.mat', alpha, atlas));
 agg_filename
 
 %% get masks

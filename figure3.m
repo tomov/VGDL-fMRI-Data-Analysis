@@ -195,7 +195,6 @@ switch figure_name
         g_macroROI(ismember(g_ROI, roi_names(19:21))) = {'visual'};
 
         [p,tbl,stats] = anovan(ff, {g_macroROI, g_model}, 'model','interaction','varnames',{'macroROI','model'})
-        keyboard
 
 
     case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__outliers'
