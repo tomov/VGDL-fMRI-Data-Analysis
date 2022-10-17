@@ -173,6 +173,30 @@ switch figure_name
             print('svg/figure3/plot_gp_CV_rois_fraction_AAL2_GP_EMPA__outliers.svg', '-dsvg');
         end
 
+        % stats
+        g_ROI = []; % ROI
+        g_macroROI = []; % ROI group
+        g_model = []; % model
+        f = fs(:,ix,:);
+        ff = [];
+        rois = roi_names(:);
+        models = regressor_names(ix);
+        for i = 1:size(f,1)
+            for j = 1:size(f,2)
+                ff = [ff; squeeze(f(i,j,:))];
+                g_ROI = [g_ROI; repmat(rois(i), [size(f,3) 1])];
+                g_model = [g_model; repmat(models(j), [size(f,3) 1])];
+            end
+        end
+        g_macroROI = cell(size(g_ROI));
+        g_macroROI(ismember(g_ROI, roi_names(1:7))) = {'frontal'};
+        g_macroROI(ismember(g_ROI, roi_names(8:14))) = {'parietal'};
+        g_macroROI(ismember(g_ROI, roi_names(15:18))) = {'ventral'};
+        g_macroROI(ismember(g_ROI, roi_names(19:21))) = {'visual'};
+
+        [p,tbl,stats] = anovan(ff, {g_macroROI, g_model}, 'model','interaction','varnames',{'macroROI','model'})
+        keyboard
+
 
     case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__outliers'
         % plot_gp_CV_rois.m
@@ -205,6 +229,19 @@ switch figure_name
             print('svg/figure3/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__outliers.svg', '-dsvg'); 
         end
  
+        % stats
+        % rows = ROIs
+        % cols = models
+        % reps = subjects
+        f = fs(:,ix,:);
+        ff = [];
+        for i = 1:size(f,1)
+            ff = [ff; squeeze(f(i,:,:))'];
+        end
+        reps = size(fs, 3);
+        [p,tbl,stats] = friedman(ff, reps)
+        [p,tbl,stats] = anova2(ff, reps)
+
 
     case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA__components__outliers'
         % plot_gp_CV_rois.m
