@@ -1,9 +1,12 @@
+
+%{
+
 close all;
 clear all;
 
 EXPT = vgdl_expt();
 
-subjects = 1:1:length(EXPT.subject);
+subjects = [1:14 16:length(EXPT.subject)];
 
 agg_filename = fullfile(get_mat_dir(), sprintf('glm_bic_bms_CV.mat'));
 agg_filename
@@ -51,12 +54,13 @@ for g = 1:nglmodels
 end
 
 lme = -0.5 * bic;
+%}
 
 % run BMS
 for m = 1:nROIs
     [alpha, exp_r, xp, pxp, bor] = bms(squeeze(lme(m,:,:))'); % col=model, row=subj
     pxp
-    pxps(c,:) = pxp;
+    pxps(m,:) = pxp;
 end
 
 glmodels

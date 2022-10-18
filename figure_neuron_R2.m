@@ -125,6 +125,59 @@ switch figure_name
         l.Position = [0.1393 0.7034 0.2481 0.1934];
 
         print('svg/neuron_revision/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__outliers__by_game_neuron.svg', '-dsvg'); 
+
+        % stats
+        % rows = ROIs
+        % cols = models
+        % reps = subjects
+        f = f(:,ix,:);
+        ff = [];
+        for i = 1:size(f,1)
+            ff = [ff; squeeze(f(i,:,:))'];
+        end
+        reps = size(fs, 3);
+        [p,tbl,stats] = friedman(ff, reps)
+        [p,tbl,stats] = anova2(ff, reps)
+
+
+    case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__outliers__by_game__stats__DEPRECATED'
+
+        load('/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_by_game_alpha=0.050_atlas=AAL2_GP_EMPA2_project=1_neuron.mat');
+        ix = ismember(regressor_names, {'theory', 'DQN', 'PCA', 'VAE'});
+
+        game_groups = {[1:6], [2,3,4,6], [1,5]};
+        game_group_names = {'all', 'more','less'};
+
+        for k = 1:length(game_groups)
+            f = squeeze(mean(fs(game_groups{k},:,:,:), 1)); % average across games
+            f = f(:,ix,:);
+
+            game_group_names{k}
+
+            % stats
+            g_ROI = []; % ROI
+            g_macroROI = []; % ROI group
+            g_model = []; % model
+            ff = [];
+            rois = roi_names(:);
+            models = regressor_names(ix);
+            for i = 1:size(f,1)
+                for j = 1:size(f,2)
+                    ff = [ff; squeeze(f(i,j,:))];
+                    g_ROI = [g_ROI; repmat(rois(i), [size(f,3) 1])];
+                    g_model = [g_model; repmat(models(j), [size(f,3) 1])];
+                end
+            end
+            g_macroROI = cell(size(g_ROI));
+            g_macroROI(ismember(g_ROI, roi_names(1:7))) = {'frontal'};
+            g_macroROI(ismember(g_ROI, roi_names(8:14))) = {'parietal'};
+            g_macroROI(ismember(g_ROI, roi_names(15:18))) = {'ventral'};
+            g_macroROI(ismember(g_ROI, roi_names(19:21))) = {'visual'};
+
+            [p,tbl,stats] = anovan(ff, {g_macroROI, g_model}, 'model','interaction','varnames',{'macroROI','model'})
+        end
+        keyboard
+
  
     case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__outliers__by_game__more_planning'
         % plot_gp_CV_rois.m
@@ -151,6 +204,18 @@ switch figure_name
 
         print('svg/neuron_revision/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__outliers__by_game_neuron__more_planning.svg', '-dsvg'); 
 
+        % stats
+        % rows = ROIs
+        % cols = models
+        % reps = subjects
+        f = f(:,ix,:);
+        ff = [];
+        for i = 1:size(f,1)
+            ff = [ff; squeeze(f(i,:,:))'];
+        end
+        reps = size(fs, 3);
+        [p,tbl,stats] = friedman(ff, reps)
+        [p,tbl,stats] = anova2(ff, reps)
 
     case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__outliers__by_game__less_planning'
         % plot_gp_CV_rois.m
@@ -176,6 +241,20 @@ switch figure_name
         l.Position = [0.1193 0.7234 0.2481 0.1934];
 
         print('svg/neuron_revision/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__outliers__by_game_neuron__less_planning.svg', '-dsvg'); 
+
+        % stats
+        % rows = ROIs
+        % cols = models
+        % reps = subjects
+        f = f(:,ix,:);
+        ff = [];
+        for i = 1:size(f,1)
+            ff = [ff; squeeze(f(i,:,:))'];
+        end
+        reps = size(fs, 3);
+        [p,tbl,stats] = friedman(ff, reps)
+        [p,tbl,stats] = anova2(ff, reps)
+
 
     case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__more_verses_less_planning'
         % plot_gp_CV_rois.m
