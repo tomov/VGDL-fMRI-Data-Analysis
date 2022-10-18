@@ -3,7 +3,8 @@ clear all;
 
 EXPT = vgdl_expt();
 
-test_subjects = 2:2:length(EXPT.subject);
+%test_subjects = 2:2:length(EXPT.subject);
+test_subjects = [1:14 16:length(EXPT.subject)];
 
 alpha = 0.05; % significance threshold for individual voxels
 
