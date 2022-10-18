@@ -133,7 +133,6 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
 
     % optionally whiten, filter & project out nuisance regressors
     if project == 5
-    ker_old = ker;
         Y = R*K*W*Y;
     elseif project == 4
         Y = R_*Y;

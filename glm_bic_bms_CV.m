@@ -5,7 +5,7 @@ EXPT = vgdl_expt();
 
 subjects = 1:1:length(EXPT.subject);
 
-agg_filename = fullfile(get_mat_dir(), sprintf('glm_bic_bms_CV.mat');
+agg_filename = fullfile(get_mat_dir(), sprintf('glm_bic_bms_CV.mat'));
 agg_filename
 
 %% get masks
