@@ -42,7 +42,7 @@ function show_figure(figure_name)
 
         case 'example_HRRs'
 
-            rng default;
+            rng(4);
 
             D = 100;
             color = gen_embedding(D);
