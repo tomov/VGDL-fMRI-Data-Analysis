@@ -84,6 +84,9 @@ function fit_gp_CV(subj, use_smooth, glmodel, mask, model_name, what, project, n
         case 'EMPA'
             assert(ismember(what, {'theory', 'sprite', 'interaction', 'termination', 'novelty'}));
             [ker, features] = load_HRR_kernel(subj, unique(run_id), what, normalize, concat, novelty);
+        case 'EMPA_approachavoid'
+            assert(ismember(what, {'theory', 'sprite', 'interaction', 'termination', 'novelty'}));
+            [ker, features] = load_HRR_kernel_approach_avoid(subj, unique(run_id), what, normalize, concat, novelty);
         case 'DQN'
             assert(ismember(what, {'conv1', 'conv2', 'conv3', 'linear1', 'linear2', 'all'}));
             [ker, features] = load_DQN_kernel(subj, unique(run_id), what, normalize, '');

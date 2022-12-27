@@ -9,7 +9,7 @@ filename
 
 
 frequency = 40;  % Hz
-level_duration = 60;  % min
+level_duration = 60;  % s
 
 sigma = 1 * frequency; % filter std
 %lengths = [];

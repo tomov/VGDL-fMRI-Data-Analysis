@@ -1,8 +1,8 @@
 mkdir output
 
 #subjects=( 1 2 3 4 5 6 7 8 )  #  e.g. subjects=( 1 2 5 6 7 10 )
-#subjects=( 1  )  #  e.g. subjects=( 1 2 5 6 7 10 )
-subjects=( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31  32  )  #  e.g. subjects=( 1 2 5 6 7 10 )
+subjects=( 1  )  #  e.g. subjects=( 1 2 5 6 7 10 )
+#subjects=( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31  32  )  #  e.g. subjects=( 1 2 5 6 7 10 )
 #subjects=(  12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31  32  )  #  e.g. subjects=( 1 2 5 6 7 10 )
 #subjects=( 15 )  #  e.g. subjects=( 1 2 5 6 7 10 )
 #subjects=(  17 18 19 20 21 22 23 24 25 26 27 28 29 30 31  32  )
@@ -10,6 +10,7 @@ subj_arg="${subjects[@]}" # stringify it
 
 mask="masks/mask.nii"
 #model_name="EMPA"
+model_name="EMPA_approachavoid"
 #model_name="game"
 #model_name="irrelevant"
 #model_name="state"
@@ -18,7 +19,7 @@ mask="masks/mask.nii"
 #model_name="DQN25M_PCA"
 #model_name="PCA"
 #model_name="VAE"
-model_name="HRR_states"
+#model_name="HRR_states"
 #model_name="theory_change_flag"
 #model_name="sprite_change_flag"
 #model_name="interaction_change_flag"
@@ -28,21 +29,21 @@ model_name="HRR_states"
 #what="linear1"
 #what="all"
 #what="theory"
-what=""
+what="theory"
 #what="nuisance_z"
 #what="sprite"
 #what="interaction"
 #what="termination"
 #what="novelty"
-glmodel=1
-use_smooth=true
-project=2
-normalize=1
-concat=0
-novelty=1
-fast=true
-save_Y_hat=0
-which_partitions=(1 2 3)
+glmodel=1 # 1
+use_smooth=true # true
+project=1 # 1
+normalize=1 # 1
+concat=0 # 0
+novelty=1 # 1
+fast=true # true
+save_Y_hat=0 # 0
+which_partitions=(1 2 3) # (1 2 3)
 
 
 which_partitions_arg="${which_partitions[@]}"  # stringify it with spaces

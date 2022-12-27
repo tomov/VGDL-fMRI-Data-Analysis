@@ -10661,3 +10661,11 @@ fit_gp_CV.sh for subject 29: output/fit_gp_CV_29_true_1_HRR_states__2_1_0_123_57
 fit_gp_CV.sh for subject 30: output/fit_gp_CV_30_true_1_HRR_states__2_1_0_123_576969.out -- Submitted batch job 576969
 fit_gp_CV.sh for subject 31: output/fit_gp_CV_31_true_1_HRR_states__2_1_0_123_576970.out -- Submitted batch job 576970
 fit_gp_CV.sh for subject 32: output/fit_gp_CV_32_true_1_HRR_states__2_1_0_123_576971.out -- Submitted batch job 576971
+----------------
+--- Tue Dec 27 15:07:39 EST 2022: Running fit_gp_CV for subjects 1 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_EMPA_approachavoid_theory_1_1_0_123_728185.out -- Submitted batch job 728185
+----------------
+--- Tue Dec 27 15:20:52 EST 2022: Running fit_gp_CV for subjects 1 in parallel
+----------------
+fit_gp_CV.sh for subject 1: output/fit_gp_CV_1_true_1_EMPA_approachavoid_theory_1_1_0_123_728187.out -- Submitted batch job 728187
