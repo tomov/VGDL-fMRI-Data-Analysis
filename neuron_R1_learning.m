@@ -1,25 +1,26 @@
 close all
 clear all
 
+EXPT=vgdl_expt;
 
-conn = mongo('holy7c22108.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54', 'UserName', 'reader', 'Password', 'parolatamadafaqa')
+conn = mongo('holy7c22109.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54')
 
-filename = fullfile(get_mat_dir(false), 'neuron_R1_learning.mat');
+
+frequency = 40; % Hz
+level_duration = 60;  % s
+sigma = 10 * frequency; % filter std
+
+filename = fullfile(get_mat_dir(false), sprintf('neuron_R1_learning_sigma=%.0f.mat', sigma));
 filename
 
-
-frequency = 40;  % Hz
-level_duration = 60;  % s
-
-sigma = 1 * frequency; % filter std
 %lengths = [];
 
 % Initialize
 clear learning;
 for g = 1:6
     for l = 1:9
-        learning(g, l).tcf_stretched = nan(length(EXPT.subject), frequency * level_duration)
-        learning(g, l).tcf_smooth = nan(length(EXPT.subject), frequency * level_duration)
+        learning(g, l).tcf_stretched = nan(length(EXPT.subject), frequency * level_duration);
+        learning(g, l).tcf_smooth = nan(length(EXPT.subject), frequency * level_duration);
     end
 end
 

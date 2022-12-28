@@ -16,7 +16,8 @@ function dir = get_mat_dir(location)
                 dir = fullfile(getenv('MY_NCF_LAB'), 'Lab/scripts/matlab/VGDL_fMRI/mat/');
             case 0
                 % regular storage
-                dir = fullfile(getenv('MY_LAB'), 'VGDL', 'mat/');
+                %dir = fullfile(getenv('MY_LAB'), 'VGDL', 'mat/');
+                dir = fullfile(getenv('MY_SCRATCH'), 'VGDL', 'mat_from_lab/');
             case 2
                 %  fasse scratch
                 dir = fullfile(getenv('MY_SCRATCH'), 'VGDL', 'mat/');
