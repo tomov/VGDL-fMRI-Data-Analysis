@@ -157,19 +157,22 @@ switch figure_name
         print('svg/neuron_revision/figure_neuron_R1_learning_theory_update_timecourse_2.svg', '-dsvg');
 
 
+
     case 'theory_update_timecourse_3'
 
         load(fullfile(get_mat_dir(false), 'neuron_R1_learning.mat'));
         %load(fullfile(get_mat_dir(false), 'neuron_R1_learning_sigma=400.mat'));
 
-        game_names = {'Chase','Helper','Bait','Lemmings',{'Plaque', 'Attack'}, {'Avoid', 'George'},'Zelda'};
+        game_names = {'Chase','Helper','Bait','Lemmings','Plaque Attack', 'Avoid George','Zelda'};
         game_ids = {1, 2, 3, 4, 5, 5, 6};
         subj_ids = {1:32, 1:32, 1:32, 1:32, 1:11, 12:32, 1:32};
         num_levels = 9;
+        levels_per_partition = 3;
+        num_partitions = 3;
 
         %figure('pos', [99 96 1822 803]);
         %figure('pos', [99 181 1274 718]);
-        figure('pos', [99 201 1445 698]);
+        figure('pos', [99 201 1445 398]);
         hh = tiledlayout(2, 4, 'TileSpacing', 'none', 'Padding', 'none');
 
         % data wrangling
@@ -193,7 +196,9 @@ switch figure_name
         for g = 1:length(game_names) + 1
 
             nexttile;
+            hold on;
 
+            % theory update histograms
             if g <= length(game_names)
                 game_name = game_names{g};
                 game_id = game_ids{g};
@@ -204,12 +209,10 @@ switch figure_name
                 se = nanstd(tcf_by_g_by_s{g}, 1) ./ sqrt(sum(~isnan(tcf_by_g_by_s{g}), 1));
                 t = 1/frequency:1/frequency:level_duration*num_levels;
 
-                hold on;
                 plot(t,m);
                 %plot(t,tcf_by_g_by_s{g}');
                 h = fill([t flip(t)], [m+se flip(m-se)], 'blue');
                 set(h,'facealpha',0.3,'edgecolor','none');
-                hold off;
 
                 xlim([0 level_duration*num_levels]);
                 xlabel('time (s)');
@@ -223,11 +226,9 @@ switch figure_name
                 se = nanstd(tcf_by_s, 1) ./ sqrt(sum(~isnan(tcf_by_s), 1));
                 t = 1/frequency:1/frequency:level_duration*num_levels;
 
-                hold on;
                 plot(t,m);
                 h = fill([t flip(t)], [m+se flip(m-se)], 'blue');
                 set(h,'facealpha',0.3,'edgecolor','none');
-                hold off;
 
                 xlim([0 level_duration*num_levels]);
                 xlabel('time (s)');
@@ -236,6 +237,28 @@ switch figure_name
             end
 
             % level/data partition annotations
+            yl=ylim;
+            for level=1:num_levels
+                t_prev=(level-1)*level_duration;
+                t_next=(level)*level_duration;
+                if(level==1)
+                    plot([t_prev t_prev], [yl(1) yl(2)*0.8], '--','color',[0.5 0.5 0.5]); 
+                end
+                plot([t_next t_next], [yl(1) yl(2)*0.8], '--','color',[0.5 0.5 0.5]); 
+                text(mean([t_prev t_next]), yl(2)*0.7, sprintf('l%d', level), 'fontsize', 10, 'HorizontalAlignment', 'center');
+            end
+            for part=1:num_partitions
+                t_prev=(part-1)*level_duration*levels_per_partition;
+                t_next=(part)*level_duration*levels_per_partition;
+                if(level==1)
+                    plot([t_prev t_prev], [yl(1) yl(2)*1.0], '-','color',[0.5 0.5 0.5]); 
+                end
+                plot([t_next t_next], [yl(1) yl(2)*1.0], '-','color',[0.5 0.5 0.5]); 
+                text(mean([t_prev t_next]), yl(2)*0.9, sprintf('partition %d', part), 'fontsize', 10, 'HorizontalAlignment', 'center');
+            end
+
+
+            hold off;
         end
 
         sgtitle('Theory updates (smoothed)');
