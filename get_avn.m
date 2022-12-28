@@ -1,13 +1,13 @@
-%function [avn, fields] = get_avn(subj_id, run, conn, do_cache, approach_avoid_collection)
+function [avn, fields] = get_avn(subj_id, run, conn, do_cache, approach_avoid_collection)
 
-clear all;
-conn = mongo('holy7c22109.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54')
-subj_id = 1;
-run_id = 1;
-query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id) % in python we index runs from 0 (but not subjects) 
-run = find(conn, 'runs', 'query', query)
-assert(length(run) == 1);
-do_cache = false;
+%clear all;
+%conn = mongo('holy7c22109.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54')
+%subj_id = 1;
+%run_id = 1;
+%query = sprintf('{"subj_id": "%d", "run_id": %d}', subj_id, run_id) % in python we index runs from 0 (but not subjects) 
+%run = find(conn, 'runs', 'query', query)
+%assert(length(run) == 1);
+%do_cache = false;
 
     % get approach/avoid; goes together with fmri_approachAvoid.py
 
@@ -111,6 +111,7 @@ do_cache = false;
     end
 
     avn.state_timestamps = avn.state_timestamps - run.scan_start_ts;
+
 
 
     if do_cache

@@ -8,7 +8,7 @@ conn = mongo('holy7c22109.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54')
 
 frequency = 40; % Hz
 level_duration = 60;  % s
-sigma = 10 * frequency; % filter std
+sigma = 1 * frequency; % filter std
 
 filename = fullfile(get_mat_dir(false), sprintf('neuron_R1_learning_sigma=%.0f.mat', sigma));
 filename
