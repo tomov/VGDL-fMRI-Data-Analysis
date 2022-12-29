@@ -15,8 +15,8 @@ switch figure_name
 
         %figure('pos', [99 96 1822 803]);
         %figure('pos', [99 181 1274 718]);
-        figure('pos', [99 201 1445 698]);
-        h = tiledlayout(length(game_names), num_levels, 'TileSpacing', 'none', 'Padding', 'none');
+        figure('pos', [99 201 1445 698], 'Renderer','painters'); % renderer important to make sure we save vector graphics
+        hh = tiledlayout((length(game_names)+1), num_levels, 'TileSpacing', 'none', 'Padding', 'none');
 
         for g = 1:length(game_names)
             game_name = game_names{g};
@@ -33,9 +33,15 @@ switch figure_name
 
                 t = 1/frequency:1/frequency:level_duration;
 
+                m_downsampled = imresize(m, [1, level_duration], 'box');
+                se_downsampled = imresize(se, [1, level_duration], 'box');
+                t_downsampled = 1:length(m_downsampled);
+
                 hold on;
-                plot(t, m);
-                h = fill([t flip(t)], [m+se flip(m-se)], 'blue');
+                %plot(t, m);
+                plot(t_downsampled, m_downsampled);
+                %h = fill([t flip(t)], [m+se flip(m-se)], 'blue');
+                h = fill([t_downsampled flip(t_downsampled)], [m_downsampled+se_downsampled flip(m_downsampled-se_downsampled)], 'blue');
                 set(h,'facealpha',0.3,'edgecolor','none');
                 hold off;
 
@@ -51,19 +57,55 @@ switch figure_name
                 if level == 1
                     ylabel(game_name, 'fontweight','bold');
                 end
-                if g == length(game_names)
-                    xlabel('time (s)');
-                end
+                %if g == length(game_names)
+                %    xlabel('time (s)');
+                %end
                 if g == 1
                     title(sprintf('level %d', level));
                 end
             end
         end
 
-        sgtitle('Theory updates (smoothed)');
+        % Also plot average across all games
+        for level = 1:num_levels
+            tcfs = nan(32,frequency*level_duration,length(game_ids));
+            for g = 1:length(game_names)
+                game_id = game_ids{g};
+                subjs = subj_ids{g};
+                tcfs(subjs,:,g) = learning(game_id, level).tcf_smooth(subjs, :);
+            end
+            tcf = nanmean(tcfs,3);
+
+            m = nanmean(tcf, 1);
+            se = nanstd(tcf, 1) ./ sqrt(sum(~isnan(tcf), 1));
+            t = 1/frequency:1/frequency:level_duration;
+
+            m_downsampled = imresize(m, [1, level_duration], 'box');
+            se_downsampled = imresize(se, [1, level_duration], 'box');
+            t_downsampled = 1:length(m_downsampled);
+
+            nexttile
+
+            hold on;
+            %plot(t, m);
+            plot(t_downsampled, m_downsampled);
+            %h = fill([t flip(t)], [m+se flip(m-se)], 'blue');
+            h = fill([t_downsampled flip(t_downsampled)], [m_downsampled+se_downsampled flip(m_downsampled-se_downsampled)], 'blue');
+            set(h,'facealpha',0.3,'edgecolor','none');
+            hold off;
+
+            if level == 1
+                ylabel('All games', 'fontweight','bold');
+            end
+            xlabel('time (s)');
+        end
+
+        sgtitle('Theory update histograms (smoothed)');
 
         orient(gcf, 'landscape');
         print('svg/neuron_revision/figure_neuron_R1_learning_theory_update_timecourse.svg', '-dsvg');
+        %saveas(gcf, 'svg/neuron_revision/figure_neuron_R1_learning_theory_update_timecourse.svg','svg', 'Renderer', 'painters');
+        %exportgraphics(hh, 'pdf/neuron_revision/figure_neuron_R1_learning_theory_update_timecourse.pdf');
 
 
 
@@ -172,8 +214,8 @@ switch figure_name
 
         %figure('pos', [99 96 1822 803]);
         %figure('pos', [99 181 1274 718]);
-        figure('pos', [99 201 1445 398]);
-        hh = tiledlayout(2, 4, 'TileSpacing', 'none', 'Padding', 'none');
+        figure('pos', [99 201 1445 398], 'Renderer','painters'); % renderer important to make sure we save vector graphics
+        hh = tiledlayout(2, 4, 'TileSpacing', 'compact', 'Padding', 'none');
 
         % data wrangling
         for g = 1:length(game_names)
@@ -209,9 +251,14 @@ switch figure_name
                 se = nanstd(data, 1) ./ sqrt(sum(~isnan(data), 1));
                 t = 1/frequency:1/frequency:level_duration*num_levels;
 
-                plot(t,m);
-                %plot(t,tcf_by_g_by_s{g}');
-                h = fill([t flip(t)], [m+se flip(m-se)], 'blue');
+                m_downsampled = imresize(m, [1, level_duration*num_levels], 'box');
+                se_downsampled = imresize(se, [1, level_duration*num_levels], 'box');
+                t_downsampled = 1:length(m_downsampled);
+
+                %plot(t, m);
+                plot(t_downsampled, m_downsampled);
+                %h = fill([t flip(t)], [m+se flip(m-se)], 'blue');
+                h = fill([t_downsampled flip(t_downsampled)], [m_downsampled+se_downsampled flip(m_downsampled-se_downsampled)], 'blue');
                 set(h,'facealpha',0.3,'edgecolor','none');
 
                 xlim([0 level_duration*num_levels]);
@@ -224,8 +271,14 @@ switch figure_name
                 se = nanstd(tcf_by_s, 1) ./ sqrt(sum(~isnan(tcf_by_s), 1));
                 t = 1/frequency:1/frequency:level_duration*num_levels;
 
-                plot(t,m);
-                h = fill([t flip(t)], [m+se flip(m-se)], 'blue');
+                m_downsampled = imresize(m, [1, level_duration*num_levels], 'box');
+                se_downsampled = imresize(se, [1, level_duration*num_levels], 'box');
+                t_downsampled = 1:length(m_downsampled);
+
+                %plot(t, m);
+                plot(t_downsampled, m_downsampled);
+                %h = fill([t flip(t)], [m+se flip(m-se)], 'blue');
+                h = fill([t_downsampled flip(t_downsampled)], [m_downsampled+se_downsampled flip(m_downsampled-se_downsampled)], 'blue');
                 set(h,'facealpha',0.3,'edgecolor','none');
 
                 xlim([0 level_duration*num_levels]);
@@ -238,6 +291,13 @@ switch figure_name
             if ismember(g, [1 5])
                 ylabel('theory updates (a.u.)');
             end
+
+            % stats
+            %[h,p] = Mann_Kendall(m,0.05)
+            %plot(t_downsampled, m_downsampled, 'color', [0.8 0.8 0.8]);
+            datain = [t_downsampled' m_downsampled'];
+            [taub, ~, ~, p, Z] = ktaub(datain,0.05,false);
+            fprintf('game #%g: two-tailed Mann-Kendall test ($\\tau_b = %.2f, n = %d, z = %.2f, p = %e$)\n', g, taub, length(m_downsampled), Z, p);
 
             % level/data partition annotations
             yl=ylim;
