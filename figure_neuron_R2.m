@@ -285,6 +285,30 @@ switch figure_name
 
         print('svg/neuron_revision/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__more_verses_less_planning.svg', '-dsvg'); 
 
+
+    case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__approachavoid'
+        % plot_gp_CV_rois.m
+
+        agg_filename = '/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat_from_lab/gp_CV_rois_alpha=0.050_atlas=AAL2_GP_EMPA2_grouped_neuron_approachavoid.mat'; %  reviewer 1 approachavoid
+        agg_filename
+        load(agg_filename);
+
+        figure('position', [147 521 200 318]);
+        h = plot_gp_CV_rois_helper_boxcharts(fs, 'signrank', 'median', {'full attributes', 'approach/avoid/neutral'}, roi_names, [], [], 8, [1:1], 1.0, true);
+        title('EMPA by sprite encoding');
+        ylabel('Fraction significant voxels');
+        xticklabels({'Frontal/Motor', 'Dorsal/Parietal', 'Ventral/Temporal', 'Early visual'}); 
+
+        % prettify
+        yscale = 11.9;
+        xscale = 1.25;
+        xlim([0.5 * xscale xscale * (length(roi_names) + 0.5)]);
+        ylim([0 0.7]);
+        l = legend({'full attributes', 'approach/avoid'});
+        l.Position = [0.4893 0.8234 0.1481 0.0934];
+
+        print('svg/neuron_revision/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__approachvoid.svg', '-dsvg'); 
+
     otherwise
         assert(false, 'Invalid figure name');
 end
