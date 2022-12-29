@@ -1,5 +1,7 @@
 function [avn, fields] = get_avn(subj_id, run, conn, do_cache, approach_avoid_collection)
 
+    % get approach/avoid timecourses; goes together with fmri_approachAvoid.py
+
 %clear all;
 %conn = mongo('holy7c22109.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54')
 %subj_id = 1;
@@ -8,8 +10,6 @@ function [avn, fields] = get_avn(subj_id, run, conn, do_cache, approach_avoid_co
 %run = find(conn, 'runs', 'query', query)
 %assert(length(run) == 1);
 %do_cache = false;
-
-    % get approach/avoid; goes together with fmri_approachAvoid.py
 
     if ~exist('do_cache', 'var')
         do_cache = false;

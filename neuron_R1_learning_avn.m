@@ -1,3 +1,5 @@
+% learning timecourses based on interactions with approach/avoid/neutral objects
+
 close all
 clear all
 
@@ -6,8 +8,7 @@ EXPT=vgdl_expt;
 conn = mongo('holy7c22109.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54')
 
 
-frequency = 40; % Hz
-level_duration = 60;  % s
+frequency = 20; % Hz; IMPORTANT!!! must match frame_rate in vgdl/core.py
 sigma = 1 * frequency; % filter std
 
 filename = fullfile(get_mat_dir(false), sprintf('neuron_R1_learning_avn_sigma=%.0f.mat', sigma));
@@ -22,7 +23,9 @@ for g = 1:6
     for subj_id = 1:length(EXPT.subject)
         for v=1:numel(valences)
             learning(g, subj_id).(valences{v}) = struct;
-            lengths(g, subj_id).(valences{v}) = 0;
+            learning_offset(g, subj_id).(valences{v}) = struct;
+            learning_offset_collapsed(g, subj_id).(valences{v}) = [];
+            learning_avn(g).(valences{v}) = [];
         end
     end
 end
@@ -47,34 +50,94 @@ for subj_id = 1:length(EXPT.subject)
                 sprite_names=fieldnames(avn.(valences{v}));
 
                 % appends sprites of corresponding valence for given run
-                delta_length = nan;
                 for s=1:numel(sprite_names)
-                    if ~ismember(sprite_names{s}, fieldnames(learning(g,subj_id).(valences{v})))
-                        learning(g,subj_id).(valences{v}).(sprite_names{s}) = nan(lengths(g,subj_id).(valences{v}), 1);
+                    effects = avn.(valences{v}).(sprite_names{s})(avn.game_ids == g);
+                    if any(isnan(effects))
+                        % sprite from a different game => continue
+                        assert(all(isnan(effects)), 'Either all or none of the effects should be NaN');
+                        continue;
                     end
-                    effects = avn.(valences{v}).(sprite_names{s});
-                    delta_length = length(effects);
+                    if ~ismember(sprite_names{s}, fieldnames(learning(g,subj_id).(valences{v})))
+                        learning(g,subj_id).(valences{v}).(sprite_names{s}) = [];
+                    end
                     learning(g,subj_id).(valences{v}).(sprite_names{s}) = [learning(g,subj_id).(valences{v}).(sprite_names{s}); effects];
                 end
-                lengths(g, subj_id).(valences{v}) = lengths(g, subj_id).(valences{v}) + delta_length;
 
-                % pad all sprites from other games with nan
-                all_sprite_names = fieldnames(learning(g,subj_id).(valences{v}));
-                remaining_sprite_names = all_sprite_names(~ismember(all_sprite_names, sprite_names));
-                remaining_sprite_names
-                delta_length
-                for s=1:numel(remaining_sprite_names)
-                    learning(g,subj_id).(valences{v}).(remaining_sprite_names{s}) = [learning(g,subj_id).(valences{v}).(remaining_sprite_names{s}); nan(delta_length,1)];
-                end
             end
         end
-
-        keyboard
 
     end
 end
 
-% 2) offset timeseries from first event
+% 2) offset timeseries from first event, for each game, subject, valance, sprite
+for g = 1:6
+    for subj_id = 1:length(EXPT.subject)
+        for v=1:numel(valences)
+            sprite_names=fieldnames(learning(g, subj_id).(valences{v}));
+
+            % offset timecourses from first event
+            max_length = 0;
+            for s=1:numel(sprite_names)
+                effects = learning(g, subj_id).(valences{v}).(sprite_names{s});
+                offset = min(find(effects));
+                if ~isempty(offset)
+                    % offset effects, if there are any
+                    effects = effects(offset:end);
+                end
+                learning_offset(g, subj_id).(valences{v}).(sprite_names{s}) = effects;
+                max_length = max(max_length, length(learning_offset(g, subj_id).(valences{v}).(sprite_names{s})));
+            end
+
+            % pad all sprites to the same length
+            for s=1:numel(sprite_names)
+                remaining_length = max_length - length(learning_offset(g, subj_id).(valences{v}).(sprite_names{s}));
+                learning_offset(g, subj_id).(valences{v}).(sprite_names{s}) = [learning_offset(g, subj_id).(valences{v}).(sprite_names{s}); nan(remaining_length, 1)];
+            end
+        end
+    end
+end
+
+% 3) collapse across sprites and pad to the same length for all subjects
+%    also smooth
+for g = 1:6
+    for v=1:numel(valences)
+        % collate sprites and average
+        max_length = 0;
+        for subj_id = 1:length(EXPT.subject)
+            sprite_names=fieldnames(learning(g, subj_id).(valences{v}));
+
+            collated = [];
+            for s=1:numel(sprite_names)
+                effects = learning_offset(g, subj_id).(valences{v}).(sprite_names{s});
+                collated = [collated, effects];
+            end
+            learning_offset_collapsed(g, subj_id).(valences{v}) = mean(collated, 2);
+            %learning_offset_collapsed(g, subj_id).(valences{v}) = nanmean(collated, 2); % might have too much variance at the tails
+
+            max_length = max(max_length, length(learning_offset_collapsed(g, subj_id).(valences{v})));
+        end
+
+        % pad for the same length for all subjects
+        for subj_id = 1:length(EXPT.subject)
+            remaining_length = max_length - length(learning_offset_collapsed(g, subj_id).(valences{v}));
+            learning_offset_collapsed(g, subj_id).(valences{v}) = [learning_offset_collapsed(g, subj_id).(valences{v}); nan(remaining_length, 1)];
+        end
+
+        % smooth
+        for subj_id = 1:length(EXPT.subject)
+            learning_offset_collapsed_smooth(g, subj_id).(valences{v}) = imgaussfilt(learning_offset_collapsed(g, subj_id).(valences{v}), sigma);
+        end
+    end
+end
+
+% 4) collate across subjects
+for g = 1:6
+    for v=1:numel(valences)
+        learning_avn(g).(valences{v}) = [learning_offset_collapsed(g,:).(valences{v})];
+        learning_avn_smooth(g).(valences{v}) = [learning_offset_collapsed_smooth(g,:).(valences{v})];
+    end
+end
+
 
 filename
 
