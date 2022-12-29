@@ -202,9 +202,8 @@ switch figure_name
             if g <= length(game_names)
                 game_name = game_names{g};
                 game_id = game_ids{g};
-                subjs = subj_ids{g};
 
-                data = tcf_by_g_by_s{g}(subjs,:);
+                data = tcf_by_g_by_s{g};
                 m = nanmean(data, 1);
                 %se = nanstd(tcf_by_g_by_s{g}, 1) ./ sqrt(size(tcf_by_g_by_s{g}, 1));
                 se = nanstd(data, 1) ./ sqrt(sum(~isnan(data), 1));
@@ -216,8 +215,6 @@ switch figure_name
                 set(h,'facealpha',0.3,'edgecolor','none');
 
                 xlim([0 level_duration*num_levels]);
-                xlabel('time (s)');
-                ylabel('theory updates (a.u.)');
                 title(game_name);
 
             else
@@ -232,9 +229,14 @@ switch figure_name
                 set(h,'facealpha',0.3,'edgecolor','none');
 
                 xlim([0 level_duration*num_levels]);
-                xlabel('time (s)');
-                ylabel('theory updates (a.u.)');
                 title('All games');
+            end
+
+            if ismember(g, [5 6 7 8])
+                xlabel('time (s)');
+            end
+            if ismember(g, [1 5])
+                ylabel('theory updates (a.u.)');
             end
 
             % level/data partition annotations
@@ -258,11 +260,10 @@ switch figure_name
                 text(mean([t_prev t_next]), yl(2)*0.9, sprintf('partition %d', part), 'fontsize', 10, 'HorizontalAlignment', 'center');
             end
 
-
             hold off;
         end
 
-        sgtitle('Theory updates (smoothed)');
+        sgtitle('Theory update histograms (smoothed)');
 
         orient(gcf, 'landscape');
         print('svg/neuron_revision/figure_neuron_R1_learning_theory_update_timecourse_3.svg', '-dsvg');
@@ -311,8 +312,12 @@ switch figure_name
 
                 legend(valences);
                 %xlim([0 level_duration*num_levels]);
-                xlabel('time (s)');
-                ylabel('theory updates (a.u.)');
+                if ismember(g, [5 6 7 8])
+                    xlabel('time (s)');
+                end
+                if ismember(g, [1 5])
+                    ylabel('theory updates (a.u.)');
+                end
                 title(game_name);
 
             else
