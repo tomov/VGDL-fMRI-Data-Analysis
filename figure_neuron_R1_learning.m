@@ -204,9 +204,10 @@ switch figure_name
                 game_id = game_ids{g};
                 subjs = subj_ids{g};
 
-                m = nanmean(tcf_by_g_by_s{g}, 1);
+                data = tcf_by_g_by_s{g}(subjs,:);
+                m = nanmean(data, 1);
                 %se = nanstd(tcf_by_g_by_s{g}, 1) ./ sqrt(size(tcf_by_g_by_s{g}, 1));
-                se = nanstd(tcf_by_g_by_s{g}, 1) ./ sqrt(sum(~isnan(tcf_by_g_by_s{g}), 1));
+                se = nanstd(data, 1) ./ sqrt(sum(~isnan(data), 1));
                 t = 1/frequency:1/frequency:level_duration*num_levels;
 
                 plot(t,m);
@@ -265,6 +266,83 @@ switch figure_name
 
         orient(gcf, 'landscape');
         print('svg/neuron_revision/figure_neuron_R1_learning_theory_update_timecourse_3.svg', '-dsvg');
+
+
+
+    case 'avn_timecourse'
+
+        load(fullfile(get_mat_dir(false), 'neuron_R1_learning_avn_sigma=20.mat'));
+        %load(fullfile(get_mat_dir(false), 'neuron_R1_learning_sigma=400.mat'));
+
+        game_names = {'Chase','Helper','Bait','Lemmings','Plaque Attack', 'Avoid George','Zelda'};
+        game_ids = {1, 2, 3, 4, 5, 5, 6};
+        subj_ids = {1:32, 1:32, 1:32, 1:32, 1:11, 12:32, 1:32};
+
+        %figure('pos', [99 96 1822 803]);
+        %figure('pos', [99 181 1274 718]);
+        figure('pos', [99 201 1445 398]);
+        hh = tiledlayout(2, 4, 'TileSpacing', 'none', 'Padding', 'none');
+
+        for g = 1:length(game_names) + 1
+
+            nexttile;
+            hold on;
+
+            % theory update histograms
+            if g <= length(game_names)
+                game_name = game_names{g};
+                game_id = game_ids{g};
+                subjs = subj_ids{g};
+
+                for v=1:numel(valences)
+
+                    data = learning_avn_smooth(g).(valences{v}); 
+                    m = nanmean(data, 1);
+                    %se = nanstd(tcf_by_g_by_s{g}, 1) ./ sqrt(size(tcf_by_g_by_s{g}, 1));
+                    se = nanstd(data, 1) ./ sqrt(sum(~isnan(data), 1));
+                    %t = 1/frequency:1/frequency:level_duration*num_levels;
+
+                    plot(m);
+                    %plot(t,m);
+                    %plot(t,tcf_by_g_by_s{g}');
+                    %h = fill([t flip(t)], [m+se flip(m-se)], 'blue');
+                    %set(h,'facealpha',0.3,'edgecolor','none');
+                end
+
+                legend(valences);
+                %xlim([0 level_duration*num_levels]);
+                xlabel('time (s)');
+                ylabel('theory updates (a.u.)');
+                title(game_name);
+
+            else
+                % all games (special case)
+
+                %m = nanmean(tcf_by_s, 1);
+                %se = nanstd(tcf_by_s, 1) ./ sqrt(sum(~isnan(tcf_by_s), 1));
+                %t = 1/frequency:1/frequency:level_duration*num_levels;
+
+                %plot(t,m);
+                %h = fill([t flip(t)], [m+se flip(m-se)], 'blue');
+                %set(h,'facealpha',0.3,'edgecolor','none');
+
+                %xlim([0 level_duration*num_levels]);
+                %xlabel('time (s)');
+                %ylabel('theory updates (a.u.)');
+                %title('All games');
+            end
+
+
+            hold off;
+        end
+
+        sgtitle('sntoheu (smoothed)');
+
+        orient(gcf, 'landscape');
+        print('svg/neuron_revision/figure_neuron_R1_learning_theory_update_timecourse_3.svg', '-dsvg');
+
+
+
 
 
     case 'GLM_102'

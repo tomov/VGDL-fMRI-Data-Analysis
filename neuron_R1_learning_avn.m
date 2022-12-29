@@ -130,11 +130,11 @@ for g = 1:6
     end
 end
 
-% 4) collate across subjects
+% 4) collate across subjects (rows)
 for g = 1:6
     for v=1:numel(valences)
-        learning_avn(g).(valences{v}) = [learning_offset_collapsed(g,:).(valences{v})];
-        learning_avn_smooth(g).(valences{v}) = [learning_offset_collapsed_smooth(g,:).(valences{v})];
+        learning_avn(g).(valences{v}) = [learning_offset_collapsed(g,:).(valences{v})]';
+        learning_avn_smooth(g).(valences{v}) = [learning_offset_collapsed_smooth(g,:).(valences{v})]';
     end
 end
 
