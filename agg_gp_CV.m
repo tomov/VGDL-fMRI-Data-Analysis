@@ -24,18 +24,19 @@ subjects = 1:length(EXPT.subject);
 %model_name = 'HRR_states';
 %model_name = 'game';
 %model_name = 'EMPA';
-model_name = 'VAE';
+model_name = 'EMPA_approachavoid';
+%model_name = 'VAE';
 %model_name = 'VAE_e1k';
 %what = 'conv3';
 %what = 'linear2';
 %what = 'all';
-what = '';
+what = 'theory';
 %what = 'novelty';
 %what = 'all';
 %what = 'theory';
 %what = 'termination';
 %what = 'sprite';
-project = 2;
+project = 1;
 glmodel = 1;
 %suffix = '_nowhiten_nofilter';
 %suffix = '_';
@@ -94,7 +95,8 @@ for s = 1:1:length(subjects)
     %filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=2_norm=1_concat=0_novelty=1_fast=1_saveYhat=1_parts=123_games=all.mat', subj_id); %  EMPA no KW
     %filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=DQN25M_PCA_all_nsamples=100_project=2_norm=1_concat=0_novelty=1_fast=1_saveYhat=0_parts=123_games=all.mat', subj_id); %  DQN PCA no KW
     %filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=PCA__nsamples=100_project=2_norm=1_concat=0_novelty=1_fast=1_saveYhat=0_parts=123_games=all.mat', subj_id); %  PCA no KW
-    filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=11_us=1_glm=1_mask=mask_model=VAE__nsamples=100_project=2_norm=1_concat=0_novelty=1_fast=1_saveYhat=0_parts=123_games=all.mat', subj_id); %  VAE no KW
+    %filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=VAE__nsamples=100_project=2_norm=1_concat=0_novelty=1_fast=1_saveYhat=0_parts=123_games=all.mat', subj_id); %  VAE no KW
+    filename = sprintf('/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=EMPA_approachavoid_theory_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_saveYhat=0_parts=123_games=all.mat', subj_id);
     filename
     %filename = sprintf('mat/fit_gp_CV_noRKW_HRR_subj=%d_us=%d_glm=21_mask=mask_%s.mat', subj_id, use_smooth, what);
 

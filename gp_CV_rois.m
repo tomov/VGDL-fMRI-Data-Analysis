@@ -9,9 +9,9 @@ alpha = 0.05; % significance threshold for individual voxels
 %atlas = 'AAL2_GP_EMPA_grouped';
 
 %atlas = 'AAL2_GP_EMPA2';  % !!!! Initial submission
-%atlas = 'AAL2_GP_EMPA2_grouped';  % !!! Initial submission
+atlas = 'AAL2_GP_EMPA2_grouped';  % !!! Initial submission
 %atlas = 'AAL2_gross';
-atlas = 'AAL2_GLM_102';
+%atlas = 'AAL2_GLM_102';
 
 %atlas = 'AAL2_GP_EMPA';
 %atlas = 'AAL2_grouped2';
@@ -24,7 +24,8 @@ fasse_ncf = false;
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), sprintf('gp_CV_rois_alpha=%.3f_atlas=%s_vae.mat', alpha, atlas));
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), sprintf('gp_CV_rois_alpha=%.3f_atlas=%s_25M_e1k.mat', alpha, atlas));
 %agg_filename = fullfile(get_mat_dir(fasse_ncf), sprintf('gp_CV_rois_alpha=%.3f_atlas=%s_neuron_bms.mat', alpha, atlas));
-agg_filename = fullfile(get_mat_dir(fasse_ncf), sprintf('gp_CV_rois_alpha=%.3f_atlas=%s_neuron_bms_norm.mat', alpha, atlas));
+%agg_filename = fullfile(get_mat_dir(fasse_ncf), sprintf('gp_CV_rois_alpha=%.3f_atlas=%s_neuron_bms_norm.mat', alpha, atlas));
+agg_filename = fullfile(get_mat_dir(fasse_ncf), sprintf('gp_CV_rois_alpha=%.3f_atlas=%s_neuron_approachavoid.mat', alpha, atlas));
 agg_filename
 
 %% get masks
@@ -72,7 +73,6 @@ regressor_names = { ...
     'theory_no_noveltyRule', ...
 };
 %}
-
 
 % THIS IS IT
 %{
@@ -131,6 +131,8 @@ regressor_names = { ...
 %}
 
 
+
+% multiplexing analysis
 %{
 filename_templates = { ...
     fullfile(get_mat_dir(2), 'fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=theory_change_flag__nsamples=100_project=1_norm=0_concat=0_novelty=1_fast=1_saveYhat=0_parts=123_games=all.mat'), ...
@@ -149,6 +151,7 @@ filename_templates = { ...
     fullfile(get_mat_dir(2), 'fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=multiplexing_nuisance_z_nsamples=100_project=1_norm=0_concat=0_novelty=1_fast=1_saveYhat=0_parts=123_games=all.mat'), ...
 };
 %}
+%{
 filename_templates = { ...
     fullfile(get_mat_dir(2), 'fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=theory_change_flag__nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_saveYhat=0_parts=123_games=all.mat'), ...
     fullfile(get_mat_dir(2), 'fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=sprite_change_flag__nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_saveYhat=0_parts=123_games=all.mat'), ...
@@ -164,6 +167,19 @@ regressor_names = { ...
     'termination updates', ...
     'multiplexed updates', ...
 };
+%}
+ 
+
+% approach-avoid vs. full sprite attributes
+filename_templates = { ...
+    fullfile(get_mat_dir(fasse_ncf), 'fit_gp_CV_HRR_subj=%d_us=1_glm=1_mask=mask_model=EMPA_theory_nsamples=100_project=1_fast=1.mat'), ...
+    fullfile(get_mat_dir(2), 'fit_gp_CV_subj=%d_us=1_glm=1_mask=mask_model=EMPA_approachavoid_theory_nsamples=100_project=1_norm=1_concat=0_novelty=1_fast=1_saveYhat=0_parts=123_games=all.mat'), ...
+};
+regressor_names = { ...
+    'sprite_attributes', ...
+    'approach_avoid', ...
+};
+
 
 nregressors = length(filename_templates)
 assert(length(filename_templates) == nregressors);
