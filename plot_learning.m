@@ -5,9 +5,9 @@ close all;
 
 conn = mongo('holy7c22109.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54')
 
-%game_names = get_game_names_ordered(11);
+game_names = get_game_names_ordered(11);
 %subj_ids = 1:11;
-game_names = get_game_names_ordered(12);
+%game_names = get_game_names_ordered(12);
 %subj_ids = 12:32;
 subj_ids = [1];
 
@@ -81,10 +81,11 @@ for g = 1:length(game_names)
 
             elseif strcmp(agent_name, 'DQN')
                 %[instance_scores, instance_wins, instance_success, instance_success_rates, instance_game_names, instance_levels] = get_dqn_level_scores(game_name, subj_id, levels, false);
-            else
-                %[instance_scores, instance_wins, instance_success, instance_success_rates, instance_game_names, instance_levels] = get_agent_level_scores(conn, agent_name, subj_id, levels, agent_tag, true);
-                [play_scores, play_wins, play_steps, play_game_names, play_levels] = get_agent_play_scores(conn, agent_name, subj_id, levels, agent_tag, false); %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CACHE
+                [play_scores, play_wins, play_steps, play_game_names, play_levels] = get_dqn_play_scores(game_name, subj_id, levels, false); %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CACHE
                 keyboard
+            else
+                continue %!!!!!!!!!!!!!!!!!!!!!!!RM
+                [play_scores, play_wins, play_steps, play_game_names, play_levels] = get_agent_play_scores(conn, agent_name, subj_id, levels, agent_tag, false); %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CACHE
             end
             which_instances = strcmp(instance_game_names, game_name);
             %assert(sum(which_instances) >= 6);

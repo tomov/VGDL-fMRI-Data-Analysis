@@ -25,7 +25,6 @@ function [play_scores, play_wins, play_steps, game_names, actual_levels] = get_a
 
     play_scores = [];
     play_wins = [];
-    play_durations = [];
     play_steps = [];
     game_names = {};
     actual_levels = [];
