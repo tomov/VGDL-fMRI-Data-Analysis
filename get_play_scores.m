@@ -1,8 +1,5 @@
 function [play_scores, play_wins, play_steps, play_durations, game_names, levels] = get_play_scores(conn, subj_id, run_ids, do_cache)
-    % copy of get_instance_scores.m
-
-    % get score for each instance (i.e. level) as max across all won plays 
-    % this was the same way we determined to pay out for the fMRI study
+    % copy of get_instance_scores.m but for playsssss/episodes
 
     if ~exist('do_cache', 'var')
         do_cache = false;
