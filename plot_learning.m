@@ -23,8 +23,10 @@ agents(2).tag = 'attempt_1_states'; % 1..11
 %agents(2).tag = 'attempt_3_colors';  % 12..32
 agents(3).name = 'DQN';
 %agents(3).tag = '';   % 1..11
-agents(4).name = 'Random';
-agents(4).tag = 'attempt_1_states';
+
+%agents(4).name = 'Random';
+%agents(4).tag = 'attempt_1_states';
+
 %agents(3).name = 'EMPA';
 %agents(3).tag = 'attempt_1_states';
 
@@ -138,10 +140,43 @@ figure;
 hold on;
 for a = 1:length(agents)
     data = squeeze(mean(results(a).cumwins,1));
+    data = data(:,1:max_human_steps);
+
     m = mean(data,1);
     se = std(data,1)/sqrt(size(data,1));
+    steps = 1:length(m);
 
-    plot(m(1:max_human_steps));
+    hp = plot(steps, m);
+    hf = fill([steps flip(steps)], [m+se flip(m-se)], get(hp,'Color'));
+    set(hf,'facealpha',0.3,'edgecolor','none');
 end
 legend({agents.name});
+xlabel('steps');
+ylabel('episodes won');
+title('All games');
+
+
+figure;
+
+% averaged across games, separate subjects
+hold on;
+for a = 2:length(agents)
+    data = squeeze(mean(results(a).cumwins,1));
+    data = data(:,1:max_human_steps);
+
+    m = mean(data,1);
+    se = std(data,1)/sqrt(size(data,1));
+    steps = 1:length(m);
+
+    plot(steps, m);
+end
+
+% plot humans
+data = squeeze(mean(results(1).cumwins,1));
+data = data(:,1:max_human_steps);
+plot(data', 'color', [0.5 0.5 0.5]);
+
+legend('EMPA','DDQN','Human');
+xlabel('steps');
+ylabel('episodes won');
 title('All games');
