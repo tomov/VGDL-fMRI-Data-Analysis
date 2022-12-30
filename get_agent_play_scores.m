@@ -62,5 +62,5 @@ function [play_scores, play_wins, play_steps, game_names, actual_levels] = get_a
     end
 
     if do_cache
-        save(filename, 'level_scores', 'game_names', 'level_wins', 'level_success', 'level_success_rates', 'actual_levels', '-v7.3');
+        save(filename, 'play_scores','play_wins','play_steps','game_names','actual_levels', '-v7.3');
     end

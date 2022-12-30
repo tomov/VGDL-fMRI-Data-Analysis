@@ -9,10 +9,13 @@ game_names = get_game_names_ordered(11);
 %subj_ids = 1:11;
 %game_names = get_game_names_ordered(12);
 %subj_ids = 12:32;
-subj_ids = [1];
+subj_ids = [1:11];
 
 run_ids = 1:6;
 levels = 1:9;
+frame_rate = 20; % Hz
+level_duration = 60; %s
+max_steps = frame_rate*level_duration*length(levels);
 
 agents(1).name = 'Human';
 agents(2).name = 'EMPA';
@@ -40,23 +43,16 @@ agents(6).name = 'EMPA';
 agents(6).tag = 'ablation_lessnodes_attempt_1';  % 12..32
 %}
 
-%plot_what = 'success_rates'
-%plot_what = 'wins'
-plot_what = 'success_rates'
-plot_whats = {'scores', 'wins', 'success', 'success_rates'};
-assert(ismember(plot_what, plot_whats));
-y_label = get_plot_what_label(plot_what);
 
 %% gather relevant data in a table
 
-tbl_game_ix = [];
-tbl_level = [];
-tbl_agent_ix = [];
-tbl_subj_id = [];
-tbl_scores = [];
-tbl_wins = [];
-tbl_success = [];
-tbl_success_rates = [];
+for a = 1:length(agents)
+    z = zeros(length(game_names), length(subj_ids), max_steps);
+    results(a).wins = z;
+    results(a).cumwins = z;
+end
+
+max_human_steps = 0;
 
 for g = 1:length(game_names)
     game_name = game_names{g};
@@ -67,242 +63,85 @@ for g = 1:length(game_names)
         agent_tag = agents(a).tag;
         agent_name
 
-        % count levels that were never played as lost / 0 core / zero success rate (nan -> zero)
-        scores{g, a} = zeros(length(subj_ids), length(levels));
-        wins{g, a} = zeros(length(subj_ids), length(levels));
-        success{g, a} = zeros(length(subj_ids), length(levels));
-        success_rates{g, a} = zeros(length(subj_ids), length(levels));
         for s = 1:length(subj_ids)
             subj_id = subj_ids(s);
 
             if strcmp(agent_name, 'Human')
-                continue %!!!!!!!!!!!!!!!!!!!!!!!RM
-                [play_scores, play_wins, play_steps, play_durations, play_game_names, play_levels] = get_play_scores(conn, subj_id, run_ids, false); %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CACHE
+                [play_scores, play_wins, play_actions, play_keypresses, play_durations, play_game_names, play_levels] = get_play_scores(conn, subj_id, run_ids, true);
+                play_steps = play_actions;
+                %play_steps = play_durations * frame_rate;
+                %play_steps = play_keypresses;
 
             elseif strcmp(agent_name, 'DQN')
-                %[instance_scores, instance_wins, instance_success, instance_success_rates, instance_game_names, instance_levels] = get_dqn_level_scores(game_name, subj_id, levels, false);
-                [play_scores, play_wins, play_steps, play_game_names, play_levels] = get_dqn_play_scores(game_name, subj_id, levels, false); %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CACHE
-                keyboard
+                [play_scores, play_wins, play_steps, play_game_names, play_levels] = get_dqn_play_scores(game_name, subj_id, levels, true);
             else
-                continue %!!!!!!!!!!!!!!!!!!!!!!!RM
-                [play_scores, play_wins, play_steps, play_game_names, play_levels] = get_agent_play_scores(conn, agent_name, subj_id, levels, agent_tag, false); %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CACHE
+                [play_scores, play_wins, play_steps, play_game_names, play_levels] = get_agent_play_scores(conn, agent_name, subj_id, levels, agent_tag, true);
             end
-            which_instances = strcmp(instance_game_names, game_name);
-            %assert(sum(which_instances) >= 6);
-            instance_scores = instance_scores(which_instances);
-            instance_wins = instance_wins(which_instances);
-            instance_success = instance_success(which_instances);
-            instance_success_rates = instance_success_rates(which_instances);
-            instance_levels = instance_levels(which_instances);
 
-            %assert(length(instance_scores) == length(levels)); -- not true if subject missed runs, e.g. subj 9
-            assert(all(ismember(instance_levels, levels)));
-            scores{g, a}(s, instance_levels) = instance_scores; % {game, agent}(subject, level) = average score
-            wins{g, a}(s, instance_levels) = instance_wins;
-            success{g, a}(s, instance_levels) = instance_success;
-            success_rates{g, a}(s, instance_levels) = instance_success_rates;
+            % subselect game
+            which_plays=strcmp(play_game_names,game_name); 
 
-            tbl_game_ix = [tbl_game_ix, g * ones(1, length(instance_levels))];
-            tbl_level = [tbl_level, instance_levels];
-            tbl_agent_ix = [tbl_agent_ix, a * ones(1, length(instance_levels))];
-            tbl_subj_id = [tbl_subj_id, subj_id * ones(1, length(instance_levels))];
-            tbl_scores = [tbl_scores, instance_scores];
-            tbl_wins = [tbl_wins, instance_wins];
-            tbl_success = [tbl_success, instance_success];
-            tbl_success_rates = [tbl_success_rates, instance_success_rates];
+            play_wins=play_wins(which_plays);
+            play_scores=play_scores(which_plays);
+            play_steps=play_steps(which_plays);
+            play_game_names=play_game_names(which_plays);
+            play_levels=play_levels(which_plays);
+
+            play_steps(play_steps == 0) = 1; % pad with an extra step when there were no steps in the episode
+            cumsteps = cumsum(play_steps);
+
+            if strcmp(agent_name, 'Human')
+                max_human_steps = max(max_human_steps, max(cumsteps));
+            end
+
+            % truncate if there are too many steps
+            play_wins(cumsteps > max_steps) = [];
+            play_scores(cumsteps > max_steps) = [];
+            play_steps(cumsteps > max_steps) = [];
+            play_game_names(cumsteps > max_steps) = [];
+            play_levels(cumsteps > max_steps) = [];
+            cumsteps(cumsteps > max_steps) = [];
+
+            % mark win events
+            results(a).wins(g, subj_id, cumsteps) = play_wins;
+            results(a).cumwins(g, subj_id, :) = cumsum(results(a).wins(g, subj_id, :));
+
         end
     end
-
 end
 
-tbl = table(tbl_game_ix, tbl_level, tbl_agent_ix, tbl_subj_id, tbl_scores, tbl_wins, tbl_success, tbl_success_rates, 'VariableNames', {'game', 'level', 'agent', 'subj', 'score', 'win', 'success', 'success_rate'})
-
-
-%% plot stuff
-%
-
-overall_width = 0.6; % width of violin plots for all agents
-agent_width = 0.6 / length(agents); % width per agent, / 2 because Violin()
-agent_center_offsets = - overall_width / 2 + agent_width * ((1:length(agents)) - 0.5); % center of each violin, for each agent
-
-cmap = colormap(jet(length(agents)));
-
-
-%% per level 
 
 figure;
 
+% each game separately yikes
 for g = 1:length(game_names)
     game_name = game_names{g};
+    game_name
 
-    subplot(2, 3, g);
-    hold on;
-
-    for l = 1:length(levels)
-        level = levels(l);
-
-        clear ys;
-        for a = 1:length(agents)
-            s = eval(plot_what);
-            s = s{g, a}(:, level);
-            Violin(s, l + agent_center_offsets(a), 'ShowMean', true, 'Width', 0.1, 'ViolinColor', cmap(a, :));
-            ys{a} = s;
-        end
-
-        % significance ***
-        p = ranksum(ys{1}, ys{2}); % Mann Whitney U test across subjects
-        if isnan(p), p = 1; end
-        y = max([max(ys{1}) max(ys{2})]) + 0.5;
-        plot(l + [agent_center_offsets(1) agent_center_offsets(2)], [y y], 'color', 'black');
-        text(l, y + 0.3 + 0.3 * (p >= 0.05), significance(p), 'HorizontalAlignment', 'center', 'fontsize', 15);
-    end
-
-    % dividers
-    ax = gca;
-    for l = 0:length(levels)
-        plot([l + 0.5, l + 0.5], ax.YLim, '--', 'color', [0.3 0.3 0.3]);
-    end
-
-    xticks(levels);
-    xlabel('level');
-    ylabel(y_label);
-    title(game_name, 'interpreter', 'none');
-
-    % hacky custom legend
-    h = zeros(length(agents), 1);
-    for a = 1:length(agents)
-        h(a) = plot(NaN, NaN, 'color', cmap(a,:));
-    end
-    legend(h, {agents.name});
-
-    hold off;
-end
-
-
-
-%% per game
-
-
-figure('pos', [370 585 2033 627]) ;
-
-for pw = 1:length(plot_whats)
-    plot_what = plot_whats{pw};
-
-    subplot(1, length(plot_whats), pw);
+    subplot(1,length(game_names),g);
 
     hold on;
-
-    for g = 1:length(game_names)
-        % average across levels for each subject
-        clear ys;
-        for a = 1:length(agents)
-            s = eval(plot_what);
-            s = nanmean(s{g, a}, 2); % average across levels
-            Violin(s, g + agent_center_offsets(a), 'ShowMean', true, 'Width', 0.1, 'ViolinColor', cmap(a, :));
-            ys{a} = s;
-        end
-
-        % significance ***
-        p = ranksum(ys{1}, ys{2}); % Mann Whitney U test across subjects
-        if isnan(p), p = 1; end
-        y = max([max(ys{1}) max(ys{2})]) + 0.5;
-        plot(g + [agent_center_offsets(1) agent_center_offsets(2)], [y y], 'color', 'black');
-        text(g, y + 0.3 + 0.3 * (p >= 0.05), significance(p), 'HorizontalAlignment', 'center', 'fontsize', 15);
-    end
-
-    % dividers
-    ax = gca;
-    for g = 0:length(game_names)
-        plot([g + 0.5, g + 0.5], ax.YLim, '--', 'color', [0.3 0.3 0.3]);
-    end
-
-    xticks(1:length(game_names));
-    xticklabels(game_names);
-    set(gca,'TickLabelInterpreter','none');
-    xtickangle(30);
-    xlabel('game');
-    ylabel(plot_what);
-    title(sprintf('Subjects %d..%d', min(subj_ids), max(subj_ids)), 'interpreter', 'none');
-
-    % hacky custom legend
-    h = zeros(length(agents), 1);
     for a = 1:length(agents)
-        h(a) = plot(NaN, NaN, 'color', cmap(a,:));
-    end
-    legend(h, {agents.name});
+        data = squeeze(results(a).cumwins(g,:,:));
+        m = mean(data,1);
 
-    hold off;
+        plot(m);
+    end
+    legend({agents.name});
+    title(game_name);
 end
 
 
+figure;
 
+% averaged across games
+hold on;
+for a = 1:length(agents)
+    data = squeeze(mean(results(a).cumwins,1));
+    m = mean(data,1);
+    se = std(data,1)/sqrt(size(data,1));
 
-%% all games
-
-figure('pos', [370 585 2033 627]) ;
-
-for pw = 1:length(plot_whats)
-    plot_what = plot_whats{pw};
-
-    subplot(1, length(plot_whats), pw);
-    hold on;
-
-    clear ys;
-    maxy = 0;
-    for a = 1:length(agents)
-        s = eval(plot_what);
-        clear ss;
-        for g = 1:length(game_names)
-            ss(:,g) = nanmean(s{g, a}, 2); % average across levels
-        end
-        s = mean(ss, 2); % and average across games too
-        Violin(s, 0 + agent_center_offsets(a), 'ShowMean', true, 'Width', 0.1, 'ViolinColor', cmap(a, :));
-        ys{a} = s;
-        maxy = max(maxy, max(ys{a}));
-    end
-
-    % significance ***
-    for a1 = 1:length(agents)
-        for a2 = a1+1:length(agents)
-            if all(isnan(ys{a1})) || all(isnan(ys{a2}))
-                continue
-            end
-            p = ranksum(ys{a1}, ys{a2}); % Mann Whitney U test across subjects
-            if isnan(p), p = 1; end
-            maxy = maxy + 0.05;
-            y = maxy;
-            x = mean([agent_center_offsets(a1) agent_center_offsets(a2)]);
-            plot(0 + [agent_center_offsets(a1) agent_center_offsets(a2)], [y y], 'color', 'black');
-            text(x, y + 0.01 + 0.0 * (p >= 0.05), significance(p), 'HorizontalAlignment', 'center', 'fontsize', 15);
-        end
-    end
-
-    ylabel(get_plot_what_label(plot_what));
-    set(gca, 'xtick', []);
-
-    % hacky custom legend
-    hh = zeros(length(agents), 1);
-    for a = 1:length(agents)
-        hh(a) = plot(NaN, NaN, 'color', cmap(a,:));
-    end
-    legend(hh, {agents.name});
-
-    title(sprintf('Subjects %d..%d', min(subj_ids), max(subj_ids)), 'interpreter', 'none');
-    hold off;
+    plot(m(1:max_human_steps));
 end
-
-
-function y_label = get_plot_what_label(plot_what)
-    switch (plot_what)
-        case 'scores'
-            y_label = 'expected payout';
-        case 'wins'
-            y_label = '# wins / level';
-        case 'success'
-            y_label = 'solved levels';
-        case 'success_rates'
-            y_label = 'success rate';
-        otherwise
-            assert(false);
-    end
-end
+legend({agents.name});
+title('All games');

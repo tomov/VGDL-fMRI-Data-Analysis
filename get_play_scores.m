@@ -1,4 +1,4 @@
-function [play_scores, play_wins, play_steps, play_durations, game_names, levels] = get_play_scores(conn, subj_id, run_ids, do_cache)
+function [play_scores, play_wins, play_actions, play_keypresses, play_durations, game_names, levels] = get_play_scores(conn, subj_id, run_ids, do_cache)
     % copy of get_instance_scores.m but for playsssss/episodes
 
     if ~exist('do_cache', 'var')
@@ -17,7 +17,8 @@ function [play_scores, play_wins, play_steps, play_durations, game_names, levels
     play_scores = [];
     play_wins = [];
     play_durations = [];
-    play_steps = [];
+    play_actions = [];
+    play_keypresses = [];
     game_names = {};
     levels = [];
 
@@ -54,10 +55,17 @@ function [play_scores, play_wins, play_steps, play_durations, game_names, levels
                     assert(length(plays) == 1);
                     play = plays(1);
 
-                    play_wins = [play_wins, play.win];
+                    plays_post = find(conn, 'plays_post', 'query', q, 'projection', '{"keypresses": 1.0}');
+                    assert(length(plays_post) == 1);
+                    play_post = plays_post(1);
+
+                    play_wins = [play_wins, ~isempty(play.win) && play.win(1)];
                     play_scores = [play_scores, play.score];
                     play_durations = [play_durations, play.end_time - play.start_time];
-                    play_steps = [play_steps, length(play.actions)];
+                    play_actions = [play_actions, length(play.actions)];
+                    num_keypresses = length(play_post.keypresses.up) + length(play_post.keypresses.down) +length(play_post.keypresses.left) +length(play_post.keypresses.right) +length(play_post.keypresses.spacebar);
+                    play_keypresses = [play_keypresses, num_keypresses];
+
                     game_names = [game_names, {game_name}];
                     levels = [levels, instance.level_id + 1];
                 end
@@ -67,5 +75,5 @@ function [play_scores, play_wins, play_steps, play_durations, game_names, levels
     end
 
     if do_cache
-        save(filename, 'play_scores', 'game_names', 'play_wins', 'play_durations', 'levels', '-v7.3');
+        save(filename, 'play_scores', 'play_actions','play_keypresses', 'game_names', 'play_wins', 'play_durations', 'levels', '-v7.3');
     end
