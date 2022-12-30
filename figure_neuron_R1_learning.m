@@ -357,7 +357,7 @@ switch figure_name
 
                 for v=1:numel(valences)
 
-                    data = learning_avn_smooth(g).(valences{v}); 
+                    data = learning_avn_smooth(game_id).(valences{v}); 
                     m = nanmean(data, 1);
                     %se = nanstd(tcf_by_g_by_s{g}, 1) ./ sqrt(size(tcf_by_g_by_s{g}, 1));
                     se = nanstd(data, 1) ./ sqrt(sum(~isnan(data), 1));
@@ -404,7 +404,107 @@ switch figure_name
         sgtitle('sntoheu (smoothed)');
 
         orient(gcf, 'landscape');
-        print('svg/neuron_revision/figure_neuron_R1_learning_theory_update_timecourse_3.svg', '-dsvg');
+        print('svg/neuron_revision/figure_neuron_R1_learning_avn_timecourse.svg', '-dsvg');
+
+
+    case 'avn_timecourse_2'
+
+        load(fullfile(get_mat_dir(false), 'neuron_R1_learning_avn_sigma=20.mat'));
+        %load(fullfile(get_mat_dir(false), 'neuron_R1_learning_sigma=400.mat'));
+
+        game_names = {'Chase','Helper','Bait','Lemmings','Plaque Attack', 'Avoid George','Zelda'};
+        game_ids = {1, 2, 3, 4, 5, 5, 6};
+        subj_ids = {1:32, 1:32, 1:32, 1:32, 1:11, 12:32, 1:32};
+
+        %figure('pos', [99 96 1822 803]);
+        %figure('pos', [99 181 1274 718]);
+        figure('pos', [99 201 1445 398]);
+        hh = tiledlayout(2, 4, 'TileSpacing', 'none', 'Padding', 'none');
+
+        for g = 1:length(game_names) + 1
+
+            nexttile;
+            hold on;
+
+            % theory update histograms
+            if g <= length(game_names)
+                game_name = game_names{g};
+                game_id = game_ids{g};
+                subjs = subj_ids{g};
+
+                all_sprite_names= {};
+                for v=1:numel(valences)
+
+                    sprite_names=fieldnames(learning(game_id,subjs(1)).(valences{v}));
+
+                    for s=1:numel(sprite_names)
+
+                        % pad, smooth, and collate across subjects
+                        max_len=0;
+                        collated = [];
+                        for subj_id = subjs
+                            len = length(learning(game_id,subj_id).(valences{v}).(sprite_names{s}));
+                            max_len=max(max_len, len);
+                        end
+                        for subj_id = subjs
+                            len = length(learning(game_id,subj_id).(valences{v}).(sprite_names{s}));
+                            padded = [learning(game_id,subj_id).(valences{v}).(sprite_names{s}); nan(max_len-len,1)];
+                            smoothed = imgaussfilt(padded, 20);
+                            collated = [collated, smoothed];
+                        end
+
+                        data = collated';
+                        m = nanmean(data, 1);
+                        %se = nanstd(tcf_by_g_by_s{g}, 1) ./ sqrt(size(tcf_by_g_by_s{g}, 1));
+                        se = nanstd(data, 1) ./ sqrt(sum(~isnan(data), 1));
+                        %t = 1/frequency:1/frequency:level_duration*num_levels;
+
+                        if strcmp(sprite_names{s},'wall')
+                            continue
+                        end
+
+                        plot(m);
+                        all_sprite_names = [all_sprite_names, sprite_names(s)];
+                    end
+
+                end
+
+                %xlim([0 level_duration*num_levels]);
+                if ismember(g, [5 6 7 8])
+                    xlabel('time (s)');
+                end
+                if ismember(g, [1 5])
+                    ylabel('theory updates (a.u.)');
+                end
+                title(game_name);
+                legend(all_sprite_names);
+
+            else
+                % all games (special case)
+
+                %m = nanmean(tcf_by_s, 1);
+                %se = nanstd(tcf_by_s, 1) ./ sqrt(sum(~isnan(tcf_by_s), 1));
+                %t = 1/frequency:1/frequency:level_duration*num_levels;
+
+                %plot(t,m);
+                %h = fill([t flip(t)], [m+se flip(m-se)], 'blue');
+                %set(h,'facealpha',0.3,'edgecolor','none');
+
+                %xlim([0 level_duration*num_levels]);
+                %xlabel('time (s)');
+                %ylabel('theory updates (a.u.)');
+                %title('All games');
+            end
+
+
+            hold off;
+        end
+
+        sgtitle('sntoheu (smoothed)');
+
+        orient(gcf, 'landscape');
+        print('svg/neuron_revision/figure_neuron_R1_learning_avn_timecourse_2.svg', '-dsvg');
+
 
 
 

@@ -76,7 +76,7 @@ function [avn, fields] = get_avn(subj_id, run, conn, do_cache, approach_avoid_co
                 assert(length(approach_avoids) == 1);
                 approach_avoid = approach_avoids(1);
 
-                state_timestamps = approach_avoid.state_timestamps(2:end-1);
+                state_timestamps = approach_avoid.state_timestamps;
 
                 for v=1:numel(valences)
                     sprite_names = fieldnames(approach_avoid.effects_by_valence.(valences{v}));
@@ -87,7 +87,7 @@ function [avn, fields] = get_avn(subj_id, run, conn, do_cache, approach_avoid_co
                             % new sprite type => pad with nans
                             avn.(valences{v}).(sprite_names{s}) = nan(size(avn.state_timestamps));
                         end
-                        effects = approach_avoid.effects_by_valence.(valences{v}).(sprite_names{s})(2:end-1);
+                        effects = approach_avoid.effects_by_valence.(valences{v}).(sprite_names{s});
                         avn.(valences{v}).(sprite_names{s}) = [avn.(valences{v}).(sprite_names{s}); effects];
                     end
 
