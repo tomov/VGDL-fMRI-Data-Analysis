@@ -259,11 +259,12 @@ switch figure_name
     case 'plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__more_verses_less_planning'
         % plot_gp_CV_rois.m
 
-        agg_filename = '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_by_game_alpha=0.050_atlas=AAL2_GP_EMPA2_grouped_project=1_neuron.mat'; % YASSSS
+        %agg_filename = '/n/holystore01/LABS/gershman_lab/Users/mtomov13/VGDL/mat/gp_CV_rois_by_game_alpha=0.050_atlas=AAL2_GP_EMPA2_grouped_project=1_neuron.mat'; % YASSSS
+        agg_filename = '/n/holyscratch01/LABS/gershman_lab/Users/mtomov13/VGDL/mat_from_lab/gp_CV_rois_by_game_alpha=0.050_atlas=AAL2_GP_EMPA2_grouped_project=1_neuron.mat'; % YASSSS
         agg_filename
         load(agg_filename);
 
-        figure('position', [147 521 345 318]);
+        figure('position', [147 521 180 318]);
         ix = ismember(regressor_names, {'theory'});
         f1 = squeeze(mean(fs([2,3,4,6],:,ix,:), 1)); % average across games (helper, bait, zelda, lemmings)
         f2 = squeeze(mean(fs([1,5],:,ix,:), 1)); % average across games (chase,  plaque attack, avoid George)
@@ -271,9 +272,10 @@ switch figure_name
         f2 = reshape(f2, [size(f2, 1), 1, size(f2, 2)]); % add back EMPA dimension
         f = cat(2, f1, f2);
         h = plot_gp_CV_rois_helper_boxcharts(f, 'signrank', 'median', {'more planning', 'less planning'}, roi_names, [], [], 8, [1:1], 1.0, true);
-        title('EMPA by more vs. less planning');
+        title({'EMPA by more', 'vs. less planning'});
         ylabel('Fraction significant voxels');
         xticklabels({'Frontal/Motor', 'Dorsal/Parietal', 'Ventral/Temporal', 'Early visual'}); 
+        xtickangle(50);
 
         % prettify
         yscale = 11.9;
@@ -281,8 +283,10 @@ switch figure_name
         xlim([0.5 * xscale xscale * (length(roi_names) + 0.5)]);
         ylim([0 0.7]);
         l = legend({'more planning', 'less planning'});
-        l.Position = [0.2093 0.7234 0.2481 0.1934];
+        %l.Position = [0.2093 0.7234 0.2481 0.1934];
+        l.Position = [0.5193 0.7834 0.1481 0.0934];
 
+        %set(gcf,'color','none');
         print('svg/neuron_revision/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__more_verses_less_planning.svg', '-dsvg'); 
 
 
@@ -293,11 +297,12 @@ switch figure_name
         agg_filename
         load(agg_filename);
 
-        figure('position', [147 521 200 318]);
+        figure('position', [147 521 180 318]);
         h = plot_gp_CV_rois_helper_boxcharts(fs, 'signrank', 'median', {'full attributes', 'approach/avoid/neutral'}, roi_names, [], [], 8, [1:1], 1.0, true);
-        title('EMPA by sprite encoding');
+        title({'EMPA by ','sprite encoding'});
         ylabel('Fraction significant voxels');
         xticklabels({'Frontal/Motor', 'Dorsal/Parietal', 'Ventral/Temporal', 'Early visual'}); 
+        xtickangle(50);
 
         % prettify
         yscale = 11.9;
@@ -305,9 +310,10 @@ switch figure_name
         xlim([0.5 * xscale xscale * (length(roi_names) + 0.5)]);
         ylim([0 0.7]);
         l = legend({'full attributes', 'approach/avoid'});
-        l.Position = [0.4893 0.8234 0.1481 0.0934];
+        l.Position = [0.5193 0.7994 0.1481 0.0934];
 
-        print('svg/neuron_revision/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__approachvoid.svg', '-dsvg'); 
+        %set(gcf,'color','none');
+        print('svg/neuron_revision/plot_gp_CV_rois_fraction_AAL2_GP_EMPA_grouped__approachavoid.svg', '-dsvg'); 
 
     otherwise
         assert(false, 'Invalid figure name');
