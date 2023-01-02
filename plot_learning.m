@@ -5,25 +5,25 @@ close all;
 
 conn = mongo('holy7c22109.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54')
 
-game_names = get_game_names_ordered(11);
+%game_names = get_game_names_ordered(11);
 %subj_ids = 1:11;
-%game_names = get_game_names_ordered(12);
-%subj_ids = 12:32;
-subj_ids = [1:11];
+game_names = get_game_names_ordered(12);
+subj_ids = [12:32];
+%subj_ids = [1:11];
 
 run_ids = 1:6;
 levels = 1:9;
 frame_rate = 20; % Hz
 level_duration = 60; %s
 max_steps = frame_rate*level_duration*length(levels);
-
+%
 agents(1).name = 'Human';
 agents(2).name = 'EMPA';
-agents(2).tag = 'attempt_1_states'; % 1..11
-%agents(2).tag = 'attempt_3_colors';  % 12..32
+%agents(2).tag = 'attempt_1_states'; % 1..11
+agents(2).tag = 'attempt_3_colors';  % 12..32
 agents(3).name = 'DQN';
 %agents(3).tag = '';   % 1..11
-
+%%
 %agents(4).name = 'Random';
 %agents(4).tag = 'attempt_1_states';
 
@@ -49,10 +49,13 @@ agents(6).tag = 'ablation_lessnodes_attempt_1';  % 12..32
 %% gather relevant data in a table
 
 for a = 1:length(agents)
+    %z = zeros(length(game_names), length(subj_ids), max_steps);
     z = zeros(length(game_names), length(subj_ids), max_steps);
     results(a).wins = z;
     results(a).cumwins = z;
 end
+
+human_steps = nan(length(game_names), length(subj_ids));
 
 max_human_steps = 0;
 
@@ -75,9 +78,13 @@ for g = 1:length(game_names)
                 %play_steps = play_keypresses;
 
             elseif strcmp(agent_name, 'DQN')
-                [play_scores, play_wins, play_steps, play_game_names, play_levels] = get_dqn_play_scores(game_name, subj_id, levels, true);
+                %[play_scores, play_wins, play_steps, play_game_names, play_levels] = get_dqn_play_scores(game_name, subj_id, levels, true);
+                %TODO!!!!!!!!!!!
+                [play_scores, play_wins, play_steps, play_game_names, play_levels] = get_dqn_play_scores(game_name, 12, levels, true);
             else
-                [play_scores, play_wins, play_steps, play_game_names, play_levels] = get_agent_play_scores(conn, agent_name, subj_id, levels, agent_tag, true);
+                %[play_scores, play_wins, play_steps, play_game_names, play_levels] = get_agent_play_scores(conn, agent_name, subj_id, levels, agent_tag, true);
+                %TODO!!!!!!!!!!!
+                [play_scores, play_wins, play_steps, play_game_names, play_levels] = get_agent_play_scores(conn, agent_name, 12, levels, agent_tag, true);
             end
 
             % subselect game
@@ -93,6 +100,7 @@ for g = 1:length(game_names)
             cumsteps = cumsum(play_steps);
 
             if strcmp(agent_name, 'Human')
+                human_steps(g,s) = max(cumsteps);
                 max_human_steps = max(max_human_steps, max(cumsteps));
             end
 
@@ -105,8 +113,8 @@ for g = 1:length(game_names)
             cumsteps(cumsteps > max_steps) = [];
 
             % mark win events
-            results(a).wins(g, subj_id, cumsteps) = play_wins;
-            results(a).cumwins(g, subj_id, :) = cumsum(results(a).wins(g, subj_id, :));
+            results(a).wins(g, s, cumsteps) = play_wins;
+            results(a).cumwins(g, s, :) = cumsum(results(a).wins(g, s, :));
 
         end
     end
@@ -130,7 +138,7 @@ for g = 1:length(game_names)
         plot(m);
     end
     legend({agents.name});
-    title(game_name);
+    title(game_name,'interpreter','none');
 end
 
 
@@ -139,8 +147,7 @@ figure;
 % averaged across games
 hold on;
 for a = 1:length(agents)
-    data = squeeze(mean(results(a).cumwins,1));
-    data = data(:,1:max_human_steps);
+    data = process_cumwins(results(a).cumwins,max_human_steps);
 
     m = mean(data,1);
     se = std(data,1)/sqrt(size(data,1));
@@ -161,8 +168,7 @@ figure;
 % averaged across games, separate subjects
 hold on;
 for a = 2:length(agents)
-    data = squeeze(mean(results(a).cumwins,1));
-    data = data(:,1:max_human_steps);
+    data = process_cumwins(results(a).cumwins,max_human_steps);
 
     m = mean(data,1);
     se = std(data,1)/sqrt(size(data,1));
@@ -172,8 +178,17 @@ for a = 2:length(agents)
 end
 
 % plot humans
-data = squeeze(mean(results(1).cumwins,1));
-data = data(:,1:max_human_steps);
+
+%data = process_cumwins(results(1).cumwins,max_human_steps);
+load(fullfile(get_mat_dir(),'plot_learning_humans1-11_data.mat'), 'data');
+data_1_11 = data;
+load(fullfile(get_mat_dir(),'plot_learning_humans12-32_data.mat'), 'data');
+data_12_32 = data;
+clip = min(size(data_1_11,2),size(data_12_32,2));
+data_1_11=data_1_11(:,1:clip);
+data_12_32=data_12_32(:,1:clip);
+data = [data_1_11; data_12_32];
+
 plot(data', 'color', [0.5 0.5 0.5]);
 
 legend('EMPA','DDQN','Human');
