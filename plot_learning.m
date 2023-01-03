@@ -8,7 +8,8 @@ conn = mongo('holy7c22109.rc.fas.harvard.edu', 27017, 'heroku_7lzprs54')
 %game_names = get_game_names_ordered(11);
 %subj_ids = 1:11;
 game_names = get_game_names_ordered(12);
-subj_ids = [12:32];
+%subj_ids = [12:32];
+subj_ids = [12];
 %subj_ids = [1:11];
 
 run_ids = 1:6;
@@ -30,20 +31,18 @@ agents(3).name = 'DQN';
 %agents(3).name = 'EMPA';
 %agents(3).tag = 'attempt_1_states';
 
-%{
-agents(1).name = 'EMPA';
-agents(1).tag = 'attempt_3_colors';  % 12..32
-agents(2).name = 'EMPA';
-agents(2).tag = 'ablation_AGH3_attempt_1';  % 12..32
-agents(3).name = 'EMPA';
-agents(3).tag = 'ablation_IW_attempt_1';  % 12..32
 agents(4).name = 'EMPA';
-agents(4).tag = 'ablation_greedy_attempt_1';  % 12..32
+agents(4).tag = 'ablation_AGH3_attempt_1';  % 12..32
+%agents(5).name = 'EMPA';
+%agents(5).tag = 'ablation_IW_attempt_1';  % 12..32
+%agents(4).name = 'EMPA';
+%agents(4).tag = 'ablation_greedy_attempt_1';  % 12..32
+%agents(6).name = 'EMPA';
+%agents(6).tag = 'ablation_nodes_attempt_1';  % 12..32
 agents(5).name = 'EMPA';
-agents(5).tag = 'ablation_nodes_attempt_1';  % 12..32
+agents(5).tag = 'ablation_lessnodes_attempt_1';  % 12..32
 agents(6).name = 'EMPA';
-agents(6).tag = 'ablation_lessnodes_attempt_1';  % 12..32
-%}
+agents(6).tag = 'ablation_epsgreedy_attempt_1';  % 12..32
 
 
 %% gather relevant data in a table
@@ -53,6 +52,8 @@ for a = 1:length(agents)
     z = zeros(length(game_names), length(subj_ids), max_steps);
     results(a).wins = z;
     results(a).cumwins = z;
+    results(a).payouts = z;
+    results(a).cumpayouts = z;
 end
 
 human_steps = nan(length(game_names), length(subj_ids));
@@ -84,7 +85,7 @@ for g = 1:length(game_names)
             else
                 %[play_scores, play_wins, play_steps, play_game_names, play_levels] = get_agent_play_scores(conn, agent_name, subj_id, levels, agent_tag, true);
                 %TODO!!!!!!!!!!!
-                [play_scores, play_wins, play_steps, play_game_names, play_levels] = get_agent_play_scores(conn, agent_name, 12, levels, agent_tag, true);
+                [play_scores, play_wins, play_steps, play_game_names, play_levels] = get_agent_play_scores(conn, agent_name, 12, levels, agent_tag, false);
             end
 
             % subselect game
@@ -115,7 +116,8 @@ for g = 1:length(game_names)
             % mark win events
             results(a).wins(g, s, cumsteps) = play_wins;
             results(a).cumwins(g, s, :) = cumsum(results(a).wins(g, s, :));
-
+            results(a).payouts(g, s, cumsteps) = (play_wins == 1) .* play_scores;
+            results(a).cumpayouts(g, s, :) = cumsum(results(a).payouts(g, s, :));
         end
     end
 end
@@ -132,7 +134,9 @@ for g = 1:length(game_names)
 
     hold on;
     for a = 1:length(agents)
-        data = squeeze(results(a).cumwins(g,:,:));
+        %data = process_cumwins(results(a).cumwins(g,:,:), max_human_steps);
+        data = process_cumwins(results(a).cumpayouts(g,:,:), max_human_steps);
+
         m = mean(data,1);
 
         plot(m);
@@ -147,15 +151,16 @@ figure;
 % averaged across games
 hold on;
 for a = 1:length(agents)
-    data = process_cumwins(results(a).cumwins,max_human_steps);
+    %data = process_cumwins(results(a).cumwins,max_human_steps);
+    data = process_cumwins(results(a).cumpayouts,max_human_steps);
 
     m = mean(data,1);
     se = std(data,1)/sqrt(size(data,1));
     steps = 1:length(m);
 
     hp = plot(steps, m);
-    hf = fill([steps flip(steps)], [m+se flip(m-se)], get(hp,'Color'));
-    set(hf,'facealpha',0.3,'edgecolor','none');
+    %hf = fill([steps flip(steps)], [m+se flip(m-se)], get(hp,'Color'));
+    %set(hf,'facealpha',0.3,'edgecolor','none');
 end
 legend({agents.name});
 xlabel('steps');
@@ -163,35 +168,3 @@ ylabel('episodes won');
 title('All games');
 
 
-figure;
-
-% averaged across games, separate subjects
-hold on;
-for a = 2:length(agents)
-    data = process_cumwins(results(a).cumwins,max_human_steps);
-
-    m = mean(data,1);
-    se = std(data,1)/sqrt(size(data,1));
-    steps = 1:length(m);
-
-    plot(steps, m);
-end
-
-% plot humans
-
-%data = process_cumwins(results(1).cumwins,max_human_steps);
-load(fullfile(get_mat_dir(),'plot_learning_humans1-11_data.mat'), 'data');
-data_1_11 = data;
-load(fullfile(get_mat_dir(),'plot_learning_humans12-32_data.mat'), 'data');
-data_12_32 = data;
-clip = min(size(data_1_11,2),size(data_12_32,2));
-data_1_11=data_1_11(:,1:clip);
-data_12_32=data_12_32(:,1:clip);
-data = [data_1_11; data_12_32];
-
-plot(data', 'color', [0.5 0.5 0.5]);
-
-legend('EMPA','DDQN','Human');
-xlabel('steps');
-ylabel('episodes won');
-title('All games');

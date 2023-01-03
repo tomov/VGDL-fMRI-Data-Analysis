@@ -65,6 +65,12 @@ switch figure_name
         
         print('svg/neuron_revision/ablations.svg', '-dsvg'); 
 
+    case 'ablations_learning'
+
+        plot_learning2
+
+        print('svg/neuron_revision/ablations_learning.svg', '-dsvg'); 
+
     otherwise
         assert(false, 'Invalid figure name');
 end
