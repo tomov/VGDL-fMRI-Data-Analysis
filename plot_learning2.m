@@ -85,8 +85,8 @@ t = 1:length(m);
 % null distribution
 human_slopes = [];
 for s=1:size(humans,1)
-    mdl=fitlm(t',humans(s,:)', 'intercept',false);
-    slope=mdl.Coefficients.Estimate;
+    mdl=fitlm(t',humans(s,:)','quadratic', 'intercept',false);
+    slope=mdl.Coefficients.Estimate(1);
     human_slopes=[human_slopes,slope];
 end
 human_slopes
@@ -95,8 +95,8 @@ model_data = {empa, dqn, empa_no_intrinsic, empa_no_IW, empa_eps_greedy};
 model_names = {'EMPA','DDQN','EMPA, no intrinsic rewards', 'EMPA, no iterative width', 'EMPA, eps-greedy'};
 model_slopes = [];
 for i=1:length(model_data)
-    mdl=fitlm(t',model_data{i}', 'intercept',false);
-    slope = mdl.Coefficients.Estimate
+    mdl=fitlm(t',model_data{i}','quadratic', 'intercept',false);
+    slope = mdl.Coefficients.Estimate(1)
     %[p,h,stats] = signrank(human_slopes-empa_slope)
     %[h,p,ci,stats] = ttest(human_slopes-empa_slope)
     [h,p,ci,stats] = ttest2(human_slopes,slope);
@@ -117,7 +117,7 @@ for i=1:length(model_data)
 end
 
 %legend({'Human','EMPA','DQN'});
-xlabel('slope');
+xlabel('linear coefficient');
 ylabel('count');
 
 
