@@ -9,13 +9,13 @@ max_human_steps = 1703; % average # human steps
 
 % load models (one subjects)
 %load(fullfile(get_mat_dir(),'plot_learning_subj12.mat'), 'results');
-load(fullfile(get_mat_dir(),'plot_learning_subj12_ablations.mat'), 'results');
+%load(fullfile(get_mat_dir(),'plot_learning_subj12_ablations2.mat'), 'results');
+load(fullfile(get_mat_dir(),'plot_learning_subj12_ablations2.mat'), 'results');
 empa = process_cumwins(results(2).cumwins, max_human_steps);
 dqn = process_cumwins(results(3).cumwins, max_human_steps);
 empa_no_intrinsic = process_cumwins(results(4).cumwins, max_human_steps);
-empa_no_prune = process_cumwins(results(5).cumwins, max_human_steps);
-empa_10x_fewer = process_cumwins(results(6).cumwins, max_human_steps);
-empa_100x_fewer = process_cumwins(results(7).cumwins, max_human_steps);
+empa_no_IW = process_cumwins(results(5).cumwins, max_human_steps);
+empa_eps_greedy = process_cumwins(results(6).cumwins, max_human_steps);
 
 
 % load humans (all subjects)
@@ -37,39 +37,45 @@ subplot(2,1,1);
 
 cmap = [0.4460 0.6740 0.1880;
         0 0.4470 0.7410;
-        0.8500 0.3250 0.0980];
+        0.8500 0.3250 0.0980;
+         0.7085    0.6669    0.8734;
+        0.5809    0.1964    0.5266;
+            0.9184    0.7308    0.1890;
+        ];
 
 
 hold on;
+linewidth=1.5;
 
 h0 = plot(humans', 'color', [0.9 0.9 0.9]);
 
 m = mean(humans,1);
 se = std(humans,1)/sqrt(size(humans,1));
-h1 = plot(m, 'color', cmap(1,:),'linewidth',2);
+h1 = plot(m, 'color', cmap(1,:),'linewidth',linewidth);
 %hf = fill([1:length(m) flip(1:length(m))], [m+se flip(m-se)], cmap(1,:));
 %set(hf,'facealpha',0.3,'edgecolor','none');
 
-h2 = plot(empa','color',cmap(2,:),'linewidth',2);
-h3 = plot(dqn','color',cmap(3,:),'linewidth',2);
-h4 = plot(empa_no_intrinsic','linewidth',2);
-h5 = plot(empa_no_prune','linewidth',2);
-h6 = plot(empa_10x_fewer','linewidth',2);
-h7 = plot(empa_100x_fewer','linewidth',2);
+h2 = plot(empa','color',cmap(2,:),'linewidth',linewidth);
+h3 = plot(dqn','color',cmap(3,:),'linewidth',linewidth);
+h4 = plot(empa_no_intrinsic','color',cmap(4,:),'linewidth',linewidth);
+h5 = plot(empa_no_IW','color',cmap(5,:),'linewidth',linewidth);
+h6 = plot(empa_eps_greedy','color',cmap(6,:),'linewidth',linewidth);
 
 hold off;
 
-l=legend([h0(1);h1(1);h2(1);h3(1);h4(1);h5(1);h6(1);h7(1)],...
+l=legend([h0(1);h1(1);h2(1);h3(1);h4(1);h5(1);h6(1)],...
     {'Human (individual)','Human (mean)','EMPA','DDQN',...
-     'EMPA, no intrinsic words', 'EMPA, no pruning', 'EMPA, 10x fewer nodes', 'EMPA, 100x fewer nodes'});
+     'EMPA, no IR', 'EMPA, no IW', 'EMPA, \epsilon-greedy'});%,'Interpreter','latex');
 %set(l,'position',[0.1333 0.7596 0.4150 0.1637]);
-set(l,'position',[0.1997    0.0476    0.4950    0.2132]);
-xlabel('Steps taken by agent');
-ylabel('Episodes won');
+%set(l,'position',[0.1997    0.0476    0.4950    0.2132]);
+set(l,'position',[0.1430 0.8051 0.3332 0.1873]);
+xlabel('steps taken by agent');
+ylabel('episodes won');
 %title('Human and model learning');
 xlim([0 max_human_steps]);
 
 
+%title('Human and model learning');
 
 
 %% statistics
@@ -85,19 +91,18 @@ for s=1:size(humans,1)
 end
 human_slopes
 
-
-mdl=fitlm(t',empa', 'intercept',false);
-empa_slope = mdl.Coefficients.Estimate
-%[p,h,stats] = signrank(human_slopes-empa_slope)
-%[h,p,ci,stats] = ttest(human_slopes-empa_slope)
-[h,p,ci,stats] = ttest2(human_slopes,empa_slope);
-fprintf('Human vs. EMPA slopes: t(%d)=%.3f, p=%.4f, two-sample t-test\n',stats.df,stats.tstat,p);
-
-mdl=fitlm(t',dqn', 'intercept',false);
-dqn_slope = mdl.Coefficients.Estimate
-%[p,h,stats] = signrank(human_slopes-dqn_slope)
-[h,p,ci,stats] = ttest2(human_slopes,dqn_slope);
-fprintf('Human vs. DQN slopes: t(%d)=%.3f, p=%.4f, two-sample t-test\n',stats.df,stats.tstat,p);
+model_data = {empa, dqn, empa_no_intrinsic, empa_no_IW, empa_eps_greedy};
+model_names = {'EMPA','DDQN','EMPA, no intrinsic rewards', 'EMPA, no iterative width', 'EMPA, eps-greedy'};
+model_slopes = [];
+for i=1:length(model_data)
+    mdl=fitlm(t',model_data{i}', 'intercept',false);
+    slope = mdl.Coefficients.Estimate
+    %[p,h,stats] = signrank(human_slopes-empa_slope)
+    %[h,p,ci,stats] = ttest(human_slopes-empa_slope)
+    [h,p,ci,stats] = ttest2(human_slopes,slope);
+    fprintf('Human vs. %s slopes: t(%d)=%.3f, p=%.4f, two-sample t-test\n',model_names{i},stats.df,stats.tstat,p);
+    model_slopes(i)=slope;
+end
 
 
 
@@ -107,8 +112,9 @@ subplot(4,1,3);
 hold on;
 histogram(human_slopes,'facecolor',cmap(1,:));
 
-plot([empa_slope empa_slope], [0 20],'color',cmap(2,:),'linewidth',2);
-plot([dqn_slope dqn_slope], [0 20],'color',cmap(3,:),'linewidth',2);
+for i=1:length(model_data)
+    plot([model_slopes(i) model_slopes(i)], [0 18],'color',cmap(i+1,:),'linewidth',linewidth);
+end
 
 %legend({'Human','EMPA','DQN'});
 xlabel('slope');

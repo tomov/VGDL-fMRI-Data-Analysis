@@ -33,14 +33,14 @@ agents(3).name = 'DQN';
 
 agents(4).name = 'EMPA';
 agents(4).tag = 'ablation_AGH3_attempt_1';  % 12..32
-%agents(5).name = 'EMPA';
-%agents(5).tag = 'ablation_IW_attempt_1';  % 12..32
+agents(5).name = 'EMPA';
+agents(5).tag = 'ablation_IW_attempt_1';  % 12..32
 %agents(4).name = 'EMPA';
 %agents(4).tag = 'ablation_greedy_attempt_1';  % 12..32
 %agents(6).name = 'EMPA';
 %agents(6).tag = 'ablation_nodes_attempt_1';  % 12..32
-agents(5).name = 'EMPA';
-agents(5).tag = 'ablation_lessnodes_attempt_1';  % 12..32
+%agents(5).name = 'EMPA';
+%agents(5).tag = 'ablation_lessnodes_attempt_1';  % 12..32
 agents(6).name = 'EMPA';
 agents(6).tag = 'ablation_epsgreedy_attempt_1';  % 12..32
 
@@ -79,13 +79,11 @@ for g = 1:length(game_names)
                 %play_steps = play_keypresses;
 
             elseif strcmp(agent_name, 'DQN')
-                %[play_scores, play_wins, play_steps, play_game_names, play_levels] = get_dqn_play_scores(game_name, subj_id, levels, true);
-                %TODO!!!!!!!!!!!
-                [play_scores, play_wins, play_steps, play_game_names, play_levels] = get_dqn_play_scores(game_name, 12, levels, true);
+                [play_scores, play_wins, play_steps, play_game_names, play_levels] = get_dqn_play_scores(game_name, subj_id, levels, true);
+                %[play_scores, play_wins, play_steps, play_game_names, play_levels] = get_dqn_play_scores(game_name, 12, levels, true);
             else
-                %[play_scores, play_wins, play_steps, play_game_names, play_levels] = get_agent_play_scores(conn, agent_name, subj_id, levels, agent_tag, true);
-                %TODO!!!!!!!!!!!
-                [play_scores, play_wins, play_steps, play_game_names, play_levels] = get_agent_play_scores(conn, agent_name, 12, levels, agent_tag, false);
+                [play_scores, play_wins, play_steps, play_game_names, play_levels] = get_agent_play_scores(conn, agent_name, subj_id, levels, agent_tag, true);
+                %[play_scores, play_wins, play_steps, play_game_names, play_levels] = get_agent_play_scores(conn, agent_name, 12, levels, agent_tag, true);
             end
 
             % subselect game
